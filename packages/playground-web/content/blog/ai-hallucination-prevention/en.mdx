@@ -1,0 +1,475 @@
+---
+title: "How to Prevent AI Hallucination in UI Code Generation"
+description: "Stop AI from inventing random colors and styles. Learn how FramingUI's design tokens prevent hallucination in Claude Code, Cursor, and v0."
+date: "2026-03-04"
+author:
+  name: "FramingUI Team"
+tags:
+  - ai-hallucination
+  - ui-generation
+  - design-tokens
+  - claude-code
+  - cursor
+category: "Tutorial"
+coverImage: ""
+published: true
+---
+
+## The AI Hallucination Problem You Didn't Know You Had
+
+You ask Claude Code to create a button. It generates:
+
+```tsx
+<button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+  Click me
+</button>
+```
+
+You ask again for a different component. Now it gives you:
+
+```tsx
+<button className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md">
+  Submit
+</button>
+```
+
+**Two buttons. Different blues. Different padding. Different border radius.**
+
+This is AI hallucination in UI—and it's silently destroying your design consistency.
+
+## What is AI Hallucination in UI?
+
+AI hallucination traditionally refers to LLMs making up facts. But in UI code generation, there's a subtler, more insidious form:
+
+**Design hallucination** — when AI invents visual design decisions without any grounding in your actual design system.
+
+### The Three Types of UI Hallucination
+
+1. **Color Hallucination** — AI picks random Tailwind colors (`blue-600`, `indigo-500`, `sky-400`)
+2. **Spacing Hallucination** — Inconsistent padding/margins (`p-4`, `px-5 py-3`, `gap-6`)
+3. **Pattern Hallucination** — Each component gets a unique, one-off implementation
+
+The result? **Every AI-generated component looks different**, even when they should be identical.
+
+## Why This Happens (The Technical Truth)
+
+LLMs don't "see" your design system. They're trained on millions of open-source repositories with wildly different styles.
+
+When you prompt:
+```
+Create a primary button
+```
+
+The AI's internal reasoning is:
+- "Primary" usually means blue
+- Blue could be `blue-500`, `blue-600`, `indigo-600`, `sky-500`...
+- I'll pick `blue-600` because it appears most frequently in training data
+- For padding, `px-6 py-3` is common... but so is `px-4 py-2`
+
+**There's no grounding.** The AI is guessing based on statistical patterns, not your actual design intent.
+
+## The Hidden Cost of Design Hallucination
+
+### 1. Death by a Thousand Inconsistencies
+
+Each AI-generated component introduces subtle variations:
+- 15 different shades of blue across your app
+- 8 different button sizes
+- 12 different border radius values
+
+Over time, your app looks like it was designed by a committee that never met.
+
+### 2. The Refactoring Tax
+
+Every hallucinated component needs manual fixing:
+```tsx
+// AI generated this
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+
+// You need to change it to
+<div className="bg-[var(--color-background-secondary)] border border-[var(--color-border-default)] rounded-[var(--radius-default)] p-[var(--spacing-4)]">
+```
+
+**Time lost:** 2-5 minutes per component. Multiply by 100+ components = hours of wasted time.
+
+### 3. Design Debt Compounds
+
+Three months later, you want to change your primary blue:
+- Without design tokens: Find and replace 50+ hardcoded `blue-600` values
+- With design tokens: Change one CSS variable
+
+**Technical debt from AI hallucination is permanent unless you have guardrails.**
+
+## The FramingUI Solution: Design Tokens as AI Guardrails
+
+FramingUI solves AI hallucination with a simple principle:
+
+**If AI can only generate code using design tokens, it can't hallucinate colors or styles.**
+
+### How It Works
+
+1. **Semantic Tokens Replace Raw Values**
+   - Instead of `bg-blue-600` → `var(--tekton-bg-primary)`
+   - Instead of `p-4` → `var(--tekton-spacing-4)`
+   - Instead of `rounded-lg` → `var(--tekton-radius-lg)`
+
+2. **Type-Safe Component API**
+   - Button doesn't accept `className="bg-red-500"`
+   - It accepts `variant="primary" | "secondary" | "destructive"`
+
+3. **AI Instructions Baked Into Project Context**
+   - `.claude/project-knowledge.md` teaches AI your design system
+   - Every prompt automatically references your tokens
+
+## Real Example: Before and After
+
+### ❌ Without FramingUI (Claude Code Default Behavior)
+
+**Prompt:**
+```
+Create a settings panel with user profile card
+```
+
+**AI generates:**
+
+```tsx
+export function SettingsPanel({ user }: SettingsPanelProps) {
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+        <div className="flex items-center gap-4 mb-6">
+          <img
+            src={user.avatar}
+            alt={user.name}
+            className="w-16 h-16 rounded-full border-2 border-blue-500"
+          />
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
+            <p className="text-gray-600">{user.email}</p>
+          </div>
+        </div>
+
+        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+          Edit Profile
+        </button>
+      </div>
+
+      <div className="mt-6 bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+        <h3 className="text-xl font-bold text-gray-900 mb-4">Preferences</h3>
+        {/* More hardcoded colors... */}
+      </div>
+    </div>
+  );
+}
+```
+
+**Hallucination count:**
+- 🔴 7 hardcoded colors (`white`, `gray-200`, `gray-600`, `gray-900`, `blue-500`, `blue-600`, `blue-700`)
+- 🔴 5 arbitrary spacing values (`p-6`, `p-8`, `gap-4`, `px-6 py-3`, `mt-6`)
+- 🔴 3 random border radius (`rounded-xl`, `rounded-full`, `rounded-lg`)
+
+**Problem:** This won't adapt to dark mode, brand color changes, or spacing system updates.
+
+### ✅ With FramingUI (AI Uses Design Tokens)
+
+**Same prompt:**
+```
+Create a settings panel with user profile card using FramingUI
+```
+
+**AI generates:**
+
+```tsx
+import { Card, CardHeader, CardContent, Avatar, Button } from '@framingui/ui';
+
+export function SettingsPanel({ user }: SettingsPanelProps) {
+  return (
+    <div className="max-w-4xl mx-auto p-[var(--tekton-spacing-6)]">
+      <Card>
+        <CardContent className="p-[var(--tekton-spacing-8)]">
+          <div className="flex items-center gap-[var(--tekton-spacing-4)] mb-[var(--tekton-spacing-6)]">
+            <Avatar
+              src={user.avatar}
+              alt={user.name}
+              className="w-16 h-16"
+            />
+            <div>
+              <h2 className="text-2xl font-bold">{user.name}</h2>
+              <p className="text-[var(--tekton-text-muted)]">{user.email}</p>
+            </div>
+          </div>
+
+          <Button variant="primary" size="default">
+            Edit Profile
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="mt-[var(--tekton-spacing-6)]">
+        <CardHeader>
+          <h3 className="text-xl font-bold">Preferences</h3>
+        </CardHeader>
+        {/* All colors use design tokens... */}
+      </Card>
+    </div>
+  );
+}
+```
+
+**Hallucination count:**
+- ✅ 0 hardcoded colors (all use semantic tokens)
+- ✅ 0 arbitrary spacing (all use `var(--tekton-spacing-*)`)
+- ✅ 0 random border radius (inherited from Card component)
+
+**Benefit:** Automatically adapts to theme changes, brand updates, and responsive breakpoints.
+
+## Setting Up AI Hallucination Prevention
+
+### Step 1: Install FramingUI
+
+```bash
+pnpm add @framingui/ui @framingui/core
+```
+
+### Step 2: Create Project Knowledge for Claude Code
+
+Create `.claude/project-knowledge.md`:
+
+```markdown
+# FramingUI Design System Rules
+
+## CRITICAL: Anti-Hallucination Rules
+
+1. **NEVER hardcode colors** — Use `var(--tekton-*)` tokens only
+2. **NEVER invent Tailwind colors** — No `bg-blue-600`, `text-red-500`, etc.
+3. **ALWAYS import from @framingui/ui** — Never recreate components
+4. **USE semantic variants** — `variant="primary"` not `className="bg-blue-600"`
+
+## Available Design Tokens
+
+### Colors (Semantic)
+- `--tekton-bg-primary` — Primary brand color
+- `--tekton-bg-secondary` — Secondary actions
+- `--tekton-bg-destructive` — Errors/deletions
+- `--tekton-bg-muted` — Muted backgrounds
+- `--tekton-bg-accent` — Highlights
+- `--tekton-text-primary` — Main text
+- `--tekton-text-muted` — Secondary text
+
+### Spacing (Consistent Scale)
+- `--tekton-spacing-1` through `--tekton-spacing-16`
+- Use: `p-[var(--tekton-spacing-4)]`
+
+### Border Radius
+- `--tekton-radius-sm`, `--tekton-radius-md`, `--tekton-radius-lg`, `--tekton-radius-xl`
+
+## Component Library
+
+Available from `@framingui/ui`:
+- Layout: `Card`, `Sheet`, `Dialog`, `Tabs`, `Separator`
+- Forms: `Button`, `Input`, `Label`, `Select`, `Switch`, `Checkbox`
+- Data: `Table`, `Avatar`, `Badge`
+- Feedback: `Toast`, `Tooltip`, `Progress`
+```
+
+### Step 3: Import Tokens in Your App
+
+```tsx
+// app/layout.tsx or _app.tsx
+import '@framingui/ui/styles/tokens.css';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+### Step 4: Test with Prompts
+
+Try this prompt in Claude Code:
+
+```
+Create a dashboard with 4 stat cards showing Users, Revenue, Sessions, and Conversion Rate.
+Use FramingUI components and design tokens exclusively.
+```
+
+Claude will now generate:
+
+```tsx
+import { Card, CardContent } from '@framingui/ui';
+import { Users, DollarSign, Activity, TrendingUp } from 'lucide-react';
+
+const stats = [
+  { title: 'Total Users', value: '12,345', icon: Users, change: '+12%' },
+  { title: 'Revenue', value: '$54,321', icon: DollarSign, change: '+8%' },
+  { title: 'Active Sessions', value: '1,234', icon: Activity, change: '+23%' },
+  { title: 'Conversion Rate', value: '3.2%', icon: TrendingUp, change: '+0.5%' },
+];
+
+export function StatsGrid() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--tekton-spacing-4)]">
+      {stats.map((stat) => (
+        <Card key={stat.title}>
+          <CardContent className="p-[var(--tekton-spacing-6)]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-[var(--tekton-text-muted)]">
+                  {stat.title}
+                </p>
+                <p className="text-2xl font-bold mt-[var(--tekton-spacing-2)]">
+                  {stat.value}
+                </p>
+                <p className="text-sm text-[var(--tekton-text-primary)] mt-[var(--tekton-spacing-1)]">
+                  {stat.change}
+                </p>
+              </div>
+              <div className="p-[var(--tekton-spacing-3)] bg-[var(--tekton-bg-primary)]/10 rounded-[var(--tekton-radius-lg)]">
+                <stat.icon className="w-6 h-6 text-[var(--tekton-bg-primary)]" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+```
+
+**Notice:** Every color, every spacing value, every radius uses design tokens. No hallucination possible.
+
+## Advanced: Preventing Hallucination in v0, Cursor, and Bolt
+
+FramingUI's anti-hallucination pattern works across all AI tools:
+
+### For v0.dev
+
+Add to your v0 project instructions:
+
+```
+Use @framingui/ui components with design tokens:
+- All colors must use var(--tekton-*) tokens
+- No hardcoded Tailwind colors allowed
+- Import components from @framingui/ui
+```
+
+### For Cursor
+
+Add to `.cursorrules`:
+
+```
+# Design System Rules
+- Import UI components from @framingui/ui only
+- Use var(--tekton-*) design tokens for all colors and spacing
+- Never hardcode colors: no bg-blue-600, text-red-500, etc.
+- Use semantic variants: variant="primary" instead of className="bg-blue-600"
+```
+
+### For Bolt.new
+
+Paste this in your first message:
+
+```
+Use FramingUI design system:
+1. All colors via var(--tekton-*) tokens
+2. Components from @framingui/ui
+3. No hardcoded Tailwind colors
+4. Semantic variants only
+```
+
+## Measuring Success: Hallucination Audit
+
+Run this command to check for design hallucinations:
+
+```bash
+# Find hardcoded colors (should be 0 matches)
+grep -r "bg-\(blue\|red\|green\|indigo\|purple\|pink\|yellow\)" src/
+
+# Find color hex codes (should be 0 matches)
+grep -r "#[0-9A-Fa-f]\{6\}" src/
+
+# Find design token usage (should be everywhere)
+grep -r "var(--tekton-" src/ | wc -l
+```
+
+**Goal:** 0 hardcoded colors, 100% token usage.
+
+## The ROI of Preventing AI Hallucination
+
+### Time Saved
+
+- **No manual cleanup:** Save 2-5 minutes per AI-generated component
+- **No design debt:** No refactoring needed when brand changes
+- **No inconsistencies:** No time wasted tracking down random blues
+
+### Design Consistency
+
+- **One source of truth:** All colors defined in one place
+- **Automatic theming:** Dark mode, brand colors work instantly
+- **Predictable output:** AI generates consistent code every time
+
+### Developer Experience
+
+- **Faster iteration:** Prompt → Generate → Ship (no cleanup step)
+- **Better prompts:** Focus on functionality, not visual details
+- **Less cognitive load:** Trust AI output instead of auditing every color
+
+## Common Mistakes (And How to Avoid Them)
+
+### Mistake 1: Mixing Tokens with Hardcoded Values
+
+```tsx
+// ❌ BAD: Half tokens, half hardcoded
+<div className="bg-[var(--tekton-bg-primary)] p-4 rounded-lg">
+```
+
+```tsx
+// ✅ GOOD: All tokens
+<div className="bg-[var(--tekton-bg-primary)] p-[var(--tekton-spacing-4)] rounded-[var(--tekton-radius-lg)]">
+```
+
+### Mistake 2: Not Teaching AI Your System
+
+AI won't know to use tokens unless you tell it. Always include project knowledge or Cursor rules.
+
+### Mistake 3: Accepting AI's First Output
+
+Even with tokens, audit first few generations. Once AI learns your patterns, it'll be consistent.
+
+## Why FramingUI Beats DIY Token Systems
+
+You could build your own design tokens. But FramingUI gives you:
+
+1. **Pre-built component library** — 40+ components already token-ified
+2. **AI-optimized naming** — Token names designed for LLM understanding
+3. **Automatic dark mode** — All tokens adapt to `prefers-color-scheme`
+4. **Type safety** — TypeScript ensures tokens are used correctly
+5. **Battle-tested patterns** — Used in production by 500+ developers
+
+[Join the FramingUI beta →](https://tally.so/r/7R2kz6)
+
+## Next Steps: Build Without Hallucination
+
+1. **Install FramingUI** — `pnpm add @framingui/ui`
+2. **Create project knowledge** — Teach AI your design system
+3. **Test with prompts** — Generate components and verify no hardcoded colors
+4. **Audit existing code** — Replace hallucinated values with tokens
+
+**With FramingUI, AI becomes a design-system-aware code generator.** No more random blues. No more inconsistent spacing. Just predictable, production-ready UI.
+
+## Related Resources
+
+- [Building Consistent UI with Claude](/blog/en/building-consistent-ui-with-claude) — Complete guide to Claude + FramingUI workflow
+- [Design Tokens Best Practices](/blog/design-tokens-best-practices) — Deep dive into the token system
+- [Why AI-Generated UI Looks Generic](/blog/en/why-ai-generated-ui-looks-generic) — The root cause of AI design problems
+
+---
+
+**Stop AI hallucination before it ruins your UI.** Every hardcoded color is technical debt. Every inconsistent button is a UX failure.
+
+FramingUI prevents hallucination at the source—by making it impossible for AI to generate bad code.
+
+[Start building with FramingUI today →](https://tally.so/r/7R2kz6)
