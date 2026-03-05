@@ -1,0 +1,220 @@
+---
+title: "Claude Code + FramingUI: MCP 설정 완벽 가이드"
+description: "FramingUI MCP 서버를 Claude Code에 연결해서 디자인 할루시네이션 없이 AI로 UI를 생성하는 방법을 알아봅니다."
+date: "2025-03-05"
+author:
+  name: "FramingUI Team"
+tags:
+  - claude-code
+  - mcp
+  - tutorial
+  - setup
+category: "Tutorial"
+coverImage: ""
+published: true
+---
+
+## 이 가이드에서 만들 것
+
+이 가이드를 따라하면 Claude Code가 FramingUI MCP 서버에 연결됩니다. 연결되면 Claude Code가:
+
+- 디자인 토큰에 직접 접근 가능
+- 디자인 시스템에 맞는 UI 컴포넌트 생성
+- 색상, 여백, 타이포그래피 값을 추측하지 않음
+
+더 이상 `bg-blue-500`을 `bg-primary`로 수정할 필요 없습니다.
+
+## 사전 준비
+
+시작하기 전에 확인하세요:
+
+- Claude Code 설치됨 (`npm install -g @anthropic/claude-code` 또는 Anthropic 설치 프로그램)
+- Node.js 18+ 설치됨
+- 일관된 UI 생성이 필요한 프로젝트
+
+## Step 1: FramingUI MCP 서버 설치
+
+MCP 서버를 전역 또는 프로젝트에 설치합니다:
+
+```bash
+# 전역 설치 (여러 프로젝트에서 사용시 권장)
+npm install -g @framingui/mcp-server
+
+# 또는 프로젝트 로컬
+npm install --save-dev @framingui/mcp-server
+```
+
+설치 확인:
+
+```bash
+npx @framingui/mcp-server --version
+```
+
+## Step 2: Claude Code 설정
+
+Claude Code는 `~/.claude/claude_desktop_config.json` 또는 프로젝트의 `.claude/config.json`에서 MCP 서버 설정을 읽습니다.
+
+설정 파일을 만들거나 수정하세요:
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "command": "npx",
+      "args": ["@framingui/mcp-server"],
+      "env": {
+        "PROJECT_PATH": "."
+      }
+    }
+  }
+}
+```
+
+프로젝트별 설정은 레포 루트에 `.claude/config.json`을 만드세요.
+
+## Step 3: 디자인 시스템 초기화
+
+아직 디자인 시스템이 없다면 FramingUI가 기본 구조를 만들어줍니다:
+
+```bash
+npx @framingui/cli init
+```
+
+이렇게 생성됩니다:
+
+- `framingui.config.ts` — 토큰 정의
+- `tokens/` — 생성된 토큰 파일들
+- 색상, 여백, 타이포그래피가 포함된 기본 테마
+
+이미 토큰이 있다면 설정에서 MCP 서버가 참조하도록 지정하세요.
+
+## Step 4: 연결 확인
+
+프로젝트 디렉토리에서 Claude Code를 시작합니다:
+
+```bash
+claude
+```
+
+간단한 프롬프트로 MCP 연결을 테스트하세요:
+
+```
+이 프로젝트에서 사용 가능한 디자인 토큰이 뭐야?
+```
+
+Claude Code가 토큰 목록을 보여줘야 합니다. 안 되면 확인하세요:
+
+- MCP 서버가 제대로 설치됐는지
+- 설정 파일 경로가 맞는지
+- `PROJECT_PATH`가 프로젝트 루트를 가리키는지
+
+## Step 5: 디자인 시스템 컨텍스트로 UI 생성
+
+이제 강력한 부분입니다. Claude Code에 UI 생성을 요청하세요:
+
+```
+기존 디자인 토큰을 사용해서 가격표 카드 컴포넌트 만들어줘.
+시맨틱 색상만 사용해. hover랑 focus 상태도 포함해.
+```
+
+Claude Code가:
+
+1. FramingUI MCP 서버에 사용 가능한 토큰을 쿼리
+2. 실제 `primary`, `secondary`, `background` 값으로 코드 생성
+3. 임의의 픽셀값 대신 여백 스케일 적용
+
+## 예시: Before와 After
+
+### MCP 없이 (추측한 값)
+
+```tsx
+<div className="bg-blue-600 p-4 rounded-lg">
+  <h3 className="text-white text-xl font-bold">Pro 플랜</h3>
+  <p className="text-gray-200">월 29,000원</p>
+</div>
+```
+
+### MCP 있으면 (디자인 시스템 일치)
+
+```tsx
+<div className="bg-primary p-md rounded-lg">
+  <h3 className="text-primary-foreground text-heading-sm font-semibold">Pro 플랜</h3>
+  <p className="text-primary-foreground/80">월 29,000원</p>
+</div>
+```
+
+두 번째 버전은 실제 토큰을 사용합니다. 수동 수정 필요 없음.
+
+## 고급: 커스텀 토큰 경로
+
+토큰이 비표준 위치에 있다면:
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "command": "npx",
+      "args": ["@framingui/mcp-server"],
+      "env": {
+        "PROJECT_PATH": ".",
+        "TOKEN_PATH": "./src/styles/tokens.json"
+      }
+    }
+  }
+}
+```
+
+## 효과적인 프롬프트 패턴
+
+제약이 있는 프롬프트가 MCP에서 가장 효과적입니다:
+
+**좋은 예:**
+```
+이메일이랑 비밀번호 필드가 있는 설정 폼 만들어줘.
+기존 폼 프리미티브 사용해.
+시맨틱 토큰만 써.
+유효성 검사 에러 상태도 포함해.
+```
+
+**덜 효과적인 예:**
+```
+폼 만들어줘.
+```
+
+제약을 많이 줄수록 Claude Code가 MCP 컨텍스트를 더 잘 활용합니다.
+
+## 문제 해결
+
+### "MCP server not found"
+
+- 설치 확인: `npx @framingui/mcp-server --version`
+- 설정 경로 확인: `~/.claude/claude_desktop_config.json`
+- 설정 변경 후 Claude Code 재시작
+
+### "No tokens available"
+
+- `PROJECT_PATH`가 프로젝트를 가리키는지 확인
+- 토큰이 없으면 `npx @framingui/cli init` 실행
+- `framingui.config.ts`에 유효한 토큰 정의 확인
+
+### "Claude Code가 토큰을 무시함"
+
+- 프롬프트에 명시: "시맨틱 토큰만 사용해"
+- 제약 추가: "새로운 색상 값 만들지 마"
+- MCP 연결 확인: "사용 가능한 디자인 토큰 보여줘"
+
+## 다음 단계
+
+연결되면 탐색해보세요:
+
+- **컴포넌트 생성**: 적절한 variant가 있는 전체 컴포넌트 빌드
+- **리팩토링**: 하드코딩된 값을 토큰으로 마이그레이션 요청
+- **문서화**: 디자인 시스템을 참조하는 컴포넌트 문서 생성
+
+## 요약
+
+FramingUI MCP 서버는 디자인 시스템과 Claude Code를 연결합니다. AI가 토큰을 올바르게 추측하길 바라는 대신, 진실의 원천에 직접 접근권을 줍니다.
+
+설정은 5분. 수동 수정에 드는 시간 절약은 즉시 체감됩니다.
+
+`npm install -g @framingui/mcp-server`로 시작하고 할루시네이션된 색상을 다시는 수정하지 마세요.
