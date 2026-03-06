@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
+import { useScroll, useMotionValueEvent } from 'framer-motion';
 import { Button } from '@framingui/ui';
 import { Footer } from '../shared/Footer';
 import { useGlobalLanguage } from '../../contexts/GlobalLanguageContext';
