@@ -2,6 +2,25 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.1] - 2026-03-06
+
+### Fixed
+
+- **API 에러 처리 전면 개선**: `T | null` 반환을 `ApiResult<T>` discriminated union으로 교체하여 에러 원인(AUTH_FAILED, FORBIDDEN, NOT_FOUND, RATE_LIMITED 등)을 명확히 전달
+- `preview-theme`에서 라이선스 보유 테마가 "not available"로 반환되는 버그 수정
+- `fetchWithCache` 통합 패턴으로 캐시 → API → stale fallback 흐름 단일화
+
+### Added
+
+- `api-result.ts`: `ApiResult<T>`, `ApiErrorCode`, `formatToolError` 타입 시스템
+- 서버 측 인증 캐시 (5분 TTL) — bcrypt 전체 스캔 반복 방지
+- HTTP 에러 코드 분류 테스트 추가 (401, 403, 429, 500)
+
+### Changed
+
+- 전체 14개 tool handler에 ApiResult 언래핑 적용
+- `recipe-resolver`, `template-matcher`, `css-generator` ApiResult 대응
+
 ## [0.6.0] - 2026-03-06
 
 ### Changed
