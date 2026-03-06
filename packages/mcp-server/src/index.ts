@@ -9,7 +9,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { info, error as logError } from './utils/logger.js';
 import { verifyApiKey } from './auth/verify.js';
-import { setAuthData } from './auth/state.js';
+import { setAuthData, setRawApiKey } from './auth/state.js';
 import {
   AuthRequiredError,
   WhoamiRequiredError,
@@ -1045,6 +1045,7 @@ if (apiKey) {
 
     if (authResult.valid) {
       setAuthData(authResult);
+      setRawApiKey(apiKey);
       info(
         `Authentication successful - User: ${authResult.user?.email || 'unknown'}, Plan: ${authResult.user?.plan || 'unknown'}`
       );

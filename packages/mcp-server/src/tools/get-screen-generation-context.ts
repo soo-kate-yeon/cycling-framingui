@@ -3,8 +3,8 @@
  * SPEC-MCP-004 Phase 3.5: Provides complete context for AI agents to generate screen definitions
  */
 
-import { loadTheme } from '@framingui/core';
 import { templateRegistry } from '@framingui/ui';
+import { fetchTheme } from '../api/data-client.js';
 import type {
   GetScreenGenerationContextInput,
   GetScreenGenerationContextOutput,
@@ -182,11 +182,11 @@ function extractComponentTypes(template: any): string[] {
 /**
  * Get theme recipe info
  */
-function getThemeRecipeInfo(themeId: string): ThemeRecipeInfo[] {
+async function getThemeRecipeInfo(themeId: string): Promise<ThemeRecipeInfo[]> {
   const recipes: ThemeRecipeInfo[] = [];
 
   try {
-    const allRecipes = getAllRecipes(themeId);
+    const allRecipes = await getAllRecipes(themeId);
 
     // Group recipes by component type
     const grouped: Record<string, { variants: string[]; defaultClassName?: string }> = {};
@@ -276,9 +276,9 @@ export async function getScreenGenerationContextTool(
     // 4. Get theme recipes if theme specified
     let themeRecipes: ThemeRecipeInfo[] | undefined;
     if (input.themeId) {
-      const theme = loadTheme(input.themeId);
+      const theme = await fetchTheme(input.themeId);
       if (theme) {
-        themeRecipes = getThemeRecipeInfo(input.themeId);
+        themeRecipes = await getThemeRecipeInfo(input.themeId);
       }
     }
 

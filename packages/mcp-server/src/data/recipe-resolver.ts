@@ -3,9 +3,10 @@
  * SPEC-MCP-004 Phase 4: Theme Recipes Auto-Application
  *
  * 테마에서 레시피를 조회하고 컴포넌트 className에 적용합니다.
+ * (로컬 .moai/themes/generated/ 읽기 → framingui.com API fetch)
  */
 
-import { loadTheme } from '@framingui/core';
+import { fetchTheme } from '../api/data-client.js';
 import type { ComponentNode } from '@framingui/core';
 
 /**
@@ -70,13 +71,13 @@ function getNestedValue(obj: any, path: string): any {
  * @param variant - 컴포넌트 variant (glass, primary, hero 등)
  * @returns 레시피 className 문자열 또는 undefined
  */
-export function resolveRecipe(
+export async function resolveRecipe(
   themeId: string,
   componentType: string,
   variant?: string
-): string | undefined {
+): Promise<string | undefined> {
   try {
-    const theme = loadTheme(themeId) as any;
+    const theme = (await fetchTheme(themeId)) as any;
     if (!theme) {
       return undefined;
     }
@@ -149,13 +150,16 @@ function mergeClassName(existing: string | undefined, recipe: string): string {
  * @param themeId - 테마 ID
  * @returns 레시피가 적용된 노드 (원본 수정하지 않음)
  */
-export function applyRecipeToNode(node: ComponentNode, themeId: string): ComponentNode {
+export async function applyRecipeToNode(
+  node: ComponentNode,
+  themeId: string
+): Promise<ComponentNode> {
   const result = { ...node };
 
   // variant가 있으면 레시피 조회
   if (result.type) {
     const variant = (result.props as any)?.variant;
-    const recipe = resolveRecipe(themeId, result.type, variant);
+    const recipe = await resolveRecipe(themeId, result.type, variant);
 
     if (recipe) {
       // props 복사 (immutability 보장)
@@ -171,12 +175,15 @@ export function applyRecipeToNode(node: ComponentNode, themeId: string): Compone
 
   // children 재귀 처리
   if (Array.isArray(result.children)) {
-    result.children = result.children.map(child => {
+    const resolvedChildren = [];
+    for (const child of result.children) {
       if (typeof child === 'object' && child !== null && 'type' in child) {
-        return applyRecipeToNode(child as ComponentNode, themeId);
+        resolvedChildren.push(await applyRecipeToNode(child as ComponentNode, themeId));
+      } else {
+        resolvedChildren.push(child);
       }
-      return child;
-    });
+    }
+    result.children = resolvedChildren;
   }
 
   return result;
@@ -189,11 +196,11 @@ export function applyRecipeToNode(node: ComponentNode, themeId: string): Compone
  * @param themeId - 테마 ID
  * @returns 레시피가 적용된 컴포넌트 배열
  */
-export function applyRecipesToBlueprint(
+export async function applyRecipesToBlueprint(
   components: ComponentNode[],
   themeId: string
-): ComponentNode[] {
-  return components.map(component => applyRecipeToNode(component, themeId));
+): Promise<ComponentNode[]> {
+  return Promise.all(components.map(component => applyRecipeToNode(component, themeId)));
 }
 
 /**
@@ -203,26 +210,29 @@ export function applyRecipesToBlueprint(
  * @param themeId - 테마 ID
  * @returns 적용된 레시피 개수
  */
-export function countAppliedRecipes(components: ComponentNode[], themeId: string): number {
+export async function countAppliedRecipes(
+  components: ComponentNode[],
+  themeId: string
+): Promise<number> {
   let count = 0;
 
-  function traverse(node: ComponentNode) {
+  async function traverse(node: ComponentNode) {
     const variant = (node.props as any)?.variant;
-    if (node.type && resolveRecipe(themeId, node.type, variant)) {
+    if (node.type && (await resolveRecipe(themeId, node.type, variant))) {
       count++;
     }
 
     if (Array.isArray(node.children)) {
       for (const child of node.children) {
         if (typeof child === 'object' && child !== null && 'type' in child) {
-          traverse(child as ComponentNode);
+          await traverse(child as ComponentNode);
         }
       }
     }
   }
 
   for (const component of components) {
-    traverse(component);
+    await traverse(component);
   }
 
   return count;
@@ -234,9 +244,9 @@ export function countAppliedRecipes(components: ComponentNode[], themeId: string
  * @param themeId - 테마 ID
  * @returns 레시피 경로 → className 매핑
  */
-export function getAllRecipes(themeId: string): Record<string, string> {
+export async function getAllRecipes(themeId: string): Promise<Record<string, string>> {
   try {
-    const theme = loadTheme(themeId) as any;
+    const theme = (await fetchTheme(themeId)) as any;
     if (!theme) {
       return {};
     }

@@ -1,10 +1,11 @@
 /**
  * MCP Tool: list-icon-libraries
- * List all available icon libraries from .moai/icon-libraries/generated/
+ * API 기반으로 아이콘 라이브러리 목록 반환
+ * (로컬 .moai/icon-libraries/generated/ 읽기 → framingui.com API fetch)
  * [SPEC-ICON-001]
  */
 
-import { listIconLibraries } from '@framingui/core';
+import { fetchIconLibraryList } from '../api/data-client.js';
 import type { ListIconLibrariesOutput } from '../schemas/mcp-schemas.js';
 import { info, error as logError } from '../utils/logger.js';
 
@@ -16,7 +17,7 @@ export async function listIconLibrariesTool(): Promise<ListIconLibrariesOutput> 
   info('list-icon-libraries: Fetching available icon libraries');
 
   try {
-    const libraries = listIconLibraries();
+    const libraries = await fetchIconLibraryList();
 
     if (libraries.length === 0) {
       info('list-icon-libraries: No icon libraries found');

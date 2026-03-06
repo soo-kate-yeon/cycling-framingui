@@ -1,41 +1,31 @@
 /**
  * List Themes MCP Tool (v2.1)
- * Lists all available themes from .moai/themes/generated/
- * SPEC-DEPLOY-001: 인증된 사용자의 라이선스 보유 테마만 반환
+ * API 기반으로 라이선스 보유 테마 목록 반환
+ * (로컬 .moai/themes/generated/ 읽기 → framingui.com API fetch)
  */
 
-import { listThemes } from '@framingui/core';
+import { fetchThemeList } from '../api/data-client.js';
 import type { ListThemesOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
-import { getAccessibleThemes } from '../auth/state.js';
 
 /**
  * List available themes based on authentication status
- * 인증된 사용자의 라이선스 보유 테마만 반환
- * @returns Array of accessible theme metadata from .moai/themes/generated/
+ * API가 이미 라이선스 필터링을 수행하므로 추가 필터링 불필요
  */
 export async function listThemesTool(): Promise<ListThemesOutput> {
   try {
-    // @framingui/core에서 전체 테마 로드
-    const allThemes = listThemes();
-    const allThemeIds = allThemes.map(theme => theme.id);
-
-    // 인증 기반 접근 가능 테마 필터링
-    const accessibleThemeIds = getAccessibleThemes(allThemeIds);
-
-    // 접근 가능한 테마만 반환
-    const filteredThemes = allThemes.filter(theme => accessibleThemeIds.includes(theme.id));
+    const themes = await fetchThemeList();
 
     return {
       success: true,
-      themes: filteredThemes.map(theme => ({
+      themes: themes.map(theme => ({
         id: theme.id,
         name: theme.name,
         description: theme.description,
         brandTone: theme.brandTone,
         schemaVersion: theme.schemaVersion,
       })),
-      count: filteredThemes.length,
+      count: themes.length,
     };
   } catch (error) {
     return {

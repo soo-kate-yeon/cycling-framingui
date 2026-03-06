@@ -20,6 +20,9 @@ let currentAuthData: VerifyResponse | null = null;
 // whoami 도구 호출 완료 여부 (서버 사이드 게이트)
 let whoamiCompleted = false;
 
+// Raw API key (API 데이터 클라이언트에서 Bearer 헤더로 사용)
+let rawApiKey: string | null = null;
+
 /**
  * Set authentication data and cache it
  * @param authData - Verification response from API
@@ -51,11 +54,26 @@ export function getAuthData(): VerifyResponse | null {
 }
 
 /**
+ * Store raw API key for data-client API calls
+ */
+export function setRawApiKey(apiKey: string | null): void {
+  rawApiKey = apiKey;
+}
+
+/**
+ * Get raw API key for data-client API calls
+ */
+export function getRawApiKey(): string | null {
+  return rawApiKey;
+}
+
+/**
  * Clear authentication data and cache
  */
 export function clearAuthData(): void {
   currentAuthData = null;
   whoamiCompleted = false;
+  rawApiKey = null;
   authCache.clear();
   info('Authentication data cleared');
 }

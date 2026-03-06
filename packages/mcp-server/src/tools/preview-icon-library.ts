@@ -1,10 +1,11 @@
 /**
  * MCP Tool: preview-icon-library
- * Preview a specific icon library and retrieve its full data
+ * API 기반으로 아이콘 라이브러리 상세 데이터 조회
+ * (로컬 .moai/icon-libraries/generated/ 읽기 → framingui.com API fetch)
  * [SPEC-ICON-001]
  */
 
-import { loadIconLibrary, iconLibraryExists } from '@framingui/core';
+import { fetchIconLibrary } from '../api/data-client.js';
 import type { PreviewIconLibraryInput, PreviewIconLibraryOutput } from '../schemas/mcp-schemas.js';
 import { info, error as logError } from '../utils/logger.js';
 
@@ -20,27 +21,19 @@ export async function previewIconLibraryTool(
 
   info(`preview-icon-library: Previewing library "${libraryId}"`);
 
-  // Check if library exists
-  if (!iconLibraryExists(libraryId)) {
-    logError(`preview-icon-library: Library "${libraryId}" not found`);
-    return {
-      success: false,
-      error: `Icon library "${libraryId}" not found. Use list-icon-libraries to see available libraries.`,
-    };
-  }
-
   try {
-    const library = loadIconLibrary(libraryId);
+    const library = await fetchIconLibrary(libraryId);
 
     if (!library) {
+      logError(`preview-icon-library: Library "${libraryId}" not found`);
       return {
         success: false,
-        error: `Failed to load icon library "${libraryId}"`,
+        error: `Icon library "${libraryId}" not found. Use list-icon-libraries to see available libraries.`,
       };
     }
 
     // Get first 20 icons as sample
-    const iconNames = Object.keys(library.icons);
+    const iconNames = Object.keys(library.icons || {});
     const iconSample = iconNames.slice(0, 20);
 
     info(`preview-icon-library: Successfully loaded library "${libraryId}"`);

@@ -114,7 +114,7 @@ export async function exportScreenTool(input: ExportScreenInput): Promise<Export
 
     // SPEC-MCP-004 Phase 4: Apply theme recipes if themeId exists
     if (blueprint.themeId && blueprint.components) {
-      const componentsWithRecipes = applyRecipesToBlueprint(
+      const componentsWithRecipes = await applyRecipesToBlueprint(
         blueprint.components,
         blueprint.themeId
       );
@@ -359,7 +359,7 @@ export async function hybridExportTool(input: HybridExportInput): Promise<Hybrid
       // SPEC-MCP-004 Phase 4: Apply theme recipes if themeId exists
       if ((bp.themeId || themeId) && bp.components) {
         const targetThemeId = bp.themeId || themeId;
-        const componentsWithRecipes = applyRecipesToBlueprint(bp.components, targetThemeId!);
+        const componentsWithRecipes = await applyRecipesToBlueprint(bp.components, targetThemeId!);
         bp = {
           ...bp,
           components: componentsWithRecipes,
