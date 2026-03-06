@@ -122,8 +122,9 @@ async function getComponentInfo(componentIds: string[]): Promise<ContextComponen
   const components: ContextComponentInfo[] = [];
 
   for (const id of componentIds) {
-    const component = await fetchComponent(id.toLowerCase());
-    if (component) {
+    const result = await fetchComponent(id.toLowerCase());
+    if (result.ok) {
+      const component = result.data;
       components.push({
         id: component.id,
         name: component.name,
@@ -235,7 +236,8 @@ export async function getScreenGenerationContextTool(
       const match = templateMatches[0];
       if (match) {
         // API를 통해 템플릿 상세 정보 조회 [SPEC-MCP-007:E-002]
-        const templateData = await fetchTemplate(match.templateId);
+        const templateResult = await fetchTemplate(match.templateId);
+        const templateData = templateResult.ok ? templateResult.data : null;
 
         bestMatch = {
           templateId: match.templateId,
@@ -265,7 +267,8 @@ export async function getScreenGenerationContextTool(
     let examples: ScreenExample[] | undefined;
     if (input.includeExamples !== false) {
       // API를 통해 스크린 예제 조회 [SPEC-MCP-007:E-007]
-      const allExamples = await fetchScreenExamples();
+      const examplesResult = await fetchScreenExamples();
+      const allExamples = examplesResult.ok ? examplesResult.data : [];
       // 설명과 관련된 예제 필터링 (간단한 키워드 매칭)
       const lowerDesc = input.description.toLowerCase();
       const scored = allExamples.map((ex: any) => {
@@ -292,8 +295,8 @@ export async function getScreenGenerationContextTool(
     // 4. Get theme recipes if theme specified
     let themeRecipes: ThemeRecipeInfo[] | undefined;
     if (input.themeId) {
-      const theme = await fetchTheme(input.themeId);
-      if (theme) {
+      const themeResult = await fetchTheme(input.themeId);
+      if (themeResult.ok) {
         themeRecipes = await getThemeRecipeInfo(input.themeId);
       }
     }

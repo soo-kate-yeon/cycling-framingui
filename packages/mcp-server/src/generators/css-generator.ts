@@ -25,16 +25,16 @@ export interface CSSGenerationResult {
  * @returns CSS 생성 결과
  */
 export async function generateCSSFromThemeId(themeId: string): Promise<CSSGenerationResult> {
-  const css = await fetchCSSVariables(themeId);
-  if (!css) {
+  const result = await fetchCSSVariables(themeId);
+  if (!result.ok) {
     return {
       success: false,
-      error: `Failed to fetch CSS variables for theme: ${themeId}`,
+      error: `Failed to fetch CSS variables for theme "${themeId}": ${result.error.message}`,
     };
   }
   return {
     success: true,
-    css,
+    css: result.data,
   };
 }
 

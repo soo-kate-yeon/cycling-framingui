@@ -5,6 +5,7 @@
  */
 
 import { fetchThemeList } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 import type { ListThemesOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -14,8 +15,13 @@ import { extractErrorMessage } from '../utils/error-handler.js';
  */
 export async function listThemesTool(): Promise<ListThemesOutput> {
   try {
-    const themes = await fetchThemeList();
+    const result = await fetchThemeList();
 
+    if (!result.ok) {
+      return { success: false, error: formatToolError(result.error) };
+    }
+
+    const themes = result.data;
     return {
       success: true,
       themes: themes.map(theme => ({

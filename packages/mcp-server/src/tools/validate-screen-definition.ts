@@ -27,9 +27,12 @@ async function getComponentCatalog(): Promise<string[]> {
   if (_componentCatalogCache) {
     return _componentCatalogCache;
   }
-  const components = await fetchComponentList();
+  const result = await fetchComponentList();
+  if (!result.ok) {
+    return _componentCatalogCache ?? [];
+  }
   // API 컴포넌트는 id (소문자)로 저장, 검증에서 name (PascalCase)도 필요
-  _componentCatalogCache = components.map((c: any) => c.name);
+  _componentCatalogCache = result.data.map((c: any) => c.name);
   return _componentCatalogCache;
 }
 
@@ -37,8 +40,9 @@ async function getPropsData(componentId: string): Promise<any | null> {
   if (_componentPropsCache.has(componentId)) {
     return _componentPropsCache.get(componentId);
   }
-  const detail = await fetchComponent(componentId.toLowerCase());
-  if (detail) {
+  const result = await fetchComponent(componentId.toLowerCase());
+  if (result.ok) {
+    const detail = result.data;
     const propsData = {
       props: detail.props ?? [],
       variants: detail.variants,

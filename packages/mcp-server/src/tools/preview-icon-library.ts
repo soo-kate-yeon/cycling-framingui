@@ -6,6 +6,7 @@
  */
 
 import { fetchIconLibrary } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 import type { PreviewIconLibraryInput, PreviewIconLibraryOutput } from '../schemas/mcp-schemas.js';
 import { info, error as logError } from '../utils/logger.js';
 
@@ -22,15 +23,13 @@ export async function previewIconLibraryTool(
   info(`preview-icon-library: Previewing library "${libraryId}"`);
 
   try {
-    const library = await fetchIconLibrary(libraryId);
+    const result = await fetchIconLibrary(libraryId);
 
-    if (!library) {
-      logError(`preview-icon-library: Library "${libraryId}" not found`);
-      return {
-        success: false,
-        error: `Icon library "${libraryId}" not found. Use list-icon-libraries to see available libraries.`,
-      };
+    if (!result.ok) {
+      return { success: false, error: formatToolError(result.error, `Library "${libraryId}"`) };
     }
+
+    const library = result.data;
 
     // Get first 20 icons as sample
     const iconNames = Object.keys(library.icons || {});

@@ -5,6 +5,7 @@
  */
 
 import { fetchTokenList } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 import type { ListTokensInput, ListTokensOutput, TokenMetadata } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -40,7 +41,11 @@ export async function listTokensTool(input: ListTokensInput): Promise<ListTokens
     const { tokenType = 'all', filter } = input;
 
     // API를 통해 토큰 조회 [SPEC-MCP-007:E-005]
-    const tokenData = await fetchTokenList(tokenType as 'shell' | 'page' | 'section' | 'all');
+    const result = await fetchTokenList(tokenType as 'shell' | 'page' | 'section' | 'all');
+    if (!result.ok) {
+      return { success: false, error: formatToolError(result.error) };
+    }
+    const tokenData = result.data;
 
     let shells: TokenMetadata[] = tokenData.shells ?? [];
     let pages: TokenMetadata[] = tokenData.pages ?? [];

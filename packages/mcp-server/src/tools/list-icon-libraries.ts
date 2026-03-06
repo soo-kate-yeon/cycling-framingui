@@ -6,6 +6,7 @@
  */
 
 import { fetchIconLibraryList } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 import type { ListIconLibrariesOutput } from '../schemas/mcp-schemas.js';
 import { info, error as logError } from '../utils/logger.js';
 
@@ -17,17 +18,13 @@ export async function listIconLibrariesTool(): Promise<ListIconLibrariesOutput> 
   info('list-icon-libraries: Fetching available icon libraries');
 
   try {
-    const libraries = await fetchIconLibraryList();
+    const result = await fetchIconLibraryList();
 
-    if (libraries.length === 0) {
-      info('list-icon-libraries: No icon libraries found');
-      return {
-        success: true,
-        libraries: [],
-        count: 0,
-      };
+    if (!result.ok) {
+      return { success: false, error: formatToolError(result.error) };
     }
 
+    const libraries = result.data;
     info(`list-icon-libraries: Found ${libraries.length} icon libraries`);
 
     return {

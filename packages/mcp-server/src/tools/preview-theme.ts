@@ -9,8 +9,8 @@ import { themeToCSS, type ThemeDefinition } from '@framingui/ui';
 import type { PreviewThemeInput, PreviewThemeOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 import { getAuthData } from '../auth/state.js';
-import { addMcpUtmParams } from '../utils/url-utils.js';
-import { fetchTheme, fetchThemeList } from '../api/data-client.js';
+import { fetchTheme } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 
 /**
  * ThemeV2 (core) -> ThemeDefinition (ui) 어댑터
@@ -136,24 +136,16 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
     }
 
     // API를 통해 테마 로드 (라이선스 확인은 API가 수행)
-    const theme = await fetchTheme(themeId);
+    const themeResult = await fetchTheme(themeId);
 
-    if (!theme) {
-      // 라이선스 미보유 또는 존재하지 않는 테마
-      const availableThemes = await fetchThemeList();
-      const availableIds = availableThemes.map(t => t.id);
-      if (availableIds.length > 0) {
-        return {
-          success: false,
-          error: `Theme "${themeId}" not found or not included in your license. Available themes: ${availableIds.join(', ')}`,
-        };
-      }
-      const purchaseUrl = addMcpUtmParams('https://framingui.com', 'preview-theme');
+    if (!themeResult.ok) {
       return {
         success: false,
-        error: `Theme "${themeId}" is not available. Please check your license at ${purchaseUrl}.`,
+        error: formatToolError(themeResult.error, `Theme "${themeId}"`),
       };
     }
+
+    const theme = themeResult.data;
 
     // includeCSS가 true인 경우 CSS 변수 생성
     let css: string | undefined;

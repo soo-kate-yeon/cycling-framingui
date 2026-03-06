@@ -8,6 +8,7 @@
  */
 
 import { fetchTemplateList } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 import type {
   ListScreenTemplatesInput,
   ListScreenTemplatesOutput,
@@ -33,10 +34,15 @@ export async function listScreenTemplatesTool(
       params.search = input.search;
     }
 
-    const templates = await fetchTemplateList(params);
+    const result = await fetchTemplateList(params);
+    if (!result.ok) {
+      return { success: false, error: formatToolError(result.error) };
+    }
+    const templates = result.data;
 
     // 전체 템플릿에서 카테고리 카운트 계산 (category 필터 없이 조회)
-    const allTemplates = await fetchTemplateList();
+    const allResult = await fetchTemplateList();
+    const allTemplates = allResult.ok ? allResult.data : templates;
     const categories = {
       auth: allTemplates.filter((t: any) => t.category === 'auth').length,
       dashboard: allTemplates.filter((t: any) => t.category === 'dashboard').length,

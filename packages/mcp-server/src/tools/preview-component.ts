@@ -12,6 +12,7 @@
  */
 
 import { fetchComponent, fetchComponentList } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 import type { PreviewComponentInput, PreviewComponentOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -27,17 +28,24 @@ export async function previewComponentTool(
     const includeExamples = input.includeExamples ?? true;
     const includeDependencies = input.includeDependencies ?? true;
 
-    const component = await fetchComponent(input.componentId);
+    const componentResult = await fetchComponent(input.componentId);
 
-    if (!component) {
-      // [TAG-MCP003-012] Return error with available components
-      const allComponents = await fetchComponentList();
-      const availableComponents = allComponents.map((c: any) => c.id);
-      return {
-        success: false,
-        error: `Component not found: ${input.componentId}. Available components: ${availableComponents.join(', ')}`,
-      };
+    if (!componentResult.ok) {
+      // NOT_FOUND인 경우 사용 가능한 컴포넌트 목록 제공
+      if (componentResult.error.code === 'NOT_FOUND') {
+        const listResult = await fetchComponentList();
+        if (listResult.ok) {
+          const availableComponents = listResult.data.map((c: any) => c.id);
+          return {
+            success: false,
+            error: `Component not found: ${input.componentId}. Available components: ${availableComponents.join(', ')}`,
+          };
+        }
+      }
+      return { success: false, error: formatToolError(componentResult.error) };
     }
+
+    const component = componentResult.data;
 
     // Build component preview (API 응답에서 직접 필드 사용)
     const result = {

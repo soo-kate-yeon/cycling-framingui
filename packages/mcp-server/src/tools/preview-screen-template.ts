@@ -12,6 +12,7 @@
  */
 
 import { fetchTemplate, fetchTemplateList } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 import type {
   PreviewScreenTemplateInput,
   PreviewScreenTemplateOutput,
@@ -31,17 +32,24 @@ export async function previewScreenTemplateTool(
     // Set default value for optional parameter
     const includeLayoutTokens = input.includeLayoutTokens ?? true;
 
-    const template = await fetchTemplate(input.templateId);
+    const templateResult = await fetchTemplate(input.templateId);
 
-    if (!template) {
-      // [TAG-MCP003-013] Return error with available templates
-      const allTemplates = await fetchTemplateList();
-      const availableTemplates = allTemplates.map((t: any) => t.id);
-      return {
-        success: false,
-        error: `Template not found: ${input.templateId}. Available templates: ${availableTemplates.join(', ')}`,
-      };
+    if (!templateResult.ok) {
+      // NOT_FOUND인 경우 사용 가능한 템플릿 목록 제공
+      if (templateResult.error.code === 'NOT_FOUND') {
+        const listResult = await fetchTemplateList();
+        if (listResult.ok) {
+          const availableTemplates = listResult.data.map((t: any) => t.id);
+          return {
+            success: false,
+            error: `Template not found: ${input.templateId}. Available templates: ${availableTemplates.join(', ')}`,
+          };
+        }
+      }
+      return { success: false, error: formatToolError(templateResult.error) };
     }
+
+    const template = templateResult.data;
 
     // Build skeleton structure
     const skeleton = {

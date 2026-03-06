@@ -77,10 +77,11 @@ export async function resolveRecipe(
   variant?: string
 ): Promise<string | undefined> {
   try {
-    const theme = (await fetchTheme(themeId)) as any;
-    if (!theme) {
+    const themeResult = await fetchTheme(themeId);
+    if (!themeResult.ok) {
       return undefined;
     }
+    const theme = themeResult.data as any;
 
     // recipes는 tokens 내부가 아니라 최상위 필드
     const recipes = theme.recipes || theme.tokens?.recipes;
@@ -246,10 +247,11 @@ export async function countAppliedRecipes(
  */
 export async function getAllRecipes(themeId: string): Promise<Record<string, string>> {
   try {
-    const theme = (await fetchTheme(themeId)) as any;
-    if (!theme) {
+    const themeResult = await fetchTheme(themeId);
+    if (!themeResult.ok) {
       return {};
     }
+    const theme = themeResult.data as any;
 
     // recipes는 tokens 내부가 아니라 최상위 필드
     const recipes = theme.recipes || theme.tokens?.recipes;

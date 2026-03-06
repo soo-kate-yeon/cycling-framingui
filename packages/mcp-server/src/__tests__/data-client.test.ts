@@ -1,12 +1,12 @@
 /**
- * data-client.ts 테스트
+ * data-client.ts 테스트 (v2 - ApiResult 기반)
  * SPEC-MCP-007 Phase 2 - fetchTemplateList, fetchTemplate, fetchComponentList,
  * fetchComponent, fetchTokenList, fetchCSSVariables, fetchScreenExamples
  *
  * 테스트 시나리오:
- * 1. 캐시 미스: fetch 호출 → 결과 반환
- * 2. API 실패 + 캐시 없음: 빈 배열/null 반환
- * 3. 인증 없음: fetch 호출 없이 빈 배열/null 반환
+ * 1. 캐시 미스: fetch 호출 → ApiResult 성공 반환
+ * 2. API 실패 + 캐시 없음: ApiResult 에러 반환
+ * 3. 인증 없음: fetch 호출 없이 NOT_AUTHENTICATED 에러 반환
  * 4. URL 파라미터 전달 확인
  */
 
@@ -37,12 +37,11 @@ vi.mock('../utils/logger.js', () => ({
 }));
 
 // MemoryCache를 mock으로 교체 - 캐시가 항상 miss인 상태로 테스트
-// (data-client.ts의 스코프에서 MemoryCache new 호출 결과를 제어)
 vi.mock('../auth/cache.js', () => {
   return {
     MemoryCache: vi.fn().mockImplementation(() => ({
-      get: vi.fn().mockReturnValue(null), // 캐시 미스
-      getStale: vi.fn().mockReturnValue(null), // stale 캐시도 없음
+      get: vi.fn().mockReturnValue(null),
+      getStale: vi.fn().mockReturnValue(null),
       set: vi.fn(),
       delete: vi.fn(),
       clear: vi.fn(),
@@ -56,7 +55,7 @@ const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 테스트 대상 import (.ts 확장자로 직접 import해서 최신 소스 사용)
+// 테스트 대상 import
 // ─────────────────────────────────────────────────────────────────────────────
 
 import {
@@ -80,6 +79,15 @@ function makeOkResponse(body: unknown) {
   };
 }
 
+function makeErrorResponse(status: number, body: unknown) {
+  return {
+    ok: false,
+    status,
+    statusText: 'Error',
+    json: vi.fn().mockResolvedValue(body),
+  };
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // 공통 beforeEach
 // ─────────────────────────────────────────────────────────────────────────────
@@ -96,7 +104,7 @@ beforeEach(() => {
 // fetchTemplateList
 // ─────────────────────────────────────────────────────────────────────────────
 describe('fetchTemplateList()', () => {
-  it('API 성공 시 템플릿 목록을 반환한다', async () => {
+  it('API 성공 시 ok: true와 템플릿 목록을 반환한다', async () => {
     const templates = [
       {
         id: 'dashboard',
@@ -110,8 +118,11 @@ describe('fetchTemplateList()', () => {
 
     const result = await fetchTemplateList();
 
-    expect(result).toHaveLength(1);
-    expect(result[0]!.id).toBe('dashboard');
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toHaveLength(1);
+      expect(result.data[0]!.id).toBe('dashboard');
+    }
     expect(mockFetch).toHaveBeenCalledOnce();
   });
 
@@ -133,28 +144,37 @@ describe('fetchTemplateList()', () => {
     expect(calledUrl).toContain('search=login');
   });
 
-  it('API 실패 시 빈 배열을 반환한다', async () => {
+  it('API 응답 success: false 시 에러를 반환한다', async () => {
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: false, error: 'not found' }));
 
     const result = await fetchTemplateList();
 
-    expect(result).toEqual([]);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('SERVER_ERROR');
+    }
   });
 
-  it('fetch 네트워크 오류 시 빈 배열을 반환한다', async () => {
+  it('fetch 네트워크 오류 시 NETWORK_ERROR를 반환한다', async () => {
     mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
     const result = await fetchTemplateList();
 
-    expect(result).toEqual([]);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('NETWORK_ERROR');
+    }
   });
 
-  it('인증 없는 상태에서 빈 배열을 반환한다', async () => {
+  it('인증 없는 상태에서 NOT_AUTHENTICATED를 반환한다', async () => {
     mockGetAuthData.mockReturnValue(null);
 
     const result = await fetchTemplateList();
 
-    expect(result).toEqual([]);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('NOT_AUTHENTICATED');
+    }
     expect(mockFetch).not.toHaveBeenCalled();
   });
 });
@@ -163,30 +183,35 @@ describe('fetchTemplateList()', () => {
 // fetchTemplate
 // ─────────────────────────────────────────────────────────────────────────────
 describe('fetchTemplate()', () => {
-  it('API 성공 시 템플릿 상세를 반환한다', async () => {
+  it('API 성공 시 ok: true와 템플릿 상세를 반환한다', async () => {
     const template = { id: 'dashboard', name: 'Dashboard', sections: [] };
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: true, template }));
 
     const result = await fetchTemplate('dashboard');
 
-    expect(result).not.toBeNull();
-    expect(result.id).toBe('dashboard');
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.id).toBe('dashboard');
+    }
   });
 
-  it('API 실패 시 null을 반환한다', async () => {
+  it('API 응답 success: false 시 에러를 반환한다', async () => {
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: false, error: 'not found' }));
 
     const result = await fetchTemplate('nonexistent');
 
-    expect(result).toBeNull();
+    expect(result.ok).toBe(false);
   });
 
-  it('fetch 네트워크 오류 시 null을 반환한다', async () => {
+  it('fetch 네트워크 오류 시 NETWORK_ERROR를 반환한다', async () => {
     mockFetch.mockRejectedValueOnce(new Error('timeout'));
 
     const result = await fetchTemplate('dashboard');
 
-    expect(result).toBeNull();
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('NETWORK_ERROR');
+    }
   });
 
   it('ID가 URL 인코딩되어 전달된다', async () => {
@@ -205,7 +230,7 @@ describe('fetchTemplate()', () => {
 // fetchComponentList
 // ─────────────────────────────────────────────────────────────────────────────
 describe('fetchComponentList()', () => {
-  it('API 성공 시 컴포넌트 목록을 반환한다', async () => {
+  it('API 성공 시 ok: true와 컴포넌트 목록을 반환한다', async () => {
     const components = [
       {
         id: 'button',
@@ -221,24 +246,30 @@ describe('fetchComponentList()', () => {
 
     const result = await fetchComponentList();
 
-    expect(result).toHaveLength(1);
-    expect(result[0]!.id).toBe('button');
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toHaveLength(1);
+      expect(result.data[0]!.id).toBe('button');
+    }
   });
 
-  it('API 실패 시 빈 배열을 반환한다', async () => {
+  it('API 응답 success: false 시 에러를 반환한다', async () => {
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: false }));
 
     const result = await fetchComponentList();
 
-    expect(result).toEqual([]);
+    expect(result.ok).toBe(false);
   });
 
-  it('fetch 네트워크 오류 시 빈 배열을 반환한다', async () => {
+  it('fetch 네트워크 오류 시 NETWORK_ERROR를 반환한다', async () => {
     mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
     const result = await fetchComponentList();
 
-    expect(result).toEqual([]);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('NETWORK_ERROR');
+    }
   });
 });
 
@@ -246,7 +277,7 @@ describe('fetchComponentList()', () => {
 // fetchComponent
 // ─────────────────────────────────────────────────────────────────────────────
 describe('fetchComponent()', () => {
-  it('API 성공 시 컴포넌트 상세를 반환한다', async () => {
+  it('API 성공 시 ok: true와 컴포넌트 상세를 반환한다', async () => {
     const component = {
       id: 'button',
       name: 'Button',
@@ -262,25 +293,30 @@ describe('fetchComponent()', () => {
 
     const result = await fetchComponent('button');
 
-    expect(result).not.toBeNull();
-    expect(result?.id).toBe('button');
-    expect(result?.props).toBeDefined();
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.id).toBe('button');
+      expect(result.data.props).toBeDefined();
+    }
   });
 
-  it('API 실패 시 null을 반환한다', async () => {
+  it('API 응답 success: false 시 에러를 반환한다', async () => {
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: false, error: 'not found' }));
 
     const result = await fetchComponent('nonexistent');
 
-    expect(result).toBeNull();
+    expect(result.ok).toBe(false);
   });
 
-  it('fetch 네트워크 오류 시 null을 반환한다', async () => {
+  it('fetch 네트워크 오류 시 NETWORK_ERROR를 반환한다', async () => {
     mockFetch.mockRejectedValueOnce(new Error('timeout'));
 
     const result = await fetchComponent('button');
 
-    expect(result).toBeNull();
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('NETWORK_ERROR');
+    }
   });
 });
 
@@ -288,7 +324,7 @@ describe('fetchComponent()', () => {
 // fetchTokenList
 // ─────────────────────────────────────────────────────────────────────────────
 describe('fetchTokenList()', () => {
-  it('type=all 요청 시 shells/pages/sections 포함 응답을 반환한다', async () => {
+  it('type=all 요청 시 ok: true와 shells/pages/sections를 반환한다', async () => {
     const responseBody = {
       success: true,
       shells: [{ id: 'shell.web.dashboard' }],
@@ -300,10 +336,13 @@ describe('fetchTokenList()', () => {
 
     const result = await fetchTokenList('all');
 
-    expect(result.metadata.total).toBe(3);
-    expect(result.shells).toHaveLength(1);
-    expect(result.pages).toHaveLength(1);
-    expect(result.sections).toHaveLength(1);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.metadata.total).toBe(3);
+      expect(result.data.shells).toHaveLength(1);
+      expect(result.data.pages).toHaveLength(1);
+      expect(result.data.sections).toHaveLength(1);
+    }
   });
 
   it('type=shell 쿼리파라미터가 전달된다', async () => {
@@ -317,13 +356,12 @@ describe('fetchTokenList()', () => {
     expect(calledUrl).toContain('type=shell');
   });
 
-  it('API 실패 시 빈 metadata를 반환한다', async () => {
+  it('API 응답 success: false 시 에러를 반환한다', async () => {
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: false }));
 
     const result = await fetchTokenList('all');
 
-    expect(result.metadata.total).toBe(0);
-    expect(result.shells).toBeUndefined();
+    expect(result.ok).toBe(false);
   });
 
   it('tokenType 미지정 시 type=all로 요청된다', async () => {
@@ -340,30 +378,36 @@ describe('fetchTokenList()', () => {
 // fetchCSSVariables
 // ─────────────────────────────────────────────────────────────────────────────
 describe('fetchCSSVariables()', () => {
-  it('API 성공 시 CSS 문자열을 반환한다', async () => {
+  it('API 성공 시 ok: true와 CSS 문자열을 반환한다', async () => {
     const css = ':root { --color-brand-500: oklch(0.5 0.2 240); }';
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: true, css }));
 
     const result = await fetchCSSVariables('square-minimalism');
 
-    expect(result).toBe(css);
-    expect(result).toContain(':root');
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toBe(css);
+      expect(result.data).toContain(':root');
+    }
   });
 
-  it('API 실패 시 null을 반환한다', async () => {
+  it('API 응답 success: false 시 에러를 반환한다', async () => {
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: false, error: 'not found' }));
 
     const result = await fetchCSSVariables('nonexistent');
 
-    expect(result).toBeNull();
+    expect(result.ok).toBe(false);
   });
 
-  it('fetch 네트워크 오류 시 null을 반환한다', async () => {
+  it('fetch 네트워크 오류 시 NETWORK_ERROR를 반환한다', async () => {
     mockFetch.mockRejectedValueOnce(new Error('timeout'));
 
     const result = await fetchCSSVariables('square-minimalism');
 
-    expect(result).toBeNull();
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('NETWORK_ERROR');
+    }
   });
 
   it('themeId와 /css 경로가 URL에 포함된다', async () => {
@@ -381,7 +425,7 @@ describe('fetchCSSVariables()', () => {
 // fetchScreenExamples
 // ─────────────────────────────────────────────────────────────────────────────
 describe('fetchScreenExamples()', () => {
-  it('API 성공 시 스크린 예제 목록을 반환한다', async () => {
+  it('API 성공 시 ok: true와 스크린 예제 목록을 반환한다', async () => {
     const examples = [
       { name: 'Team Grid', description: 'Grid layout', definition: { id: 'team-grid' } },
       { name: 'Login Form', description: 'Auth screen', definition: { id: 'login-screen' } },
@@ -390,25 +434,31 @@ describe('fetchScreenExamples()', () => {
 
     const result = await fetchScreenExamples();
 
-    expect(result).toHaveLength(2);
-    expect(result[0]!.name).toBe('Team Grid');
-    expect(result[1]!.definition.id).toBe('login-screen');
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toHaveLength(2);
+      expect(result.data[0]!.name).toBe('Team Grid');
+      expect(result.data[1]!.definition.id).toBe('login-screen');
+    }
   });
 
-  it('API 실패 시 빈 배열을 반환한다', async () => {
+  it('API 응답 success: false 시 에러를 반환한다', async () => {
     mockFetch.mockResolvedValueOnce(makeOkResponse({ success: false }));
 
     const result = await fetchScreenExamples();
 
-    expect(result).toEqual([]);
+    expect(result.ok).toBe(false);
   });
 
-  it('fetch 네트워크 오류 시 빈 배열을 반환한다', async () => {
+  it('fetch 네트워크 오류 시 NETWORK_ERROR를 반환한다', async () => {
     mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
     const result = await fetchScreenExamples();
 
-    expect(result).toEqual([]);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('NETWORK_ERROR');
+    }
   });
 
   it('응답 예제에 name, description, definition이 포함된다', async () => {
@@ -423,9 +473,66 @@ describe('fetchScreenExamples()', () => {
 
     const result = await fetchScreenExamples();
 
-    expect(result[0]!).toHaveProperty('name');
-    expect(result[0]!).toHaveProperty('description');
-    expect(result[0]!).toHaveProperty('definition');
-    expect(result[0]!.definition.shell).toBe('shell.web.dashboard');
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data[0]!).toHaveProperty('name');
+      expect(result.data[0]!).toHaveProperty('description');
+      expect(result.data[0]!).toHaveProperty('definition');
+      expect(result.data[0]!.definition.shell).toBe('shell.web.dashboard');
+    }
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HTTP 에러 코드 분류 테스트
+// ─────────────────────────────────────────────────────────────────────────────
+describe('HTTP 에러 코드 분류', () => {
+  it('401 응답 시 AUTH_FAILED 에러를 반환한다', async () => {
+    mockFetch.mockResolvedValueOnce(makeErrorResponse(401, { error: 'unauthorized' }));
+
+    const result = await fetchTemplate('pebble');
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('AUTH_FAILED');
+      expect(result.error.status).toBe(401);
+    }
+  });
+
+  it('403 응답 시 FORBIDDEN 에러를 반환한다', async () => {
+    mockFetch.mockResolvedValueOnce(
+      makeErrorResponse(403, { error: 'Theme "pebble" is not included in your license.' })
+    );
+
+    const result = await fetchTemplate('pebble');
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('FORBIDDEN');
+      expect(result.error.message).toContain('not included');
+    }
+  });
+
+  it('429 응답 시 RATE_LIMITED 에러를 반환한다', async () => {
+    mockFetch.mockResolvedValueOnce(makeErrorResponse(429, { error: 'Too many requests' }));
+
+    const result = await fetchTemplate('pebble');
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('RATE_LIMITED');
+    }
+  });
+
+  it('500 응답 시 SERVER_ERROR 에러를 반환한다', async () => {
+    mockFetch.mockResolvedValueOnce(makeErrorResponse(500, { error: 'Internal server error' }));
+
+    const result = await fetchTemplate('pebble');
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('SERVER_ERROR');
+      expect(result.error.status).toBe(500);
+    }
   });
 });

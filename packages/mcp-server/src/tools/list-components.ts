@@ -8,6 +8,7 @@
  */
 
 import { fetchComponentList } from '../api/data-client.js';
+import { formatToolError } from '../api/api-result.js';
 import type { ListComponentsInput, ListComponentsOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -21,7 +22,11 @@ export async function listComponentsTool(
 ): Promise<ListComponentsOutput> {
   try {
     // API에서 전체 컴포넌트 목록 조회
-    const allComponents = await fetchComponentList();
+    const result = await fetchComponentList();
+    if (!result.ok) {
+      return { success: false, error: formatToolError(result.error) };
+    }
+    const allComponents = result.data;
 
     // 카테고리 필터 적용
     let components = allComponents;

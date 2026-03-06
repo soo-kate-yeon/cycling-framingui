@@ -262,7 +262,8 @@ export function matchTemplates(description: string, topN: number = 3): TemplateM
  * get-screen-generation-context에서 사용
  */
 export async function fetchTemplateDetails(templateId: string): Promise<any | null> {
-  return fetchTemplate(templateId);
+  const result = await fetchTemplate(templateId);
+  return result.ok ? result.data : null;
 }
 
 /**
