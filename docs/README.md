@@ -14,6 +14,7 @@ Welcome to the Tekton documentation! This guide will help you find the informati
 
 - **[Getting Started](./guides/getting-started.md)** - Installation and basic usage
 - **[API Reference](./api/README.md)** - Complete API documentation
+- **[Release Learning Checklist](./deployment/release-learning-checklist.md)** - Deployment and package release guardrails learned from recent failures
 - **[Contributing](../CONTRIBUTING.md)** - Development guidelines and workflow
 
 ---
