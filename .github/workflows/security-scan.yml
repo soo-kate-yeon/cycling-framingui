@@ -15,10 +15,34 @@ permissions:
   security-events: write
 
 jobs:
+  workspace-install:
+    name: Workspace Install
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Verify frozen lockfile install
+        run: pnpm install --frozen-lockfile
+
   npm-audit:
     name: npm Audit
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    needs: [workspace-install]
 
     steps:
       - name: Checkout code
@@ -95,6 +119,7 @@ jobs:
     name: Dependency Security Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    needs: [workspace-install]
 
     steps:
       - name: Checkout code
@@ -134,14 +159,24 @@ jobs:
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
-    needs: [npm-audit, dependency-check]
+    needs: [workspace-install, npm-audit, dependency-check]
     if: always()
 
     steps:
       - name: Check security scan status
         run: |
+          if [ "${{ needs.workspace-install.result }}" == "failure" ]; then
+            echo "::error::Workspace install failed before security checks could run"
+            exit 1
+          fi
+
           if [ "${{ needs.npm-audit.result }}" == "failure" ]; then
             echo "::error::npm audit detected critical or high vulnerabilities"
+            exit 1
+          fi
+
+          if [ "${{ needs.dependency-check.result }}" == "failure" ]; then
+            echo "::error::Dependency security check failed before a summary could be produced"
             exit 1
           fi
 

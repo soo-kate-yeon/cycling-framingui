@@ -1,4 +1,4 @@
-name: Auto-fix CI Failures
+name: CI Failure Intake
 
 on:
   workflow_run:
@@ -7,64 +7,31 @@ on:
       - 'E2E Tests'
       - 'Accessibility Tests'
       - 'Security Scan'
-      - 'Publish to npm'
+      - 'Publish Integrity Gate'
       - 'Deploy to Vercel'
       - 'Vercel Deploy - Playground Web'
     types:
       - completed
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: write
   actions: read
 
 concurrency:
-  group: auto-fix-${{ github.event.workflow_run.head_branch }}
+  group: ci-failure-intake-${{ github.event.workflow_run.id }}
   cancel-in-progress: false
 
 jobs:
-  auto-fix:
-    name: Auto-fix Failed Checks
+  summarize:
+    name: Summarize Failed Checks
     if: github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.head_branch != ''
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 2
-
-      - name: Check for infinite loop
-        id: loop-guard
-        run: |
-          LAST_AUTHOR=$(git log -1 --format='%an')
-          LAST_SUBJECT=$(git log -1 --format='%s')
-
-          if [ "$LAST_AUTHOR" = "github-actions[bot]" ] && echo "$LAST_SUBJECT" | grep -qi "auto-fix ci failures"; then
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "::warning::Last commit was auto-fix by bot. Skipping to prevent infinite loop."
-          else
-            echo "skip=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Set branch policy
-        if: steps.loop-guard.outputs.skip != 'true'
-        id: branch-policy
-        run: |
-          BRANCH="${{ github.event.workflow_run.head_branch }}"
-          if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
-            echo "allow_push_fixes=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Protected branch detected ($BRANCH). Auto-commit/push disabled."
-          else
-            echo "allow_push_fixes=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Analyze failed workflow
-        if: steps.loop-guard.outputs.skip != 'true'
-        id: analyze
+      - name: Collect failure metadata
+        id: collect
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -74,223 +41,90 @@ jobs:
           echo "workflow_name=$WORKFLOW_NAME" >> "$GITHUB_OUTPUT"
           echo "workflow_url=${{ github.event.workflow_run.html_url }}" >> "$GITHUB_OUTPUT"
 
-          # 실패한 job 목록 및 로그를 수집해 리뷰/코멘트에 활용
           gh run view "$RUN_ID" --json jobs --jq '.jobs[] | select(.conclusion == "failure") | .name' > failed_jobs.txt || true
           gh run view "$RUN_ID" --log-failed > failed_logs.txt 2>/dev/null || true
 
-          NEEDS_LINT=false
-          NEEDS_FORMAT=false
-          NEEDS_TYPE=false
-          NEEDS_TEST=false
-          NEEDS_BUILD=false
-          NEEDS_SECURITY=false
-          NEEDS_DEPLOY=false
-
           FAILED_META="$(cat failed_jobs.txt 2>/dev/null; cat failed_logs.txt 2>/dev/null)"
+          ROOT_CAUSE="manual investigation required"
+          NEXT_ACTION="Review the failing run and repair it on a dedicated fix branch."
 
-          if echo "$FAILED_META" | grep -Eqi "lint|eslint"; then
-            NEEDS_LINT=true
+          if echo "$FAILED_META" | grep -q 'ERR_PNPM_OUTDATED_LOCKFILE'; then
+            ROOT_CAUSE="pnpm lockfile drift"
+            NEXT_ACTION="Run pnpm install --lockfile-only, commit pnpm-lock.yaml, and rerun CI."
+          elif echo "$FAILED_META" | grep -Eqi 'lint|eslint|prettier|format'; then
+            ROOT_CAUSE="lint or formatting regression"
+            NEXT_ACTION="Run the lint/format commands locally, commit the fixes, and rerun CI."
+          elif echo "$FAILED_META" | grep -Eqi 'typescript|type check|tsc|TS[0-9]{4}'; then
+            ROOT_CAUSE="TypeScript or type-level regression"
+            NEXT_ACTION="Reproduce the type failure locally before pushing a fix branch."
+          elif echo "$FAILED_META" | grep -Eqi 'test|vitest|jest|playwright|e2e'; then
+            ROOT_CAUSE="test regression"
+            NEXT_ACTION="Reproduce the failing tests locally, fix the regression, and push a follow-up branch."
+          elif echo "$FAILED_META" | grep -Eqi 'security|audit|vulnerab'; then
+            ROOT_CAUSE="security scan failure"
+            NEXT_ACTION="Check whether the failure is a true vulnerability or a setup/install error before changing dependencies."
+          elif echo "$FAILED_META" | grep -Eqi 'deploy|vercel|production|preview'; then
+            ROOT_CAUSE="deployment failure"
+            NEXT_ACTION="Inspect the deployment job and verify credentials, build output, and target environment."
           fi
 
-          if echo "$FAILED_META" | grep -Eqi "prettier|format"; then
-            NEEDS_FORMAT=true
-          fi
-
-          if echo "$FAILED_META" | grep -Eqi "typescript|type check|tsc|TS[0-9]{4}"; then
-            NEEDS_TYPE=true
-          fi
-
-          if echo "$FAILED_META" | grep -Eqi "test|vitest|jest|playwright|e2e"; then
-            NEEDS_TEST=true
-          fi
-
-          if echo "$FAILED_META" | grep -Eqi "build|compile"; then
-            NEEDS_BUILD=true
-          fi
-
-          if echo "$FAILED_META" | grep -Eqi "security|audit|vulnerab"; then
-            NEEDS_SECURITY=true
-          fi
-
-          if echo "$FAILED_META" | grep -Eqi "deploy|vercel|production|preview"; then
-            NEEDS_DEPLOY=true
-          fi
-
-          echo "needs_lint_fix=$NEEDS_LINT" >> "$GITHUB_OUTPUT"
-          echo "needs_format_fix=$NEEDS_FORMAT" >> "$GITHUB_OUTPUT"
-          echo "needs_type_fix=$NEEDS_TYPE" >> "$GITHUB_OUTPUT"
-          echo "needs_test_fix=$NEEDS_TEST" >> "$GITHUB_OUTPUT"
-          echo "needs_build_fix=$NEEDS_BUILD" >> "$GITHUB_OUTPUT"
-          echo "needs_security_fix=$NEEDS_SECURITY" >> "$GITHUB_OUTPUT"
-          echo "needs_deploy_fix=$NEEDS_DEPLOY" >> "$GITHUB_OUTPUT"
+          echo "root_cause=$ROOT_CAUSE" >> "$GITHUB_OUTPUT"
+          echo "next_action=$NEXT_ACTION" >> "$GITHUB_OUTPUT"
 
           {
             echo "failed_jobs<<EOF"
             if [ -s failed_jobs.txt ]; then
               cat failed_jobs.txt
             else
-              echo "(failed job 목록을 가져오지 못했습니다)"
+              echo "(failed job list unavailable)"
             fi
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Setup pnpm
-        if: steps.loop-guard.outputs.skip != 'true' && (steps.analyze.outputs.needs_lint_fix == 'true' || steps.analyze.outputs.needs_format_fix == 'true')
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        if: steps.loop-guard.outputs.skip != 'true' && (steps.analyze.outputs.needs_lint_fix == 'true' || steps.analyze.outputs.needs_format_fix == 'true')
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        if: steps.loop-guard.outputs.skip != 'true' && (steps.analyze.outputs.needs_lint_fix == 'true' || steps.analyze.outputs.needs_format_fix == 'true')
-        run: pnpm install --frozen-lockfile --ignore-scripts
-
-      - name: Run ESLint auto-fix
-        if: steps.loop-guard.outputs.skip != 'true' && steps.analyze.outputs.needs_lint_fix == 'true'
-        continue-on-error: true
-        run: |
-          echo "Running ESLint auto-fix for workspace packages..."
-          pnpm lint:all -- --fix || true
-
-      - name: Run Prettier auto-fix
-        if: steps.loop-guard.outputs.skip != 'true' && steps.analyze.outputs.needs_format_fix == 'true'
-        continue-on-error: true
-        run: |
-          echo "Running Prettier auto-fix..."
-          pnpm exec prettier --write \
-            "packages/*/src/**/*.{ts,tsx,js,jsx}" \
-            "packages/*/__tests__/**/*.{ts,tsx,js,jsx}" \
-            "packages/playground-web/{app,components,lib,__tests__}/**/*.{ts,tsx,js,jsx}" \
-            ".github/workflows/**/*.{yml,yaml}" \
-            "*.{ts,tsx,js,jsx,json,md}" || true
-
-      - name: Check for changes
-        if: steps.loop-guard.outputs.skip != 'true'
-        id: check-changes
-        run: |
-          rm -f failed_logs.txt failed_jobs.txt
-
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            {
-              echo "changed_files<<EOF"
-              git diff --name-only
-              echo "EOF"
-            } >> "$GITHUB_OUTPUT"
-          else
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            {
-              echo "changed_files<<EOF"
-              echo "(변경 파일 없음)"
-              echo "EOF"
-            } >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Commit and push fixes
-        if: steps.loop-guard.outputs.skip != 'true' && steps.branch-policy.outputs.allow_push_fixes == 'true' && steps.check-changes.outputs.has_changes == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add -A
-          git commit -m "chore: auto-fix CI failures from ${{ steps.analyze.outputs.workflow_name }}"
-          git pull --rebase origin "${{ github.event.workflow_run.head_branch }}" || git rebase --abort
-          git push origin "HEAD:${{ github.event.workflow_run.head_branch }}"
-
       - name: Comment on PR (if exists)
-        if: always() && steps.loop-guard.outputs.skip != 'true'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_NUMBER=$(gh pr list --head "${{ github.event.workflow_run.head_branch }}" --json number --jq '.[0].number' 2>/dev/null)
+          PR_NUMBER=$(gh pr list --head "${{ github.event.workflow_run.head_branch }}" --json number --jq '.[0].number' 2>/dev/null || true)
 
           if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
-            if [ "${{ steps.check-changes.outputs.has_changes }}" = "true" ] && [ "${{ steps.branch-policy.outputs.allow_push_fixes }}" = "true" ]; then
-              STATUS_LINE="자동 수정 커밋을 생성하고 push 했습니다."
-            elif [ "${{ steps.check-changes.outputs.has_changes }}" = "true" ] && [ "${{ steps.branch-policy.outputs.allow_push_fixes }}" = "false" ]; then
-              STATUS_LINE="자동 수정 후보를 생성했지만 보호 브랜치(main/master) 정책으로 push는 수행하지 않았습니다."
-            else
-              STATUS_LINE="자동 수정 가능한 변경이 없어 수동 개입이 필요합니다."
-            fi
-
             COMMENT_BODY="$(cat <<'COMMENT_EOF'
-          ## Auto-fix CI Review
+            ## CI Failure Intake
 
-          대상 워크플로우: `${{ steps.analyze.outputs.workflow_name }}`
-          실행 링크: ${{ steps.analyze.outputs.workflow_url }}
-          결론: `failure`
+            Workflow: `${{ steps.collect.outputs.workflow_name }}`
+            Run: ${{ steps.collect.outputs.workflow_url }}
+            Likely root cause: `${{ steps.collect.outputs.root_cause }}`
 
-          분석된 실패 Job:
-          ```text
-          ${{ steps.analyze.outputs.failed_jobs }}
-          ```
+            Failed jobs:
+            ```text
+            ${{ steps.collect.outputs.failed_jobs }}
+            ```
 
-          감지 결과:
-          - Lint: `${{ steps.analyze.outputs.needs_lint_fix }}`
-          - Format: `${{ steps.analyze.outputs.needs_format_fix }}`
-          - Type: `${{ steps.analyze.outputs.needs_type_fix }}`
-          - Test: `${{ steps.analyze.outputs.needs_test_fix }}`
-          - Build: `${{ steps.analyze.outputs.needs_build_fix }}`
-          - Security: `${{ steps.analyze.outputs.needs_security_fix }}`
-          - Deploy: `${{ steps.analyze.outputs.needs_deploy_fix }}`
+            Recommended next step:
+            ${{ steps.collect.outputs.next_action }}
 
-          처리 결과:
-          - __STATUS_LINE__
-
-          변경 파일:
-          ```text
-          ${{ steps.check-changes.outputs.changed_files }}
-          ```
-          COMMENT_EOF
-          )"
-            COMMENT_BODY="${COMMENT_BODY/__STATUS_LINE__/$STATUS_LINE}"
+            This workflow only summarizes failures. Branch creation, fixes, and pushes are delegated to Codex automation.
+            COMMENT_EOF
+            )"
             gh pr comment "$PR_NUMBER" --body "$COMMENT_BODY"
           else
             echo "No open PR found for branch ${{ github.event.workflow_run.head_branch }}."
           fi
 
       - name: Summary
-        if: always() && steps.loop-guard.outputs.skip != 'true'
         run: |
-          echo "## Auto-fix CI Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Workflow: ${{ steps.analyze.outputs.workflow_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Run: ${{ steps.analyze.outputs.workflow_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Branch: ${{ github.event.workflow_run.head_branch }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Allow auto push: ${{ steps.branch-policy.outputs.allow_push_fixes }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [ "${{ steps.check-changes.outputs.has_changes }}" == "true" ] && [ "${{ steps.branch-policy.outputs.allow_push_fixes }}" == "true" ]; then
-            echo "Fixes applied and committed." >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Changes:" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            git diff HEAD~1 --name-only >> $GITHUB_STEP_SUMMARY || true
-            echo '```' >> $GITHUB_STEP_SUMMARY
-          elif [ "${{ steps.check-changes.outputs.has_changes }}" == "true" ] && [ "${{ steps.branch-policy.outputs.allow_push_fixes }}" == "false" ]; then
-            echo "Auto-fix candidates were generated, but push was blocked by protected branch policy." >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Candidate Changes:" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            echo "${{ steps.check-changes.outputs.changed_files }}" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-          else
-            echo "No automatic fixes available. Manual intervention required for:" >> $GITHUB_STEP_SUMMARY
-            echo "- TypeScript/type-level errors" >> $GITHUB_STEP_SUMMARY
-            echo "- Test failures (unit/e2e/a11y)" >> $GITHUB_STEP_SUMMARY
-            echo "- Build/deployment errors" >> $GITHUB_STEP_SUMMARY
-            echo "- Security vulnerabilities requiring dependency updates" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Failed Jobs" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.analyze.outputs.failed_jobs }}" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "## CI Failure Intake" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Workflow: ${{ steps.collect.outputs.workflow_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Run: ${{ steps.collect.outputs.workflow_url }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Branch: ${{ github.event.workflow_run.head_branch }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Likely root cause: ${{ steps.collect.outputs.root_cause }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Failed Jobs" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ steps.collect.outputs.failed_jobs }}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Recommended Next Step" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ steps.collect.outputs.next_action }}" >> "$GITHUB_STEP_SUMMARY"
