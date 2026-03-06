@@ -11,6 +11,7 @@ export const PREMIUM_THEMES = [
   'bold-line',
   'classic-magazine',
   'dark-boldness',
+  'editorial-tech',
   'minimal-workspace',
   'neutral-workspace',
   'pebble',

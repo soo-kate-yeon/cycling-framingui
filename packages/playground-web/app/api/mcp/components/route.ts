@@ -302,7 +302,8 @@ export async function GET(request: NextRequest) {
       {
         status: 200,
         headers: {
-          'Cache-Control': 'public, s-maxage=3600',
+          'Cache-Control': 'private, no-store',
+          Vary: 'Authorization',
           ...auth.rateLimitHeaders,
         },
       }

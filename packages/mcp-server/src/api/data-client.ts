@@ -269,7 +269,23 @@ export async function fetchThemeList(): Promise<ApiResult<ThemeMeta[]>> {
     cache: themeListCache,
     cacheKey: 'list',
     apiPath: '/api/mcp/themes',
-    validate: data => data.success === true,
+    validate: data => {
+      if (data.success !== true) {
+        return false;
+      }
+
+      // 라이선스가 있는데 빈 목록이 오면 auth-dependent upstream 캐시 오염으로 본다.
+      const licensedCount = getAuthData()?.themes?.licensed?.length ?? 0;
+      const themeCount = data.themes?.length ?? 0;
+      if (licensedCount > 0 && themeCount === 0) {
+        logError(
+          `[data-client] Empty theme list received despite ${licensedCount} licensed themes`
+        );
+        return false;
+      }
+
+      return true;
+    },
     extract: data => data.themes ?? null,
   });
 }

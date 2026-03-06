@@ -2,6 +2,13 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.3] - 2026-03-06
+
+### Fixed
+
+- Treated empty `list-themes` responses as invalid when the authenticated session already has licensed themes, preventing blank theme lists from being cached in MCP memory.
+- Added `editorial-tech` to the master-account premium theme set so `whoami` and downstream tools stay aligned with the actual catalog.
+
 ## [0.6.2] - 2026-03-06
 
 ### Changed

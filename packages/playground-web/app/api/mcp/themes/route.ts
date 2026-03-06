@@ -40,7 +40,9 @@ export async function GET(request: NextRequest) {
       {
         status: 200,
         headers: {
-          'Cache-Control': 'public, s-maxage=3600',
+          // Authorization에 따라 응답이 달라지므로 공유 캐시를 금지한다.
+          'Cache-Control': 'private, no-store',
+          Vary: 'Authorization',
           ...auth.rateLimitHeaders,
         },
       }
