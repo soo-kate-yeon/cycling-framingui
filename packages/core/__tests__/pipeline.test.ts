@@ -3,6 +3,9 @@
  * Tests the complete flow: Theme -> Blueprint -> Screen
  */
 
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import {
   // Theme
@@ -74,6 +77,23 @@ describe('Theme Module', () => {
       expect(themes.length).toBeGreaterThan(0);
       expect(themes[0]).toHaveProperty('id');
       expect(themes[0]).toHaveProperty('name');
+    });
+
+    it('should fall back when cwd has no .moai directory', () => {
+      const originalCwd = process.cwd();
+      const tempDir = mkdtempSync(join(tmpdir(), 'framingui-core-'));
+
+      process.chdir(tempDir);
+
+      try {
+        const themes = listThemes();
+        const theme = loadTheme('classic-magazine');
+
+        expect(themes.length).toBeGreaterThan(0);
+        expect(theme?.id).toBe('classic-magazine');
+      } finally {
+        process.chdir(originalCwd);
+      }
     });
   });
 

@@ -5,7 +5,8 @@
  */
 
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
+import { getGeneratedDataDir } from './generated-data-dir.js';
 
 // ============================================================================
 // V2.1 Theme Types (Visual DNA Only - No Layout)
@@ -243,32 +244,14 @@ export interface ThemeMetaV2 {
 // ============================================================================
 
 /**
- * Find project root by looking for .moai directory
- */
-function findProjectRoot(startDir: string): string | null {
-  let currentDir = startDir;
-  const root = '/';
-
-  while (currentDir !== root) {
-    if (existsSync(join(currentDir, '.moai'))) {
-      return currentDir;
-    }
-    currentDir = resolve(currentDir, '..');
-  }
-
-  return null;
-}
-
-/**
- * Get themes directory path
- * Returns .moai/themes/generated/ from project root
+ * Resolve themes directory.
+ * Priority:
+ * 1. Consumer project .moai/themes/generated
+ * 2. Monorepo root .moai/themes/generated
+ * 3. Bundled package data copied into dist/bundled/themes/generated
  */
 function getThemesDir(): string | null {
-  const projectRoot = findProjectRoot(process.cwd());
-  if (!projectRoot) {
-    return null;
-  }
-  return join(projectRoot, '.moai', 'themes', 'generated');
+  return getGeneratedDataDir(import.meta.url, 'themes');
 }
 
 // ============================================================================

@@ -5,7 +5,8 @@
  */
 
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
+import { getGeneratedDataDir } from './generated-data-dir.js';
 
 // ============================================================================
 // Icon Library Types
@@ -70,32 +71,14 @@ export interface IconLibraryMeta {
 // ============================================================================
 
 /**
- * Find project root by looking for .moai directory
- */
-function findProjectRoot(startDir: string): string | null {
-  let currentDir = startDir;
-  const root = '/';
-
-  while (currentDir !== root) {
-    if (existsSync(join(currentDir, '.moai'))) {
-      return currentDir;
-    }
-    currentDir = resolve(currentDir, '..');
-  }
-
-  return null;
-}
-
-/**
- * Get icon libraries directory path
- * Returns .moai/icon-libraries/generated/ from project root
+ * Resolve icon libraries directory.
+ * Priority:
+ * 1. Consumer project .moai/icon-libraries/generated
+ * 2. Monorepo root .moai/icon-libraries/generated
+ * 3. Bundled package data copied into dist/bundled/icon-libraries/generated
  */
 function getIconLibrariesDir(): string | null {
-  const projectRoot = findProjectRoot(process.cwd());
-  if (!projectRoot) {
-    return null;
-  }
-  return join(projectRoot, '.moai', 'icon-libraries', 'generated');
+  return getGeneratedDataDir(import.meta.url, 'icon-libraries');
 }
 
 // ============================================================================

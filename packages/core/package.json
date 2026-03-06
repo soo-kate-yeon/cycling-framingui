@@ -1,6 +1,6 @@
 {
   "name": "@framingui/core",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Core design system pipeline: Theme -> Blueprint -> Screen (~800 LOC)",
   "type": "module",
   "main": "./dist/index.js",
@@ -27,7 +27,7 @@
     "directory": "packages/core"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node ./scripts/copy-bundled-generated-data.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

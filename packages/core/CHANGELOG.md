@@ -5,6 +5,26 @@ All notable changes to @tekton/core will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2026-03-06
+
+### Fixed
+
+- Fixed theme discovery in deployed environments where `process.cwd()` does not contain `.moai/`.
+- Restored `listThemes()` and `loadTheme()` behavior for hosted MCP API routes that were returning zero licensed themes.
+- Applied the same fallback resolution to icon library loading so deployed builds do not depend on workspace-local generated data.
+
+### Changed
+
+- Added bundled generated theme and icon-library JSON data to the `@framingui/core` build output.
+- Theme and icon loaders now resolve data in this order:
+  1. consumer project `.moai/.../generated`
+  2. monorepo root `.moai/.../generated`
+  3. package-bundled `dist/bundled/.../generated`
+
+### Testing
+
+- Added a regression test covering `listThemes()` and `loadTheme()` when the current working directory has no `.moai` directory.
+
 ## [0.2.0] - 2026-01-25
 
 ### Added - 3-Layer Token System (SPEC-COMPONENT-001-A)
