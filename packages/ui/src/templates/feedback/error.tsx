@@ -38,16 +38,16 @@ export function ErrorTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
-      <div className="max-w-md text-center space-y-[var(--tekton-spacing-6)]">
+      <div className="max-w-md text-center space-y-[var(--spacing-6)]">
         {/* Error Icon */}
         {slots.icon || (
           <div className="flex justify-center">
-            <div className="rounded-full bg-[var(--tekton-bg-destructive)] bg-opacity-10 p-[var(--tekton-spacing-4)]">
+            <div className="rounded-full bg-[var(--bg-destructive)] bg-opacity-10 p-[var(--spacing-4)]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-[var(--tekton-text-destructive)]"
+                className="h-12 w-12 text-[var(--text-destructive)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -64,20 +64,20 @@ export function ErrorTemplateComponent({
         )}
 
         {/* Error Message */}
-        <div className="space-y-[var(--tekton-spacing-2)]">
+        <div className="space-y-[var(--spacing-2)]">
           <h2 className="text-2xl font-bold">{title}</h2>
-          <p className="text-[var(--tekton-text-muted-foreground)]">{message}</p>
+          <p className="text-[var(--text-muted-foreground)]">{message}</p>
         </div>
 
         {/* Error Details */}
         {slots.errorDetails && (
-          <div className="text-left bg-[var(--tekton-bg-muted)] p-[var(--tekton-spacing-4)] rounded-[var(--tekton-radius-md)] text-sm">
+          <div className="text-left bg-[var(--bg-muted)] p-[var(--spacing-4)] rounded-[var(--radius-md)] text-sm">
             {slots.errorDetails}
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex flex-col gap-[var(--tekton-spacing-3)]">
+        <div className="flex flex-col gap-[var(--spacing-3)]">
           {showRetry && <Button className="w-full">{retryLabel}</Button>}
           {slots.additionalActions && slots.additionalActions}
         </div>

@@ -103,12 +103,12 @@ const ISSUES: Issue[] = [
 
 export function KanbanBoardView(_props: KanbanBoardViewProps) {
   return (
-    <div className="flex h-full bg-[var(--tekton-bg-canvas)] rounded-[var(--tekton-radius-xl)] border border-[var(--tekton-border-default)] overflow-hidden shadow-sm">
+    <div className="flex h-full bg-[var(--bg-canvas)] rounded-[var(--radius-xl)] border border-[var(--border-default)] overflow-hidden shadow-sm">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-surface)] flex flex-col shrink-0">
+      <aside className="w-64 border-r border-[var(--border-default)] bg-[var(--bg-surface)] flex flex-col shrink-0">
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-[var(--tekton-action-primary)] flex items-center justify-center text-[10px] text-white font-bold">
+            <div className="w-6 h-6 rounded bg-[var(--action-primary)] flex items-center justify-center text-[10px] text-white font-bold">
               T
             </div>
             <span className="text-sm font-bold tracking-tight">Tekton</span>
@@ -159,8 +159,8 @@ export function KanbanBoardView(_props: KanbanBoardViewProps) {
           </div>
         </nav>
 
-        <div className="p-4 border-t border-[var(--tekton-border-default)]">
-          <div className="bg-[var(--tekton-bg-canvas)] border border-[var(--tekton-border-default)] rounded-[var(--tekton-radius-sm)] p-3 space-y-2">
+        <div className="p-4 border-t border-[var(--border-default)]">
+          <div className="bg-[var(--bg-canvas)] border border-[var(--border-default)] rounded-[var(--radius-sm)] p-3 space-y-2">
             <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
               What's new
             </p>
@@ -172,7 +172,7 @@ export function KanbanBoardView(_props: KanbanBoardViewProps) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Header */}
-        <header className="flex items-center justify-between px-6 py-3 border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-canvas)]">
+        <header className="flex items-center justify-between px-6 py-3 border-b border-[var(--border-default)] bg-[var(--bg-canvas)]">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm font-semibold">
               <div className="w-5 h-5 rounded bg-green-500 flex items-center justify-center text-[10px] text-white">
@@ -185,7 +185,7 @@ export function KanbanBoardView(_props: KanbanBoardViewProps) {
             <div className="flex items-center gap-1">
               <Badge
                 variant="secondary"
-                className="bg-[var(--tekton-bg-surface)] border-none font-semibold h-7 px-3 rounded-[var(--tekton-radius-sm)] text-xs"
+                className="bg-[var(--bg-surface)] border-none font-semibold h-7 px-3 rounded-[var(--radius-sm)] text-xs"
               >
                 All issues
               </Badge>
@@ -205,11 +205,11 @@ export function KanbanBoardView(_props: KanbanBoardViewProps) {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] cursor-pointer text-xs font-semibold">
+            <div className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer text-xs font-semibold">
               <Filter size={14} />
               <span>Filter</span>
             </div>
-            <div className="flex items-center gap-2 text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] cursor-pointer text-xs font-semibold">
+            <div className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer text-xs font-semibold">
               <Layout size={14} />
               <span>Display</span>
             </div>
@@ -271,8 +271,8 @@ function KanbanCard({ issue, columnId }: { issue: Issue; columnId: string }) {
 
   return (
     <div
-      className="group p-3 border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-canvas)] hover:bg-[var(--tekton-bg-surface-subtle,var(--tekton-bg-canvas-subtle,var(--tekton-bg-canvas)))] hover:border-[var(--tekton-border-emphasis)] hover:shadow-sm cursor-grab active:cursor-grabbing transition-all"
-      style={{ borderRadius: 'var(--tekton-radius-md)' }}
+      className="group p-3 border border-[var(--border-default)] bg-[var(--bg-canvas)] hover:bg-[var(--bg-surface-subtle,var(--bg-canvas-subtle,var(--bg-canvas)))] hover:border-[var(--border-emphasis)] hover:shadow-sm cursor-grab active:cursor-grabbing transition-all"
+      style={{ borderRadius: 'var(--radius-md)' }}
     >
       <div className="flex flex-col gap-2.5">
         <div className="flex items-start justify-between">
@@ -292,14 +292,14 @@ function KanbanCard({ issue, columnId }: { issue: Issue; columnId: string }) {
           ) : (
             <Circle size={16} className="text-neutral-300 shrink-0 mt-0.5" />
           )}
-          <h4 className="text-sm font-semibold leading-relaxed tracking-tight text-[var(--tekton-text-primary)] line-clamp-2">
+          <h4 className="text-sm font-semibold leading-relaxed tracking-tight text-[var(--text-primary)] line-clamp-2">
             {issue.title}
           </h4>
         </div>
         <div className="flex items-center justify-between mt-1">
           <div className="flex items-center gap-3">
             <div
-              className={`px-1 py-0.5 rounded-sm border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-surface)] flex items-center gap-1`}
+              className={`px-1 py-0.5 rounded-sm border border-[var(--border-default)] bg-[var(--bg-surface)] flex items-center gap-1`}
             >
               <div className={`w-2 h-2 rounded-full ${getPriorityColor(issue.priority)}`} />
               <span className="text-[10px] font-bold text-neutral-400">{issue.label}</span>
@@ -309,7 +309,7 @@ function KanbanCard({ issue, columnId }: { issue: Issue; columnId: string }) {
             </span>
           </div>
           <div className="flex items-center -space-x-1.5">
-            <div className="w-5 h-5 rounded-full border-2 border-[var(--tekton-bg-canvas)] bg-neutral-200" />
+            <div className="w-5 h-5 rounded-full border-2 border-[var(--bg-canvas)] bg-neutral-200" />
           </div>
         </div>
       </div>
@@ -330,10 +330,10 @@ function SidebarItem({
 }) {
   return (
     <div
-      className={`flex items-center justify-between px-3 py-1.5 text-xs font-medium rounded-[var(--tekton-radius-md)] cursor-pointer transition-colors ${
+      className={`flex items-center justify-between px-3 py-1.5 text-xs font-medium rounded-[var(--radius-md)] cursor-pointer transition-colors ${
         active
-          ? 'bg-[var(--tekton-border-default)] text-[var(--tekton-text-primary)]'
-          : 'text-[var(--tekton-text-secondary)] hover:bg-[var(--tekton-bg-canvas-subtle,var(--tekton-border-default))] hover:text-[var(--tekton-text-primary)]'
+          ? 'bg-[var(--border-default)] text-[var(--text-primary)]'
+          : 'text-[var(--text-secondary)] hover:bg-[var(--bg-canvas-subtle,var(--border-default))] hover:text-[var(--text-primary)]'
       }`}
     >
       <div className="flex items-center gap-2">
@@ -341,14 +341,14 @@ function SidebarItem({
           <Icon
             size={14}
             className={
-              active ? 'text-[var(--tekton-text-primary)]' : 'text-[var(--tekton-text-tertiary)]'
+              active ? 'text-[var(--text-primary)]' : 'text-[var(--text-tertiary)]'
             }
           />
         )}
         <span>{label}</span>
       </div>
       {count && (
-        <span className="text-[10px] text-[var(--tekton-text-tertiary)] bg-[var(--tekton-bg-canvas)] px-1.5 py-0.5 rounded-sm border border-[var(--tekton-border-default)]">
+        <span className="text-[10px] text-[var(--text-tertiary)] bg-[var(--bg-canvas)] px-1.5 py-0.5 rounded-sm border border-[var(--border-default)]">
           {count}
         </span>
       )}

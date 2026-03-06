@@ -47,18 +47,18 @@ export function VerificationTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
       <Card className="w-full max-w-md">
         <CardHeader>
-          {slots.icon && <div className="mb-[var(--tekton-spacing-4)]">{slots.icon}</div>}
+          {slots.icon && <div className="mb-[var(--spacing-4)]">{slots.icon}</div>}
           <CardTitle>{title}</CardTitle>
           <CardDescription>{subtitle}</CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-[var(--tekton-spacing-4)]">
+        <CardContent className="space-y-[var(--spacing-4)]">
           {/* Email Display */}
-          <div className="bg-[var(--tekton-bg-muted)] p-[var(--tekton-spacing-3)] rounded-[var(--tekton-radius-md)] text-center">
+          <div className="bg-[var(--bg-muted)] p-[var(--spacing-3)] rounded-[var(--radius-md)] text-center">
             <p className="text-sm font-medium">{userEmail}</p>
           </div>
 
@@ -68,9 +68,9 @@ export function VerificationTemplateComponent({
           {/* Resend Link */}
           {showResend && (
             <div className="text-center">
-              <p className="text-sm text-[var(--tekton-text-muted-foreground)]">
+              <p className="text-sm text-[var(--text-muted-foreground)]">
                 Didn&apos;t receive the email?{' '}
-                <button className="text-[var(--tekton-text-primary)] hover:underline">
+                <button className="text-[var(--text-primary)] hover:underline">
                   Resend
                 </button>
               </p>
@@ -80,9 +80,9 @@ export function VerificationTemplateComponent({
 
         <CardFooter>
           {slots.footer || (
-            <p className="text-sm text-center w-full text-[var(--tekton-text-muted-foreground)]">
+            <p className="text-sm text-center w-full text-[var(--text-muted-foreground)]">
               Wrong email?{' '}
-              <a href="#" className="text-[var(--tekton-text-primary)] hover:underline">
+              <a href="#" className="text-[var(--text-primary)] hover:underline">
                 Change email address
               </a>
             </p>

@@ -133,32 +133,32 @@ describe('Card', () => {
     it('applies Tekton token-based styles to Card', () => {
       const { container } = render(<Card>Test</Card>);
       const card = container.firstChild;
-      expect(card.className).toMatch(/var\(--tekton-/);
+      expect(card.className).toMatch(/var\(--/);
     });
     it('uses Tekton spacing tokens in CardHeader', () => {
       const { container } = render(<CardHeader>Header</CardHeader>);
       const header = container.firstChild;
-      expect(header.className).toContain('p-[var(--tekton-spacing-6)]');
+      expect(header.className).toContain('p-[var(--spacing-6)]');
     });
     it('uses Tekton spacing tokens in CardContent', () => {
       const { container } = render(<CardContent>Content</CardContent>);
       const content = container.firstChild;
-      expect(content.className).toContain('p-[var(--tekton-spacing-6)]');
+      expect(content.className).toContain('p-[var(--spacing-6)]');
     });
     it('uses Tekton radius tokens', () => {
       const { container } = render(<Card>Radius</Card>);
       const card = container.firstChild;
-      expect(card.className).toContain('rounded-[var(--tekton-radius-lg)]');
+      expect(card.className).toContain('rounded-[var(--radius-lg)]');
     });
     it('uses Tekton border tokens', () => {
       const { container } = render(<Card>Border</Card>);
       const card = container.firstChild;
-      expect(card.className).toContain('border-[var(--tekton-border-default)]');
+      expect(card.className).toContain('border-[var(--border-default)]');
     });
     it('uses Tekton color tokens', () => {
       const { container } = render(<Card>Colors</Card>);
       const card = container.firstChild;
-      expect(card.className).toContain('bg-[var(--tekton-bg-card)]');
+      expect(card.className).toContain('bg-[var(--bg-card)]');
     });
   });
   // Additional Edge Cases

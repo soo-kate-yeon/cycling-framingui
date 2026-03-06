@@ -50,18 +50,18 @@ export interface ResponsiveBreakpoints {
  */
 export interface ResponsiveLayout {
   mobile: {
-    padding: string; // var(--tekton-layout-padding-mobile)
-    gap: string; // var(--tekton-layout-gap-mobile)
+    padding: string; // var(--layout-padding-mobile)
+    gap: string; // var(--layout-gap-mobile)
     columns: number; // 4
   };
   tablet: {
-    padding: string; // var(--tekton-layout-padding-tablet)
-    gap: string; // var(--tekton-layout-gap-tablet)
+    padding: string; // var(--layout-padding-tablet)
+    gap: string; // var(--layout-gap-tablet)
     columns: number; // 8
   };
   desktop: {
-    padding: string; // var(--tekton-layout-padding-desktop)
-    gap: string; // var(--tekton-layout-gap-desktop)
+    padding: string; // var(--layout-padding-desktop)
+    gap: string; // var(--layout-gap-desktop)
     columns: number; // 12
   };
 }
@@ -157,18 +157,18 @@ export interface TemplateRegistryEntry {
  */
 export const DEFAULT_RESPONSIVE_LAYOUT: ResponsiveLayout = {
   mobile: {
-    padding: 'var(--tekton-layout-padding-mobile)', // 16px
-    gap: 'var(--tekton-layout-gap-mobile)', // 16px
+    padding: 'var(--layout-padding-mobile)', // 16px
+    gap: 'var(--layout-gap-mobile)', // 16px
     columns: 4,
   },
   tablet: {
-    padding: 'var(--tekton-layout-padding-tablet)', // 32px
-    gap: 'var(--tekton-layout-gap-tablet)', // 24px
+    padding: 'var(--layout-padding-tablet)', // 32px
+    gap: 'var(--layout-gap-tablet)', // 24px
     columns: 8,
   },
   desktop: {
-    padding: 'var(--tekton-layout-padding-desktop)', // 64px
-    gap: 'var(--tekton-layout-gap-desktop)', // 32px
+    padding: 'var(--layout-padding-desktop)', // 64px
+    gap: 'var(--layout-gap-desktop)', // 32px
     columns: 12,
   },
 };

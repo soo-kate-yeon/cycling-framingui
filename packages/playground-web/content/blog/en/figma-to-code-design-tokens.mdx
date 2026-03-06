@@ -115,10 +115,10 @@ import { Button } from '@framingui/ui';
 Behind the scenes:
 ```css
 .button-primary {
-  background: var(--tekton-bg-primary);
-  color: var(--tekton-fg-primary);
-  border-radius: var(--tekton-radius-md);
-  padding: var(--tekton-spacing-3) var(--tekton-spacing-4);
+  background: var(--bg-primary);
+  color: var(--fg-primary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3) var(--spacing-4);
 }
 ```
 
@@ -129,14 +129,14 @@ Behind the scenes:
 ```tsx
 // Light mode
 :root {
-  --tekton-bg-primary: #3B82F6;
-  --tekton-bg-card: #FFFFFF;
+  --bg-primary: #3B82F6;
+  --bg-card: #FFFFFF;
 }
 
 // Dark mode
 [data-theme="dark"] {
-  --tekton-bg-primary: #60A5FA;
-  --tekton-bg-card: #1F2937;
+  --bg-primary: #60A5FA;
+  --bg-card: #1F2937;
 }
 ```
 

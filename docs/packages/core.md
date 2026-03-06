@@ -88,7 +88,7 @@ if (!validation.success) {
 
 // CSS 변수 생성
 const css = generateThemeCSS(theme);
-// => ':root { --tekton-bg-primary: oklch(...); ... }'
+// => ':root { --bg-primary: oklch(...); ... }'
 ```
 
 **순환 참조 감지**: 토큰 A -> B -> C -> A 같은 순환 참조를 자동으로 감지하고 오류를 보고합니다.

@@ -147,8 +147,8 @@ interface TemplateLayout {
 | ---------- | ---------------------------------------------- | -------- | ---------------------------------------------------- |
 | `type`     | `'full' \| 'centered' \| 'split' \| 'sidebar'` | ✅       | Layout structure type                                |
 | `maxWidth` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'`       | ❌       | Content max width (default: `'full'`)                |
-| `padding`  | `TokenReference`                               | ❌       | Outer padding (default: `'var(--tekton-spacing-4)'`) |
-| `gap`      | `TokenReference`                               | ❌       | Section gap (default: `'var(--tekton-spacing-4)'`)   |
+| `padding`  | `TokenReference`                               | ❌       | Outer padding (default: `'var(--spacing-4)'`) |
+| `gap`      | `TokenReference`                               | ❌       | Section gap (default: `'var(--spacing-4)'`)   |
 
 **Layout Types:**
 
@@ -165,8 +165,8 @@ interface TemplateLayout {
 const layout: TemplateLayout = {
   type: 'centered',
   maxWidth: 'sm',
-  padding: 'var(--tekton-spacing-4)',
-  gap: 'var(--tekton-spacing-6)',
+  padding: 'var(--spacing-4)',
+  gap: 'var(--spacing-6)',
 };
 ```
 
@@ -384,7 +384,7 @@ const LoginTemplate = getTemplate('login-minimal');
 
 - Type: `centered`
 - Max Width: `sm`
-- Padding: `var(--tekton-spacing-4)`
+- Padding: `var(--spacing-4)`
 
 **Slots:**
 
@@ -422,7 +422,7 @@ import { LoginTemplate } from '@framingui/templates/auth/login';
 
 - Type: `sidebar`
 - Max Width: `full`
-- Gap: `var(--tekton-spacing-0)` (no gap)
+- Gap: `var(--spacing-0)` (no gap)
 
 **Slots:**
 
@@ -483,8 +483,8 @@ export const MyTemplate: ScreenTemplate = {
   layout: {
     type: 'full',
     maxWidth: 'lg',
-    padding: 'var(--tekton-spacing-4)',
-    gap: 'var(--tekton-spacing-6)',
+    padding: 'var(--spacing-4)',
+    gap: 'var(--spacing-6)',
   },
   slots: [
     {
@@ -611,13 +611,13 @@ describe('MyTemplate', () => {
 
 **Always Use Tokens:**
 
-- ✅ `padding: 'var(--tekton-spacing-4)'`
+- ✅ `padding: 'var(--spacing-4)'`
 - ❌ `padding: '1rem'`
 
 **Layer Appropriately:**
 
-- Use semantic tokens for colors: `var(--tekton-bg-background)`
-- Use atomic tokens for spacing: `var(--tekton-spacing-4)`
+- Use semantic tokens for colors: `var(--bg-background)`
+- Use atomic tokens for spacing: `var(--spacing-4)`
 - Use component tokens for variants: `var(--button-primary-background)`
 
 ### 4. Theme Compatibility
@@ -796,7 +796,7 @@ const Component: React.FC<ScreenTemplateProps> = ({ slots }) => {
 
 **Solution:**
 
-1. Verify CSS Variables are used: `var(--tekton-*)`
+1. Verify CSS Variables are used: `var(--*)`
 2. Check theme loader is initialized
 3. Ensure template supports active theme
 4. Inspect CSS Variable values in DevTools

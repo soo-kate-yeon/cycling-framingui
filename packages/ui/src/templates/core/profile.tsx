@@ -41,12 +41,12 @@ export function ProfileTemplateComponent({
   const userEmail = String(options.user_email || 'john@example.com');
 
   return (
-    <div className={`min-h-screen p-[var(--tekton-spacing-8)] ${className}`}>
+    <div className={`min-h-screen p-[var(--spacing-8)] ${className}`}>
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="mb-[var(--tekton-spacing-8)]">
-          <h1 className="text-3xl font-bold mb-[var(--tekton-spacing-2)]">{title}</h1>
-          <p className="text-[var(--tekton-text-muted-foreground)]">{subtitle}</p>
+        <div className="mb-[var(--spacing-8)]">
+          <h1 className="text-3xl font-bold mb-[var(--spacing-2)]">{title}</h1>
+          <p className="text-[var(--text-muted-foreground)]">{subtitle}</p>
         </div>
 
         {/* Profile Card */}
@@ -55,16 +55,16 @@ export function ProfileTemplateComponent({
             <CardTitle>Personal Information</CardTitle>
             <CardDescription>Update your profile details</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-[var(--tekton-spacing-6)]">
+          <CardContent className="space-y-[var(--spacing-6)]">
             {/* Avatar Section */}
             {slots.avatar && (
-              <div className="flex items-center gap-[var(--tekton-spacing-4)]">
+              <div className="flex items-center gap-[var(--spacing-4)]">
                 <div>{slots.avatar}</div>
                 <div>
                   <Button variant="outline" size="sm">
                     Change Photo
                   </Button>
-                  <p className="text-xs text-[var(--tekton-text-muted-foreground)] mt-[var(--tekton-spacing-2)]">
+                  <p className="text-xs text-[var(--text-muted-foreground)] mt-[var(--spacing-2)]">
                     JPG, PNG. Max 2MB
                   </p>
                 </div>
@@ -72,23 +72,23 @@ export function ProfileTemplateComponent({
             )}
 
             {/* Name Input */}
-            <div className="space-y-[var(--tekton-spacing-2)]">
+            <div className="space-y-[var(--spacing-2)]">
               <Label htmlFor="name">Name</Label>
               <Input id="name" type="text" defaultValue={userName} />
             </div>
 
             {/* Email Input */}
-            <div className="space-y-[var(--tekton-spacing-2)]">
+            <div className="space-y-[var(--spacing-2)]">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" defaultValue={userEmail} disabled />
-              <p className="text-xs text-[var(--tekton-text-muted-foreground)]">
+              <p className="text-xs text-[var(--text-muted-foreground)]">
                 Contact support to change your email address
               </p>
             </div>
 
             {/* Bio/Description */}
             {slots.bioField && (
-              <div className="space-y-[var(--tekton-spacing-2)]">{slots.bioField}</div>
+              <div className="space-y-[var(--spacing-2)]">{slots.bioField}</div>
             )}
 
             {/* Additional Fields */}
@@ -98,11 +98,11 @@ export function ProfileTemplateComponent({
 
         {/* Additional Sections */}
         {slots.additionalSections && (
-          <div className="mt-[var(--tekton-spacing-6)]">{slots.additionalSections}</div>
+          <div className="mt-[var(--spacing-6)]">{slots.additionalSections}</div>
         )}
 
         {/* Action Buttons */}
-        <div className="mt-[var(--tekton-spacing-8)] flex justify-end gap-[var(--tekton-spacing-4)]">
+        <div className="mt-[var(--spacing-8)] flex justify-end gap-[var(--spacing-4)]">
           <Button variant="outline">Cancel</Button>
           <Button>{saveLabel}</Button>
         </div>

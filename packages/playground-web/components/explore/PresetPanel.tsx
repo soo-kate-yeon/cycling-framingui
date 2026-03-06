@@ -33,13 +33,13 @@ interface PresetSectionProps {
 
 function PresetSection({ title, presets, selectedId, onSelect }: PresetSectionProps) {
   return (
-    <div className="preset-section" style={{ marginBottom: 'var(--tekton-spacing-lg, 16px)' }}>
+    <div className="preset-section" style={{ marginBottom: 'var(--spacing-lg, 16px)' }}>
       <h3
         style={{
-          fontSize: 'var(--tekton-font-size-sm, 14px)',
+          fontSize: 'var(--font-size-sm, 14px)',
           fontWeight: '600',
-          color: 'var(--tekton-text-foreground, #111827)',
-          marginBottom: 'var(--tekton-spacing-sm, 8px)',
+          color: 'var(--text-foreground, #111827)',
+          marginBottom: 'var(--spacing-sm, 8px)',
         }}
       >
         {title}
@@ -51,7 +51,7 @@ function PresetSection({ title, presets, selectedId, onSelect }: PresetSectionPr
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 'var(--tekton-spacing-xs, 4px)',
+          gap: 'var(--spacing-xs, 4px)',
         }}
       >
         {presets.map((preset) => {
@@ -68,24 +68,24 @@ function PresetSection({ title, presets, selectedId, onSelect }: PresetSectionPr
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: 'var(--tekton-spacing-sm, 8px) var(--tekton-spacing-md, 12px)',
-                backgroundColor: isSelected ? 'var(--tekton-bg-accent, #f3f4f6)' : 'transparent',
+                padding: 'var(--spacing-sm, 8px) var(--spacing-md, 12px)',
+                backgroundColor: isSelected ? 'var(--bg-accent, #f3f4f6)' : 'transparent',
                 border: '1px solid',
                 borderColor: isSelected
-                  ? 'var(--tekton-bg-primary, #3b82f6)'
-                  : 'var(--tekton-border-default, #e5e7eb)',
-                borderRadius: 'var(--tekton-radius-md, 6px)',
+                  ? 'var(--bg-primary, #3b82f6)'
+                  : 'var(--border-default, #e5e7eb)',
+                borderRadius: 'var(--radius-md, 6px)',
                 cursor: 'pointer',
-                fontSize: 'var(--tekton-font-size-sm, 14px)',
+                fontSize: 'var(--font-size-sm, 14px)',
                 fontWeight: isSelected ? '500' : '400',
-                color: 'var(--tekton-text-foreground, #111827)',
+                color: 'var(--text-foreground, #111827)',
                 transition: 'all 0.2s ease',
                 textAlign: 'left',
                 width: '100%',
               }}
               onMouseEnter={(e) => {
                 if (!isSelected) {
-                  e.currentTarget.style.backgroundColor = 'var(--tekton-bg-muted, #f9fafb)';
+                  e.currentTarget.style.backgroundColor = 'var(--bg-muted, #f9fafb)';
                 }
               }}
               onMouseLeave={(e) => {
@@ -101,12 +101,12 @@ function PresetSection({ title, presets, selectedId, onSelect }: PresetSectionPr
                     width: '16px',
                     height: '16px',
                     borderRadius: '50%',
-                    backgroundColor: 'var(--tekton-bg-primary, #3b82f6)',
+                    backgroundColor: 'var(--bg-primary, #3b82f6)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '10px',
-                    color: 'var(--tekton-bg-primary-foreground, #ffffff)',
+                    color: 'var(--bg-primary-foreground, #ffffff)',
                   }}
                   aria-label="Selected"
                 >
@@ -132,19 +132,19 @@ export function PresetPanel({ className = '' }: PresetPanelProps) {
     <div
       className={`preset-panel ${className}`}
       style={{
-        padding: 'var(--tekton-spacing-lg, 16px)',
-        backgroundColor: 'var(--tekton-bg-background, #ffffff)',
-        border: '1px solid var(--tekton-border-default, #e5e7eb)',
-        borderRadius: 'var(--tekton-radius-lg, 8px)',
+        padding: 'var(--spacing-lg, 16px)',
+        backgroundColor: 'var(--bg-background, #ffffff)',
+        border: '1px solid var(--border-default, #e5e7eb)',
+        borderRadius: 'var(--radius-lg, 8px)',
         maxWidth: '320px',
       }}
     >
       <h2
         style={{
-          fontSize: 'var(--tekton-font-size-base, 16px)',
+          fontSize: 'var(--font-size-base, 16px)',
           fontWeight: '600',
-          color: 'var(--tekton-text-foreground, #111827)',
-          marginBottom: 'var(--tekton-spacing-lg, 16px)',
+          color: 'var(--text-foreground, #111827)',
+          marginBottom: 'var(--spacing-lg, 16px)',
         }}
       >
         Theme Presets

@@ -78,7 +78,7 @@ describe('Tooltip', () => {
       await userEvent.hover(screen.getByRole('button'));
       await waitFor(() => {
         const content = screen.getAllByText('Tooltip content')[0];
-        expect(content.className).toContain('px-[var(--tekton-spacing-3)]');
+        expect(content.className).toContain('px-[var(--spacing-3)]');
       });
     });
     it('uses Tekton radius and border tokens', async () => {
@@ -86,8 +86,8 @@ describe('Tooltip', () => {
       await userEvent.hover(screen.getByRole('button'));
       await waitFor(() => {
         const content = screen.getAllByText('Tooltip content')[0];
-        expect(content.className).toContain('rounded-[var(--tekton-radius-md)]');
-        expect(content.className).toContain('border-[var(--tekton-border-default)]');
+        expect(content.className).toContain('rounded-[var(--radius-md)]');
+        expect(content.className).toContain('border-[var(--border-default)]');
       });
     });
   });

@@ -28,7 +28,7 @@ const TableFooter = React.forwardRef(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
     className={cn(
-      'border-t bg-[var(--tekton-bg-muted)]/50 font-medium [&>tr]:last:border-b-0',
+      'border-t bg-[var(--bg-muted)]/50 font-medium [&>tr]:last:border-b-0',
       className
     )}
     {...props}
@@ -39,7 +39,7 @@ const TableRow = React.forwardRef(({ className, ...props }, ref) => (
   <tr
     ref={ref}
     className={cn(
-      'border-b border-[var(--tekton-border-default)] transition-colors hover:bg-[var(--tekton-bg-muted)]/50 data-[state=selected]:bg-[var(--tekton-bg-muted)]',
+      'border-b border-[var(--border-default)] transition-colors hover:bg-[var(--bg-muted)]/50 data-[state=selected]:bg-[var(--bg-muted)]',
       className
     )}
     {...props}
@@ -50,7 +50,7 @@ const TableHead = React.forwardRef(({ className, ...props }, ref) => (
   <th
     ref={ref}
     className={cn(
-      'h-12 px-[var(--tekton-spacing-4)] text-left align-middle font-medium text-[var(--tekton-bg-muted-foreground)] [&:has([role=checkbox])]:pr-0',
+      'h-12 px-[var(--spacing-4)] text-left align-middle font-medium text-[var(--bg-muted-foreground)] [&:has([role=checkbox])]:pr-0',
       className
     )}
     {...props}
@@ -61,7 +61,7 @@ const TableCell = React.forwardRef(({ className, ...props }, ref) => (
   <td
     ref={ref}
     className={cn(
-      'p-[var(--tekton-spacing-4)] align-middle [&:has([role=checkbox])]:pr-0',
+      'p-[var(--spacing-4)] align-middle [&:has([role=checkbox])]:pr-0',
       className
     )}
     {...props}
@@ -72,7 +72,7 @@ const TableCaption = React.forwardRef(({ className, ...props }, ref) => (
   <caption
     ref={ref}
     className={cn(
-      'mt-[var(--tekton-spacing-4)] text-sm text-[var(--tekton-bg-muted-foreground)]',
+      'mt-[var(--spacing-4)] text-sm text-[var(--bg-muted-foreground)]',
       className
     )}
     {...props}

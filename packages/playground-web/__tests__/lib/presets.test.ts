@@ -29,7 +29,7 @@ describe('Theme Presets', () => {
       colorPresets.forEach((preset) => {
         Object.entries(preset.values).forEach(([key, value]) => {
           // CSS Variable 키 확인
-          expect(key).toMatch(/^--tekton-/);
+          expect(key).toMatch(/^--/);
 
           // OKLCH 값 확인
           expect(value).toMatch(/oklch\(/);
@@ -47,8 +47,8 @@ describe('Theme Presets', () => {
 
     it('각 프리셋에 brand 색상 포함', () => {
       colorPresets.forEach((preset) => {
-        expect(preset.values).toHaveProperty('--tekton-color-brand');
-        expect(preset.values).toHaveProperty('--tekton-bg-canvas');
+        expect(preset.values).toHaveProperty('--color-brand');
+        expect(preset.values).toHaveProperty('--bg-canvas');
       });
     });
   });
@@ -74,8 +74,8 @@ describe('Theme Presets', () => {
 
     it('각 프리셋에 폰트 패밀리 포함', () => {
       typographyPresets.forEach((preset) => {
-        expect(preset.values).toHaveProperty('--tekton-font-family');
-        expect(preset.values['--tekton-font-family']).toBeTruthy();
+        expect(preset.values).toHaveProperty('--font-family');
+        expect(preset.values['--font-family']).toBeTruthy();
       });
     });
   });
@@ -101,7 +101,7 @@ describe('Theme Presets', () => {
 
     it('각 프리셋에 spacing-unit 포함', () => {
       spacingPresets.forEach((preset) => {
-        expect(preset.values).toHaveProperty('--tekton-spacing-unit');
+        expect(preset.values).toHaveProperty('--spacing-unit');
       });
     });
   });
@@ -147,12 +147,12 @@ describe('Theme Presets', () => {
   });
 
   describe('CSS Variable 키 규칙', () => {
-    it('모든 프리셋 값 키가 --tekton- 으로 시작', () => {
+    it('모든 프리셋 값 키가 -- 으로 시작', () => {
       const allPresets = [...colorPresets, ...typographyPresets, ...spacingPresets];
 
       allPresets.forEach((preset) => {
         Object.keys(preset.values).forEach((key) => {
-          expect(key).toMatch(/^--tekton-/);
+          expect(key).toMatch(/^--/);
         });
       });
     });

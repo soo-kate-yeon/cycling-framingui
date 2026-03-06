@@ -190,8 +190,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)]">
-        <div className="p-[var(--tekton-spacing-6)]">
+      <aside className="w-64 border-r border-[var(--border-default)] bg-[var(--bg-card)]">
+        <div className="p-[var(--spacing-6)]">
           <h2 className="text-lg font-bold">MyApp</h2>
         </div>
         <Separator />
@@ -201,12 +201,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="h-16 border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] flex items-center px-[var(--tekton-spacing-6)]">
+        <header className="h-16 border-b border-[var(--border-default)] bg-[var(--bg-card)] flex items-center px-[var(--spacing-6)]">
           <h1 className="text-xl font-semibold">Dashboard</h1>
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-auto p-[var(--tekton-spacing-6)] bg-[var(--tekton-bg-background)]">
+        <main className="flex-1 overflow-auto p-[var(--spacing-6)] bg-[var(--bg-background)]">
           {children}
         </main>
       </div>
@@ -242,15 +242,15 @@ export function DashboardSidebar() {
   const [activeItem, setActiveItem] = useState('/dashboard');
 
   return (
-    <aside className="w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] flex flex-col h-screen">
+    <aside className="w-64 border-r border-[var(--border-default)] bg-[var(--bg-card)] flex flex-col h-screen">
       {/* Logo */}
-      <div className="p-[var(--tekton-spacing-6)]">
+      <div className="p-[var(--spacing-6)]">
         <h2 className="text-lg font-bold">MyApp Admin</h2>
       </div>
       <Separator />
 
       {/* Navigation */}
-      <nav className="flex-1 p-[var(--tekton-spacing-4)] space-y-[var(--tekton-spacing-2)]">
+      <nav className="flex-1 p-[var(--spacing-4)] space-y-[var(--spacing-2)]">
         {navItems.map((item) => (
           <Button
             key={item.href}
@@ -258,11 +258,11 @@ export function DashboardSidebar() {
             className={cn(
               'w-full justify-start',
               activeItem === item.href &&
-                'bg-[var(--tekton-bg-primary)] text-[var(--tekton-bg-primary-foreground)]'
+                'bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)]'
             )}
             onClick={() => setActiveItem(item.href)}
           >
-            <item.icon className="mr-[var(--tekton-spacing-2)] h-4 w-4" />
+            <item.icon className="mr-[var(--spacing-2)] h-4 w-4" />
             {item.label}
           </Button>
         ))}
@@ -271,15 +271,15 @@ export function DashboardSidebar() {
       <Separator />
 
       {/* User section */}
-      <div className="p-[var(--tekton-spacing-4)]">
+      <div className="p-[var(--spacing-4)]">
         <Button variant="ghost" className="w-full justify-between">
           <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-[var(--tekton-bg-primary)] flex items-center justify-center text-sm font-bold text-[var(--tekton-bg-primary-foreground)] mr-[var(--tekton-spacing-3)]">
+            <div className="w-8 h-8 rounded-full bg-[var(--bg-primary)] flex items-center justify-center text-sm font-bold text-[var(--bg-primary-foreground)] mr-[var(--spacing-3)]">
               JD
             </div>
             <div className="text-left">
               <p className="text-sm font-medium">John Doe</p>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">Admin</p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">Admin</p>
             </div>
           </div>
           <ChevronDown className="h-4 w-4" />
@@ -335,31 +335,31 @@ const stats = [
 
 export function StatsGrid() {
   return (
-    <div className="grid gap-[var(--tekton-spacing-4)] md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-[var(--spacing-4)] md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (
         <Card key={stat.title}>
-          <CardContent className="p-[var(--tekton-spacing-6)]">
-            <div className="flex items-center justify-between space-x-[var(--tekton-spacing-4)]">
-              <div className="space-y-[var(--tekton-spacing-2)]">
-                <p className="text-sm font-medium text-[var(--tekton-bg-muted-foreground)]">
+          <CardContent className="p-[var(--spacing-6)]">
+            <div className="flex items-center justify-between space-x-[var(--spacing-4)]">
+              <div className="space-y-[var(--spacing-2)]">
+                <p className="text-sm font-medium text-[var(--bg-muted-foreground)]">
                   {stat.title}
                 </p>
-                <div className="flex items-baseline space-x-[var(--tekton-spacing-2)]">
+                <div className="flex items-baseline space-x-[var(--spacing-2)]">
                   <p className="text-2xl font-bold">{stat.value}</p>
                   <span
                     className={cn(
                       'text-xs font-medium',
                       stat.trend === 'up'
-                        ? 'text-[var(--tekton-bg-primary)]'
-                        : 'text-[var(--tekton-bg-destructive)]'
+                        ? 'text-[var(--bg-primary)]'
+                        : 'text-[var(--bg-destructive)]'
                     )}
                   >
                     {stat.change}
                   </span>
                 </div>
               </div>
-              <div className="p-[var(--tekton-spacing-3)] bg-[var(--tekton-bg-primary)]/10 rounded-[var(--tekton-radius-lg)]">
-                <stat.icon className="h-5 w-5 text-[var(--tekton-bg-primary)]" />
+              <div className="p-[var(--spacing-3)] bg-[var(--bg-primary)]/10 rounded-[var(--radius-lg)]">
+                <stat.icon className="h-5 w-5 text-[var(--bg-primary)]" />
               </div>
             </div>
           </CardContent>
@@ -457,7 +457,7 @@ export function RecentOrdersTable() {
                     {order.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-[var(--tekton-bg-muted-foreground)]">
+                <TableCell className="text-[var(--bg-muted-foreground)]">
                   {order.date}
                 </TableCell>
                 <TableCell>
@@ -495,14 +495,14 @@ export default function DashboardPage() {
       <DashboardSidebar />
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="h-16 border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] flex items-center justify-between px-[var(--tekton-spacing-6)]">
+        <header className="h-16 border-b border-[var(--border-default)] bg-[var(--bg-card)] flex items-center justify-between px-[var(--spacing-6)]">
           <h1 className="text-xl font-semibold">Dashboard Overview</h1>
           <Button variant="default">Download Report</Button>
         </header>
 
         {/* Main content */}
-        <main className="flex-1 overflow-auto p-[var(--tekton-spacing-6)] bg-[var(--tekton-bg-background)]">
-          <div className="space-y-[var(--tekton-spacing-6)]">
+        <main className="flex-1 overflow-auto p-[var(--spacing-6)] bg-[var(--bg-background)]">
+          <div className="space-y-[var(--spacing-6)]">
             <StatsGrid />
             <RecentOrdersTable />
           </div>
@@ -563,7 +563,7 @@ Create a stats grid component using FramingUI Card showing:
 - Revenue ($54,321)
 - Conversion Rate (3.2%)
 
-Use var(--tekton-*) tokens for all styling.
+Use var(--*) tokens for all styling.
 ```
 
 ### Generate Data Table
@@ -587,7 +587,7 @@ Create a complete admin dashboard using FramingUI with:
 - Header with title and action button
 - 4 stats cards in responsive grid
 - Recent orders table
-- All styling using var(--tekton-*) tokens
+- All styling using var(--*) tokens
 ```
 
 ## Advanced: Chart Integration
@@ -629,7 +629,7 @@ export function RevenueChart() {
             <Line
               type="monotone"
               dataKey="revenue"
-              stroke="var(--tekton-bg-primary)"
+              stroke="var(--bg-primary)"
               strokeWidth={2}
             />
           </LineChart>
@@ -640,7 +640,7 @@ export function RevenueChart() {
 }
 ```
 
-✅ **Uses design token**: `stroke="var(--tekton-bg-primary)"`
+✅ **Uses design token**: `stroke="var(--bg-primary)"`
 
 ## Next Steps
 

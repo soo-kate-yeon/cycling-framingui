@@ -168,11 +168,11 @@ describe('theme-loader', () => {
 
       expect(css).toContain(':root');
       expect(css).toContain('[data-theme="linear-minimal-v1"]');
-      expect(css).toContain('--tekton-bg-background:');
-      expect(css).toContain('--tekton-bg-primary:');
-      expect(css).toContain('--tekton-border-default:');
-      expect(css).toContain('--tekton-radius-sm: 4px');
-      expect(css).toContain('--tekton-spacing-1: 4px');
+      expect(css).toContain('--bg-background:');
+      expect(css).toContain('--bg-primary:');
+      expect(css).toContain('--border-default:');
+      expect(css).toContain('--radius-sm: 4px');
+      expect(css).toContain('--spacing-1: 4px');
     });
 
     it('should resolve semantic tokens to OKLCH colors', () => {
@@ -187,19 +187,19 @@ describe('theme-loader', () => {
     it('should include all spacing tokens', () => {
       const css = themeToCSS(linearMinimalV1);
 
-      expect(css).toContain('--tekton-spacing-0: 0');
-      expect(css).toContain('--tekton-spacing-1: 4px');
-      expect(css).toContain('--tekton-spacing-2: 8px');
-      expect(css).toContain('--tekton-spacing-4: 16px');
+      expect(css).toContain('--spacing-0: 0');
+      expect(css).toContain('--spacing-1: 4px');
+      expect(css).toContain('--spacing-2: 8px');
+      expect(css).toContain('--spacing-4: 16px');
     });
 
     it('should include all radius tokens', () => {
       const css = themeToCSS(linearMinimalV1);
 
-      expect(css).toContain('--tekton-radius-sm: 4px');
-      expect(css).toContain('--tekton-radius-md: 6px');
-      expect(css).toContain('--tekton-radius-lg: 8px');
-      expect(css).toContain('--tekton-radius-full: 9999px');
+      expect(css).toContain('--radius-sm: 4px');
+      expect(css).toContain('--radius-md: 6px');
+      expect(css).toContain('--radius-lg: 8px');
+      expect(css).toContain('--radius-full: 9999px');
     });
   });
 
@@ -258,10 +258,10 @@ describe('theme-loader', () => {
       });
       const css = themeToCSS(theme);
 
-      // --tekton-bg-primary-foreground 과 --tekton-action-primary-text 에
+      // --bg-primary-foreground 과 --action-primary-text 에
       // neutral.white 값이 사용되어야 함
-      expect(css).toContain('--tekton-bg-primary-foreground: oklch(0.98 0.01 100)');
-      expect(css).toContain('--tekton-action-primary-text: oklch(0.98 0.01 100)');
+      expect(css).toContain('--bg-primary-foreground: oklch(0.98 0.01 100)');
+      expect(css).toContain('--action-primary-text: oklch(0.98 0.01 100)');
     });
 
     it('should fall back to color.white (v1 schema) when neutral.white is absent', () => {
@@ -273,8 +273,8 @@ describe('theme-loader', () => {
       });
       const css = themeToCSS(theme);
 
-      expect(css).toContain('--tekton-bg-primary-foreground: oklch(0.99 0.005 50)');
-      expect(css).toContain('--tekton-action-primary-text: oklch(0.99 0.005 50)');
+      expect(css).toContain('--bg-primary-foreground: oklch(0.99 0.005 50)');
+      expect(css).toContain('--action-primary-text: oklch(0.99 0.005 50)');
     });
 
     it('should fall back to pure white { l:1, c:0, h:0 } when both are absent', () => {
@@ -286,8 +286,8 @@ describe('theme-loader', () => {
       });
       const css = themeToCSS(theme);
 
-      expect(css).toContain('--tekton-bg-primary-foreground: oklch(1 0 0)');
-      expect(css).toContain('--tekton-action-primary-text: oklch(1 0 0)');
+      expect(css).toContain('--bg-primary-foreground: oklch(1 0 0)');
+      expect(css).toContain('--action-primary-text: oklch(1 0 0)');
     });
 
     it('should fall back to pure white when neutral is undefined', () => {
@@ -296,7 +296,7 @@ describe('theme-loader', () => {
       });
       const css = themeToCSS(theme);
 
-      expect(css).toContain('--tekton-bg-primary-foreground: oklch(1 0 0)');
+      expect(css).toContain('--bg-primary-foreground: oklch(1 0 0)');
     });
   });
 
@@ -356,58 +356,58 @@ describe('theme-loader', () => {
       },
     };
 
-    it('should generate --tekton-bg-canvas variable', () => {
+    it('should generate --bg-canvas variable', () => {
       const css = themeToCSS(fullTheme);
-      expect(css).toContain('--tekton-bg-canvas: oklch(0.99 0.005 265)');
+      expect(css).toContain('--bg-canvas: oklch(0.99 0.005 265)');
     });
 
-    it('should generate --tekton-bg-surface variable', () => {
+    it('should generate --bg-surface variable', () => {
       const css = themeToCSS(fullTheme);
-      expect(css).toContain('--tekton-bg-surface: oklch(1 0 0)');
+      expect(css).toContain('--bg-surface: oklch(1 0 0)');
     });
 
-    it('should generate --tekton-text-primary variable', () => {
+    it('should generate --text-primary variable', () => {
       const css = themeToCSS(fullTheme);
-      expect(css).toContain('--tekton-text-primary: oklch(0.2 0.04 265)');
+      expect(css).toContain('--text-primary: oklch(0.2 0.04 265)');
     });
 
-    it('should generate --tekton-text-secondary variable', () => {
+    it('should generate --text-secondary variable', () => {
       const css = themeToCSS(fullTheme);
-      expect(css).toContain('--tekton-text-secondary: oklch(0.6 0.03 265)');
+      expect(css).toContain('--text-secondary: oklch(0.6 0.03 265)');
     });
 
-    it('should generate --tekton-text-tertiary variable', () => {
+    it('should generate --text-tertiary variable', () => {
       const css = themeToCSS(fullTheme);
-      expect(css).toContain('--tekton-text-tertiary: oklch(0.6 0.03 265)');
+      expect(css).toContain('--text-tertiary: oklch(0.6 0.03 265)');
     });
 
-    it('should generate --tekton-action-primary variable', () => {
+    it('should generate --action-primary variable', () => {
       const css = themeToCSS(fullTheme);
       // action-primary 는 textPrimary 와 동일
-      expect(css).toContain('--tekton-action-primary: oklch(0.2 0.04 265)');
+      expect(css).toContain('--action-primary: oklch(0.2 0.04 265)');
     });
 
-    it('should generate --tekton-action-primary-text as white', () => {
+    it('should generate --action-primary-text as white', () => {
       const css = themeToCSS(fullTheme);
-      expect(css).toContain('--tekton-action-primary-text: oklch(1 0 0)');
+      expect(css).toContain('--action-primary-text: oklch(1 0 0)');
     });
 
-    it('should generate --tekton-border-emphasis variable', () => {
+    it('should generate --border-emphasis variable', () => {
       const css = themeToCSS(fullTheme);
-      expect(css).toContain('--tekton-border-emphasis: oklch(0.85 0.02 265)');
+      expect(css).toContain('--border-emphasis: oklch(0.85 0.02 265)');
     });
 
     it('should generate all 8 page semantic variables', () => {
       const css = themeToCSS(fullTheme);
       const pageSemanticVars = [
-        '--tekton-bg-canvas',
-        '--tekton-bg-surface',
-        '--tekton-text-primary',
-        '--tekton-text-secondary',
-        '--tekton-text-tertiary',
-        '--tekton-action-primary:',
-        '--tekton-action-primary-text',
-        '--tekton-border-emphasis',
+        '--bg-canvas',
+        '--bg-surface',
+        '--text-primary',
+        '--text-secondary',
+        '--text-tertiary',
+        '--action-primary:',
+        '--action-primary-text',
+        '--border-emphasis',
       ];
       for (const varName of pageSemanticVars) {
         expect(css).toContain(varName);
@@ -479,8 +479,8 @@ describe('theme-loader', () => {
       );
       const css = themeToCSS(theme);
 
-      expect(css).toContain('--tekton-text-primary: oklch(0.2 0.04 265)');
-      expect(css).toContain('--tekton-text-secondary: oklch(0.55 0.12 265)');
+      expect(css).toContain('--text-primary: oklch(0.2 0.04 265)');
+      expect(css).toContain('--text-secondary: oklch(0.55 0.12 265)');
     });
 
     it('should fall back to atomic.color.neutral when semantic.text is absent', () => {
@@ -496,11 +496,11 @@ describe('theme-loader', () => {
       const css = themeToCSS(theme);
 
       // textPrimary → neutral[900]
-      expect(css).toContain('--tekton-text-primary: oklch(0.2 0.04 265)');
+      expect(css).toContain('--text-primary: oklch(0.2 0.04 265)');
       // textSecondary → neutral[500]
-      expect(css).toContain('--tekton-text-secondary: oklch(0.6 0.03 265)');
+      expect(css).toContain('--text-secondary: oklch(0.6 0.03 265)');
       // textTertiary → neutral[400]
-      expect(css).toContain('--tekton-text-tertiary: oklch(0.7 0.025 265)');
+      expect(css).toContain('--text-tertiary: oklch(0.7 0.025 265)');
     });
 
     it('should fall back to hardcoded OKLCH when semantic.text and neutral keys are absent', () => {
@@ -514,11 +514,11 @@ describe('theme-loader', () => {
       const css = themeToCSS(theme);
 
       // textPrimary → 하드코딩 폴백: { l: 0.12, c: 0.01, h: 0 }
-      expect(css).toContain('--tekton-text-primary: oklch(0.12 0.01 0)');
+      expect(css).toContain('--text-primary: oklch(0.12 0.01 0)');
       // textSecondary → 하드코딩 폴백: { l: 0.58, c: 0.02, h: 0 }
-      expect(css).toContain('--tekton-text-secondary: oklch(0.58 0.02 0)');
+      expect(css).toContain('--text-secondary: oklch(0.58 0.02 0)');
       // textTertiary → 하드코딩 폴백: { l: 0.72, c: 0.02, h: 0 }
-      expect(css).toContain('--tekton-text-tertiary: oklch(0.72 0.02 0)');
+      expect(css).toContain('--text-tertiary: oklch(0.72 0.02 0)');
     });
 
     it('should fall back tertiary to hardcoded even when primary/secondary resolve via neutral', () => {
@@ -530,9 +530,9 @@ describe('theme-loader', () => {
       });
       const css = themeToCSS(theme);
 
-      expect(css).toContain('--tekton-text-primary: oklch(0.2 0.04 265)');
-      expect(css).toContain('--tekton-text-secondary: oklch(0.6 0.03 265)');
-      expect(css).toContain('--tekton-text-tertiary: oklch(0.72 0.02 0)');
+      expect(css).toContain('--text-primary: oklch(0.2 0.04 265)');
+      expect(css).toContain('--text-secondary: oklch(0.6 0.03 265)');
+      expect(css).toContain('--text-tertiary: oklch(0.72 0.02 0)');
     });
   });
 
@@ -584,8 +584,8 @@ describe('theme-loader', () => {
 
       const css = themeToCSS(theme);
       expect(css).toContain(':root');
-      expect(css).toContain('--tekton-bg-primary: oklch(0.2 0.04 0)');
-      expect(css).toContain('--tekton-bg-canvas: oklch(0.99 0.005 0)');
+      expect(css).toContain('--bg-primary: oklch(0.2 0.04 0)');
+      expect(css).toContain('--bg-canvas: oklch(0.99 0.005 0)');
     });
 
     it('should generate CSS without neutral field', () => {
@@ -630,8 +630,8 @@ describe('theme-loader', () => {
       const css = themeToCSS(theme);
       expect(css).toContain(':root');
       // neutral 없으므로 텍스트는 하드코딩 폴백 사용
-      expect(css).toContain('--tekton-text-primary: oklch(0.12 0.01 0)');
-      expect(css).toContain('--tekton-text-secondary: oklch(0.58 0.02 0)');
+      expect(css).toContain('--text-primary: oklch(0.12 0.01 0)');
+      expect(css).toContain('--text-secondary: oklch(0.58 0.02 0)');
     });
 
     it('should generate CSS with only minimal color fields (no brand, no neutral, no white)', () => {
@@ -675,10 +675,10 @@ describe('theme-loader', () => {
       const css = themeToCSS(theme);
       expect(css).toContain(':root');
       // white 폴백: pure white
-      expect(css).toContain('--tekton-bg-primary-foreground: oklch(1 0 0)');
-      expect(css).toContain('--tekton-action-primary-text: oklch(1 0 0)');
+      expect(css).toContain('--bg-primary-foreground: oklch(1 0 0)');
+      expect(css).toContain('--action-primary-text: oklch(1 0 0)');
       // 텍스트 하드코딩 폴백
-      expect(css).toContain('--tekton-text-primary: oklch(0.12 0.01 0)');
+      expect(css).toContain('--text-primary: oklch(0.12 0.01 0)');
     });
   });
 
@@ -729,8 +729,8 @@ describe('theme-loader', () => {
 
       const css = themeToCSS(linearMinimal);
 
-      // SPEC-UI-001 requirements: All tokens must follow --tekton-* pattern
-      const tektonTokenPattern = /--tekton-[a-z-]+:/g;
+      // SPEC-UI-001 requirements: All tokens must follow --* pattern
+      const tektonTokenPattern = /--[a-z-]+:/g;
       const matches = css.match(tektonTokenPattern);
 
       expect(matches).toBeTruthy();

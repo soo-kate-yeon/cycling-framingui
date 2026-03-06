@@ -97,7 +97,7 @@ export function LoginForm() {
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="space-y-[var(--tekton-spacing-4)]">
+          <CardContent className="space-y-[var(--spacing-4)]">
             <FormField
               control={form.control}
               name="email"
@@ -125,14 +125,14 @@ export function LoginForm() {
               )}
             />
           </CardContent>
-          <CardFooter className="flex flex-col space-y-[var(--tekton-spacing-4)]">
+          <CardFooter className="flex flex-col space-y-[var(--spacing-4)]">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? '로그인 중...' : '로그인'}
             </Button>
             <div className="text-sm text-center">
               <a
                 href="/forgot-password"
-                className="text-[var(--tekton-bg-primary)] hover:underline"
+                className="text-[var(--bg-primary)] hover:underline"
               >
                 비밀번호를 잊으셨나요?
               </a>
@@ -147,7 +147,7 @@ export function LoginForm() {
 
 ### 주요 기능
 
-✅ **디자인 토큰**: 모든 간격이 `var(--tekton-spacing-*)`, 색상이 `var(--tekton-bg-*)` 사용
+✅ **디자인 토큰**: 모든 간격이 `var(--spacing-*)`, 색상이 `var(--bg-*)` 사용
 ✅ **타입 안전성**: Zod 스키마가 런타임 검증 + TypeScript 타입 제공
 ✅ **접근성**: FramingUI Form 컴포넌트가 레이블, 입력, 오류 메시지 연결
 ✅ **로딩 상태**: 제출 중 버튼 비활성화
@@ -225,15 +225,15 @@ export function EnhancedLoginForm() {
         <CardTitle>환영합니다</CardTitle>
         <CardDescription>선호하는 로그인 방법을 선택하세요</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-[var(--tekton-spacing-4)]">
+      <CardContent className="space-y-[var(--spacing-4)]">
         {/* 소셜 로그인 버튼 */}
-        <div className="grid grid-cols-2 gap-[var(--tekton-spacing-4)]">
+        <div className="grid grid-cols-2 gap-[var(--spacing-4)]">
           <Button
             variant="outline"
             onClick={() => handleSocialLogin('github')}
             type="button"
           >
-            <Github className="mr-[var(--tekton-spacing-2)] h-4 w-4" />
+            <Github className="mr-[var(--spacing-2)] h-4 w-4" />
             GitHub
           </Button>
           <Button
@@ -241,7 +241,7 @@ export function EnhancedLoginForm() {
             onClick={() => handleSocialLogin('google')}
             type="button"
           >
-            <Mail className="mr-[var(--tekton-spacing-2)] h-4 w-4" />
+            <Mail className="mr-[var(--spacing-2)] h-4 w-4" />
             Google
           </Button>
         </div>
@@ -251,7 +251,7 @@ export function EnhancedLoginForm() {
             <Separator />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-[var(--tekton-bg-background)] px-[var(--tekton-spacing-2)] text-[var(--tekton-bg-muted-foreground)]">
+            <span className="bg-[var(--bg-background)] px-[var(--spacing-2)] text-[var(--bg-muted-foreground)]">
               또는 계속하기
             </span>
           </div>
@@ -259,7 +259,7 @@ export function EnhancedLoginForm() {
 
         {/* 이메일/비밀번호 폼 */}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-[var(--tekton-spacing-4)]">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-[var(--spacing-4)]">
             <FormField
               control={form.control}
               name="email"
@@ -290,11 +290,11 @@ export function EnhancedLoginForm() {
               control={form.control}
               name="remember"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-[var(--tekton-spacing-3)] space-y-0">
+                <FormItem className="flex flex-row items-start space-x-[var(--spacing-3)] space-y-0">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
-                  <div className="space-y-[var(--tekton-spacing-1)] leading-none">
+                  <div className="space-y-[var(--spacing-1)] leading-none">
                     <FormLabel>로그인 유지</FormLabel>
                   </div>
                 </FormItem>
@@ -307,9 +307,9 @@ export function EnhancedLoginForm() {
         </Form>
       </CardContent>
       <CardFooter className="flex justify-center">
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           계정이 없으신가요?{' '}
-          <a href="/signup" className="text-[var(--tekton-bg-primary)] hover:underline">
+          <a href="/signup" className="text-[var(--bg-primary)] hover:underline">
             가입하기
           </a>
         </p>
@@ -385,7 +385,7 @@ FramingUI의 Form 컴포넌트는 자동으로 제공합니다:
 ### 페이지 중앙 배치
 
 ```tsx
-<div className="flex min-h-screen items-center justify-center p-[var(--tekton-spacing-4)]">
+<div className="flex min-h-screen items-center justify-center p-[var(--spacing-4)]">
   <EnhancedLoginForm />
 </div>
 ```
@@ -417,7 +417,7 @@ async function onSubmit(data: LoginFormData) {
 
 // JSX에서:
 {apiError && (
-  <p className="text-sm text-[var(--tekton-bg-destructive)]" role="alert">
+  <p className="text-sm text-[var(--bg-destructive)]" role="alert">
     {apiError}
   </p>
 )}

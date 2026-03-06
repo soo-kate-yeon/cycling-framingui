@@ -213,19 +213,19 @@ describe('DashboardTemplate', () => {
     it('uses Tekton spacing tokens', () => {
       const { container } = render(<DashboardTemplateComponent />);
       const html = container.innerHTML;
-      expect(html).toMatch(/var\(--tekton-spacing-/);
+      expect(html).toMatch(/var\(--spacing-/);
     });
 
     it('uses Tekton border tokens', () => {
       const { container } = render(<DashboardTemplateComponent />);
       const html = container.innerHTML;
-      expect(html).toMatch(/var\(--tekton-border-/);
+      expect(html).toMatch(/var\(--border-/);
     });
 
     it('uses Tekton background tokens', () => {
       const { container } = render(<DashboardTemplateComponent />);
       const html = container.innerHTML;
-      expect(html).toMatch(/var\(--tekton-bg-/);
+      expect(html).toMatch(/var\(--bg-/);
     });
   });
 });

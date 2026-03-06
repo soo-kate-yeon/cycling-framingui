@@ -35,45 +35,45 @@ import {
 
 // Bold-line 테마: 흰색 배경, 검정 텍스트, 2px 굵은 테두리, 0px 라디우스, 그린 액센트
 const BOLD_LINE_FALLBACK: Record<string, string> = {
-  '--tekton-bg-canvas': '#FFFFFF',
-  '--tekton-bg-surface': '#FAFAFA',
-  '--tekton-text-primary': '#000000',
-  '--tekton-text-secondary': '#525252',
-  '--tekton-text-tertiary': '#A3A3A3',
-  '--tekton-border-default': '#000000',
-  '--tekton-border-emphasis': '#000000',
-  '--tekton-action-primary': '#000000',
-  '--tekton-action-primary-text': '#FFFFFF',
+  '--bg-canvas': '#FFFFFF',
+  '--bg-surface': '#FAFAFA',
+  '--text-primary': '#000000',
+  '--text-secondary': '#525252',
+  '--text-tertiary': '#A3A3A3',
+  '--border-default': '#000000',
+  '--border-emphasis': '#000000',
+  '--action-primary': '#000000',
+  '--action-primary-text': '#FFFFFF',
 
-  '--tekton-bg-background': '#FFFFFF',
-  '--tekton-bg-foreground': '#000000',
-  '--tekton-bg-card': '#FFFFFF',
-  '--tekton-bg-card-foreground': '#000000',
-  '--tekton-bg-popover': '#FFFFFF',
-  '--tekton-bg-popover-foreground': '#000000',
-  '--tekton-bg-primary': '#000000',
-  '--tekton-bg-primary-foreground': '#FFFFFF',
-  '--tekton-bg-secondary': '#F5F5F5',
-  '--tekton-bg-secondary-foreground': '#000000',
-  '--tekton-bg-muted': '#F5F5F5',
-  '--tekton-bg-muted-foreground': '#525252',
-  '--tekton-bg-accent': '#F0FDF4',
-  '--tekton-bg-accent-foreground': '#000000',
-  '--tekton-bg-destructive': '#DC2626',
-  '--tekton-bg-destructive-foreground': '#FFFFFF',
-  '--tekton-border-input': '#000000',
-  '--tekton-border-ring': '#000000',
+  '--bg-background': '#FFFFFF',
+  '--bg-foreground': '#000000',
+  '--bg-card': '#FFFFFF',
+  '--bg-card-foreground': '#000000',
+  '--bg-popover': '#FFFFFF',
+  '--bg-popover-foreground': '#000000',
+  '--bg-primary': '#000000',
+  '--bg-primary-foreground': '#FFFFFF',
+  '--bg-secondary': '#F5F5F5',
+  '--bg-secondary-foreground': '#000000',
+  '--bg-muted': '#F5F5F5',
+  '--bg-muted-foreground': '#525252',
+  '--bg-accent': '#F0FDF4',
+  '--bg-accent-foreground': '#000000',
+  '--bg-destructive': '#DC2626',
+  '--bg-destructive-foreground': '#FFFFFF',
+  '--border-input': '#000000',
+  '--border-ring': '#000000',
 
   // 브랜드 액센트 (그린)
-  '--tekton-color-brand': '#22C55E',
-  '--tekton-color-brand-text': '#16A34A',
+  '--color-brand': '#22C55E',
+  '--color-brand-text': '#16A34A',
 
-  '--tekton-radius-sm': '0px',
-  '--tekton-radius-md': '0px',
-  '--tekton-radius-lg': '0px',
-  '--tekton-radius-xl': '0px',
-  '--tekton-radius-none': '0px',
-  '--tekton-radius-full': '0px',
+  '--radius-sm': '0px',
+  '--radius-md': '0px',
+  '--radius-lg': '0px',
+  '--radius-xl': '0px',
+  '--radius-none': '0px',
+  '--radius-full': '0px',
 };
 
 const NAV_ITEMS = [
@@ -153,7 +153,7 @@ export default function BoldLineDemo() {
                 <item.icon size={16} strokeWidth={3} />
                 <span>{locale === 'ko' ? item.labelKo : item.label}</span>
                 {isActive && (
-                  <span className="ml-auto w-1.5 h-1.5 bg-[var(--tekton-color-brand)]" />
+                  <span className="ml-auto w-1.5 h-1.5 bg-[var(--color-brand)]" />
                 )}
               </button>
             );
@@ -232,7 +232,7 @@ export default function BoldLineDemo() {
           <div className="flex items-center gap-5 ml-auto">
             <button className="relative group">
               <Bell size={20} strokeWidth={3} className="text-black" />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[var(--tekton-color-brand)] border-2 border-white" />
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[var(--color-brand)] border-2 border-white" />
             </button>
             <div className="w-9 h-9 bg-black flex items-center justify-center text-white text-xs font-black">
               BC

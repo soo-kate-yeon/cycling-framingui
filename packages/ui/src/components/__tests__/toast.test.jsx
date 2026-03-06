@@ -97,7 +97,7 @@ describe('Toast', () => {
         </ToastProvider>
       );
       const toast = container.querySelector('[data-state]');
-      expect(toast?.className).toMatch(/var\(--tekton-/);
+      expect(toast?.className).toMatch(/var\(--/);
     });
   });
 });

@@ -30,12 +30,12 @@ export const Default = {
         <TabsTrigger value="password">Password</TabsTrigger>
       </TabsList>
       <TabsContent value="account">
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Make changes to your account here.
         </p>
       </TabsContent>
       <TabsContent value="password">
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Change your password here.
         </p>
       </TabsContent>
@@ -111,25 +111,25 @@ export const Multiple = {
       </TabsList>
       <TabsContent value="overview" className="space-y-4">
         <h3 className="text-lg font-semibold">Overview</h3>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           View your account overview and recent activity.
         </p>
       </TabsContent>
       <TabsContent value="analytics" className="space-y-4">
         <h3 className="text-lg font-semibold">Analytics</h3>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Track your performance metrics and insights.
         </p>
       </TabsContent>
       <TabsContent value="reports" className="space-y-4">
         <h3 className="text-lg font-semibold">Reports</h3>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Generate and download detailed reports.
         </p>
       </TabsContent>
       <TabsContent value="notifications" className="space-y-4">
         <h3 className="text-lg font-semibold">Notifications</h3>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Manage your notification preferences.
         </p>
       </TabsContent>

@@ -8,6 +8,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { FreeTrialModal } from '@/components/modals/FreeTrialModal';
+import { GlobalLanguageProvider } from '@/contexts/GlobalLanguageContext';
 
 const { mockUseAuth, mockTrackFunnelPrimaryCtaClick } = vi.hoisted(() => ({
   mockUseAuth: vi.fn(),
@@ -42,6 +43,19 @@ function createMockResponse({
 }
 
 describe('FreeTrialModal', () => {
+  function renderModal(onStartTrial = vi.fn()) {
+    return render(
+      <GlobalLanguageProvider>
+        <FreeTrialModal
+          isOpen={true}
+          onClose={vi.fn()}
+          onStartTrial={onStartTrial}
+          onDismissForever={vi.fn()}
+        />
+      </GlobalLanguageProvider>
+    );
+  }
+
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
@@ -69,7 +83,7 @@ describe('FreeTrialModal', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const onStartTrial = vi.fn();
-    render(<FreeTrialModal isOpen={true} onClose={vi.fn()} onStartTrial={onStartTrial} />);
+    renderModal(onStartTrial);
 
     await waitFor(() => {
       expect(onStartTrial).toHaveBeenCalledTimes(1);
@@ -90,9 +104,9 @@ describe('FreeTrialModal', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
 
-    render(<FreeTrialModal isOpen={true} onClose={vi.fn()} onStartTrial={vi.fn()} />);
+    renderModal();
 
-    expect(await screen.findByText('체험 생성 중 오류가 발생했습니다')).toBeInTheDocument();
+    expect(await screen.findByText('An error occurred while creating the trial')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -119,9 +133,9 @@ describe('FreeTrialModal', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
 
-    render(<FreeTrialModal isOpen={true} onClose={vi.fn()} onStartTrial={vi.fn()} />);
+    renderModal();
 
-    expect(await screen.findByText('이미 체험을 사용했습니다')).toBeInTheDocument();
+    expect(await screen.findByText('You have already used the trial')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });

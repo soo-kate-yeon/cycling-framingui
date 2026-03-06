@@ -39,25 +39,25 @@ describe('Badge', () => {
     it('applies default variant when no variant is specified', () => {
       const { container } = render(<Badge>Default</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toContain('bg-[var(--tekton-bg-primary)]');
+      expect(badge.className).toContain('bg-[var(--bg-primary)]');
     });
 
     it('applies secondary variant styles', () => {
       const { container } = render(<Badge variant="secondary">Secondary</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toContain('bg-[var(--tekton-bg-secondary)]');
+      expect(badge.className).toContain('bg-[var(--bg-secondary)]');
     });
 
     it('applies destructive variant styles', () => {
       const { container } = render(<Badge variant="destructive">Destructive</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toContain('bg-[var(--tekton-bg-destructive)]');
+      expect(badge.className).toContain('bg-[var(--bg-destructive)]');
     });
 
     it('applies outline variant styles', () => {
       const { container } = render(<Badge variant="outline">Outline</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toContain('text-[var(--tekton-bg-foreground)]');
+      expect(badge.className).toContain('text-[var(--bg-foreground)]');
     });
   });
 
@@ -123,32 +123,32 @@ describe('Badge', () => {
     it('applies Tekton token-based styles', () => {
       const { container } = render(<Badge>Tokenized</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toMatch(/var\(--tekton-/);
+      expect(badge.className).toMatch(/var\(--/);
     });
 
     it('uses Tekton spacing tokens', () => {
       const { container } = render(<Badge>Spacing</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toContain('px-[var(--tekton-spacing-3)]');
-      expect(badge.className).toContain('py-[var(--tekton-spacing-1)]');
+      expect(badge.className).toContain('px-[var(--spacing-3)]');
+      expect(badge.className).toContain('py-[var(--spacing-1)]');
     });
 
     it('uses Tekton radius tokens', () => {
       const { container } = render(<Badge>Radius</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toContain('rounded-[var(--tekton-radius-full)]');
+      expect(badge.className).toContain('rounded-[var(--radius-full)]');
     });
 
     it('uses Tekton color tokens for variants', () => {
       const { container } = render(<Badge variant="destructive">Destructive</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toContain('bg-[var(--tekton-bg-destructive)]');
+      expect(badge.className).toContain('bg-[var(--bg-destructive)]');
     });
 
     it('uses Tekton border ring tokens', () => {
       const { container } = render(<Badge>Ring</Badge>);
       const badge = container.firstChild as HTMLElement;
-      expect(badge.className).toContain('focus:ring-[var(--tekton-border-ring)]');
+      expect(badge.className).toContain('focus:ring-[var(--border-ring)]');
     });
   });
 

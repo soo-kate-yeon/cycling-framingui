@@ -79,20 +79,20 @@ export const Sizes = {
 export const Group = {
   render: () => (
     <div className="flex -space-x-4">
-      <Avatar className="border-2 border-[var(--tekton-bg-background)]">
+      <Avatar className="border-2 border-[var(--bg-background)]">
         <AvatarImage src="https://github.com/shadcn.png" alt="User 1" />
         <AvatarFallback>U1</AvatarFallback>
       </Avatar>
-      <Avatar className="border-2 border-[var(--tekton-bg-background)]">
+      <Avatar className="border-2 border-[var(--bg-background)]">
         <AvatarFallback>U2</AvatarFallback>
       </Avatar>
-      <Avatar className="border-2 border-[var(--tekton-bg-background)]">
+      <Avatar className="border-2 border-[var(--bg-background)]">
         <AvatarFallback>U3</AvatarFallback>
       </Avatar>
-      <Avatar className="border-2 border-[var(--tekton-bg-background)]">
+      <Avatar className="border-2 border-[var(--bg-background)]">
         <AvatarFallback>U4</AvatarFallback>
       </Avatar>
-      <Avatar className="border-2 border-[var(--tekton-bg-background)]">
+      <Avatar className="border-2 border-[var(--bg-background)]">
         <AvatarFallback>+5</AvatarFallback>
       </Avatar>
     </div>
@@ -130,19 +130,19 @@ export const WithStatus = {
           <AvatarImage src="https://github.com/shadcn.png" alt="Online" />
           <AvatarFallback>ON</AvatarFallback>
         </Avatar>
-        <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 ring-2 ring-[var(--tekton-bg-background)]" />
+        <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 ring-2 ring-[var(--bg-background)]" />
       </div>
       <div className="relative">
         <Avatar>
           <AvatarFallback>AW</AvatarFallback>
         </Avatar>
-        <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-yellow-500 ring-2 ring-[var(--tekton-bg-background)]" />
+        <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-yellow-500 ring-2 ring-[var(--bg-background)]" />
       </div>
       <div className="relative">
         <Avatar>
           <AvatarFallback>OF</AvatarFallback>
         </Avatar>
-        <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-gray-400 ring-2 ring-[var(--tekton-bg-background)]" />
+        <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-gray-400 ring-2 ring-[var(--bg-background)]" />
       </div>
     </div>
   ),

@@ -35,8 +35,8 @@ FramingUI는 shadcn UI를 포크하고 모든 컴포넌트에 **디자인 토큰
 </Button>
 
 // 내부 구현:
-// bg-[var(--tekton-bg-primary)]
-// hover:bg-[var(--tekton-bg-primary)]/90
+// bg-[var(--bg-primary)]
+// hover:bg-[var(--bg-primary)]/90
 ```
 
 ## 실제 예제: Button 컴포넌트
@@ -48,7 +48,7 @@ import { Button } from '@framingui/ui';
 
 function LoginForm() {
   return (
-    <div className="space-y-[var(--tekton-spacing-4)]">
+    <div className="space-y-[var(--spacing-4)]">
       <Button variant="default">로그인</Button>
       <Button variant="outline">계정 생성</Button>
       <Button variant="destructive">삭제</Button>
@@ -63,8 +63,8 @@ function LoginForm() {
 
 AI가 FramingUI를 사용하여 코드를 생성할 때 색상을 환각할 수 없는 이유:
 
-1. **단일 진실 공급원**: 모든 색상이 `var(--tekton-*)` 토큰에서 나옵니다
-2. **시맨틱 네이밍**: `--tekton-bg-primary`는 명확합니다
+1. **단일 진실 공급원**: 모든 색상이 `var(--*)` 토큰에서 나옵니다
+2. **시맨틱 네이밍**: `--bg-primary`는 명확합니다
 3. **OKLCH 기반**: 색상이 지각적으로 균일하여 일관된 밝기를 보장합니다
 
 ### 예제: AI 생성 카드
@@ -81,7 +81,7 @@ function ProductCard({ title, description, price }: ProductCardProps) {
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold text-[var(--tekton-bg-primary)]">
+        <p className="text-2xl font-bold text-[var(--bg-primary)]">
           {price}원
         </p>
       </CardContent>
@@ -90,7 +90,7 @@ function ProductCard({ title, description, price }: ProductCardProps) {
 }
 ```
 
-AI가 `text-blue-600`이나 `#3B82F6`을 추측하는 대신 토큰(`var(--tekton-bg-primary)`)을 사용하는 것에 주목하세요.
+AI가 `text-blue-600`이나 `#3B82F6`을 추측하는 대신 토큰(`var(--bg-primary)`)을 사용하는 것에 주목하세요.
 
 ## OKLCH: 비밀 소스
 
@@ -119,7 +119,7 @@ npx framingui generate --color "#FF6B35"
 ```
 UI 컴포넌트 생성 시:
 - 항상 @framingui/ui에서 임포트
-- 색상, 간격, 반경에 var(--tekton-*) 토큰 사용
+- 색상, 간격, 반경에 var(--*) 토큰 사용
 - 색상 값이나 간격을 하드코딩하지 말 것
 ```
 
@@ -134,9 +134,9 @@ UI 컴포넌트 생성 시:
 - Button, Input, Card, Form, Dialog 등
 
 디자인 토큰 (Tailwind 색상 대신 사용):
-- 색상: var(--tekton-bg-primary), var(--tekton-bg-secondary)
-- 간격: var(--tekton-spacing-2), var(--tekton-spacing-4)
-- 반경: var(--tekton-radius-md), var(--tekton-radius-lg)
+- 색상: var(--bg-primary), var(--bg-secondary)
+- 간격: var(--spacing-2), var(--spacing-4)
+- 반경: var(--radius-md), var(--radius-lg)
 ```
 
 ## Shadcn UI에서 마이그레이션

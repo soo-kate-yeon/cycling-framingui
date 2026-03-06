@@ -22,18 +22,18 @@ import type {
 
 describe('TokenReference Type [REQ-STY-004]', () => {
   it('should accept valid CSS variable references', () => {
-    const validToken: TokenReference = 'var(--tekton-bg-surface-default)';
-    expect(validToken).toBe('var(--tekton-bg-surface-default)');
+    const validToken: TokenReference = 'var(--bg-surface-default)';
+    expect(validToken).toBe('var(--bg-surface-default)');
   });
 
   it('should enforce CSS variable format at compile time', () => {
     // Type tests - these should compile successfully
-    expectTypeOf<TokenReference>().toMatchTypeOf<`var(--tekton-${string})`>();
+    expectTypeOf<TokenReference>().toMatchTypeOf<`var(--${string})`>();
 
     // Valid examples
-    const token1: TokenReference = 'var(--tekton-spacing-4)';
-    const token2: TokenReference = 'var(--tekton-bg-primary-default)';
-    const token3: TokenReference = 'var(--tekton-radius-md)';
+    const token1: TokenReference = 'var(--spacing-4)';
+    const token2: TokenReference = 'var(--bg-primary-default)';
+    const token3: TokenReference = 'var(--radius-md)';
 
     expect(token1).toBeDefined();
     expect(token2).toBeDefined();
@@ -41,9 +41,9 @@ describe('TokenReference Type [REQ-STY-004]', () => {
   });
 
   it('should be compatible with CSS variable usage', () => {
-    const token: TokenReference = 'var(--tekton-fg-primary)';
+    const token: TokenReference = 'var(--fg-primary)';
     const cssProperty = `color: ${token}`;
-    expect(cssProperty).toBe('color: var(--tekton-fg-primary)');
+    expect(cssProperty).toBe('color: var(--fg-primary)');
   });
 });
 

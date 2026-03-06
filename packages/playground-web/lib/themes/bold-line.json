@@ -213,19 +213,19 @@
                 "icon": "h-14 w-14 flex items-center justify-center border-2 border-transparent hover:border-black hover:bg-neutral-100 transition-colors rounded-none"
             },
             "input": {
-                "default": "w-full bg-transparent border-0 border-b-2 border-black py-4 px-2 text-lg text-black placeholder:text-neutral-400 focus:outline-none focus:border-b-2 focus:bg-[var(--tekton-bg-brand-default)]/5 transition-all rounded-none",
-                "search": "w-full bg-transparent border-0 border-b-2 border-black py-4 px-12 text-lg text-black placeholder:text-neutral-400 focus:outline-none focus:border-b-2 focus:bg-[var(--tekton-bg-brand-default)]/5 transition-all rounded-none"
+                "default": "w-full bg-transparent border-0 border-b-2 border-black py-4 px-2 text-lg text-black placeholder:text-neutral-400 focus:outline-none focus:border-b-2 focus:bg-[var(--bg-brand-default)]/5 transition-all rounded-none",
+                "search": "w-full bg-transparent border-0 border-b-2 border-black py-4 px-12 text-lg text-black placeholder:text-neutral-400 focus:outline-none focus:border-b-2 focus:bg-[var(--bg-brand-default)]/5 transition-all rounded-none"
             },
             "badge": {
                 "default": "inline-flex items-center bg-black text-white px-3 py-1 text-sm font-bold rounded-none",
                 "secondary": "inline-flex items-center bg-white border-2 border-black px-3 py-1 text-sm font-bold text-black rounded-none",
-                "brand": "inline-flex items-center bg-[var(--tekton-bg-brand-default)] text-black px-3 py-1 text-sm font-bold border-2 border-black rounded-none"
+                "brand": "inline-flex items-center bg-[var(--bg-brand-default)] text-black px-3 py-1 text-sm font-bold border-2 border-black rounded-none"
             },
             "table": {
                 "wrapper": "relative w-full overflow-auto mt-8 mb-8",
                 "root": "w-full text-left border-collapse",
                 "header": "border-b-2 border-black",
-                "row": "border-b-[1px] border-neutral-200 hover:bg-[var(--tekton-bg-brand-default)]/20 transition-colors",
+                "row": "border-b-[1px] border-neutral-200 hover:bg-[var(--bg-brand-default)]/20 transition-colors",
                 "head": "py-4 px-4 text-sm font-black text-black uppercase tracking-wider",
                 "cell": "py-5 px-4 text-base text-black font-medium"
             },

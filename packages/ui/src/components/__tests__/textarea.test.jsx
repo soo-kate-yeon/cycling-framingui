@@ -108,22 +108,22 @@ describe('Textarea', () => {
     it('applies Tekton token-based styles', () => {
       render(<Textarea />);
       const textarea = screen.getByRole('textbox');
-      expect(textarea.className).toMatch(/var\(--tekton-/);
+      expect(textarea.className).toMatch(/var\(--/);
     });
     it('uses Tekton spacing tokens', () => {
       render(<Textarea />);
       const textarea = screen.getByRole('textbox');
-      expect(textarea.className).toContain('px-[var(--tekton-spacing-3)]');
+      expect(textarea.className).toContain('px-[var(--spacing-3)]');
     });
     it('uses Tekton radius tokens', () => {
       render(<Textarea />);
       const textarea = screen.getByRole('textbox');
-      expect(textarea.className).toContain('rounded-[var(--tekton-radius-md)]');
+      expect(textarea.className).toContain('rounded-[var(--radius-md)]');
     });
     it('uses Tekton border tokens', () => {
       render(<Textarea />);
       const textarea = screen.getByRole('textbox');
-      expect(textarea.className).toContain('border-[var(--tekton-border-input)]');
+      expect(textarea.className).toContain('border-[var(--border-input)]');
     });
     it('has consistent min-height', () => {
       render(<Textarea />);

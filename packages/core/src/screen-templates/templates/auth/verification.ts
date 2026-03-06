@@ -33,9 +33,9 @@ export const VerificationComponent: FC<ScreenTemplateProps> = ({ slots, classNam
   return {
     type: 'div',
     props: {
-      className: `min-h-screen flex items-center justify-center bg-[var(--tekton-bg-base)] ${className ?? ''}`,
+      className: `min-h-screen flex items-center justify-center bg-[var(--bg-base)] ${className ?? ''}`,
       style: {
-        padding: 'var(--tekton-layout-padding-mobile)',
+        padding: 'var(--layout-padding-mobile)',
       },
     },
     children: [
@@ -44,8 +44,8 @@ export const VerificationComponent: FC<ScreenTemplateProps> = ({ slots, classNam
         props: {
           className: 'w-full max-w-md',
           style: {
-            padding: 'var(--tekton-spacing-8)',
-            gap: 'var(--tekton-spacing-6)',
+            padding: 'var(--spacing-8)',
+            gap: 'var(--spacing-6)',
           },
         },
         children: [
@@ -87,7 +87,7 @@ export const VerificationComponent: FC<ScreenTemplateProps> = ({ slots, classNam
               {
                 type: 'p',
                 props: {
-                  className: 'text-sm text-[var(--tekton-text-secondary)]',
+                  className: 'text-sm text-[var(--text-secondary)]',
                 },
                 children: [defaultTexts.subtitle],
               },
@@ -117,7 +117,7 @@ export const VerificationComponent: FC<ScreenTemplateProps> = ({ slots, classNam
           {
             type: 'p',
             props: {
-              className: 'text-sm text-center text-[var(--tekton-text-secondary)]',
+              className: 'text-sm text-center text-[var(--text-secondary)]',
             },
             children: [defaultTexts.instruction],
           },
@@ -161,7 +161,7 @@ export const VerificationComponent: FC<ScreenTemplateProps> = ({ slots, classNam
                 type: 'a',
                 props: {
                   href: '/login',
-                  className: 'text-sm text-[var(--tekton-text-link)] hover:underline',
+                  className: 'text-sm text-[var(--text-link)] hover:underline',
                 },
                 children: [defaultTexts.backToLogin],
               },

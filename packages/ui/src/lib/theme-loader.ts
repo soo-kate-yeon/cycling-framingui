@@ -174,61 +174,73 @@ export function themeToCSS(theme: ThemeDefinition): string {
   /* ========================================
      Component Tokens (@framingui/ui 컴포넌트용)
      ======================================== */
-  --tekton-bg-background: ${resolveColor(tokens.semantic.background.canvas)};
-  --tekton-bg-foreground: ${textPrimary};
+  --bg-background: ${resolveColor(tokens.semantic.background.canvas)};
+  --bg-foreground: ${textPrimary};
 
-  --tekton-bg-card: ${resolveColor(tokens.semantic.background.surface.default)};
-  --tekton-bg-card-foreground: ${textPrimary};
+  --bg-card: ${resolveColor(tokens.semantic.background.surface.default)};
+  --bg-card-foreground: ${textPrimary};
 
-  --tekton-bg-popover: ${resolveColor(tokens.semantic.background.surface.default)};
-  --tekton-bg-popover-foreground: ${textPrimary};
+  --bg-popover: ${resolveColor(tokens.semantic.background.surface.default)};
+  --bg-popover-foreground: ${textPrimary};
 
-  --tekton-bg-primary: ${resolveColor(tokens.semantic.background.brand.default)};
-  --tekton-bg-primary-foreground: ${oklchToCSS(white)};
+  --bg-primary: ${resolveColor(tokens.semantic.background.brand.default)};
+  --bg-primary-foreground: ${oklchToCSS(white)};
 
-  --tekton-bg-secondary: ${resolveColor(tokens.semantic.background.surface.emphasis)};
-  --tekton-bg-secondary-foreground: ${textPrimary};
+  --bg-secondary: ${resolveColor(tokens.semantic.background.surface.emphasis)};
+  --bg-secondary-foreground: ${textPrimary};
 
-  --tekton-bg-muted: ${resolveColor(tokens.semantic.background.surface.subtle)};
-  --tekton-bg-muted-foreground: ${textSecondary};
+  --bg-muted: ${resolveColor(tokens.semantic.background.surface.subtle)};
+  --bg-muted-foreground: ${textSecondary};
 
-  --tekton-bg-accent: ${resolveColor(tokens.semantic.background.surface.emphasis)};
-  --tekton-bg-accent-foreground: ${textPrimary};
+  --bg-accent: ${resolveColor(tokens.semantic.background.surface.emphasis)};
+  --bg-accent-foreground: ${textPrimary};
 
-  --tekton-bg-destructive: ${oklchToCSS({ l: 0.5, c: 0.2, h: 30 })}; /* Default red */
-  --tekton-bg-destructive-foreground: ${oklchToCSS(white)};
+  --bg-destructive: ${oklchToCSS({ l: 0.5, c: 0.2, h: 30 })}; /* Default red */
+  --bg-destructive-foreground: ${oklchToCSS(white)};
+
+  --bg-base: ${resolveColor(tokens.semantic.background.canvas)};
+  --bg-success: ${resolveColor(tokens.semantic.background.brand.emphasis)};
 
   /* ========================================
      Border Tokens
      ======================================== */
-  --tekton-border-default: ${resolveColor(tokens.semantic.border.default.default)};
-  --tekton-border-input: ${resolveColor(tokens.semantic.border.default.subtle)};
-  --tekton-border-ring: ${resolveColor(tokens.semantic.background.brand.default)};
+  --border-default: ${resolveColor(tokens.semantic.border.default.default)};
+  --border-input: ${resolveColor(tokens.semantic.border.default.subtle)};
+  --border-ring: ${resolveColor(tokens.semantic.background.brand.default)};
+  --border-border: ${resolveColor(tokens.semantic.border.default.default)};
+  --border-primary: ${resolveColor(tokens.semantic.background.brand.default)};
 
   /* ========================================
      Page Semantic Tokens (페이지 템플릿 인라인 스타일용)
      ======================================== */
-  --tekton-bg-canvas: ${resolveColor(tokens.semantic.background.canvas)};
-  --tekton-bg-surface: ${resolveColor(tokens.semantic.background.surface.default)};
-  --tekton-text-primary: ${textPrimary};
-  --tekton-text-secondary: ${textSecondary};
-  --tekton-text-tertiary: ${textTertiary};
-  --tekton-action-primary: ${textPrimary};
-  --tekton-action-primary-text: ${oklchToCSS(white)};
-  --tekton-border-emphasis: ${resolveColor(tokens.semantic.border.default.emphasis)};
+  --bg-canvas: ${resolveColor(tokens.semantic.background.canvas)};
+  --bg-surface: ${resolveColor(tokens.semantic.background.surface.default)};
+  --text-primary: ${textPrimary};
+  --text-secondary: ${textSecondary};
+  --text-tertiary: ${textTertiary};
+  --text-foreground: ${textPrimary};
+  --text-card-foreground: ${textPrimary};
+  --text-popover-foreground: ${textPrimary};
+  --text-muted-foreground: ${textSecondary};
+  --text-link: ${resolveColor(tokens.semantic.background.brand.default)};
+  --text-success: ${resolveColor(tokens.semantic.background.brand.emphasis)};
+  --text-destructive: ${oklchToCSS({ l: 0.5, c: 0.2, h: 30 })};
+  --action-primary: ${textPrimary};
+  --action-primary-text: ${oklchToCSS(white)};
+  --border-emphasis: ${resolveColor(tokens.semantic.border.default.emphasis)};
 
   /* ========================================
      Radius Tokens
      ======================================== */
   ${Object.entries(tokens.atomic.radius)
-    .map(([key, val]) => `--tekton-radius-${key}: ${val};`)
+    .map(([key, val]) => `--radius-${key}: ${val};`)
     .join('\n  ')}
 
   /* ========================================
      Spacing Tokens
      ======================================== */
   ${Object.entries(tokens.atomic.spacing)
-    .map(([key, val]) => `--tekton-spacing-${key}: ${val};`)
+    .map(([key, val]) => `--spacing-${key}: ${val};`)
     .join('\n  ')}
 }
 `;

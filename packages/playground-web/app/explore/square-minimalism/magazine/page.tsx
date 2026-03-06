@@ -8,7 +8,7 @@ export default function MagazinePage() {
   return (
     <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-900 selection:text-white">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-md border-b border-[var(--tekton-border-default-subtle)]">
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-md border-b border-[var(--border-default-subtle)]">
         <div className="flex items-center gap-8">
           <Menu className="h-5 w-5 cursor-pointer" />
           <h1 className="text-xl font-bold tracking-tighter uppercase italic">Square Mag.</h1>
@@ -63,7 +63,7 @@ export default function MagazinePage() {
         </section>
 
         {/* Brand Principle Section (Magazine B Style) */}
-        <section className="py-24 px-6 md:px-20 border-b border-[var(--tekton-border-default-subtle)] grid md:grid-cols-2 gap-20 bg-neutral-50">
+        <section className="py-24 px-6 md:px-20 border-b border-[var(--border-default-subtle)] grid md:grid-cols-2 gap-20 bg-neutral-50">
           <div className="space-y-8">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
               01 / PHILOSOPHY
@@ -76,7 +76,7 @@ export default function MagazinePage() {
             <p className="text-xl text-neutral-500 leading-relaxed font-light italic">
               "Minimalism is not a lack of something. It's simply the perfect amount of something."
             </p>
-            <Separator className="my-8 bg-[var(--tekton-border-default)]" />
+            <Separator className="my-8 bg-[var(--border-default)]" />
             <div className="flex justify-between items-center group cursor-pointer">
               <span className="font-bold text-xs uppercase tracking-widest">Explore DNA</span>
               <div className="h-10 w-10 border border-neutral-900 flex items-center justify-center group-hover:bg-neutral-900 group-hover:text-white transition-all">
@@ -193,7 +193,7 @@ export default function MagazinePage() {
             <input
               type="email"
               placeholder="YOUR EMAIL ARCHITECTURE"
-              className="flex-1 bg-transparent border-b border-[var(--tekton-border-default-emphasis)] py-4 text-xl tracking-wide placeholder:text-neutral-700 outline-none focus:border-white transition-colors uppercase font-bold"
+              className="flex-1 bg-transparent border-b border-[var(--border-default-emphasis)] py-4 text-xl tracking-wide placeholder:text-neutral-700 outline-none focus:border-white transition-colors uppercase font-bold"
             />
             <Button className="bg-white text-black rounded-none h-16 px-12 text-sm font-bold uppercase tracking-[0.2em] hover:bg-neutral-200 transition-all border-none">
               SIGN UP

@@ -34,11 +34,11 @@ export const Default: Story = {
           <Checkbox id="terms" />
           <Label htmlFor="terms" className="text-sm cursor-pointer">
             I agree to the{' '}
-            <a href="#" className="text-[var(--tekton-text-primary)] hover:underline">
+            <a href="#" className="text-[var(--text-primary)] hover:underline">
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="#" className="text-[var(--tekton-text-primary)] hover:underline">
+            <a href="#" className="text-[var(--text-primary)] hover:underline">
               Privacy Policy
             </a>
           </Label>

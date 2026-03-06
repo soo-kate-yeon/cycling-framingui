@@ -38,7 +38,7 @@ export function LandingTemplateComponent({
     <div className={`min-h-screen flex ${className}`}>
       {/* Sidebar */}
       {slots.sidebar && (
-        <aside className="w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-muted)]">
+        <aside className="w-64 border-r border-[var(--border-default)] bg-[var(--bg-muted)]">
           {slots.sidebar}
         </aside>
       )}
@@ -47,18 +47,18 @@ export function LandingTemplateComponent({
       <main className="flex-1 flex flex-col">
         {/* Header */}
         {slots.header && (
-          <header className="border-b border-[var(--tekton-border-default)] p-[var(--tekton-spacing-4)]">
+          <header className="border-b border-[var(--border-default)] p-[var(--spacing-4)]">
             {slots.header}
           </header>
         )}
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col items-center justify-center p-[var(--tekton-spacing-8)]">
-          <div className="max-w-2xl w-full text-center space-y-[var(--tekton-spacing-6)]">
+        <div className="flex-1 flex flex-col items-center justify-center p-[var(--spacing-8)]">
+          <div className="max-w-2xl w-full text-center space-y-[var(--spacing-6)]">
             {/* Title and Subtitle */}
-            <div className="space-y-[var(--tekton-spacing-2)]">
+            <div className="space-y-[var(--spacing-2)]">
               <h1 className="text-3xl font-bold">{title}</h1>
-              <p className="text-[var(--tekton-text-muted-foreground)]">{subtitle}</p>
+              <p className="text-[var(--text-muted-foreground)]">{subtitle}</p>
             </div>
 
             {/* CTA Button */}
@@ -68,12 +68,12 @@ export function LandingTemplateComponent({
 
             {/* Recent Activity */}
             {slots.recentActivity && (
-              <div className="mt-[var(--tekton-spacing-8)]">{slots.recentActivity}</div>
+              <div className="mt-[var(--spacing-8)]">{slots.recentActivity}</div>
             )}
 
             {/* Suggestions */}
             {slots.suggestions && (
-              <div className="mt-[var(--tekton-spacing-6)]">{slots.suggestions}</div>
+              <div className="mt-[var(--spacing-6)]">{slots.suggestions}</div>
             )}
           </div>
         </div>

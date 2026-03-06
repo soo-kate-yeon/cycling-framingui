@@ -69,7 +69,7 @@ export const DashboardExample = {
     <div className="h-screen">
       <Sidebar>
         <SidebarHeader>
-          <span className="text-xl font-bold text-[var(--tekton-bg-primary)]">Tekton</span>
+          <span className="text-xl font-bold text-[var(--bg-primary)]">Tekton</span>
         </SidebarHeader>
         <SidebarContent>
           <SidebarItem icon="🏠" active>
@@ -198,9 +198,9 @@ export const WithToggle = {
             </SidebarItem>
           </SidebarContent>
         </Sidebar>
-        <main className="flex-1 p-8 bg-[var(--tekton-bg-muted)]">
+        <main className="flex-1 p-8 bg-[var(--bg-muted)]">
           <h1 className="text-2xl font-bold">Main Content</h1>
-          <p className="mt-4 text-[var(--tekton-text-muted-foreground)]">
+          <p className="mt-4 text-[var(--text-muted-foreground)]">
             Toggle the sidebar using the button
           </p>
         </main>

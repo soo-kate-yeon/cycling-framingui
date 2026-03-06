@@ -126,19 +126,19 @@ describe('Skeleton', () => {
     it('applies Tekton token-based styles', () => {
       const { container } = render(<Skeleton />);
       const skeleton = container.firstChild as HTMLElement;
-      expect(skeleton.className).toMatch(/var\(--tekton-/);
+      expect(skeleton.className).toMatch(/var\(--/);
     });
 
     it('uses Tekton background tokens', () => {
       const { container } = render(<Skeleton />);
       const skeleton = container.firstChild as HTMLElement;
-      expect(skeleton.className).toContain('bg-[var(--tekton-bg-muted)]');
+      expect(skeleton.className).toContain('bg-[var(--bg-muted)]');
     });
 
     it('uses Tekton radius tokens by default', () => {
       const { container } = render(<Skeleton />);
       const skeleton = container.firstChild as HTMLElement;
-      expect(skeleton.className).toContain('rounded-[var(--tekton-radius-md)]');
+      expect(skeleton.className).toContain('rounded-[var(--radius-md)]');
     });
 
     it('maintains consistent animation', () => {

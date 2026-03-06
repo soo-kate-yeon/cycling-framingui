@@ -18,7 +18,7 @@ npm install @framingui/tokens
 - **컴파일 타임 안전성**: 잘못된 토큰 이름을 사용하면 TypeScript가 빌드 단계에서 오류를 발생시킵니다.
 - **IDE 자동완성**: `TektonTokens` 인터페이스를 통해 사용 가능한 모든 토큰에 대한 자동완성을 지원합니다.
 
-모든 토큰 값은 `TokenReference` 타입으로 정의되며, 이는 `var(--tekton-${string})` 형태의 CSS 변수 참조를 나타냅니다.
+모든 토큰 값은 `TokenReference` 타입으로 정의되며, 이는 `var(--${string})` 형태의 CSS 변수 참조를 나타냅니다.
 
 ---
 
@@ -29,10 +29,10 @@ npm install @framingui/tokens
 모든 토큰 값의 기본 타입입니다. CSS 변수 참조를 나타냅니다.
 
 ```typescript
-type TokenReference = `var(--tekton-${string})`;
+type TokenReference = `var(--${string})`;
 
 // 예시
-const color: TokenReference = 'var(--tekton-bg-primary-default)'; // 유효
+const color: TokenReference = 'var(--bg-primary-default)'; // 유효
 const invalid: TokenReference = '#ff0000'; // 컴파일 오류
 ```
 
@@ -241,9 +241,9 @@ function ThemedBox({ backgroundColor, textColor, padding }: ThemedBoxProps) {
 
 // 사용 - 올바른 예시
 <ThemedBox
-  backgroundColor="var(--tekton-bg-surface-default)"
-  textColor="var(--tekton-fg-primary)"
-  padding="var(--tekton-spacing-4)"
+  backgroundColor="var(--bg-surface-default)"
+  textColor="var(--fg-primary)"
+  padding="var(--spacing-4)"
 />
 
 // 사용 - 컴파일 오류 (하드코딩된 값)
@@ -264,9 +264,9 @@ function createThemeTokens(): Partial<TektonTokens> {
   return {
     bg: {
       surface: {
-        default: 'var(--tekton-bg-surface-default)',
-        elevated: 'var(--tekton-bg-surface-elevated)',
-        sunken: 'var(--tekton-bg-surface-sunken)',
+        default: 'var(--bg-surface-default)',
+        elevated: 'var(--bg-surface-elevated)',
+        sunken: 'var(--bg-surface-sunken)',
       },
       // ... 나머지 bg 토큰
     } as BgTokens,

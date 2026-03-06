@@ -41,16 +41,16 @@ export const WithSidebar: Story = {
         <div className="p-4 space-y-4">
           <div className="font-bold text-lg mb-4">Tekton</div>
           <nav className="space-y-2">
-            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--tekton-bg-accent)]">
+            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--bg-accent)]">
               Dashboard
             </a>
-            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--tekton-bg-accent)]">
+            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--bg-accent)]">
               Analytics
             </a>
-            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--tekton-bg-accent)]">
+            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--bg-accent)]">
               Reports
             </a>
-            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--tekton-bg-accent)]">
+            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--bg-accent)]">
               Settings
             </a>
           </nav>
@@ -75,7 +75,7 @@ export const WithMetrics: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">$45,231</div>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <p className="text-xs text-[var(--bg-muted-foreground)]">
                 +20.1% from last month
               </p>
             </CardContent>
@@ -87,7 +87,7 @@ export const WithMetrics: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+2,350</div>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <p className="text-xs text-[var(--bg-muted-foreground)]">
                 +180.1% from last month
               </p>
             </CardContent>
@@ -99,7 +99,7 @@ export const WithMetrics: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <p className="text-xs text-[var(--bg-muted-foreground)]">
                 +19% from last month
               </p>
             </CardContent>
@@ -111,7 +111,7 @@ export const WithMetrics: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <p className="text-xs text-[var(--bg-muted-foreground)]">
                 +201 since last hour
               </p>
             </CardContent>
@@ -140,16 +140,16 @@ export const Complete: Story = {
         <div className="p-4 space-y-4">
           <div className="font-bold text-lg mb-4">Tekton</div>
           <nav className="space-y-2">
-            <a href="#" className="block px-3 py-2 rounded bg-[var(--tekton-bg-accent)]">
+            <a href="#" className="block px-3 py-2 rounded bg-[var(--bg-accent)]">
               Dashboard
             </a>
-            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--tekton-bg-accent)]">
+            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--bg-accent)]">
               Analytics
             </a>
-            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--tekton-bg-accent)]">
+            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--bg-accent)]">
               Reports
             </a>
-            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--tekton-bg-accent)]">
+            <a href="#" className="block px-3 py-2 rounded hover:bg-[var(--bg-accent)]">
               Settings
             </a>
           </nav>
@@ -170,7 +170,7 @@ export const Complete: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">$45,231</div>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <p className="text-xs text-[var(--bg-muted-foreground)]">
                 +20.1% from last month
               </p>
             </CardContent>
@@ -182,7 +182,7 @@ export const Complete: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+2,350</div>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <p className="text-xs text-[var(--bg-muted-foreground)]">
                 +180.1% from last month
               </p>
             </CardContent>
@@ -194,7 +194,7 @@ export const Complete: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <p className="text-xs text-[var(--bg-muted-foreground)]">
                 +19% from last month
               </p>
             </CardContent>
@@ -206,7 +206,7 @@ export const Complete: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <p className="text-xs text-[var(--bg-muted-foreground)]">
                 +201 since last hour
               </p>
             </CardContent>
@@ -218,10 +218,10 @@ export const Complete: Story = {
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-[var(--tekton-bg-muted)]" />
+                <div className="h-10 w-10 rounded-full bg-[var(--bg-muted)]" />
                 <div>
                   <p className="font-medium">Customer #{i + 1}</p>
-                  <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+                  <p className="text-sm text-[var(--bg-muted-foreground)]">
                     customer{i + 1}@example.com
                   </p>
                 </div>
@@ -238,10 +238,10 @@ export const Complete: Story = {
         <div className="space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="flex gap-3">
-              <div className="mt-1 h-2 w-2 rounded-full bg-[var(--tekton-bg-primary)]" />
+              <div className="mt-1 h-2 w-2 rounded-full bg-[var(--bg-primary)]" />
               <div className="flex-1">
                 <p className="text-sm font-medium">Activity {i + 1}</p>
-                <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">{i} minutes ago</p>
+                <p className="text-sm text-[var(--bg-muted-foreground)]">{i} minutes ago</p>
               </div>
             </div>
           ))}

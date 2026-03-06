@@ -16,7 +16,7 @@ import * as React from 'react';
 import { cva } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 const sidebarVariants = cva(
-  'flex flex-col border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-background)] transition-all duration-300',
+  'flex flex-col border-r border-[var(--border-default)] bg-[var(--bg-background)] transition-all duration-300',
   {
     variants: {
       variant: {
@@ -36,7 +36,7 @@ const sidebarVariants = cva(
   }
 );
 const sidebarHeaderVariants = cva(
-  'flex items-center gap-[var(--tekton-spacing-2)] border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] p-[var(--tekton-spacing-4)]',
+  'flex items-center gap-[var(--spacing-2)] border-b border-[var(--border-default)] bg-[var(--bg-card)] p-[var(--spacing-4)]',
   {
     variants: {
       size: {
@@ -50,12 +50,12 @@ const sidebarHeaderVariants = cva(
     },
   }
 );
-const sidebarContentVariants = cva('flex-1 overflow-y-auto p-[var(--tekton-spacing-4)]', {
+const sidebarContentVariants = cva('flex-1 overflow-y-auto p-[var(--spacing-4)]', {
   variants: {
     spacing: {
-      default: 'space-y-[var(--tekton-spacing-2)]',
-      compact: 'space-y-[var(--tekton-spacing-1)]',
-      relaxed: 'space-y-[var(--tekton-spacing-4)]',
+      default: 'space-y-[var(--spacing-2)]',
+      compact: 'space-y-[var(--spacing-1)]',
+      relaxed: 'space-y-[var(--spacing-4)]',
     },
   },
   defaultVariants: {
@@ -63,14 +63,14 @@ const sidebarContentVariants = cva('flex-1 overflow-y-auto p-[var(--tekton-spaci
   },
 });
 const sidebarItemVariants = cva(
-  'flex w-full items-center gap-[var(--tekton-spacing-3)] rounded-[var(--tekton-radius-md)] px-[var(--tekton-spacing-3)] py-[var(--tekton-spacing-2)] text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'flex w-full items-center gap-[var(--spacing-3)] rounded-[var(--radius-md)] px-[var(--spacing-3)] py-[var(--spacing-2)] text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
         default:
-          'text-[var(--tekton-bg-foreground)] hover:bg-[var(--tekton-bg-accent)] hover:text-[var(--tekton-bg-accent-foreground)]',
+          'text-[var(--bg-foreground)] hover:bg-[var(--bg-accent)] hover:text-[var(--bg-accent-foreground)]',
         active:
-          'bg-[var(--tekton-bg-primary)] text-[var(--tekton-bg-primary-foreground)] hover:bg-[var(--tekton-bg-primary)]/90',
+          'bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)] hover:bg-[var(--bg-primary)]/90',
       },
     },
     defaultVariants: {
@@ -78,17 +78,17 @@ const sidebarItemVariants = cva(
     },
   }
 );
-const sidebarSectionVariants = cva('space-y-[var(--tekton-spacing-1)]', {
+const sidebarSectionVariants = cva('space-y-[var(--spacing-1)]', {
   variants: {},
 });
 const sidebarSectionTitleVariants = cva(
-  'px-[var(--tekton-spacing-3)] py-[var(--tekton-spacing-2)] text-xs font-semibold uppercase tracking-wider text-[var(--tekton-text-muted-foreground)]',
+  'px-[var(--spacing-3)] py-[var(--spacing-2)] text-xs font-semibold uppercase tracking-wider text-[var(--text-muted-foreground)]',
   {
     variants: {},
   }
 );
 const sidebarFooterVariants = cva(
-  'border-t border-[var(--tekton-border-default)] p-[var(--tekton-spacing-4)]',
+  'border-t border-[var(--border-default)] p-[var(--spacing-4)]',
   {
     variants: {},
   }
@@ -145,7 +145,7 @@ const SidebarSection = React.forwardRef(
           <button
             className={cn(
               sidebarSectionTitleVariants(),
-              'w-full text-left hover:text-[var(--tekton-bg-foreground)] transition-colors'
+              'w-full text-left hover:text-[var(--bg-foreground)] transition-colors'
             )}
             onClick={() => setIsCollapsed(!isCollapsed)}
             aria-expanded={!isCollapsed}
@@ -161,7 +161,7 @@ const SidebarSection = React.forwardRef(
             </span>
           </button>
         )}
-        {!isCollapsed && <div className="space-y-[var(--tekton-spacing-1)]">{children}</div>}
+        {!isCollapsed && <div className="space-y-[var(--spacing-1)]">{children}</div>}
       </div>
     );
   }

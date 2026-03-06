@@ -150,36 +150,36 @@ describe('Switch', () => {
     it('applies Tekton token-based styles', () => {
       const { container } = render(<Switch />);
       const switchElement = container.firstChild;
-      expect(switchElement.className).toMatch(/var\(--tekton-/);
+      expect(switchElement.className).toMatch(/var\(--/);
     });
     it('uses Tekton radius tokens', () => {
       const { container } = render(<Switch />);
       const switchElement = container.firstChild;
-      expect(switchElement.className).toContain('rounded-[var(--tekton-radius-full)]');
+      expect(switchElement.className).toContain('rounded-[var(--radius-full)]');
     });
     it('uses Tekton color tokens for checked state', () => {
       const { container } = render(<Switch />);
       const switchElement = container.firstChild;
       expect(switchElement.className).toContain(
-        'data-[state=checked]:bg-[var(--tekton-bg-primary)]'
+        'data-[state=checked]:bg-[var(--bg-primary)]'
       );
     });
     it('uses Tekton color tokens for unchecked state', () => {
       const { container } = render(<Switch />);
       const switchElement = container.firstChild;
       expect(switchElement.className).toContain(
-        'data-[state=unchecked]:bg-[var(--tekton-bg-muted)]'
+        'data-[state=unchecked]:bg-[var(--bg-muted)]'
       );
     });
     it('uses Tekton background tokens for thumb', () => {
       const { container } = render(<Switch />);
-      const thumb = container.querySelector('[class*="bg-[var(--tekton-bg-background)]"]');
+      const thumb = container.querySelector('[class*="bg-[var(--bg-background)]"]');
       expect(thumb).toBeInTheDocument();
     });
     it('uses Tekton ring tokens for focus state', () => {
       const { container } = render(<Switch />);
       const switchElement = container.firstChild;
-      expect(switchElement.className).toContain('focus-visible:ring-[var(--tekton-border-ring)]');
+      expect(switchElement.className).toContain('focus-visible:ring-[var(--border-ring)]');
     });
   });
   // Additional Edge Cases

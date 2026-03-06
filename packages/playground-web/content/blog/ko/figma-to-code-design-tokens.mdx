@@ -115,10 +115,10 @@ import { Button } from '@framingui/ui';
 내부 동작:
 ```css
 .button-primary {
-  background: var(--tekton-bg-primary);
-  color: var(--tekton-fg-primary);
-  border-radius: var(--tekton-radius-md);
-  padding: var(--tekton-spacing-3) var(--tekton-spacing-4);
+  background: var(--bg-primary);
+  color: var(--fg-primary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3) var(--spacing-4);
 }
 ```
 
@@ -129,14 +129,14 @@ import { Button } from '@framingui/ui';
 ```tsx
 // 라이트 모드
 :root {
-  --tekton-bg-primary: #3B82F6;
-  --tekton-bg-card: #FFFFFF;
+  --bg-primary: #3B82F6;
+  --bg-card: #FFFFFF;
 }
 
 // 다크 모드
 [data-theme="dark"] {
-  --tekton-bg-primary: #60A5FA;
-  --tekton-bg-card: #1F2937;
+  --bg-primary: #60A5FA;
+  --bg-card: #1F2937;
 }
 ```
 

@@ -28,23 +28,23 @@ export default function TypographyPage() {
         </p>
         <pre className="bg-neutral-900 text-neutral-100 p-4 rounded-lg overflow-x-auto text-sm">
           {`/* Text Colors */
-var(--tekton-text-foreground)
-var(--tekton-text-muted-foreground)
-var(--tekton-text-popover-foreground)
-var(--tekton-text-card-foreground)
+var(--text-foreground)
+var(--text-muted-foreground)
+var(--text-popover-foreground)
+var(--text-card-foreground)
 
 /* Background Colors */
-var(--tekton-bg-background)
-var(--tekton-bg-muted)
-var(--tekton-bg-accent)
-var(--tekton-bg-card)
-var(--tekton-bg-popover)
+var(--bg-background)
+var(--bg-muted)
+var(--bg-accent)
+var(--bg-card)
+var(--bg-popover)
 
 /* Spacing */
-var(--tekton-spacing-1) /* 0.25rem */
-var(--tekton-spacing-2) /* 0.5rem */
-var(--tekton-spacing-4) /* 1rem */
-var(--tekton-spacing-6) /* 1.5rem */`}
+var(--spacing-1) /* 0.25rem */
+var(--spacing-2) /* 0.5rem */
+var(--spacing-4) /* 1rem */
+var(--spacing-6) /* 1.5rem */`}
         </pre>
       </section>
 
@@ -124,7 +124,7 @@ var(--tekton-spacing-6) /* 1.5rem */`}
 <p className="text-neutral-400">Disabled text color</p>
 
 {/* Using design tokens */}
-<p className="text-[var(--tekton-text-muted-foreground)]">
+<p className="text-[var(--text-muted-foreground)]">
   Text using design token
 </p>`}
         </pre>

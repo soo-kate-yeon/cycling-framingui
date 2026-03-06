@@ -87,41 +87,41 @@ styled.div`
 
 ## tokens 접근자
 
-`tokens` 객체는 Proxy 기반으로 구현되어 있으며, 프로퍼티 접근 경로가 자동으로 CSS 변수 참조(`var(--tekton-...)`)로 변환됩니다. `@framingui/tokens`의 `TektonTokens` 인터페이스 타입이 적용되어 IDE 자동완성이 지원됩니다.
+`tokens` 객체는 Proxy 기반으로 구현되어 있으며, 프로퍼티 접근 경로가 자동으로 CSS 변수 참조(`var(--...)`)로 변환됩니다. `@framingui/tokens`의 `TektonTokens` 인터페이스 타입이 적용되어 IDE 자동완성이 지원됩니다.
 
 ```typescript
 import { tokens } from '@framingui/styled';
 
 // 배경 색상
-tokens.bg.surface.default; // => 'var(--tekton-bg-surface-default)'
-tokens.bg.primary.hover; // => 'var(--tekton-bg-primary-hover)'
-tokens.bg.destructive.active; // => 'var(--tekton-bg-destructive-active)'
+tokens.bg.surface.default; // => 'var(--bg-surface-default)'
+tokens.bg.primary.hover; // => 'var(--bg-primary-hover)'
+tokens.bg.destructive.active; // => 'var(--bg-destructive-active)'
 
 // 텍스트 색상
-tokens.fg.primary; // => 'var(--tekton-fg-primary)'
-tokens.fg.muted; // => 'var(--tekton-fg-muted)'
-tokens.fg.error; // => 'var(--tekton-fg-error)'
+tokens.fg.primary; // => 'var(--fg-primary)'
+tokens.fg.muted; // => 'var(--fg-muted)'
+tokens.fg.error; // => 'var(--fg-error)'
 
 // 간격
-tokens.spacing[0]; // => 'var(--tekton-spacing-0)'
-tokens.spacing[4]; // => 'var(--tekton-spacing-4)'
-tokens.spacing[8]; // => 'var(--tekton-spacing-8)'
+tokens.spacing[0]; // => 'var(--spacing-0)'
+tokens.spacing[4]; // => 'var(--spacing-4)'
+tokens.spacing[8]; // => 'var(--spacing-8)'
 
 // 둥글기
-tokens.radius.md; // => 'var(--tekton-radius-md)'
-tokens.radius.full; // => 'var(--tekton-radius-full)'
+tokens.radius.md; // => 'var(--radius-md)'
+tokens.radius.full; // => 'var(--radius-full)'
 
 // 그림자
-tokens.shadow.sm; // => 'var(--tekton-shadow-sm)'
-tokens.shadow.lg; // => 'var(--tekton-shadow-lg)'
+tokens.shadow.sm; // => 'var(--shadow-sm)'
+tokens.shadow.lg; // => 'var(--shadow-lg)'
 
 // 타이포그래피
-tokens.typography.fontSize.base; // => 'var(--tekton-typography-fontSize-base)'
-tokens.typography.fontWeight.bold; // => 'var(--tekton-typography-fontWeight-bold)'
+tokens.typography.fontSize.base; // => 'var(--typography-fontSize-base)'
+tokens.typography.fontWeight.bold; // => 'var(--typography-fontWeight-bold)'
 
 // 모션
-tokens.motion.duration.fast; // => 'var(--tekton-motion-duration-fast)'
-tokens.motion.easing.standard; // => 'var(--tekton-motion-easing-standard)'
+tokens.motion.duration.fast; // => 'var(--motion-duration-fast)'
+tokens.motion.easing.standard; // => 'var(--motion-easing-standard)'
 ```
 
 ---
@@ -196,7 +196,7 @@ import { validateNoHardcodedValues } from '@framingui/styled';
 // 유효한 CSS - 오류 없음
 validateNoHardcodedValues`
   display: flex;
-  background: var(--tekton-bg-surface-default);
+  background: var(--bg-surface-default);
 `;
 
 // 하드코딩된 값 - 오류 발생

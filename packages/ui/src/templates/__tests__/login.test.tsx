@@ -149,13 +149,13 @@ describe('LoginTemplate', () => {
     it('uses Tekton spacing tokens', () => {
       const { container } = render(<LoginTemplateComponent />);
       const html = container.innerHTML;
-      expect(html).toMatch(/var\(--tekton-spacing-/);
+      expect(html).toMatch(/var\(--spacing-/);
     });
 
     it('uses Tekton text color tokens', () => {
       const { container } = render(<LoginTemplateComponent />);
       const html = container.innerHTML;
-      expect(html).toMatch(/var\(--tekton-text-/);
+      expect(html).toMatch(/var\(--text-/);
     });
   });
 });

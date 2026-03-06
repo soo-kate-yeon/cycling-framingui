@@ -149,7 +149,7 @@ export const CustomContent = {
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
             <h4 className="font-semibold">Description</h4>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+            <p className="text-sm text-[var(--bg-muted-foreground)]">
               This is a comprehensive project management system built with modern technologies.
             </p>
           </div>

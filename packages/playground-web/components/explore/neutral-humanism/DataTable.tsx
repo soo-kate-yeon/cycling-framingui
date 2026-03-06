@@ -50,13 +50,13 @@ const DEMO_DATA: DataItem[] = [
 
 export function DataTable() {
   return (
-    <div className="w-full bg-[var(--tekton-bg-surface)] border border-[var(--tekton-border-default)] rounded-xl overflow-hidden shadow-sm">
+    <div className="w-full bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl overflow-hidden shadow-sm">
       <table className="w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-canvas)]/30 text-[var(--tekton-text-secondary)] font-medium">
+          <tr className="border-b border-[var(--border-default)] bg-[var(--bg-canvas)]/30 text-[var(--text-secondary)] font-medium">
             <th className="px-6 py-3 font-medium">Project Name</th>
             <th className="px-6 py-3 font-medium">Status</th>
-            <th className="px-6 py-3 font-medium cursor-pointer hover:text-[var(--tekton-text-primary)] group flex items-center gap-1">
+            <th className="px-6 py-3 font-medium cursor-pointer hover:text-[var(--text-primary)] group flex items-center gap-1">
               Last Edited{' '}
               <ArrowUpDown
                 size={12}
@@ -67,13 +67,13 @@ export function DataTable() {
             <th className="px-6 py-3 font-medium text-right">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[var(--tekton-border-default)]">
+        <tbody className="divide-y divide-[var(--border-default)]">
           {DEMO_DATA.map((item) => (
             <tr
               key={item.id}
-              className="hover:bg-[var(--tekton-bg-canvas)] transition-colors group"
+              className="hover:bg-[var(--bg-canvas)] transition-colors group"
             >
-              <td className="px-6 py-4 font-medium text-[var(--tekton-text-primary)]">
+              <td className="px-6 py-4 font-medium text-[var(--text-primary)]">
                 {item.project}
               </td>
               <td className="px-6 py-4">
@@ -90,17 +90,17 @@ export function DataTable() {
                   {item.status}
                 </span>
               </td>
-              <td className="px-6 py-4 text-[var(--tekton-text-secondary)]">{item.lastEdited}</td>
-              <td className="px-6 py-4 text-[var(--tekton-text-primary)]">
+              <td className="px-6 py-4 text-[var(--text-secondary)]">{item.lastEdited}</td>
+              <td className="px-6 py-4 text-[var(--text-primary)]">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-[var(--tekton-bg-canvas)] flex items-center justify-center text-[10px] font-bold text-[var(--tekton-text-secondary)]">
+                  <div className="w-6 h-6 rounded-full bg-[var(--bg-canvas)] flex items-center justify-center text-[10px] font-bold text-[var(--text-secondary)]">
                     {item.author.charAt(0)}
                   </div>
                   {item.author}
                 </div>
               </td>
               <td className="px-6 py-4 text-right">
-                <button className="p-1.5 text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)] rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                <button className="p-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)] rounded-lg transition-colors opacity-0 group-hover:opacity-100">
                   <MoreHorizontal size={16} />
                 </button>
               </td>
@@ -108,16 +108,16 @@ export function DataTable() {
           ))}
         </tbody>
       </table>
-      <div className="px-6 py-3 border-t border-[var(--tekton-border-default)] bg-[var(--tekton-bg-canvas)]/30 text-xs text-[var(--tekton-text-secondary)] flex justify-between items-center">
+      <div className="px-6 py-3 border-t border-[var(--border-default)] bg-[var(--bg-canvas)]/30 text-xs text-[var(--text-secondary)] flex justify-between items-center">
         <span>Showing 5 of 24 projects</span>
         <div className="flex gap-2">
           <button
-            className="px-2 py-1 hover:bg-[var(--tekton-bg-surface)] hover:shadow-sm rounded transition-all disabled:opacity-50"
+            className="px-2 py-1 hover:bg-[var(--bg-surface)] hover:shadow-sm rounded transition-all disabled:opacity-50"
             disabled
           >
             Previous
           </button>
-          <button className="px-2 py-1 hover:bg-[var(--tekton-bg-surface)] hover:shadow-sm rounded transition-all">
+          <button className="px-2 py-1 hover:bg-[var(--bg-surface)] hover:shadow-sm rounded transition-all">
             Next
           </button>
         </div>

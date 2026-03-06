@@ -203,9 +203,9 @@ describe('Table', () => {
         </Table>
       );
 
-      expect(screen.getByTestId('head')).toHaveClass('text-[var(--tekton-bg-muted-foreground)]');
-      expect(screen.getByTestId('footer').className).toContain('bg-[var(--tekton-bg-muted)]');
-      expect(screen.getByTestId('caption')).toHaveClass('text-[var(--tekton-bg-muted-foreground)]');
+      expect(screen.getByTestId('head')).toHaveClass('text-[var(--bg-muted-foreground)]');
+      expect(screen.getByTestId('footer').className).toContain('bg-[var(--bg-muted)]');
+      expect(screen.getByTestId('caption')).toHaveClass('text-[var(--bg-muted-foreground)]');
     });
   });
 

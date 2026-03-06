@@ -167,15 +167,15 @@ import '@framingui/ui/styles';
 
 ## Override Tokens
 
-Create overrides in your global CSS. Keep variable names in the `--tekton-*` namespace.
+Create overrides in your global CSS. Keep variable names in the `--*` namespace.
 
 ```css
 /* app/globals.css */
 :root {
-  --tekton-bg-primary: oklch(0.56 0.18 257);
-  --tekton-bg-primary-foreground: oklch(0.98 0 0);
-  --tekton-radius-lg: 14px;
-  --tekton-spacing-4: 1rem;
+  --bg-primary: oklch(0.56 0.18 257);
+  --bg-primary-foreground: oklch(0.98 0 0);
+  --radius-lg: 14px;
+  --spacing-4: 1rem;
 }
 ```
 
@@ -183,8 +183,8 @@ Use scoped overrides when only one area needs a custom look.
 
 ```css
 .pricing-surface {
-  --tekton-bg-card: oklch(0.99 0.01 250);
-  --tekton-border-default: oklch(0.88 0.02 250);
+  --bg-card: oklch(0.99 0.01 250);
+  --border-default: oklch(0.88 0.02 250);
 }
 ```
 
@@ -194,15 +194,15 @@ Use class-based switching and override only tokens that should change.
 
 ```css
 :root {
-  --tekton-bg-background: oklch(1 0 0);
-  --tekton-bg-foreground: oklch(0.2 0 0);
+  --bg-background: oklch(1 0 0);
+  --bg-foreground: oklch(0.2 0 0);
 }
 
 .dark {
-  --tekton-bg-background: oklch(0.16 0.01 260);
-  --tekton-bg-foreground: oklch(0.96 0.01 260);
-  --tekton-bg-card: oklch(0.2 0.01 260);
-  --tekton-border-default: oklch(0.32 0.01 260);
+  --bg-background: oklch(0.16 0.01 260);
+  --bg-foreground: oklch(0.96 0.01 260);
+  --bg-card: oklch(0.2 0.01 260);
+  --border-default: oklch(0.32 0.01 260);
 }
 ```
 

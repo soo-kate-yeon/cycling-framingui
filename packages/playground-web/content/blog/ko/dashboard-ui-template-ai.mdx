@@ -53,8 +53,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen">
       {/* 사이드바 */}
-      <aside className="w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)]">
-        <div className="p-[var(--tekton-spacing-6)]">
+      <aside className="w-64 border-r border-[var(--border-default)] bg-[var(--bg-card)]">
+        <div className="p-[var(--spacing-6)]">
           <h2 className="text-lg font-bold">MyApp</h2>
         </div>
         <Separator />
@@ -64,12 +64,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* 메인 콘텐츠 */}
       <div className="flex-1 flex flex-col">
         {/* 헤더 */}
-        <header className="h-16 border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] flex items-center px-[var(--tekton-spacing-6)]">
+        <header className="h-16 border-b border-[var(--border-default)] bg-[var(--bg-card)] flex items-center px-[var(--spacing-6)]">
           <h1 className="text-xl font-semibold">대시보드</h1>
         </header>
 
         {/* 콘텐츠 */}
-        <main className="flex-1 overflow-auto p-[var(--tekton-spacing-6)] bg-[var(--tekton-bg-background)]">
+        <main className="flex-1 overflow-auto p-[var(--spacing-6)] bg-[var(--bg-background)]">
           {children}
         </main>
       </div>
@@ -105,26 +105,26 @@ export function DashboardSidebar() {
   const [activeItem, setActiveItem] = useState('/dashboard');
 
   return (
-    <aside className="w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] flex flex-col h-screen">
+    <aside className="w-64 border-r border-[var(--border-default)] bg-[var(--bg-card)] flex flex-col h-screen">
       {/* 로고 */}
-      <div className="p-[var(--tekton-spacing-6)]">
+      <div className="p-[var(--spacing-6)]">
         <h2 className="text-lg font-bold">MyApp 관리자</h2>
       </div>
       <Separator />
 
       {/* 내비게이션 */}
-      <nav className="flex-1 p-[var(--tekton-spacing-4)] space-y-[var(--tekton-spacing-2)]">
+      <nav className="flex-1 p-[var(--spacing-4)] space-y-[var(--spacing-2)]">
         {navItems.map((item) => (
           <Button
             key={item.href}
             variant={activeItem === item.href ? 'default' : 'ghost'}
             className={cn(
               'w-full justify-start',
-              activeItem === item.href && 'bg-[var(--tekton-bg-primary)] text-[var(--tekton-bg-primary-foreground)]'
+              activeItem === item.href && 'bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)]'
             )}
             onClick={() => setActiveItem(item.href)}
           >
-            <item.icon className="mr-[var(--tekton-spacing-2)] h-4 w-4" />
+            <item.icon className="mr-[var(--spacing-2)] h-4 w-4" />
             {item.label}
           </Button>
         ))}
@@ -133,15 +133,15 @@ export function DashboardSidebar() {
       <Separator />
 
       {/* 사용자 섹션 */}
-      <div className="p-[var(--tekton-spacing-4)]">
+      <div className="p-[var(--spacing-4)]">
         <Button variant="ghost" className="w-full justify-between">
           <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-[var(--tekton-bg-primary)] flex items-center justify-center text-sm font-bold text-[var(--tekton-bg-primary-foreground)] mr-[var(--tekton-spacing-3)]">
+            <div className="w-8 h-8 rounded-full bg-[var(--bg-primary)] flex items-center justify-center text-sm font-bold text-[var(--bg-primary-foreground)] mr-[var(--spacing-3)]">
               홍길동
             </div>
             <div className="text-left">
               <p className="text-sm font-medium">홍길동</p>
-              <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">관리자</p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">관리자</p>
             </div>
           </div>
           <ChevronDown className="h-4 w-4" />
@@ -197,31 +197,31 @@ const stats = [
 
 export function StatsGrid() {
   return (
-    <div className="grid gap-[var(--tekton-spacing-4)] md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-[var(--spacing-4)] md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (
         <Card key={stat.title}>
-          <CardContent className="p-[var(--tekton-spacing-6)]">
-            <div className="flex items-center justify-between space-x-[var(--tekton-spacing-4)]">
-              <div className="space-y-[var(--tekton-spacing-2)]">
-                <p className="text-sm font-medium text-[var(--tekton-bg-muted-foreground)]">
+          <CardContent className="p-[var(--spacing-6)]">
+            <div className="flex items-center justify-between space-x-[var(--spacing-4)]">
+              <div className="space-y-[var(--spacing-2)]">
+                <p className="text-sm font-medium text-[var(--bg-muted-foreground)]">
                   {stat.title}
                 </p>
-                <div className="flex items-baseline space-x-[var(--tekton-spacing-2)]">
+                <div className="flex items-baseline space-x-[var(--spacing-2)]">
                   <p className="text-2xl font-bold">{stat.value}</p>
                   <span
                     className={cn(
                       'text-xs font-medium',
                       stat.trend === 'up'
-                        ? 'text-[var(--tekton-bg-primary)]'
-                        : 'text-[var(--tekton-bg-destructive)]'
+                        ? 'text-[var(--bg-primary)]'
+                        : 'text-[var(--bg-destructive)]'
                     )}
                   >
                     {stat.change}
                   </span>
                 </div>
               </div>
-              <div className="p-[var(--tekton-spacing-3)] bg-[var(--tekton-bg-primary)]/10 rounded-[var(--tekton-radius-lg)]">
-                <stat.icon className="h-5 w-5 text-[var(--tekton-bg-primary)]" />
+              <div className="p-[var(--spacing-3)] bg-[var(--bg-primary)]/10 rounded-[var(--radius-lg)]">
+                <stat.icon className="h-5 w-5 text-[var(--bg-primary)]" />
               </div>
             </div>
           </CardContent>
@@ -301,7 +301,7 @@ export function RecentOrdersTable() {
                     {order.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-[var(--tekton-bg-muted-foreground)]">
+                <TableCell className="text-[var(--bg-muted-foreground)]">
                   {order.date}
                 </TableCell>
                 <TableCell>
@@ -339,14 +339,14 @@ export default function DashboardPage() {
       <DashboardSidebar />
       <div className="flex-1 flex flex-col">
         {/* 헤더 */}
-        <header className="h-16 border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] flex items-center justify-between px-[var(--tekton-spacing-6)]">
+        <header className="h-16 border-b border-[var(--border-default)] bg-[var(--bg-card)] flex items-center justify-between px-[var(--spacing-6)]">
           <h1 className="text-xl font-semibold">대시보드 개요</h1>
           <Button variant="default">보고서 다운로드</Button>
         </header>
 
         {/* 메인 콘텐츠 */}
-        <main className="flex-1 overflow-auto p-[var(--tekton-spacing-6)] bg-[var(--tekton-bg-background)]">
-          <div className="space-y-[var(--tekton-spacing-6)]">
+        <main className="flex-1 overflow-auto p-[var(--spacing-6)] bg-[var(--bg-background)]">
+          <div className="space-y-[var(--spacing-6)]">
             <StatsGrid />
             <RecentOrdersTable />
           </div>
@@ -407,7 +407,7 @@ export function MobileSidebar({ children }: { children: React.ReactNode }) {
 - 수익 (₩54,321,000)
 - 전환율 (3.2%)
 
-모든 스타일링에 var(--tekton-*) 토큰을 사용해줘.
+모든 스타일링에 var(--*) 토큰을 사용해줘.
 ```
 
 ### 데이터 테이블 생성
@@ -431,7 +431,7 @@ export function MobileSidebar({ children }: { children: React.ReactNode }) {
 - 제목과 액션 버튼이 있는 헤더
 - 반응형 그리드의 4개 통계 카드
 - 최근 주문 테이블
-- 모든 스타일링에 var(--tekton-*) 토큰 사용
+- 모든 스타일링에 var(--*) 토큰 사용
 ```
 
 ## 고급: 차트 통합
@@ -465,7 +465,7 @@ export function RevenueChart() {
             <Line
               type="monotone"
               dataKey="revenue"
-              stroke="var(--tekton-bg-primary)"
+              stroke="var(--bg-primary)"
               strokeWidth={2}
             />
           </LineChart>
@@ -476,7 +476,7 @@ export function RevenueChart() {
 }
 ```
 
-✅ **디자인 토큰 사용**: `stroke="var(--tekton-bg-primary)"`
+✅ **디자인 토큰 사용**: `stroke="var(--bg-primary)"`
 
 ## 다음 단계
 

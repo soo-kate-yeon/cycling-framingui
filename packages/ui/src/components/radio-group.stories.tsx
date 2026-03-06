@@ -62,7 +62,7 @@ export const WithDescriptions: Story = {
           <Label htmlFor="r1" className="cursor-pointer">
             Default
           </Label>
-          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+          <p className="text-sm text-[var(--bg-muted-foreground)]">
             The default spacing for your content.
           </p>
         </div>
@@ -73,7 +73,7 @@ export const WithDescriptions: Story = {
           <Label htmlFor="r2" className="cursor-pointer">
             Comfortable
           </Label>
-          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+          <p className="text-sm text-[var(--bg-muted-foreground)]">
             More space between elements.
           </p>
         </div>
@@ -84,7 +84,7 @@ export const WithDescriptions: Story = {
           <Label htmlFor="r3" className="cursor-pointer">
             Compact
           </Label>
-          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+          <p className="text-sm text-[var(--bg-muted-foreground)]">
             Minimal spacing between elements.
           </p>
         </div>
@@ -167,7 +167,7 @@ export const PaymentMethod: Story = {
           <Label htmlFor="card" className="cursor-pointer font-medium">
             Credit Card
           </Label>
-          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+          <p className="text-sm text-[var(--bg-muted-foreground)]">
             Pay with credit or debit card
           </p>
         </div>
@@ -178,7 +178,7 @@ export const PaymentMethod: Story = {
           <Label htmlFor="paypal" className="cursor-pointer font-medium">
             PayPal
           </Label>
-          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+          <p className="text-sm text-[var(--bg-muted-foreground)]">
             Pay with your PayPal account
           </p>
         </div>
@@ -189,7 +189,7 @@ export const PaymentMethod: Story = {
           <Label htmlFor="bank" className="cursor-pointer font-medium">
             Bank Transfer
           </Label>
-          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">Pay via bank transfer</p>
+          <p className="text-sm text-[var(--bg-muted-foreground)]">Pay via bank transfer</p>
         </div>
       </div>
     </RadioGroup>

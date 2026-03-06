@@ -129,7 +129,7 @@ export default function DashboardExample() {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">$45,231.89</div>
-        <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-xs text-[var(--bg-muted-foreground)]">
           +20.1% from last month
         </p>
       </CardContent>
@@ -158,7 +158,7 @@ export default function NotificationExample() {
           <span className="text-2xl">📧</span>
           <div className="flex-1 space-y-1">
             <p className="text-sm font-medium leading-none">New message</p>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+            <p className="text-sm text-[var(--bg-muted-foreground)]">
               You have a new message from John
             </p>
           </div>
@@ -285,19 +285,19 @@ All components extend standard HTML div attributes.
 ```json
 {
   "bg": {
-    "card": "var(--tekton-bg-card)",
-    "cardForeground": "var(--tekton-bg-card-foreground)",
-    "mutedForeground": "var(--tekton-bg-muted-foreground)"
+    "card": "var(--bg-card)",
+    "cardForeground": "var(--bg-card-foreground)",
+    "mutedForeground": "var(--bg-muted-foreground)"
   },
   "spacing": {
-    "2": "var(--tekton-spacing-2)",
-    "6": "var(--tekton-spacing-6)"
+    "2": "var(--spacing-2)",
+    "6": "var(--spacing-6)"
   },
   "radius": {
-    "lg": "var(--tekton-radius-lg)"
+    "lg": "var(--radius-lg)"
   },
   "border": {
-    "default": "var(--tekton-border-default)"
+    "default": "var(--border-default)"
   },
   "shadow": {
     "sm": "shadow-sm"

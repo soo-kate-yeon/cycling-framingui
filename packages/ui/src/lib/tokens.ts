@@ -10,74 +10,74 @@
  * IMPACT: 토큰 정의 누락 시 UI 불일치 발생
  *
  * This file maps shadcn-ui semantic tokens to Tekton's global token system.
- * All values use `var(--tekton-*)` pattern for theme consistency.
+ * All values use `var(--*)` pattern for theme consistency.
  */
 
 import type { TokenReference } from '@framingui/tokens';
 
 /**
  * Tekton Token CSS Variables
- * Pattern: var(--tekton-{category}-{name})
+ * Pattern: var(--{category}-{name})
  */
 export const tokenVars = {
   // ========================================
   // Background Tokens
   // ========================================
   bg: {
-    background: 'var(--tekton-bg-background)' as TokenReference,
-    foreground: 'var(--tekton-bg-foreground)' as TokenReference,
-    card: 'var(--tekton-bg-card)' as TokenReference,
-    cardForeground: 'var(--tekton-bg-card-foreground)' as TokenReference,
-    popover: 'var(--tekton-bg-popover)' as TokenReference,
-    popoverForeground: 'var(--tekton-bg-popover-foreground)' as TokenReference,
-    primary: 'var(--tekton-bg-primary)' as TokenReference,
-    primaryForeground: 'var(--tekton-bg-primary-foreground)' as TokenReference,
-    secondary: 'var(--tekton-bg-secondary)' as TokenReference,
-    secondaryForeground: 'var(--tekton-bg-secondary-foreground)' as TokenReference,
-    muted: 'var(--tekton-bg-muted)' as TokenReference,
-    mutedForeground: 'var(--tekton-bg-muted-foreground)' as TokenReference,
-    accent: 'var(--tekton-bg-accent)' as TokenReference,
-    accentForeground: 'var(--tekton-bg-accent-foreground)' as TokenReference,
-    destructive: 'var(--tekton-bg-destructive)' as TokenReference,
-    destructiveForeground: 'var(--tekton-bg-destructive-foreground)' as TokenReference,
+    background: 'var(--bg-background)' as TokenReference,
+    foreground: 'var(--bg-foreground)' as TokenReference,
+    card: 'var(--bg-card)' as TokenReference,
+    cardForeground: 'var(--bg-card-foreground)' as TokenReference,
+    popover: 'var(--bg-popover)' as TokenReference,
+    popoverForeground: 'var(--bg-popover-foreground)' as TokenReference,
+    primary: 'var(--bg-primary)' as TokenReference,
+    primaryForeground: 'var(--bg-primary-foreground)' as TokenReference,
+    secondary: 'var(--bg-secondary)' as TokenReference,
+    secondaryForeground: 'var(--bg-secondary-foreground)' as TokenReference,
+    muted: 'var(--bg-muted)' as TokenReference,
+    mutedForeground: 'var(--bg-muted-foreground)' as TokenReference,
+    accent: 'var(--bg-accent)' as TokenReference,
+    accentForeground: 'var(--bg-accent-foreground)' as TokenReference,
+    destructive: 'var(--bg-destructive)' as TokenReference,
+    destructiveForeground: 'var(--bg-destructive-foreground)' as TokenReference,
   },
 
   // ========================================
   // Border Tokens
   // ========================================
   border: {
-    default: 'var(--tekton-border-default)' as TokenReference,
-    input: 'var(--tekton-border-input)' as TokenReference,
-    ring: 'var(--tekton-border-ring)' as TokenReference,
+    default: 'var(--border-default)' as TokenReference,
+    input: 'var(--border-input)' as TokenReference,
+    ring: 'var(--border-ring)' as TokenReference,
   },
 
   // ========================================
   // Radius Tokens
   // ========================================
   radius: {
-    sm: 'var(--tekton-radius-sm)' as TokenReference,
-    md: 'var(--tekton-radius-md)' as TokenReference,
-    lg: 'var(--tekton-radius-lg)' as TokenReference,
-    xl: 'var(--tekton-radius-xl)' as TokenReference,
-    full: 'var(--tekton-radius-full)' as TokenReference,
-    select: 'var(--tekton-radius-select)' as TokenReference,
+    sm: 'var(--radius-sm)' as TokenReference,
+    md: 'var(--radius-md)' as TokenReference,
+    lg: 'var(--radius-lg)' as TokenReference,
+    xl: 'var(--radius-xl)' as TokenReference,
+    full: 'var(--radius-full)' as TokenReference,
+    select: 'var(--radius-select)' as TokenReference,
   },
 
   // ========================================
   // Spacing Tokens (4px base)
   // ========================================
   spacing: {
-    0: 'var(--tekton-spacing-0)' as TokenReference,
-    1: 'var(--tekton-spacing-1)' as TokenReference,
-    2: 'var(--tekton-spacing-2)' as TokenReference,
-    3: 'var(--tekton-spacing-3)' as TokenReference,
-    4: 'var(--tekton-spacing-4)' as TokenReference,
-    5: 'var(--tekton-spacing-5)' as TokenReference,
-    6: 'var(--tekton-spacing-6)' as TokenReference,
-    8: 'var(--tekton-spacing-8)' as TokenReference,
-    10: 'var(--tekton-spacing-10)' as TokenReference,
-    12: 'var(--tekton-spacing-12)' as TokenReference,
-    16: 'var(--tekton-spacing-16)' as TokenReference,
+    0: 'var(--spacing-0)' as TokenReference,
+    1: 'var(--spacing-1)' as TokenReference,
+    2: 'var(--spacing-2)' as TokenReference,
+    3: 'var(--spacing-3)' as TokenReference,
+    4: 'var(--spacing-4)' as TokenReference,
+    5: 'var(--spacing-5)' as TokenReference,
+    6: 'var(--spacing-6)' as TokenReference,
+    8: 'var(--spacing-8)' as TokenReference,
+    10: 'var(--spacing-10)' as TokenReference,
+    12: 'var(--spacing-12)' as TokenReference,
+    16: 'var(--spacing-16)' as TokenReference,
   },
 } as const;
 
@@ -91,14 +91,14 @@ export type TektonTokenVars = typeof tokenVars;
  * Helper function to validate token references at runtime
  */
 export function isTokenReference(value: string): value is TokenReference {
-  return value.startsWith('var(--tekton-') && value.endsWith(')');
+  return value.startsWith('var(--') && value.endsWith(')');
 }
 
 /**
  * Extract token name from TokenReference
- * Example: var(--tekton-bg-primary) → bg-primary
+ * Example: var(--bg-primary) → bg-primary
  */
 export function extractTokenName(token: TokenReference): string {
-  const match = token.match(/var\(--tekton-(.*)\)/);
+  const match = token.match(/var\(--(.*)\)/);
   return match ? match[1] : '';
 }

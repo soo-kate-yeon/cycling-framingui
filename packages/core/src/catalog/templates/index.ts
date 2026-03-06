@@ -17,18 +17,18 @@ export type {
 
 const DEFAULT_RESPONSIVE_LAYOUT: TemplateResponsiveLayout = {
   mobile: {
-    padding: 'var(--tekton-layout-padding-mobile)',
-    gap: 'var(--tekton-layout-gap-mobile)',
+    padding: 'var(--layout-padding-mobile)',
+    gap: 'var(--layout-gap-mobile)',
     columns: 4,
   },
   tablet: {
-    padding: 'var(--tekton-layout-padding-tablet)',
-    gap: 'var(--tekton-layout-gap-tablet)',
+    padding: 'var(--layout-padding-tablet)',
+    gap: 'var(--layout-gap-tablet)',
     columns: 8,
   },
   desktop: {
-    padding: 'var(--tekton-layout-padding-desktop)',
-    gap: 'var(--tekton-layout-gap-desktop)',
+    padding: 'var(--layout-padding-desktop)',
+    gap: 'var(--layout-gap-desktop)',
     columns: 12,
   },
 };

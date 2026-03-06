@@ -17,7 +17,7 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 
-const breadcrumbVariants = cva('flex items-center gap-[var(--tekton-spacing-2)]', {
+const breadcrumbVariants = cva('flex items-center gap-[var(--spacing-2)]', {
   variants: {
     size: {
       sm: 'text-xs',
@@ -39,12 +39,12 @@ const breadcrumbItemVariants = cva('inline-flex items-center gap-1.5', {
 });
 
 const breadcrumbLinkVariants = cva(
-  'transition-colors hover:text-[var(--tekton-bg-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 rounded-[var(--tekton-radius-sm)]',
+  'transition-colors hover:text-[var(--bg-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 rounded-[var(--radius-sm)]',
   {
     variants: {
       active: {
-        true: 'text-[var(--tekton-bg-foreground)] font-medium pointer-events-none',
-        false: 'text-[var(--tekton-text-muted-foreground)] underline-offset-4 hover:underline',
+        true: 'text-[var(--bg-foreground)] font-medium pointer-events-none',
+        false: 'text-[var(--text-muted-foreground)] underline-offset-4 hover:underline',
       },
     },
     defaultVariants: {
@@ -53,12 +53,12 @@ const breadcrumbLinkVariants = cva(
   }
 );
 
-const breadcrumbSeparatorVariants = cva('text-[var(--tekton-text-muted-foreground)] select-none', {
+const breadcrumbSeparatorVariants = cva('text-[var(--text-muted-foreground)] select-none', {
   variants: {},
 });
 
 const breadcrumbEllipsisVariants = cva(
-  'inline-flex h-9 w-9 items-center justify-center text-[var(--tekton-text-muted-foreground)]',
+  'inline-flex h-9 w-9 items-center justify-center text-[var(--text-muted-foreground)]',
   {
     variants: {},
   }
@@ -139,7 +139,7 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWit
       aria-current="page"
       className={cn(
         breadcrumbLinkVariants({ active: true }),
-        'text-[var(--tekton-bg-foreground)]',
+        'text-[var(--bg-foreground)]',
         className
       )}
       {...props}

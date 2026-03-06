@@ -30,7 +30,7 @@ export const Default = {
       <PopoverContent>
         <div className="space-y-2">
           <h4 className="font-medium leading-none">Dimensions</h4>
-          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+          <p className="text-sm text-[var(--bg-muted-foreground)]">
             Set the dimensions for the layer.
           </p>
         </div>
@@ -51,7 +51,7 @@ export const WithForm = {
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Dimensions</h4>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+            <p className="text-sm text-[var(--bg-muted-foreground)]">
               Set the dimensions for the layer.
             </p>
           </div>

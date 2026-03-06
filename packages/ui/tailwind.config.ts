@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       // Tekton 토큰은 CSS Variables로 처리되므로 Tailwind 테마 확장 불필요
-      // arbitrary values로 var(--tekton-*) 사용
+      // arbitrary values로 var(--*) 사용
     },
   },
   plugins: [animate],

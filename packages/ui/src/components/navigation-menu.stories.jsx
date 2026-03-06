@@ -58,11 +58,11 @@ export const WithDropdowns = {
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-[var(--tekton-radius-md)] bg-gradient-to-b from-[var(--tekton-bg-muted)]/50 to-[var(--tekton-bg-muted)] p-6 no-underline outline-none focus:shadow-md"
+                    className="flex h-full w-full select-none flex-col justify-end rounded-[var(--radius-md)] bg-gradient-to-b from-[var(--bg-muted)]/50 to-[var(--bg-muted)] p-6 no-underline outline-none focus:shadow-md"
                     href="/"
                   >
                     <div className="mb-2 mt-4 text-lg font-medium">Featured Product</div>
-                    <p className="text-sm leading-tight text-[var(--tekton-text-muted-foreground)]">
+                    <p className="text-sm leading-tight text-[var(--text-muted-foreground)]">
                       Beautifully designed components built with Radix UI and Tailwind CSS.
                     </p>
                   </a>
@@ -196,13 +196,13 @@ const ListItem = React.forwardRef(({ className, title, children, ...props }, ref
         <a
           ref={ref}
           className={cn(
-            'block select-none space-y-1 rounded-[var(--tekton-radius-md)] p-3 leading-none no-underline outline-none transition-colors hover:bg-[var(--tekton-bg-accent)] hover:text-[var(--tekton-bg-accent-foreground)] focus:bg-[var(--tekton-bg-accent)] focus:text-[var(--tekton-bg-accent-foreground)]',
+            'block select-none space-y-1 rounded-[var(--radius-md)] p-3 leading-none no-underline outline-none transition-colors hover:bg-[var(--bg-accent)] hover:text-[var(--bg-accent-foreground)] focus:bg-[var(--bg-accent)] focus:text-[var(--bg-accent-foreground)]',
             className
           )}
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-[var(--tekton-text-muted-foreground)]">
+          <p className="line-clamp-2 text-sm leading-snug text-[var(--text-muted-foreground)]">
             {children}
           </p>
         </a>

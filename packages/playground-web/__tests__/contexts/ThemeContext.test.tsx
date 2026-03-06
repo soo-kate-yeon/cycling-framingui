@@ -140,9 +140,9 @@ describe('ThemeContext', () => {
       // CSS setProperty가 호출되었는지 확인
       expect(styleSetPropertyMock).toHaveBeenCalled();
 
-      // --tekton- 으로 시작하는 CSS Variable이 설정되었는지 확인
+      // -- 으로 시작하는 CSS Variable이 설정되었는지 확인
       const calls = styleSetPropertyMock.mock.calls;
-      const hasValidCall = calls.some((call: [string, string]) => call[0].startsWith('--tekton-'));
+      const hasValidCall = calls.some((call: [string, string]) => call[0].startsWith('--'));
       expect(hasValidCall).toBe(true);
     });
 

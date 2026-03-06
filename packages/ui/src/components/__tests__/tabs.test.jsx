@@ -142,22 +142,22 @@ describe('Tabs', () => {
     it('applies Tekton token-based styles to TabsList', () => {
       const { container } = renderTabs();
       const tabsList = container.querySelector('[role="tablist"]');
-      expect(tabsList?.className).toContain('bg-[var(--tekton-bg-muted)]');
+      expect(tabsList?.className).toContain('bg-[var(--bg-muted)]');
     });
     it('uses Tekton spacing tokens in TabsTrigger', () => {
       renderTabs();
       const tab = screen.getByText('Tab 1');
-      expect(tab.className).toContain('px-[var(--tekton-spacing-3)]');
+      expect(tab.className).toContain('px-[var(--spacing-3)]');
     });
     it('uses Tekton radius tokens', () => {
       const { container } = renderTabs();
       const tabsList = container.querySelector('[role="tablist"]');
-      expect(tabsList?.className).toContain('rounded-[var(--tekton-radius-xl)]');
+      expect(tabsList?.className).toContain('rounded-[var(--radius-xl)]');
     });
     it('uses Tekton color tokens for active state', () => {
       renderTabs();
       const activeTab = screen.getByText('Tab 1');
-      expect(activeTab.className).toContain('data-[state=active]:bg-[var(--tekton-bg-background)]');
+      expect(activeTab.className).toContain('data-[state=active]:bg-[var(--bg-background)]');
     });
   });
 });

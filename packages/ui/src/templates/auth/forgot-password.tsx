@@ -46,18 +46,18 @@ export function ForgotPasswordTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
       <Card className="w-full max-w-md">
         <CardHeader>
-          {slots.logo && <div className="mb-[var(--tekton-spacing-4)]">{slots.logo}</div>}
+          {slots.logo && <div className="mb-[var(--spacing-4)]">{slots.logo}</div>}
           <CardTitle>{title}</CardTitle>
           <CardDescription>{subtitle}</CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-[var(--tekton-spacing-4)]">
+        <CardContent className="space-y-[var(--spacing-4)]">
           {/* Email Input */}
-          <div className="space-y-[var(--tekton-spacing-2)]">
+          <div className="space-y-[var(--spacing-2)]">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="Enter your email" />
           </div>
@@ -68,9 +68,9 @@ export function ForgotPasswordTemplateComponent({
 
         <CardFooter>
           {slots.footer || (
-            <p className="text-sm text-center w-full text-[var(--tekton-text-muted-foreground)]">
+            <p className="text-sm text-center w-full text-[var(--text-muted-foreground)]">
               Remember your password?{' '}
-              <a href="#" className="text-[var(--tekton-text-primary)] hover:underline">
+              <a href="#" className="text-[var(--text-primary)] hover:underline">
                 Back to login
               </a>
             </p>

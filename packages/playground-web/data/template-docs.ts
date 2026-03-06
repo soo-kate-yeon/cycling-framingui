@@ -367,7 +367,7 @@ export const TEMPLATE_DOCS: Record<string, TemplateDocsData> = {
           {
             title: 'Define custom CSS variables',
             titleKo: '커스텀 CSS 변수 정의',
-            code: ':root {\n  --tekton-neutral-900: #0A0A0A; /* Darker black */\n  --tekton-neutral-100: #FAFAFA; /* Lighter gray */\n  --tekton-bg-canvas: #FFFFFF;\n  --tekton-text-primary: var(--tekton-neutral-900);\n}',
+            code: ':root {\n  --neutral-900: #0A0A0A; /* Darker black */\n  --neutral-100: #FAFAFA; /* Lighter gray */\n  --bg-canvas: #FFFFFF;\n  --text-primary: var(--neutral-900);\n}',
             language: 'css',
           },
         ],
@@ -381,7 +381,7 @@ export const TEMPLATE_DOCS: Record<string, TemplateDocsData> = {
           {
             title: 'Override typography tokens',
             titleKo: '타이포그래피 토큰 재정의',
-            code: ':root {\n  --tekton-text-hero: 72px; /* Larger hero */\n  --tekton-text-section: 40px; /* Larger sections */\n  --tekton-text-body: 18px; /* Larger body */\n}',
+            code: ':root {\n  --text-hero: 72px; /* Larger hero */\n  --text-section: 40px; /* Larger sections */\n  --text-body: 18px; /* Larger body */\n}',
             language: 'css',
           },
         ],
@@ -932,7 +932,7 @@ export function WorkoutDashboard() {
           {
             title: 'Override radius tokens',
             titleKo: 'Radius 토큰 재정의',
-            code: ':root {\n  --tekton-radius-card: 20px; /* More rounded */\n  --tekton-radius-button: 28px; /* Pill-shaped */\n}',
+            code: ':root {\n  --radius-card: 20px; /* More rounded */\n  --radius-button: 28px; /* Pill-shaped */\n}',
             language: 'css',
           },
         ],
@@ -1168,7 +1168,7 @@ export function UserProfile() {
           {
             title: 'Override font-family',
             titleKo: 'font-family 재정의',
-            code: ':root {\n  --tekton-font-serif: "Merriweather", Georgia, serif;\n  --tekton-font-sans: "Inter", "Helvetica Neue", sans-serif;\n}',
+            code: ':root {\n  --font-serif: "Merriweather", Georgia, serif;\n  --font-sans: "Inter", "Helvetica Neue", sans-serif;\n}',
             language: 'css',
           },
         ],
@@ -1403,7 +1403,7 @@ export function MagazineArticle() {
           {
             title: 'Override text colors',
             titleKo: '텍스트 색상 재정의',
-            code: ':root {\n  --tekton-text-primary: #1A1A1A; /* Darker for higher contrast */\n  --tekton-text-secondary: #4A4A4A;\n}',
+            code: ':root {\n  --text-primary: #1A1A1A; /* Darker for higher contrast */\n  --text-secondary: #4A4A4A;\n}',
             language: 'css',
           },
         ],
@@ -1625,7 +1625,7 @@ export default function App() {
           {
             title: 'Dark mode CSS',
             titleKo: '다크 모드 CSS',
-            code: '.dark {\n  --tekton-bg-canvas: #000000;\n  --tekton-text-primary: #FFFFFF;\n  --tekton-border: #333333;\n}',
+            code: '.dark {\n  --bg-canvas: #000000;\n  --text-primary: #FFFFFF;\n  --border: #333333;\n}',
             language: 'css',
           },
         ],
@@ -1805,7 +1805,7 @@ export default function App() {
           {
             title: 'Update brand variable',
             titleKo: '브랜드 변수 업데이트',
-            code: ':root {\n  --tekton-color-brand: #3B82F6; /* Switch to Blue */\n}',
+            code: ':root {\n  --color-brand: #3B82F6; /* Switch to Blue */\n}',
             language: 'css',
           },
         ],

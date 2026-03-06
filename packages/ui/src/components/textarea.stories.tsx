@@ -63,7 +63,7 @@ export const WithHelperText: Story = {
     <div className="grid w-full gap-1.5">
       <Label htmlFor="message-2">Your message</Label>
       <Textarea placeholder="Type your message here." id="message-2" />
-      <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+      <p className="text-sm text-[var(--bg-muted-foreground)]">
         Your message will be copied to the support team.
       </p>
     </div>
@@ -100,11 +100,11 @@ export const WithError: Story = {
       <Textarea
         placeholder="Type your message here."
         id="message-error"
-        className="border-[var(--tekton-bg-destructive)]"
+        className="border-[var(--bg-destructive)]"
         aria-invalid="true"
         aria-describedby="message-error-text"
       />
-      <p id="message-error-text" className="text-sm text-[var(--tekton-bg-destructive)]">
+      <p id="message-error-text" className="text-sm text-[var(--bg-destructive)]">
         Your message must be at least 10 characters.
       </p>
     </div>
@@ -147,7 +147,7 @@ export const WithCharacterCount: Story = {
           onChange={e => setValue(e.target.value)}
           maxLength={maxLength}
         />
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)] text-right">
+        <p className="text-sm text-[var(--bg-muted-foreground)] text-right">
           {value.length}/{maxLength}
         </p>
       </div>
@@ -167,14 +167,14 @@ export const FormExample: Story = {
           type="text"
           id="subject"
           placeholder="Enter subject"
-          className="flex h-10 w-full rounded-md border border-[var(--tekton-border-input)] bg-transparent px-3 py-2 text-sm"
+          className="flex h-10 w-full rounded-md border border-[var(--border-input)] bg-transparent px-3 py-2 text-sm"
         />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="message-form">Message</Label>
         <Textarea placeholder="Enter your message" id="message-form" rows={5} />
       </div>
-      <button className="inline-flex items-center justify-center rounded-md bg-[var(--tekton-bg-primary)] px-4 py-2 text-sm font-medium text-[var(--tekton-bg-primary-foreground)]">
+      <button className="inline-flex items-center justify-center rounded-md bg-[var(--bg-primary)] px-4 py-2 text-sm font-medium text-[var(--bg-primary-foreground)]">
         Send Message
       </button>
     </div>

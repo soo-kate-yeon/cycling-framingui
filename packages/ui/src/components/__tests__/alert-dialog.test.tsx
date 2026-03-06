@@ -99,7 +99,7 @@ describe('AlertDialog', () => {
       await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
       await waitFor(() => {
         const dialog = screen.getByRole('alertdialog');
-        expect(dialog.className).toMatch(/var\(--tekton-/);
+        expect(dialog.className).toMatch(/var\(--/);
       });
     });
   });

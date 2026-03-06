@@ -23,15 +23,15 @@ export const Default = {
   render: () => {
     const [date, setDate] = useState(new Date());
     return (
-      <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
         <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
-          className="rounded-[var(--tekton-radius-md)]"
+          className="rounded-[var(--radius-md)]"
         />
         {date && (
-          <div className="border-t border-[var(--tekton-border-border)] p-3 text-center text-sm text-[var(--tekton-text-muted-foreground)]">
+          <div className="border-t border-[var(--border-border)] p-3 text-center text-sm text-[var(--text-muted-foreground)]">
             Selected: {date.toLocaleDateString()}
           </div>
         )}
@@ -47,16 +47,16 @@ export const RangeSelection = {
   render: () => {
     const [dateRange, setDateRange] = useState();
     return (
-      <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
         <Calendar
           mode="range"
           selected={dateRange}
           onSelect={setDateRange}
-          className="rounded-[var(--tekton-radius-md)]"
+          className="rounded-[var(--radius-md)]"
           numberOfMonths={2}
         />
         {dateRange && (dateRange.from || dateRange.to) && (
-          <div className="border-t border-[var(--tekton-border-border)] p-3 text-center text-sm text-[var(--tekton-text-muted-foreground)]">
+          <div className="border-t border-[var(--border-border)] p-3 text-center text-sm text-[var(--text-muted-foreground)]">
             {dateRange.from && `From: ${dateRange.from.toLocaleDateString()}`}
             {dateRange.from && dateRange.to && ' - '}
             {dateRange.to && `To: ${dateRange.to.toLocaleDateString()}`}
@@ -73,15 +73,15 @@ export const MultipleSelection = {
   render: () => {
     const [dates, setDates] = useState([]);
     return (
-      <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
         <Calendar
           mode="multiple"
           selected={dates}
           onSelect={setDates}
-          className="rounded-[var(--tekton-radius-md)]"
+          className="rounded-[var(--radius-md)]"
         />
         {dates && dates.length > 0 && (
-          <div className="border-t border-[var(--tekton-border-border)] p-3 text-sm text-[var(--tekton-text-muted-foreground)]">
+          <div className="border-t border-[var(--border-border)] p-3 text-sm text-[var(--text-muted-foreground)]">
             <div className="mb-1 font-medium">Selected dates ({dates.length}):</div>
             <div className="max-h-32 overflow-y-auto space-y-1">
               {dates.map((date, i) => (
@@ -106,15 +106,15 @@ export const WithDisabledDates = {
       { dayOfWeek: [0, 6] }, // Disable weekends
     ];
     return (
-      <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
         <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
           disabled={disabledDays}
-          className="rounded-[var(--tekton-radius-md)]"
+          className="rounded-[var(--radius-md)]"
         />
-        <div className="border-t border-[var(--tekton-border-border)] p-3 text-sm text-[var(--tekton-text-muted-foreground)]">
+        <div className="border-t border-[var(--border-border)] p-3 text-sm text-[var(--text-muted-foreground)]">
           Weekends and specific dates are disabled
         </div>
       </div>
@@ -130,15 +130,15 @@ export const WithMinMaxDates = {
     const today = new Date();
     const oneMonthFromNow = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
     return (
-      <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
         <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
           disabled={{ before: today, after: oneMonthFromNow }}
-          className="rounded-[var(--tekton-radius-md)]"
+          className="rounded-[var(--radius-md)]"
         />
-        <div className="border-t border-[var(--tekton-border-border)] p-3 text-sm text-[var(--tekton-text-muted-foreground)]">
+        <div className="border-t border-[var(--border-border)] p-3 text-sm text-[var(--text-muted-foreground)]">
           Only dates within the next month can be selected
         </div>
       </div>
@@ -152,13 +152,13 @@ export const Compact = {
   render: () => {
     const [date, setDate] = useState();
     return (
-      <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
         <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
           showOutsideDays={false}
-          className="rounded-[var(--tekton-radius-md)]"
+          className="rounded-[var(--radius-md)]"
         />
       </div>
     );
@@ -171,13 +171,13 @@ export const TwoMonths = {
   render: () => {
     const [date, setDate] = useState();
     return (
-      <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
         <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
           numberOfMonths={2}
-          className="rounded-[var(--tekton-radius-md)]"
+          className="rounded-[var(--radius-md)]"
         />
       </div>
     );
@@ -190,23 +190,23 @@ export const WithFooter = {
   render: () => {
     const [date, setDate] = useState();
     return (
-      <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
         <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
-          className="rounded-[var(--tekton-radius-md)]"
+          className="rounded-[var(--radius-md)]"
           footer={
             <div className="flex gap-2 justify-center mt-3">
               <button
                 onClick={() => setDate(new Date())}
-                className="rounded-[var(--tekton-radius-md)] bg-[var(--tekton-bg-primary)] px-3 py-1 text-sm text-[var(--tekton-bg-primary-foreground)] hover:bg-[var(--tekton-bg-primary)]/90"
+                className="rounded-[var(--radius-md)] bg-[var(--bg-primary)] px-3 py-1 text-sm text-[var(--bg-primary-foreground)] hover:bg-[var(--bg-primary)]/90"
               >
                 Today
               </button>
               <button
                 onClick={() => setDate(undefined)}
-                className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-background)] px-3 py-1 text-sm hover:bg-[var(--tekton-bg-accent)]"
+                className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-background)] px-3 py-1 text-sm hover:bg-[var(--bg-accent)]"
               >
                 Clear
               </button>
@@ -214,7 +214,7 @@ export const WithFooter = {
           }
         />
         {date && (
-          <div className="border-t border-[var(--tekton-border-border)] p-3 text-center text-sm text-[var(--tekton-text-muted-foreground)]">
+          <div className="border-t border-[var(--border-border)] p-3 text-center text-sm text-[var(--text-muted-foreground)]">
             {date.toLocaleDateString()}
           </div>
         )}
@@ -247,25 +247,25 @@ export const Controlled = {
         <div className="flex gap-2 justify-center">
           <button
             onClick={handlePrevMonth}
-            className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-background)] px-3 py-1 text-sm hover:bg-[var(--tekton-bg-accent)]"
+            className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-background)] px-3 py-1 text-sm hover:bg-[var(--bg-accent)]"
           >
             Previous Month
           </button>
           <button
             onClick={handleNextMonth}
-            className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-background)] px-3 py-1 text-sm hover:bg-[var(--tekton-bg-accent)]"
+            className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-background)] px-3 py-1 text-sm hover:bg-[var(--bg-accent)]"
           >
             Next Month
           </button>
         </div>
-        <div className="rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-card)]">
+        <div className="rounded-[var(--radius-md)] border border-[var(--border-border)] bg-[var(--bg-card)]">
           <Calendar
             mode="single"
             selected={date}
             onSelect={setDate}
             month={date}
             onMonthChange={setDate}
-            className="rounded-[var(--tekton-radius-md)]"
+            className="rounded-[var(--radius-md)]"
           />
         </div>
       </div>

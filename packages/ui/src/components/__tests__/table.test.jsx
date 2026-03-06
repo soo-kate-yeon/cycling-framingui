@@ -78,12 +78,12 @@ describe('Table', () => {
     it('uses Tekton spacing tokens in TableHead', () => {
       renderTable();
       const header = screen.getByText('Name');
-      expect(header.className).toContain('px-[var(--tekton-spacing-4)]');
+      expect(header.className).toContain('px-[var(--spacing-4)]');
     });
     it('uses Tekton border tokens in TableRow', () => {
       const { container } = renderTable();
       const row = container.querySelector('tbody tr');
-      expect(row?.className).toContain('border-[var(--tekton-border-default)]');
+      expect(row?.className).toContain('border-[var(--border-default)]');
     });
   });
 });

@@ -33,29 +33,29 @@ export function DashboardTemplateComponent({
     <div className={`min-h-screen flex ${className}`}>
       {/* Sidebar */}
       {slots.sidebar && (
-        <aside className="w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] hidden lg:block">
+        <aside className="w-64 border-r border-[var(--border-default)] bg-[var(--bg-card)] hidden lg:block">
           {slots.sidebar}
         </aside>
       )}
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto bg-[var(--tekton-bg-background)]">
+      <main className="flex-1 overflow-auto bg-[var(--bg-background)]">
         {/* Header */}
-        <header className="sticky top-0 z-10 border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-background)]/80 backdrop-blur-md p-[var(--tekton-spacing-4)]">
+        <header className="sticky top-0 z-10 border-b border-[var(--border-default)] bg-[var(--bg-background)]/80 backdrop-blur-md p-[var(--spacing-4)]">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-[var(--tekton-text-foreground)]">{title}</h1>
-              <p className="text-sm text-[var(--tekton-text-muted-foreground)]">{subtitle}</p>
+              <h1 className="text-2xl font-bold text-[var(--text-foreground)]">{title}</h1>
+              <p className="text-sm text-[var(--text-muted-foreground)]">{subtitle}</p>
             </div>
             {slots.headerActions && <div>{slots.headerActions}</div>}
           </div>
         </header>
 
         {/* Content Area */}
-        <div className="py-[var(--tekton-layout-section-py,var(--tekton-spacing-6))] px-[var(--tekton-layout-container-px,var(--tekton-spacing-6))] space-y-[var(--tekton-layout-stack-gap,var(--tekton-spacing-6))] max-w-[var(--tekton-layout-container-xl)] mx-auto">
+        <div className="py-[var(--layout-section-py,var(--spacing-6))] px-[var(--layout-container-px,var(--spacing-6))] space-y-[var(--layout-stack-gap,var(--spacing-6))] max-w-[var(--layout-container-xl)] mx-auto">
           {/* Metrics Row */}
           {slots.metrics && (
-            <div className="grid gap-[var(--tekton-spacing-4)] grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-[var(--spacing-4)] grid-cols-2 lg:grid-cols-4">
               {slots.metrics}
             </div>
           )}
@@ -63,10 +63,10 @@ export function DashboardTemplateComponent({
           <Separator />
 
           {/* Main Content Grid (12 Columns) */}
-          <div className="grid gap-x-[var(--tekton-layout-grid-gap-x,var(--tekton-spacing-6))] gap-y-[var(--tekton-layout-grid-gap-y,var(--tekton-spacing-6))] lg:grid-cols-12">
+          <div className="grid gap-x-[var(--layout-grid-gap-x,var(--spacing-6))] gap-y-[var(--layout-grid-gap-y,var(--spacing-6))] lg:grid-cols-12">
             {/* Primary Content (8 Cols) */}
             {slots.primaryContent && (
-              <div className="lg:col-span-8 space-y-[var(--tekton-layout-stack-gap,var(--tekton-spacing-6))]">
+              <div className="lg:col-span-8 space-y-[var(--layout-stack-gap,var(--spacing-6))]">
                 {/* We remove the forced Card wrapper to allow full design control (e.g. Equinox Poster) */}
                 {slots.primaryContent}
               </div>
@@ -74,7 +74,7 @@ export function DashboardTemplateComponent({
 
             {/* Secondary Content (4 Cols) */}
             {slots.secondaryContent && (
-              <div className="lg:col-span-4 space-y-[var(--tekton-layout-stack-gap,var(--tekton-spacing-6))]">
+              <div className="lg:col-span-4 space-y-[var(--layout-stack-gap,var(--spacing-6))]">
                 {/* Secondary content usually behaves like a sidebar panel */}
                 <Card className="h-full">
                   <CardHeader>

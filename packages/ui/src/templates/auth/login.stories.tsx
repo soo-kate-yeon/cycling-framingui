@@ -44,7 +44,7 @@ export const CustomBranding: Story = {
     slots: {
       logo: (
         <div className="flex justify-center">
-          <div className="text-4xl font-bold text-[var(--tekton-bg-primary)]">T</div>
+          <div className="text-4xl font-bold text-[var(--bg-primary)]">T</div>
         </div>
       ),
     },
@@ -58,7 +58,7 @@ export const WithForgotPassword: Story = {
   args: {
     slots: {
       forgotPassword: (
-        <a href="#" className="text-sm text-[var(--tekton-bg-primary)] hover:underline">
+        <a href="#" className="text-sm text-[var(--bg-primary)] hover:underline">
           Forgot password?
         </a>
       ),
@@ -129,11 +129,11 @@ export const Complete: Story = {
     slots: {
       logo: (
         <div className="flex justify-center mb-4">
-          <div className="text-4xl font-bold text-[var(--tekton-bg-primary)]">T</div>
+          <div className="text-4xl font-bold text-[var(--bg-primary)]">T</div>
         </div>
       ),
       forgotPassword: (
-        <a href="#" className="text-sm text-[var(--tekton-bg-primary)] hover:underline">
+        <a href="#" className="text-sm text-[var(--bg-primary)] hover:underline">
           Forgot?
         </a>
       ),
@@ -159,13 +159,13 @@ export const Complete: Story = {
       ),
       footer: (
         <div className="text-sm text-center w-full space-y-2">
-          <p className="text-[var(--tekton-bg-muted-foreground)]">
+          <p className="text-[var(--bg-muted-foreground)]">
             Don&apos;t have an account?{' '}
-            <a href="#" className="text-[var(--tekton-bg-primary)] hover:underline">
+            <a href="#" className="text-[var(--bg-primary)] hover:underline">
               Sign up for free
             </a>
           </p>
-          <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
+          <p className="text-xs text-[var(--bg-muted-foreground)]">
             By signing in, you agree to our{' '}
             <a href="#" className="hover:underline">
               Terms

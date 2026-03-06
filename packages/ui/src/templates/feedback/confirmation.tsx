@@ -47,13 +47,13 @@ export function ConfirmationTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
       <Card className="w-full max-w-md">
         <CardHeader>
           {/* Warning Icon (for destructive actions) */}
           {isDestructive && slots.warningIcon && (
-            <div className="mb-[var(--tekton-spacing-2)]">{slots.warningIcon}</div>
+            <div className="mb-[var(--spacing-2)]">{slots.warningIcon}</div>
           )}
           <CardTitle>{title}</CardTitle>
           <CardDescription>{message}</CardDescription>
@@ -62,13 +62,13 @@ export function ConfirmationTemplateComponent({
         <CardContent>
           {/* Additional Details */}
           {slots.details && (
-            <div className="bg-[var(--tekton-bg-muted)] p-[var(--tekton-spacing-4)] rounded-[var(--tekton-radius-md)] text-sm">
+            <div className="bg-[var(--bg-muted)] p-[var(--spacing-4)] rounded-[var(--radius-md)] text-sm">
               {slots.details}
             </div>
           )}
         </CardContent>
 
-        <CardFooter className="flex justify-end gap-[var(--tekton-spacing-3)]">
+        <CardFooter className="flex justify-end gap-[var(--spacing-3)]">
           <Button variant="outline">{cancelLabel}</Button>
           <Button variant={isDestructive ? 'destructive' : 'default'}>{confirmLabel}</Button>
         </CardFooter>
