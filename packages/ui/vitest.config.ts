@@ -44,6 +44,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@framingui/core': path.resolve(__dirname, '../core/src/index.ts'),
+      '@framingui/core/template-catalog': path.resolve(
+        __dirname,
+        '../core/src/catalog/templates/index.ts'
+      ),
     },
   },
 });

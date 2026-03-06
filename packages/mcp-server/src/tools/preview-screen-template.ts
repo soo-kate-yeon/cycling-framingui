@@ -96,7 +96,7 @@ export async function previewScreenTemplateTool(
     };
 
     // Build import statement
-    const importStatement = `import { ${template.name}Template } from '@framingui/ui';`;
+    const importStatement = `import { ${template.name}Template } from '@framingui/ui/templates';`;
 
     return {
       success: true,

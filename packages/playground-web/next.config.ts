@@ -22,6 +22,8 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack: (config) => {
+    const uiDistRoot = path.resolve(import.meta.dirname, '../ui/dist');
+
     // pnpm symlink를 따라가지 않고 package.json exports 사용
     config.resolve.symlinks = false;
     // symlinks=false 시 pnpm 가상 스토어에서 transitive 의존성 해석을 위해
@@ -30,6 +32,11 @@ const nextConfig: NextConfig = {
       path.resolve(import.meta.dirname, 'node_modules'),
       ...(config.resolve.modules || ['node_modules']),
     ];
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@framingui/ui$': path.join(uiDistRoot, 'index.mjs'),
+      '@framingui/ui/templates$': path.join(uiDistRoot, 'templates/index.mjs'),
+    };
     return config;
   },
 };

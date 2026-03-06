@@ -26,8 +26,8 @@ import {
   CardTitle,
 } from '../../components/card';
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Confirmation Template Component
@@ -81,43 +81,7 @@ export function ConfirmationTemplateComponent({
 /**
  * Confirmation Template Definition
  */
-export const ConfirmationTemplate: ScreenTemplate = {
-  id: 'feedback.confirmation',
-  name: 'Confirmation',
-  category: 'feedback',
-  description: 'Confirmation dialog for important actions',
-
-  skeleton: {
-    shell: 'centered-card',
-    page: 'feedback-page',
-    sections: [
-      {
-        id: 'confirmation-dialog',
-        name: 'Confirmation Dialog',
-        slot: 'main',
-        required: true,
-        Component: ConfirmationTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'message', 'confirm_label', 'cancel_label'],
-    optional: ['is_destructive'],
-    slots: ['warningIcon', 'details'],
-  },
-
-  requiredComponents: ['Button', 'Card'],
-
-  Component: ConfirmationTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['feedback', 'confirmation', 'dialog', 'warning'],
-};
+export const ConfirmationTemplate = createTemplateFromCatalog(
+  'feedback.confirmation',
+  ConfirmationTemplateComponent
+);

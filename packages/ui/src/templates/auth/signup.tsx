@@ -29,8 +29,8 @@ import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { Label } from '../../components/label';
 import { Separator } from '../../components/separator';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Signup Template Component
@@ -132,43 +132,4 @@ export function SignupTemplateComponent({
 /**
  * Signup Template Definition
  */
-export const SignupTemplate: ScreenTemplate = {
-  id: 'auth.signup',
-  name: 'Signup',
-  category: 'auth',
-  description: 'Standard signup screen with name, email, and password',
-
-  skeleton: {
-    shell: 'centered-card',
-    page: 'auth-page',
-    sections: [
-      {
-        id: 'signup-form',
-        name: 'Signup Form',
-        slot: 'main',
-        required: true,
-        Component: SignupTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'button_label'],
-    optional: ['social_signup'],
-    slots: ['logo', 'termsCheckbox', 'socialSignup', 'footer'],
-  },
-
-  requiredComponents: ['Button', 'Input', 'Form', 'Card', 'Label', 'Checkbox'],
-
-  Component: SignupTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['auth', 'signup', 'registration', 'form'],
-};
+export const SignupTemplate = createTemplateFromCatalog('auth.signup', SignupTemplateComponent);

@@ -19,8 +19,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/card';
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Preferences Template Component
@@ -107,49 +107,7 @@ export function PreferencesTemplateComponent({
 /**
  * Preferences Template Definition
  */
-export const PreferencesTemplate: ScreenTemplate = {
-  id: 'core.preferences',
-  name: 'Preferences',
-  category: 'form',
-  description: 'Settings and preferences page with categorized options',
-
-  skeleton: {
-    shell: 'sidebar-layout',
-    page: 'settings-page',
-    sections: [
-      {
-        id: 'preferences-content',
-        name: 'Preferences Content',
-        slot: 'main',
-        required: true,
-        Component: PreferencesTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'sidebar',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'save_label'],
-    optional: [],
-    slots: [
-      'settingsNav',
-      'generalSettings',
-      'appearanceSettings',
-      'notificationsSettings',
-      'additionalSettings',
-    ],
-  },
-
-  requiredComponents: ['Button', 'Card', 'Switch', 'Select'],
-
-  Component: PreferencesTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['core', 'settings', 'preferences', 'configuration'],
-};
+export const PreferencesTemplate = createTemplateFromCatalog(
+  'core.preferences',
+  PreferencesTemplateComponent
+);

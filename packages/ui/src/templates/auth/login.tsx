@@ -29,8 +29,8 @@ import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { Label } from '../../components/label';
 import { Separator } from '../../components/separator';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Login Template Component
@@ -124,43 +124,4 @@ export function LoginTemplateComponent({
 /**
  * Login Template Definition
  */
-export const LoginTemplate: ScreenTemplate = {
-  id: 'auth.login',
-  name: 'Login',
-  category: 'auth',
-  description: 'Standard login screen with email and password',
-
-  skeleton: {
-    shell: 'centered-card',
-    page: 'auth-page',
-    sections: [
-      {
-        id: 'login-form',
-        name: 'Login Form',
-        slot: 'main',
-        required: true,
-        Component: LoginTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'button_label'],
-    optional: ['social_login', 'remember_me'],
-    slots: ['logo', 'forgotPassword', 'rememberMe', 'socialLogin', 'footer'],
-  },
-
-  requiredComponents: ['Button', 'Input', 'Form', 'Card', 'Label'],
-
-  Component: LoginTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-01-31',
-  updated: '2026-01-31',
-  tags: ['auth', 'login', 'form'],
-};
+export const LoginTemplate = createTemplateFromCatalog('auth.login', LoginTemplateComponent);

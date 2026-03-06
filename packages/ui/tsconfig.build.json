@@ -21,8 +21,13 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "paths": {
+      "@framingui/core": ["../core/src/index.ts"],
+      "@framingui/core/template-catalog": ["../core/src/catalog/templates/index.ts"]
+    }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "__tests__"]
+  "exclude": ["node_modules", "dist", "__tests__"],
+  "references": [{ "path": "../core" }]
 }

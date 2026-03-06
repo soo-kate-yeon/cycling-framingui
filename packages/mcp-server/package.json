@@ -1,6 +1,6 @@
 {
   "name": "@framingui/mcp-server",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Framingui MCP Server with Claude Code integration and timestamp-based preview system",
   "type": "module",
   "main": "./dist/index.js",
@@ -50,8 +50,8 @@
     "@anthropic-ai/sdk": "^0.40.0",
     "@babel/parser": "^7.28.6",
     "@babel/traverse": "^7.28.6",
-    "@framingui/core": "^0.4.0",
-    "@framingui/ui": "^0.6.0",
+    "@framingui/core": "^0.4.4",
+    "@framingui/ui": "^0.6.3",
     "@modelcontextprotocol/sdk": "^1.26.0"
   },
   "devDependencies": {

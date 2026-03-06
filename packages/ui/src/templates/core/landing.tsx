@@ -18,8 +18,8 @@
  */
 
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Landing Template Component
@@ -86,43 +86,4 @@ export function LandingTemplateComponent({
 /**
  * Landing Template Definition
  */
-export const LandingTemplate: ScreenTemplate = {
-  id: 'core.landing',
-  name: 'Landing',
-  category: 'marketing',
-  description: 'Main dashboard landing page with sidebar and CTA',
-
-  skeleton: {
-    shell: 'sidebar-layout',
-    page: 'main-page',
-    sections: [
-      {
-        id: 'landing-content',
-        name: 'Landing Content',
-        slot: 'main',
-        required: true,
-        Component: LandingTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'sidebar',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'cta_label'],
-    optional: [],
-    slots: ['sidebar', 'header', 'recentActivity', 'suggestions'],
-  },
-
-  requiredComponents: ['Button'],
-
-  Component: LandingTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['core', 'landing', 'dashboard', 'home'],
-};
+export const LandingTemplate = createTemplateFromCatalog('core.landing', LandingTemplateComponent);

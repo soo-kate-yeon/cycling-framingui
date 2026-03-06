@@ -18,8 +18,8 @@
  */
 
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Empty Template Component
@@ -89,43 +89,4 @@ export function EmptyTemplateComponent({
 /**
  * Empty Template Definition
  */
-export const EmptyTemplate: ScreenTemplate = {
-  id: 'feedback.empty',
-  name: 'Empty',
-  category: 'feedback',
-  description: 'Empty state screen with call-to-action',
-
-  skeleton: {
-    shell: 'centered',
-    page: 'feedback-page',
-    sections: [
-      {
-        id: 'empty-state',
-        name: 'Empty State',
-        slot: 'main',
-        required: true,
-        Component: EmptyTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'message', 'cta_label'],
-    optional: ['show_cta'],
-    slots: ['illustration', 'helpText'],
-  },
-
-  requiredComponents: ['Button'],
-
-  Component: EmptyTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['feedback', 'empty', 'state', 'no-data'],
-};
+export const EmptyTemplate = createTemplateFromCatalog('feedback.empty', EmptyTemplateComponent);

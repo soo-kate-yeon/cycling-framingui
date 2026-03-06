@@ -12,8 +12,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/card';
 import { Separator } from '../../components/separator';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 // ... imports
 
@@ -101,65 +101,7 @@ export function DashboardTemplateComponent({
 /**
  * Dashboard Template Definition
  */
-export const DashboardTemplate: ScreenTemplate = {
-  id: 'dashboard.overview',
-  name: 'Dashboard Overview',
-  category: 'dashboard',
-  description:
-    'Standard dashboard layout with sidebar, metrics, and content areas (12-column grid)',
-
-  skeleton: {
-    shell: 'sidebar-layout',
-    page: 'dashboard-page',
-    sections: [
-      {
-        id: 'dashboard-sidebar',
-        name: 'Sidebar Navigation',
-        slot: 'sidebar',
-        required: false,
-        Component: () => null,
-      },
-      {
-        id: 'dashboard-main',
-        name: 'Main Content',
-        slot: 'primaryContent',
-        required: true,
-        Component: () => null,
-      },
-      {
-        id: 'dashboard-side',
-        name: 'Side Panel',
-        slot: 'secondaryContent',
-        required: false,
-        Component: () => null,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'sidebar',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'texts.secondary_title', 'texts.secondary_description'],
-    optional: ['metrics', 'additionalSections'],
-    slots: [
-      'sidebar',
-      'headerActions',
-      'metrics',
-      'primaryContent',
-      'secondaryContent',
-      'additionalSections',
-    ],
-  },
-
-  requiredComponents: ['Card', 'Separator'],
-
-  Component: DashboardTemplateComponent,
-
-  version: '1.1.0',
-  created: '2026-01-31',
-  updated: '2026-02-01',
-  tags: ['dashboard', 'overview', 'analytics'],
-};
+export const DashboardTemplate = createTemplateFromCatalog(
+  'dashboard.overview',
+  DashboardTemplateComponent
+);

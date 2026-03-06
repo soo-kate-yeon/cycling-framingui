@@ -28,8 +28,8 @@ import {
 import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { Label } from '../../components/label';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Forgot Password Template Component
@@ -85,43 +85,7 @@ export function ForgotPasswordTemplateComponent({
 /**
  * Forgot Password Template Definition
  */
-export const ForgotPasswordTemplate: ScreenTemplate = {
-  id: 'auth.forgot-password',
-  name: 'Forgot Password',
-  category: 'auth',
-  description: 'Password reset screen with email input',
-
-  skeleton: {
-    shell: 'centered-card',
-    page: 'auth-page',
-    sections: [
-      {
-        id: 'forgot-password-form',
-        name: 'Forgot Password Form',
-        slot: 'main',
-        required: true,
-        Component: ForgotPasswordTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'button_label'],
-    optional: [],
-    slots: ['logo', 'footer'],
-  },
-
-  requiredComponents: ['Button', 'Input', 'Form', 'Card', 'Label'],
-
-  Component: ForgotPasswordTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['auth', 'password', 'reset', 'forgot'],
-};
+export const ForgotPasswordTemplate = createTemplateFromCatalog(
+  'auth.forgot-password',
+  ForgotPasswordTemplateComponent
+);

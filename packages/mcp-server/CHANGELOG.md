@@ -2,6 +2,17 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.2] - 2026-03-06
+
+### Changed
+
+- `preview-screen-template` now emits `@framingui/ui/templates` imports so generated code uses the template-only entrypoint.
+- Raised the minimum supported `@framingui/core` and `@framingui/ui` versions to consume the catalog-backed template exports.
+
+### Testing
+
+- Replaced legacy registry-based template tool tests with API-based coverage for template listing and preview behavior.
+
 ## [0.6.1] - 2026-03-06
 
 ### Fixed

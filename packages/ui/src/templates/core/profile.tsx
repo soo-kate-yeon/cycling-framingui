@@ -21,8 +21,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { Label } from '../../components/label';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Profile Template Component
@@ -115,43 +115,4 @@ export function ProfileTemplateComponent({
 /**
  * Profile Template Definition
  */
-export const ProfileTemplate: ScreenTemplate = {
-  id: 'core.profile',
-  name: 'Profile',
-  category: 'form',
-  description: 'User profile page with editable information',
-
-  skeleton: {
-    shell: 'centered-layout',
-    page: 'profile-page',
-    sections: [
-      {
-        id: 'profile-content',
-        name: 'Profile Content',
-        slot: 'main',
-        required: true,
-        Component: ProfileTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'save_label'],
-    optional: ['user_name', 'user_email'],
-    slots: ['avatar', 'bioField', 'additionalFields', 'additionalSections'],
-  },
-
-  requiredComponents: ['Button', 'Input', 'Form', 'Card', 'Label', 'Avatar'],
-
-  Component: ProfileTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['core', 'profile', 'account', 'user'],
-};
+export const ProfileTemplate = createTemplateFromCatalog('core.profile', ProfileTemplateComponent);

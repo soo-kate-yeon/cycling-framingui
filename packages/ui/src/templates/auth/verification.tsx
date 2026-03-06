@@ -26,8 +26,8 @@ import {
   CardTitle,
 } from '../../components/card';
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Verification Template Component
@@ -97,43 +97,7 @@ export function VerificationTemplateComponent({
 /**
  * Verification Template Definition
  */
-export const VerificationTemplate: ScreenTemplate = {
-  id: 'auth.verification',
-  name: 'Email Verification',
-  category: 'auth',
-  description: 'Email verification screen with resend option',
-
-  skeleton: {
-    shell: 'centered-card',
-    page: 'auth-page',
-    sections: [
-      {
-        id: 'verification-message',
-        name: 'Verification Message',
-        slot: 'main',
-        required: true,
-        Component: VerificationTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'button_label'],
-    optional: ['show_resend', 'user_email'],
-    slots: ['icon', 'footer'],
-  },
-
-  requiredComponents: ['Button', 'Card'],
-
-  Component: VerificationTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['auth', 'verification', 'email', 'confirm'],
-};
+export const VerificationTemplate = createTemplateFromCatalog(
+  'auth.verification',
+  VerificationTemplateComponent
+);

@@ -1,6 +1,6 @@
 {
   "name": "@framingui/core",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "description": "Core design system pipeline: Theme -> Blueprint -> Screen (~800 LOC)",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,6 +9,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./template-catalog": {
+      "import": "./dist/catalog/templates/index.js",
+      "types": "./dist/catalog/templates/index.d.ts"
     }
   },
   "files": [

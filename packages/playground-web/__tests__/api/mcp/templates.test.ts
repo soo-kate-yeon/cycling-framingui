@@ -15,27 +15,24 @@ import { GET as getTemplateById } from '@/app/api/mcp/templates/[id]/route';
 // ─────────────────────────────────────────────────────────────────────────────
 // vi.mock 호이스팅: factory 안에서 참조할 mock 함수를 vi.hoisted()로 선언
 // ─────────────────────────────────────────────────────────────────────────────
-const { mockAuthenticateMcpRequest, mockGetAll, mockGetByCategory, mockSearch, mockRegistryGet } =
+const { mockAuthenticateMcpRequest, mockGetAll, mockGetByCategory, mockSearch, mockGetById } =
   vi.hoisted(() => ({
     mockAuthenticateMcpRequest: vi.fn(),
     mockGetAll: vi.fn(),
     mockGetByCategory: vi.fn(),
     mockSearch: vi.fn(),
-    mockRegistryGet: vi.fn(),
+    mockGetById: vi.fn(),
   }));
 
 vi.mock('@/lib/mcp/auth-helper', () => ({
   authenticateMcpRequest: mockAuthenticateMcpRequest,
 }));
 
-// templateRegistry 목업
-vi.mock('@framingui/ui', () => ({
-  templateRegistry: {
-    getAll: mockGetAll,
-    getByCategory: mockGetByCategory,
-    search: mockSearch,
-    get: mockRegistryGet,
-  },
+vi.mock('@framingui/core', () => ({
+  listTemplateDefinitions: mockGetAll,
+  listTemplateDefinitionsByCategory: mockGetByCategory,
+  searchTemplateDefinitions: mockSearch,
+  loadTemplateDefinition: mockGetById,
 }));
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -84,7 +81,7 @@ beforeEach(() => {
   mockGetAll.mockReturnValue(sampleTemplates);
   mockGetByCategory.mockReturnValue([sampleTemplates[0]]);
   mockSearch.mockReturnValue(sampleTemplates);
-  mockRegistryGet.mockReturnValue(sampleTemplates[0]);
+  mockGetById.mockReturnValue(sampleTemplates[0]);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -181,7 +178,7 @@ describe('GET /api/mcp/templates/[id]', () => {
   describe('정상 응답', () => {
     it('유효한 ID로 템플릿 상세를 반환한다', async () => {
       mockAuthenticateMcpRequest.mockResolvedValueOnce(validAuth);
-      mockRegistryGet.mockReturnValue(sampleTemplates[0]);
+      mockGetById.mockReturnValue(sampleTemplates[0]);
 
       const request = new NextRequest('http://localhost:3001/api/mcp/templates/dashboard');
       const response = await getTemplateById(request, {
@@ -199,7 +196,7 @@ describe('GET /api/mcp/templates/[id]', () => {
   describe('404 처리', () => {
     it('존재하지 않는 ID는 404를 반환한다', async () => {
       mockAuthenticateMcpRequest.mockResolvedValueOnce(validAuth);
-      mockRegistryGet.mockReturnValue(undefined);
+      mockGetById.mockReturnValue(undefined);
 
       const request = new NextRequest('http://localhost:3001/api/mcp/templates/nonexistent');
       const response = await getTemplateById(request, {

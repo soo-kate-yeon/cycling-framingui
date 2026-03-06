@@ -18,8 +18,8 @@
  */
 
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Success Template Component
@@ -100,43 +100,7 @@ export function SuccessTemplateComponent({
 /**
  * Success Template Definition
  */
-export const SuccessTemplate: ScreenTemplate = {
-  id: 'feedback.success',
-  name: 'Success',
-  category: 'feedback',
-  description: 'Success state screen with confirmation message',
-
-  skeleton: {
-    shell: 'centered',
-    page: 'feedback-page',
-    sections: [
-      {
-        id: 'success-message',
-        name: 'Success Message',
-        slot: 'main',
-        required: true,
-        Component: SuccessTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'message', 'cta_label'],
-    optional: ['show_cta'],
-    slots: ['icon', 'details', 'additionalActions'],
-  },
-
-  requiredComponents: ['Button'],
-
-  Component: SuccessTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['feedback', 'success', 'confirmation', 'state'],
-};
+export const SuccessTemplate = createTemplateFromCatalog(
+  'feedback.success',
+  SuccessTemplateComponent
+);

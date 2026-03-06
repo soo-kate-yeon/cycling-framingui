@@ -293,12 +293,3 @@ export type { CalendarProps } from './components/calendar';
 
 // Calendar
 export { Calendar } from './components/calendar';
-
-// ========================================
-// Templates (Phase 3)
-// ========================================
-
-// Import templates module to trigger auto-registration
-// WHY: templates/index.ts contains templateRegistry.registerMany() which registers all built-in templates
-// IMPACT: Without this import, templateRegistry.getAll() returns empty array
-export * from './templates';

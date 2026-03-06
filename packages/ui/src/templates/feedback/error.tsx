@@ -18,8 +18,8 @@
  */
 
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Error Template Component
@@ -90,43 +90,4 @@ export function ErrorTemplateComponent({
 /**
  * Error Template Definition
  */
-export const ErrorTemplate: ScreenTemplate = {
-  id: 'feedback.error',
-  name: 'Error',
-  category: 'feedback',
-  description: 'Error state screen with message and retry option',
-
-  skeleton: {
-    shell: 'centered',
-    page: 'feedback-page',
-    sections: [
-      {
-        id: 'error-message',
-        name: 'Error Message',
-        slot: 'main',
-        required: true,
-        Component: ErrorTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'message', 'retry_label'],
-    optional: ['show_retry'],
-    slots: ['icon', 'errorDetails', 'additionalActions'],
-  },
-
-  requiredComponents: ['Button'],
-
-  Component: ErrorTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['feedback', 'error', 'failure', 'state'],
-};
+export const ErrorTemplate = createTemplateFromCatalog('feedback.error', ErrorTemplateComponent);

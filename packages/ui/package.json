@@ -1,6 +1,6 @@
 {
   "name": "@framingui/ui",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "FramingUI Reference Component Library",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -8,6 +8,10 @@
     ".": {
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.mts"
+    },
+    "./templates": {
+      "import": "./dist/templates/index.mjs",
+      "types": "./dist/templates/index.d.mts"
     },
     "./styles": "./styles/tokens.css"
   },
@@ -48,6 +52,7 @@
     "accessibility"
   ],
   "dependencies": {
+    "@framingui/core": "workspace:^0.4.4",
     "@framingui/tokens": "^0.3.3"
   },
   "peerDependencies": {
