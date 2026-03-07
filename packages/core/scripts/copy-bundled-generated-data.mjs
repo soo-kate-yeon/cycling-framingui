@@ -9,32 +9,24 @@ const distDir = join(packageDir, 'dist', 'bundled');
 
 const sources = [
   {
-    label: 'themes',
-    required: true,
-    candidates: [join(repoDir, '.moai', 'themes', 'generated')],
+    from: join(repoDir, '.moai', 'themes', 'generated'),
     to: join(distDir, 'themes', 'generated'),
+    required: true,
   },
   {
-    label: 'icon-libraries',
-    required: true,
-    candidates: [
-      join(packageDir, 'data', 'icon-libraries', 'generated'),
-      join(repoDir, '.moai', 'icon-libraries', 'generated'),
-    ],
+    from: join(repoDir, '.moai', 'icon-libraries', 'generated'),
     to: join(distDir, 'icon-libraries', 'generated'),
+    required: false,
   },
 ];
 
-for (const { label, required, candidates, to } of sources) {
-  const from = candidates.find(candidate => existsSync(candidate));
-
-  if (!from) {
+for (const { from, to, required } of sources) {
+  if (!existsSync(from)) {
     if (required) {
-      throw new Error(
-        `Missing generated data directory for ${label}: ${candidates.join(', ')}`
-      );
+      throw new Error(`Missing generated data directory: ${from}`);
     }
 
+    console.warn(`[copy-bundled-generated-data] Skipping missing optional source: ${from}`);
     continue;
   }
 

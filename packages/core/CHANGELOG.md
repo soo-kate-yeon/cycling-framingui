@@ -5,52 +5,12 @@ All notable changes to @tekton/core will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.8] - 2026-03-07
+## [0.4.3] - 2026-03-06
 
 ### Fixed
 
-- Re-exported `SCREEN_COMPONENT_TYPES` from the root `@framingui/core` entry so downstream packages can depend on the public package surface instead of monorepo-only source paths.
-
-## [0.4.7] - 2026-03-07
-
-### Fixed
-
-- Exported the shared screen component contract used by MCP validation and generation so consumers no longer drift between validation and code generation paths.
-- Preserved generated screen text children and stopped emitting invalid Tailwind token utility classes in screen code output.
-
-## [0.4.6] - 2026-03-07
-
-### Changed
-
-- Migrated bundled template and token-facing template definitions to the prefixless token naming model introduced in the design token refresh.
-- Refreshed catalog-backed screen template data so downstream UI and MCP consumers resolve the updated token contract consistently.
-
-### Fixed
-
-- Hardened bundled icon-library data preparation so clean CI and publish builds keep working after the design token migration.
-
-## [0.4.5] - 2026-03-06
-
-### Fixed
-
-- Fixed `copy-bundled-generated-data.mjs` so CI and Vercel builds no longer fail when `.moai/icon-libraries/generated` is absent.
-- Added tracked bundled icon-library data to `@framingui/core` so deployed environments do not depend on repo-local `.moai` files for icon library discovery.
-- Cleared stale build output and `tsconfig.tsbuildinfo` before `@framingui/core` builds so clean local builds continue to emit `dist/*`.
-
-## [0.4.4] - 2026-03-06
-
-### Added
-
-- Added a catalog-backed screen template definition module for tracked template discovery.
-- Exported template catalog helpers from `@framingui/core` so web and MCP consumers can use one source of truth.
-
-### Changed
-
-- Template listing and detail APIs can now read tracked template definitions without depending on `@framingui/ui` registry side effects.
-
-### Testing
-
-- Added coverage for template catalog listing, category filtering, search, and single-template lookup.
+- Fixed the bundled generated-data copy step to skip missing optional icon-library sources in CI and Vercel builds.
+- Prevented `@framingui/core` production builds from failing when only tracked theme data is available in the checkout.
 
 ## [0.4.2] - 2026-03-06
 

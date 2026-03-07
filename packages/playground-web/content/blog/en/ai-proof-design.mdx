@@ -1,0 +1,363 @@
+---
+title: "AI-Proof Design: Building UIs That Don't Break When AI Generates Code"
+description: "Learn why AI-generated UI code breaks design systems, how design tokens create AI-proof interfaces, and practical strategies for maintaining consistency."
+date: "2025-03-07"
+author:
+  name: "FramingUI Team"
+tags:
+  - ai-design
+  - design-tokens
+  - design-system
+  - ui-consistency
+category: "Technical"
+coverImage: ""
+published: true
+---
+
+## The Brittle UI Problem: When AI Code Breaks Your Design
+
+AI code generation promises velocity. You describe a feature, and within seconds you get working component code. Ship it, celebrate, move on to the next ticket.
+
+Until you notice the inconsistencies:
+
+- Buttons with slightly different padding
+- Colors that "look close enough" but do not match the palette
+- Spacing that drifts from your 8px grid
+- Shadows and borders that feel wrong but you cannot pinpoint why
+
+Each generation works in isolation, but together they create visual chaos. Your design system becomes a suggestion, not a constraint. Your product feels cobbled together, not crafted.
+
+This is the brittle UI problem. AI can generate code fast, but without proper architecture, that code breaks your visual foundation with every iteration.
+
+## Why AI-Generated UI Code Breaks So Often
+
+The root cause is not AI incompetence. It is context mismatch.
+
+### AI Optimizes for Plausibility, Not Your System
+
+LLMs are trained on millions of public codebases. When you ask for a button, the model generates what buttons typically look like across the web—not what your button should look like.
+
+Without explicit constraints, AI defaults to generic patterns:
+
+- `padding: 12px 24px` (common, but maybe you use `spacing.3` and `spacing.5`)
+- `background: #3b82f6` (blue-ish, but not your `color.primary.solid`)
+- `border-radius: 8px` (reasonable, but your system uses `radius.md` which is `6px`)
+
+Each decision seems fine in isolation. Combined across dozens of components, they erode consistency.
+
+### Implicit Knowledge Does Not Transfer
+
+Your team knows the design principles. Designers know when to use `elevated` vs `default` surfaces. Engineers know that form inputs always pair with specific label styles.
+
+But this knowledge lives in Figma comments, Slack threads, and tribal memory. AI cannot access it unless you make it explicit and structured.
+
+### Natural Language Prompts Are Ambiguous
+
+"Use our brand colors" means different things depending on context:
+
+- Does "brand" mean primary, or the entire semantic palette?
+- Should text be `color.text.primary` or `color.primary.fg`?
+- What about hover states, focus rings, disabled variants?
+
+Without a shared vocabulary encoded in tokens, every prompt becomes a game of telephone.
+
+### Context Windows Compete with Feature Requirements
+
+Even if you manually paste design guidelines into every prompt, you are stealing space from the actual feature specification. And the model still has to infer how to apply those guidelines to your specific component.
+
+Structured design tokens solve this by providing a reusable, queryable contract.
+
+## What Makes a Design "AI-Proof"?
+
+AI-proof design is not about preventing AI from working. It is about designing systems that guide AI toward correct output by default.
+
+An AI-proof design system has three properties:
+
+### 1. Explicit Constraints
+
+Values and relationships are defined in machine-readable formats, not prose.
+
+- Bad: "Use consistent spacing"
+- Good: `spacing.3` → `16px`, `spacing.4` → `24px`, components always use these keys
+
+### 2. Semantic Clarity
+
+Token names encode intent, not just appearance.
+
+- Bad: `color.blue.500`
+- Good: `color.primary.solid`, `color.primary.fg`, `color.primary.border`
+
+When AI reads `color.primary.solid`, it understands semantic role. When it sees `#3b82f6`, it guesses.
+
+### 3. Composable Primitives
+
+Components are built from stable, reusable units that AI can reference reliably.
+
+- Bad: Custom styled divs with inline CSS
+- Good: `<Button variant="primary" size="md">` where variants and sizes are enumerated and token-backed
+
+When components are primitives, AI does not need to reinvent styling. It composes from approved building blocks.
+
+## Design Tokens as AI Guard Rails
+
+Design tokens are the foundation of AI-proof design. They transform implicit design knowledge into explicit, queryable data.
+
+### What Tokens Actually Do for AI
+
+Tokens are not just theming variables. For AI workflows, they serve as:
+
+**A contract** between design intent and generated code.
+
+**A constraint layer** that reduces the solution space from infinite guesses to valid compositions.
+
+**A vocabulary** that aligns human prompts and AI output.
+
+When AI reads your token schema, it sees what is allowed, what is semantic, and how parts fit together.
+
+### Minimum Viable Token Schema
+
+You do not need a massive enterprise design system to see benefits. Start with essential layers:
+
+**Color tokens:**
+
+- `color.text.primary`, `color.text.secondary`, `color.text.inverse`
+- `color.surface.default`, `color.surface.elevated`, `color.surface.sunken`
+- `color.border.default`, `color.border.focus`, `color.border.hover`
+- `color.primary.solid`, `color.primary.fg`, `color.primary.border`
+
+**Spacing tokens:**
+
+- `spacing.1` → `4px`, `spacing.2` → `8px`, `spacing.3` → `16px`, etc.
+- Consistent scale that components always reference
+
+**Typography tokens:**
+
+- `font.size.body`, `font.size.label`, `font.size.heading`
+- `font.weight.regular`, `font.weight.medium`, `font.weight.semibold`
+- `lineHeight.body`, `lineHeight.tight`, `lineHeight.loose`
+
+**Component semantic tokens:**
+
+- `button.primary.bg`, `button.primary.fg`
+- `button.secondary.bg`, `button.secondary.fg`
+- `input.bg`, `input.border`, `input.focus`
+
+This schema covers 80% of common UI generation scenarios. Expand as needed, but start here.
+
+## Practical Strategies for AI-Proof UI with FramingUI
+
+FramingUI is designed with AI workflows in mind. Here is how to use it effectively.
+
+### Strategy 1: Always Generate with Token Context
+
+Do not rely on AI memory or past examples. Explicitly provide token context on every generation.
+
+**Bad workflow:**
+
+```
+Prompt: "Create a login form with email and password fields"
+```
+
+Result: AI guesses at colors, spacing, focus states.
+
+**Good workflow:**
+
+```
+Prompt: "Create a login form using:
+- Input: input.bg, input.border, input.focus
+- Spacing: spacing.3 for gaps, spacing.5 for padding
+- Button: button.primary variant
+Check tokens at [token file or MCP endpoint]"
+```
+
+Result: AI queries tokens and generates compliant code.
+
+If using MCP integration, token context is automatically available. If not, include a brief token reference in your prompt template.
+
+### Strategy 2: Use Primitive Components, Not Styled Divs
+
+AI loves to generate custom styled elements because it has seen millions of examples. Resist this.
+
+**Brittle pattern:**
+
+```tsx
+<div style={{
+  padding: '12px 24px',
+  background: '#3b82f6',
+  borderRadius: '8px',
+  color: 'white'
+}}>
+  Submit
+</div>
+```
+
+Every generation reinvents the button. Values drift. Maintenance is hell.
+
+**AI-proof pattern:**
+
+```tsx
+<Button variant="primary" size="md">
+  Submit
+</Button>
+```
+
+AI cannot invent new variants. It composes from approved primitives. Consistency is enforced at the component API level.
+
+**How to enforce this:**
+
+- In prompts: "Only use components from `@framingui/ui`. Do not create custom styled elements."
+- In linting: Detect inline styles or unapproved utility combinations.
+- In reviews: Reject PRs that bypass primitives.
+
+### Strategy 3: Define Semantic Component Tokens
+
+Raw design tokens are not enough. You also need component-level semantic tokens that map design intent to implementation.
+
+Example for a button:
+
+```ts
+const buttonTokens = {
+  primary: {
+    bg: 'color.primary.solid',
+    fg: 'color.primary.fg',
+    border: 'color.primary.border',
+    hoverBg: 'color.primary.hover',
+    activeBg: 'color.primary.active',
+  },
+  secondary: {
+    bg: 'color.surface.elevated',
+    fg: 'color.text.primary',
+    border: 'color.border.default',
+    hoverBg: 'color.surface.hover',
+    activeBg: 'color.surface.active',
+  }
+}
+```
+
+When AI generates a button, it knows exactly which tokens to use for each state and variant. No guessing.
+
+### Strategy 4: Automate Token Validation
+
+Even with token context, AI can make mistakes. Catch them early with automated checks.
+
+**Lint rule: Detect hardcoded values**
+
+Flag any component that uses raw hex colors, pixel values, or magic numbers instead of token references.
+
+**Type checking: Enforce token usage**
+
+If using TypeScript, make your styled primitives require token keys, not arbitrary strings.
+
+```ts
+// Bad: accepts any string
+style={{ color: 'blue' }}
+
+// Good: only accepts valid token keys
+style={{ color: tokens.color.text.primary }}
+```
+
+**Visual regression testing:**
+
+When AI generates new components, snapshot tests catch unexpected visual drift.
+
+### Strategy 5: Maintain a Prompt Library with Token Contracts
+
+Do not reinvent prompts every time. Build a library of reusable templates that include token context by default.
+
+**Example template: Form input with validation**
+
+```
+Create a form input with:
+- Token context: [reference to token file or MCP]
+- Use Input primitive from @framingui/ui
+- States: default, focus, error, disabled
+- Error state uses color.intent.danger for border and text
+- Focus state uses input.focus token
+- Always pair with Label component
+```
+
+Iterate on these templates as you learn what works. Over time, your prompt library becomes a design system for AI interactions.
+
+## When Things Still Break: Debugging AI-Generated UI
+
+Even with AI-proof architecture, you will encounter edge cases. Here is how to diagnose them.
+
+### Symptom: AI invents non-existent token names
+
+**Cause:** Token schema is not explicitly provided or is incomplete.
+
+**Fix:** Ensure token context is included in every generation. If using MCP, verify the connection. If using files, confirm the schema is up to date.
+
+### Symptom: AI uses correct tokens but wrong semantic mapping
+
+**Cause:** Token names are too ambiguous (e.g., `color.blue.500` instead of `color.primary.solid`).
+
+**Fix:** Refactor tokens to be more semantic. Update prompts to clarify intent ("use primary button tokens for the submit action").
+
+### Symptom: AI generates valid primitives but wrong composition
+
+**Cause:** Component API is correct, but AI does not understand when to use which variant.
+
+**Fix:** Add composition guidelines to prompts. Example: "Use primary buttons for main actions, secondary for cancel/back."
+
+### Symptom: Generated code works but drifts visually over time
+
+**Cause:** Lack of automated validation.
+
+**Fix:** Add lint rules, snapshot tests, and periodic design QA passes.
+
+## The Long-Term Payoff: From Fragile to Resilient
+
+AI-proof design is an investment. Initial setup takes time: defining tokens, building primitives, creating prompt templates.
+
+But the payoff compounds:
+
+**Faster iteration:** Designers can update tokens once and see changes propagate through all AI-generated components.
+
+**Better consistency:** Every generated component follows system rules by default, not by manual review.
+
+**Lower review overhead:** Engineers spend less time fixing token violations and more time on logic and UX.
+
+**Scalable AI usage:** As your team generates more code with AI, quality does not degrade. The system enforces correctness.
+
+This is the shift from treating AI as a risky prototype tool to treating it as a reliable production workflow.
+
+## Getting Started with FramingUI
+
+FramingUI makes AI-proof design practical by combining token-first architecture with AI-friendly tooling.
+
+**Step 1: Define your minimum viable token schema.**
+
+Start with color, spacing, typography, and core component tokens. Do not over-design.
+
+**Step 2: Build primitives that consume those tokens.**
+
+Use FramingUI components or create your own wrappers that enforce token usage.
+
+**Step 3: Set up token context for AI tools.**
+
+If your team uses Claude, Cursor, or other AI coding assistants, integrate FramingUI's MCP server to provide token context automatically. If not, create a reusable token reference file.
+
+**Step 4: Create prompt templates with token contracts.**
+
+Standardize how your team prompts AI. Include token context, primitive usage rules, and composition guidelines.
+
+**Step 5: Add guardrails: linting, type checking, snapshot tests.**
+
+Automation catches mistakes AI and humans both make.
+
+**Step 6: Iterate based on real usage.**
+
+When AI consistently generates incorrect code for certain patterns, refine your tokens or prompts to address the gap.
+
+## Closing Thought
+
+AI code generation is not inherently fragile. UIs break when we treat AI as a magic black box instead of a tool that needs clear constraints.
+
+Design tokens are not just theming variables. They are the interface between human design intent and machine code generation.
+
+When you build an AI-proof design system, you are not limiting AI. You are giving it the structure it needs to generate consistent, maintainable, production-ready code every time.
+
+If you want AI to be a reliable part of your UI workflow—not a source of technical debt—start with tokens, enforce them with primitives, and guide AI with semantic contracts.
+
+That is how you build UIs that do not break when AI generates code.

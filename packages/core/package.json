@@ -1,6 +1,6 @@
 {
   "name": "@framingui/core",
-  "version": "0.4.8",
+  "version": "0.4.3",
   "description": "Core design system pipeline: Theme -> Blueprint -> Screen (~800 LOC)",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,10 +9,6 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./template-catalog": {
-      "import": "./dist/catalog/templates/index.js",
-      "types": "./dist/catalog/templates/index.d.ts"
     }
   },
   "files": [
@@ -31,7 +27,7 @@
     "directory": "packages/core"
   },
   "scripts": {
-    "build": "node ./scripts/prepare-build.mjs && tsc && node ./scripts/copy-bundled-generated-data.mjs",
+    "build": "tsc && node ./scripts/copy-bundled-generated-data.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
