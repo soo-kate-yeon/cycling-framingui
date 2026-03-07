@@ -1,0 +1,365 @@
+---
+title: "FAQ"
+description: "Frequently asked questions about FramingUI: shadcn differences, pricing, license, and IDE support"
+order: 5
+---
+
+# Frequently Asked Questions
+
+## General
+
+### What is FramingUI?
+
+FramingUI is an **AI-native design system** built on design tokens. It helps AI tools like Claude Code, Cursor, and Windsurf generate consistent, maintainable UI code that matches your brand.
+
+Unlike traditional component libraries, FramingUI is optimized for AI collaboration through the Model Context Protocol (MCP).
+
+### How is FramingUI different from shadcn/ui?
+
+| Feature | FramingUI | shadcn/ui |
+| --- | --- | --- |
+| **Design tokens** | ✅ First-class token system | ⚠️ Manual utility classes |
+| **AI integration** | ✅ MCP server built-in | ❌ No AI tooling |
+| **Themes** | ✅ 7 production themes | ❌ Single default theme |
+| **Token awareness** | ✅ AI understands semantic tokens | ❌ AI hardcodes colors/spacing |
+| **Installation** | ✅ npm package | ⚠️ Copy-paste via CLI |
+| **Updates** | ✅ `npm update` | ⚠️ Manual re-copy |
+| **Customization** | ✅ Override tokens in CSS | ⚠️ Modify copied files |
+
+**When to use shadcn/ui:** Full control over component source, prefer copy-paste workflow
+
+**When to use FramingUI:** AI-driven development, need theme consistency, want token-based design system
+
+### Can I use FramingUI with shadcn/ui?
+
+Yes! You can use FramingUI tokens with shadcn components:
+
+```tsx
+// Use shadcn component with FramingUI tokens
+import { Button } from '@/components/ui/button';  // shadcn
+import '@framingui/tokens/themes/minimal-workspace.css';
+
+<Button className="bg-primary text-primary-foreground">
+  Click me
+</Button>
+```
+
+However, FramingUI components are pre-configured to use tokens automatically, reducing boilerplate.
+
+## Pricing & License
+
+### Is FramingUI free?
+
+**Yes.** FramingUI is open-source and free to use under the MIT license.
+
+- ✅ Free for commercial projects
+- ✅ Free for SaaS products
+- ✅ Free for client work
+- ✅ No attribution required
+
+### What does the MIT license mean?
+
+You can:
+- ✅ Use in commercial projects
+- ✅ Modify and redistribute
+- ✅ Use in proprietary software
+- ✅ Sublicense
+
+You must:
+- ⚠️ Include the original license and copyright notice
+
+You cannot:
+- ❌ Hold authors liable
+
+Full license: [MIT License](https://opensource.org/licenses/MIT)
+
+### Do I need to pay for MCP?
+
+No. The FramingUI MCP server is free and open-source.
+
+Some AI tools (Claude Pro, Cursor Pro) require paid subscriptions, but the MCP server itself is free.
+
+### Is there a Pro version?
+
+Not yet. FramingUI is currently fully open-source. We may offer:
+- Premium themes
+- Advanced tooling
+- Enterprise support
+
+in the future, but core functionality will remain free.
+
+## IDE & Tool Support
+
+### Which IDEs support FramingUI?
+
+FramingUI works in any editor. MCP integration is available for:
+
+| Tool | MCP Support | Notes |
+| --- | --- | --- |
+| **Claude Code** | ✅ Full support | Official Anthropic editor |
+| **Cursor** | ✅ Full support | AI-first code editor |
+| **Windsurf** | ✅ Full support | Codeium's AI editor |
+| **VS Code** | ⚠️ Partial | Use Cursor or extensions |
+| **WebStorm** | ⚠️ No MCP | Components work, no AI token awareness |
+| **Zed** | 🚧 Planned | MCP support coming |
+
+**Without MCP:** You can still use FramingUI components and tokens — you just won't get AI suggestions.
+
+### Do I need Claude Pro for MCP?
+
+No. MCP works with:
+- ✅ Claude Code (free during beta)
+- ✅ Cursor (free tier available)
+- ✅ Windsurf (free tier available)
+
+However, AI quality improves with paid subscriptions (Claude Pro, Cursor Pro).
+
+### Can I use FramingUI without AI tools?
+
+**Absolutely!** FramingUI is a full design system. You can:
+
+- ✅ Use components directly
+- ✅ Customize tokens manually
+- ✅ Build UIs the traditional way
+
+MCP is optional. It just makes AI collaboration better.
+
+## Technical
+
+### What frameworks are supported?
+
+FramingUI is framework-agnostic but works best with React-based frameworks:
+
+- ✅ **Next.js** (App Router & Pages Router)
+- ✅ **Vite + React**
+- ✅ **Remix**
+- ✅ **Gatsby**
+- ✅ **Astro** (with React integration)
+- ⚠️ **Vue/Svelte** (tokens work, components are React-only)
+
+### Does it work with TypeScript?
+
+Yes. FramingUI is fully typed with TypeScript.
+
+```tsx
+import { Button, type ButtonProps } from '@framingui/ui';
+
+const MyButton: React.FC<ButtonProps> = (props) => {
+  return <Button {...props} />;
+};
+```
+
+### Can I use it with Tailwind CSS?
+
+Yes! FramingUI is built on Tailwind and extends it with design tokens.
+
+The `init` command auto-configures Tailwind:
+
+```js
+// tailwind.config.js (auto-generated)
+module.exports = {
+  content: [
+    './app/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@framingui/ui/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: 'var(--bg-primary)',
+        foreground: 'var(--bg-foreground)',
+        // ... all tokens mapped
+      },
+    },
+  },
+};
+```
+
+### Does it support Server Components (RSC)?
+
+Yes. All FramingUI components are React Server Components by default.
+
+Interactive components (with `'use client'`) are clearly marked:
+
+```tsx
+// ✅ Server Component (no JS shipped)
+import { Card } from '@framingui/ui';
+
+export default function Page() {
+  return <Card>Content</Card>;
+}
+```
+
+```tsx
+// ✅ Client Component (needs interactivity)
+'use client';
+import { Button } from '@framingui/ui';
+
+export default function Page() {
+  return <Button onClick={() => alert('Hi')}>Click</Button>;
+}
+```
+
+### How big is the bundle?
+
+FramingUI is optimized for tree-shaking:
+
+- **Tokens only:** ~2KB (CSS variables)
+- **Button component:** ~4KB (gzipped)
+- **Full component set:** ~45KB (gzipped, all components)
+
+You only bundle what you import. Unused components are tree-shaken.
+
+## Customization
+
+### Can I create custom themes?
+
+Yes! Two approaches:
+
+**1. Override tokens (recommended):**
+```css
+:root {
+  --bg-primary: oklch(0.56 0.18 257);
+  --font-sans: 'Inter', sans-serif;
+}
+```
+
+**2. Build from scratch:**
+Create a new CSS file with all token definitions. See [Theming](/docs/en/guides/theming).
+
+### Can I change component styles?
+
+Yes, through:
+
+1. **Token overrides** (changes all instances)
+2. **className prop** (per-instance customization)
+3. **Fork component** (copy source and modify)
+
+FramingUI components accept `className` for Tailwind utilities:
+
+```tsx
+<Button className="rounded-full px-8">Custom Shape</Button>
+```
+
+### Can I use custom fonts?
+
+Yes. Override the font token:
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+```
+
+Or use Next.js font optimization:
+
+```tsx
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className={inter.className}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+## Migration
+
+### Can I migrate from shadcn/ui?
+
+Yes. The component APIs are similar. Steps:
+
+1. Install FramingUI: `npm install @framingui/ui @framingui/tokens`
+2. Pick a theme and import it
+3. Replace shadcn imports with FramingUI:
+   ```tsx
+   // Before
+   import { Button } from '@/components/ui/button';
+   
+   // After
+   import { Button } from '@framingui/ui';
+   ```
+4. Remove copied component files from `components/ui/`
+
+### Can I keep some shadcn components?
+
+Yes. Use them side-by-side:
+
+```tsx
+import { Button as FramingButton } from '@framingui/ui';
+import { Dialog } from '@/components/ui/dialog';  // shadcn
+
+<div>
+  <Dialog>
+    <FramingButton>Open</FramingButton>
+  </Dialog>
+</div>
+```
+
+### How do I migrate custom components?
+
+Replace hardcoded values with tokens:
+
+**Before:**
+```tsx
+<div className="bg-white border border-gray-200 rounded-lg p-6">
+```
+
+**After:**
+```tsx
+<div className="bg-card border border-default rounded-lg p-6">
+```
+
+Use find-and-replace or ask AI with MCP to refactor.
+
+## Support
+
+### Where can I get help?
+
+- 📖 [Documentation](https://framingui.com/docs)
+- 💬 [Discord Community](https://discord.gg/framingui)
+- 🐛 [GitHub Issues](https://github.com/tektonui/framingui/issues)
+- 📧 Email: [support@framingui.com](mailto:support@framingui.com)
+
+### How do I report bugs?
+
+[Open an issue on GitHub](https://github.com/tektonui/framingui/issues/new) with:
+
+1. FramingUI version (`npm list @framingui/ui`)
+2. Framework & version (Next.js 14, etc.)
+3. Steps to reproduce
+4. Expected vs actual behavior
+5. Code snippet or repo link
+
+### Can I contribute?
+
+Yes! FramingUI is open-source.
+
+- 🐛 Report bugs
+- 💡 Suggest features
+- 🎨 Submit themes
+- 📝 Improve docs
+- 🔧 Fix issues
+
+See [CONTRIBUTING.md](https://github.com/tektonui/framingui/blob/main/CONTRIBUTING.md).
+
+### Is there a roadmap?
+
+Yes. Upcoming features:
+
+- 🎨 More built-in themes
+- 🧩 Additional components (DataTable, Calendar, etc.)
+- 🚀 Framework adapters (Vue, Svelte)
+- 🤖 Enhanced MCP capabilities
+- 📱 React Native support
+
+Follow updates on [GitHub Discussions](https://github.com/tektonui/framingui/discussions).
+
+---
+
+**Still have questions?** Join our [Discord](https://discord.gg/framingui) or [open a discussion](https://github.com/tektonui/framingui/discussions).

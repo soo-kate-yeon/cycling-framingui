@@ -1,0 +1,122 @@
+---
+title: "Getting Started"
+description: "Install FramingUI, set up your first theme, and connect MCP in under 5 minutes"
+order: 1
+---
+
+# Getting Started
+
+Get your AI-native design system up and running in 5 minutes.
+
+## 1. Install FramingUI
+
+```bash
+npm install @framingui/ui @framingui/tokens
+```
+
+Or with your preferred package manager:
+
+```bash
+pnpm add @framingui/ui @framingui/tokens
+# or
+yarn add @framingui/ui @framingui/tokens
+```
+
+## 2. Add Theme and Styles
+
+Pick a theme and import it in your app root along with base styles.
+
+```tsx
+// app/layout.tsx (Next.js App Router)
+import '@framingui/tokens/themes/minimal-workspace.css';
+import '@framingui/ui/styles';
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+```tsx
+// pages/_app.tsx (Next.js Pages Router)
+import '@framingui/tokens/themes/minimal-workspace.css';
+import '@framingui/ui/styles';
+
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+```
+
+```tsx
+// main.tsx (Vite/React)
+import '@framingui/tokens/themes/minimal-workspace.css';
+import '@framingui/ui/styles';
+import './index.css';
+```
+
+## 3. Use Your First Component
+
+```tsx
+import { Button } from '@framingui/ui';
+
+export default function HomePage() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+      <h1 className="text-4xl font-bold">Welcome to FramingUI</h1>
+      <div className="flex gap-3">
+        <Button>Primary Action</Button>
+        <Button variant="outline">Secondary</Button>
+      </div>
+    </div>
+  );
+}
+```
+
+## 4. Connect MCP (Optional)
+
+Let Claude Code, Cursor, or Windsurf understand your design system tokens and components.
+
+```bash
+npx @framingui/mcp-server init
+```
+
+This creates `.mcp.json` in your project root. Restart your AI tool and ask:
+
+> "List all FramingUI themes"
+
+## Next Steps
+
+- [Design Tokens](/docs/en/guides/design-tokens) — Learn how tokens power the system
+- [Theming](/docs/en/guides/theming) — Customize colors, spacing, and typography
+- [MCP Integration](/docs/en/guides/mcp-integration) — Deep dive into AI tool setup
+
+## Troubleshooting
+
+### Styles not showing up?
+
+- Ensure theme CSS is imported **before** `@framingui/ui/styles`
+- Check that Tailwind config includes FramingUI paths (auto-configured by `init`)
+- Restart dev server after config changes
+
+### TypeScript errors?
+
+```bash
+npm install -D @types/react @types/react-dom
+```
+
+### Components not found?
+
+Verify installation:
+
+```bash
+npm list @framingui/ui
+```
+
+If missing, reinstall:
+
+```bash
+npm install @framingui/ui @framingui/tokens
+```
