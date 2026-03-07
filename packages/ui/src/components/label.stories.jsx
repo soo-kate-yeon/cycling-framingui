@@ -42,7 +42,7 @@ export const Required = {
   render: () => (
     <div className="grid gap-2">
       <Label htmlFor="username">
-        Username <span className="text-[var(--tekton-bg-destructive)]">*</span>
+        Username <span className="text-[var(--bg-destructive)]">*</span>
       </Label>
       <Input id="username" placeholder="Enter username" required />
     </div>
@@ -91,7 +91,7 @@ export const FormExample = {
       </div>
       <div className="grid gap-2">
         <Label htmlFor="email-form">
-          Email <span className="text-[var(--tekton-bg-destructive)]">*</span>
+          Email <span className="text-[var(--bg-destructive)]">*</span>
         </Label>
         <Input id="email-form" type="email" placeholder="john@example.com" required />
       </div>

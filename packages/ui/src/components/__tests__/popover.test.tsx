@@ -88,7 +88,7 @@ describe('Popover', () => {
       await userEvent.click(screen.getByRole('button'));
       await waitFor(() => {
         const content = screen.getByText('Popover content');
-        expect(content.className).toMatch(/var\(--tekton-/);
+        expect(content.className).toMatch(/var\(--/);
       });
     });
   });

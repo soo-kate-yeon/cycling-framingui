@@ -97,12 +97,13 @@ export function generateComponentJSX(
   context: ComponentGenerationContext
 ): string {
   const lines: string[] = [];
+  const children = getRenderableChildren(component);
 
   // Generate opening tag
   const tagName = getJSXTagName(component.type);
   const attributes = generateJSXAttributes(component, context);
 
-  if (!component.children || component.children.length === 0) {
+  if (children.length === 0) {
     // Self-closing tag
     lines.push(`<${tagName}${attributes} />`);
   } else {
@@ -110,7 +111,7 @@ export function generateComponentJSX(
     lines.push(`<${tagName}${attributes}>`);
 
     // Children
-    for (const child of component.children) {
+    for (const child of children) {
       if (typeof child === 'string') {
         // Text content
         lines.push(indent(escapeJSX(child), context.depth + 1));
@@ -131,6 +132,26 @@ export function generateComponentJSX(
   }
 
   return lines.join('\n');
+}
+
+function getRenderableChildren(component: ResolvedComponent): Array<ResolvedComponent | string> {
+  if (component.children && component.children.length > 0) {
+    return component.children;
+  }
+
+  const propChildren = component.props.children;
+  if (typeof propChildren === 'string') {
+    return [propChildren];
+  }
+
+  if (Array.isArray(propChildren)) {
+    return propChildren.filter(
+      (child): child is ResolvedComponent | string =>
+        typeof child === 'string' || (typeof child === 'object' && child !== null)
+    );
+  }
+
+  return [];
 }
 
 /**
@@ -179,22 +200,31 @@ function generateJSXAttributes(
   context: ComponentGenerationContext
 ): string {
   const attributes: string[] = [];
+  const propClassName =
+    typeof component.props.className === 'string' ? component.props.className.trim() : '';
 
   // Add className based on CSS framework
   if (context.cssFramework === 'tailwind') {
     const classes = generateComponentClasses(component);
-    if (classes.length > 0) {
-      attributes.push(`className="${classes.join(' ')}"`);
+    const mergedClassName = mergeClassNames(classes.join(' '), propClassName);
+    if (mergedClassName) {
+      attributes.push(`className="${mergedClassName}"`);
     }
   } else if (context.cssFramework === 'css-modules') {
     const className = camelCase(component.type);
-    attributes.push(`className={styles.${className}}`);
+    if (propClassName) {
+      attributes.push(`className={\`${'${styles.' + className + '}'} ${propClassName}\`}`);
+    } else {
+      attributes.push(`className={styles.${className}}`);
+    }
     context.imports.add('styles');
+  } else if (propClassName) {
+    attributes.push(`className="${propClassName}"`);
   }
 
   // Add component props (excluding children)
   for (const [propName, propValue] of Object.entries(component.props)) {
-    if (propName === 'children') {
+    if (propName === 'children' || propName === 'className') {
       continue;
     }
 
@@ -208,6 +238,14 @@ function generateJSXAttributes(
   }
 
   return attributes.length > 0 ? ' ' + attributes.join(' ') : '';
+}
+
+function mergeClassNames(...classNames: string[]): string {
+  return classNames
+    .flatMap(className => className.split(/\s+/))
+    .filter(Boolean)
+    .filter((className, index, all) => all.indexOf(className) === index)
+    .join(' ');
 }
 
 // ============================================================================

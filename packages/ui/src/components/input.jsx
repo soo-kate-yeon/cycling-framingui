@@ -15,7 +15,7 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
     <input
       type={type}
       className={cn(
-        'flex h-10 w-full rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-input)] bg-[var(--tekton-bg-background)] px-[var(--tekton-spacing-3)] py-[var(--tekton-spacing-2)] text-sm ring-offset-[var(--tekton-bg-background)] file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[var(--tekton-bg-muted-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        'flex h-10 w-full rounded-[var(--radius-md)] border border-[var(--border-input)] bg-[var(--bg-background)] px-[var(--spacing-3)] py-[var(--spacing-2)] text-sm ring-offset-[var(--bg-background)] file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[var(--bg-muted-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
       ref={ref}

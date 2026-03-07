@@ -104,17 +104,17 @@ export default function LayoutPage() {
         <pre className="bg-neutral-900 text-neutral-100 p-4 rounded-lg overflow-x-auto text-sm">
           {`<div className="flex min-h-screen">
   {/* Sidebar */}
-  <aside className="w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-background)]">
+  <aside className="w-64 border-r border-[var(--border-default)] bg-[var(--bg-background)]">
     <div className="p-4">
       <h2 className="text-lg font-semibold mb-4">Navigation</h2>
       <nav className="space-y-2">
-        <a href="#" className="block px-3 py-2 rounded-lg hover:bg-[var(--tekton-bg-muted)]">
+        <a href="#" className="block px-3 py-2 rounded-lg hover:bg-[var(--bg-muted)]">
           Dashboard
         </a>
-        <a href="#" className="block px-3 py-2 rounded-lg hover:bg-[var(--tekton-bg-muted)]">
+        <a href="#" className="block px-3 py-2 rounded-lg hover:bg-[var(--bg-muted)]">
           Projects
         </a>
-        <a href="#" className="block px-3 py-2 rounded-lg hover:bg-[var(--tekton-bg-muted)]">
+        <a href="#" className="block px-3 py-2 rounded-lg hover:bg-[var(--bg-muted)]">
           Settings
         </a>
       </nav>
@@ -193,7 +193,7 @@ export default function LayoutPage() {
         <pre className="bg-neutral-900 text-neutral-100 p-4 rounded-lg overflow-x-auto text-sm">
           {`<div className="min-h-screen flex flex-col">
   {/* Header */}
-  <header className="border-b border-[var(--tekton-border-default)] bg-white">
+  <header className="border-b border-[var(--border-default)] bg-white">
     <div className="container mx-auto px-4 h-16 flex items-center justify-between">
       <h1 className="text-xl font-bold">FramingUI</h1>
       <nav className="flex gap-4">
@@ -217,7 +217,7 @@ export default function LayoutPage() {
   </main>
 
   {/* Footer */}
-  <footer className="border-t border-[var(--tekton-border-default)] bg-neutral-50">
+  <footer className="border-t border-[var(--border-default)] bg-neutral-50">
     <div className="container mx-auto px-4 py-6">
       <p className="text-center text-sm text-neutral-500">
         © 2024 FramingUI. All rights reserved.
@@ -626,7 +626,7 @@ function Dashboard() {
           <div>
             <h3 className="font-semibold text-neutral-900 mb-2">Spacing</h3>
             <p>
-              Use consistent spacing with Tekton spacing tokens (--tekton-spacing-*) or Tailwind's
+              Use consistent spacing with Tekton spacing tokens (--spacing-*) or Tailwind's
               gap and padding utilities for predictable layouts.
             </p>
           </div>

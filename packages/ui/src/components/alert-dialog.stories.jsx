@@ -70,7 +70,7 @@ export const Destructive = {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-[var(--tekton-bg-destructive)] text-[var(--tekton-bg-destructive-foreground)] hover:bg-[var(--tekton-bg-destructive)]/90">
+          <AlertDialogAction className="bg-[var(--bg-destructive)] text-[var(--bg-destructive-foreground)] hover:bg-[var(--bg-destructive)]/90">
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>

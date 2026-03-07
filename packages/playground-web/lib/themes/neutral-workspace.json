@@ -191,51 +191,51 @@
     },
     "recipes": {
       "card": {
-        "default": "bg-[var(--tekton-bg-surface)] border border-[var(--tekton-border-default)] rounded-xl shadow-sm hover:shadow-md hover:border-[var(--tekton-border-emphasis)] transition-all",
-        "flat": "bg-[var(--tekton-bg-canvas)] rounded-xl",
-        "outlined": "bg-transparent border border-[var(--tekton-border-default)] rounded-xl",
-        "feature": "bg-[var(--tekton-bg-surface)] border border-[var(--tekton-bg-canvas)] rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+        "default": "bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl shadow-sm hover:shadow-md hover:border-[var(--border-emphasis)] transition-all",
+        "flat": "bg-[var(--bg-canvas)] rounded-xl",
+        "outlined": "bg-transparent border border-[var(--border-default)] rounded-xl",
+        "feature": "bg-[var(--bg-surface)] border border-[var(--bg-canvas)] rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
       },
       "button": {
-        "primary": "bg-[var(--tekton-text-primary)] text-[var(--tekton-bg-surface)] hover:bg-[var(--tekton-bg-canvas-950,#0a0a0a)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
-        "secondary": "bg-[var(--tekton-bg-surface)] text-[var(--tekton-text-primary)] border border-[var(--tekton-border-default)] hover:bg-[var(--tekton-bg-canvas)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
-        "ghost": "text-[var(--tekton-text-secondary)] hover:bg-[var(--tekton-bg-canvas)] hover:text-[var(--tekton-text-primary)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
-        "icon": "text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)] rounded-md p-2 transition-colors"
+        "primary": "bg-[var(--text-primary)] text-[var(--bg-surface)] hover:bg-[var(--bg-canvas-950,#0a0a0a)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
+        "secondary": "bg-[var(--bg-surface)] text-[var(--text-primary)] border border-[var(--border-default)] hover:bg-[var(--bg-canvas)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
+        "ghost": "text-[var(--text-secondary)] hover:bg-[var(--bg-canvas)] hover:text-[var(--text-primary)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
+        "icon": "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)] rounded-md p-2 transition-colors"
       },
       "input": {
-        "default": "w-full bg-[var(--tekton-bg-surface)] border border-[var(--tekton-border-default)] rounded-lg h-10 px-3 text-[var(--tekton-text-primary)] placeholder:text-[var(--tekton-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--tekton-bg-canvas)] focus:border-[var(--tekton-text-primary)] transition-all",
-        "search": "w-full bg-[var(--tekton-bg-canvas)] border-none rounded-lg h-10 px-10 text-[var(--tekton-text-primary)] placeholder:text-[var(--tekton-text-secondary)] focus:bg-[var(--tekton-bg-surface)] focus:ring-2 focus:ring-[var(--tekton-bg-canvas)] transition-all"
+        "default": "w-full bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-lg h-10 px-3 text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--bg-canvas)] focus:border-[var(--text-primary)] transition-all",
+        "search": "w-full bg-[var(--bg-canvas)] border-none rounded-lg h-10 px-10 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-[var(--bg-canvas)] transition-all"
       },
       "badge": {
-        "default": "inline-flex items-center rounded-md bg-[var(--tekton-bg-canvas)] px-2 py-1 text-xs font-medium text-[var(--tekton-text-secondary)]",
-        "secondary": "inline-flex items-center rounded-md bg-[var(--tekton-bg-brand-subtle)] px-2 py-1 text-xs font-medium text-[var(--tekton-text-link)]",
-        "outline": "inline-flex items-center rounded-md border border-[var(--tekton-border-default)] px-2 py-1 text-xs font-medium text-[var(--tekton-text-primary)]"
+        "default": "inline-flex items-center rounded-md bg-[var(--bg-canvas)] px-2 py-1 text-xs font-medium text-[var(--text-secondary)]",
+        "secondary": "inline-flex items-center rounded-md bg-[var(--bg-brand-subtle)] px-2 py-1 text-xs font-medium text-[var(--text-link)]",
+        "outline": "inline-flex items-center rounded-md border border-[var(--border-default)] px-2 py-1 text-xs font-medium text-[var(--text-primary)]"
       },
       "table": {
-        "wrapper": "relative w-full overflow-auto rounded-xl border border-[var(--tekton-border-default)]",
+        "wrapper": "relative w-full overflow-auto rounded-xl border border-[var(--border-default)]",
         "root": "w-full caption-bottom text-sm",
-        "header": "[&_tr]:border-b bg-[var(--tekton-bg-canvas)]",
-        "row": "border-b border-[var(--tekton-border-default)] transition-colors hover:bg-[var(--tekton-bg-canvas)]",
-        "head": "h-10 px-4 text-left align-middle font-medium text-[var(--tekton-text-secondary)] text-xs",
+        "header": "[&_tr]:border-b bg-[var(--bg-canvas)]",
+        "row": "border-b border-[var(--border-default)] transition-colors hover:bg-[var(--bg-canvas)]",
+        "head": "h-10 px-4 text-left align-middle font-medium text-[var(--text-secondary)] text-xs",
         "cell": "p-4 align-middle text-sm"
       },
       "typography": {
-        "h1": "font-sans text-4xl font-bold tracking-tight text-[var(--tekton-text-primary)]",
-        "h2": "font-sans text-2xl font-semibold tracking-tight text-[var(--tekton-text-primary)]",
-        "h3": "font-sans text-lg font-medium text-[var(--tekton-text-primary)]",
-        "body": "font-sans text-base text-[var(--tekton-text-secondary)] leading-relaxed",
-        "caption": "font-sans text-sm text-[var(--tekton-text-tertiary)]"
+        "h1": "font-sans text-4xl font-bold tracking-tight text-[var(--text-primary)]",
+        "h2": "font-sans text-2xl font-semibold tracking-tight text-[var(--text-primary)]",
+        "h3": "font-sans text-lg font-medium text-[var(--text-primary)]",
+        "body": "font-sans text-base text-[var(--text-secondary)] leading-relaxed",
+        "caption": "font-sans text-sm text-[var(--text-tertiary)]"
       },
       "avatar": {
-        "root": "relative inline-flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-[var(--tekton-bg-canvas)]",
-        "fallback": "flex h-full w-full items-center justify-center rounded-full bg-[var(--tekton-bg-canvas)] text-sm font-medium text-[var(--tekton-text-secondary)]"
+        "root": "relative inline-flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-[var(--bg-canvas)]",
+        "fallback": "flex h-full w-full items-center justify-center rounded-full bg-[var(--bg-canvas)] text-sm font-medium text-[var(--text-secondary)]"
       },
       "menu": {
-        "item": "flex w-full items-center rounded-md px-2 py-2 text-sm text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)] cursor-pointer"
+        "item": "flex w-full items-center rounded-md px-2 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-canvas)] cursor-pointer"
       },
       "layout": {
         "container": "max-w-5xl mx-auto px-6",
-        "sidebar": "w-64 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-canvas)] h-screen p-4 flex flex-col",
+        "sidebar": "w-64 border-r border-[var(--border-default)] bg-[var(--bg-canvas)] h-screen p-4 flex flex-col",
         "section": "py-16 md:py-24"
       }
     }

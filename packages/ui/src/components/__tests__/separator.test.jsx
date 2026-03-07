@@ -105,20 +105,20 @@ describe('Separator', () => {
     it('applies Tekton token-based styles', () => {
       const { container } = render(<Separator />);
       const separator = container.firstChild;
-      expect(separator.className).toContain('bg-[var(--tekton-border-default)]');
+      expect(separator.className).toContain('bg-[var(--border-default)]');
     });
     it('uses Tekton border color tokens', () => {
       const { container } = render(<Separator />);
       const separator = container.firstChild;
-      expect(separator.className).toMatch(/var\(--tekton-border-default\)/);
+      expect(separator.className).toMatch(/var\(--border-default\)/);
     });
     it('maintains consistent styling across orientations', () => {
       const { container: horizontal } = render(<Separator orientation="horizontal" />);
       const { container: vertical } = render(<Separator orientation="vertical" />);
       const hSep = horizontal.firstChild;
       const vSep = vertical.firstChild;
-      expect(hSep.className).toContain('bg-[var(--tekton-border-default)]');
-      expect(vSep.className).toContain('bg-[var(--tekton-border-default)]');
+      expect(hSep.className).toContain('bg-[var(--border-default)]');
+      expect(vSep.className).toContain('bg-[var(--border-default)]');
     });
   });
   // Additional Edge Cases

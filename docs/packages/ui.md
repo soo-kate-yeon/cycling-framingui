@@ -314,16 +314,16 @@ injectThemeCSS(themeData);
 ```css
 :root {
   /* Background */
-  --tekton-bg-surface-default: oklch(0.98 0.002 250);
-  --tekton-bg-primary-default: oklch(0.55 0.18 250);
+  --bg-surface-default: oklch(0.98 0.002 250);
+  --bg-primary-default: oklch(0.55 0.18 250);
 
   /* Foreground */
-  --tekton-fg-primary: oklch(0.15 0.005 250);
-  --tekton-fg-muted: oklch(0.55 0.01 250);
+  --fg-primary: oklch(0.15 0.005 250);
+  --fg-muted: oklch(0.55 0.01 250);
 
   /* Spacing */
-  --tekton-spacing-4: 16px;
-  --tekton-spacing-8: 32px;
+  --spacing-4: 16px;
+  --spacing-8: 32px;
 
   /* ... 기타 토큰 */
 }
@@ -398,10 +398,10 @@ import { tokenVars, isTokenReference, extractTokenName } from '@framingui/ui';
 
 // 토큰 CSS 변수 참조
 const bgColor = tokenVars.bg.surface.default;
-// => 'var(--tekton-bg-surface-default)'
+// => 'var(--bg-surface-default)'
 
 // 토큰 참조 여부 확인
-isTokenReference('var(--tekton-spacing-4)'); // true
+isTokenReference('var(--spacing-4)'); // true
 isTokenReference('16px'); // false
 ```
 

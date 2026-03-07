@@ -28,8 +28,8 @@ import {
 import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { Label } from '../../components/label';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Forgot Password Template Component
@@ -46,18 +46,18 @@ export function ForgotPasswordTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
       <Card className="w-full max-w-md">
         <CardHeader>
-          {slots.logo && <div className="mb-[var(--tekton-spacing-4)]">{slots.logo}</div>}
+          {slots.logo && <div className="mb-[var(--spacing-4)]">{slots.logo}</div>}
           <CardTitle>{title}</CardTitle>
           <CardDescription>{subtitle}</CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-[var(--tekton-spacing-4)]">
+        <CardContent className="space-y-[var(--spacing-4)]">
           {/* Email Input */}
-          <div className="space-y-[var(--tekton-spacing-2)]">
+          <div className="space-y-[var(--spacing-2)]">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="Enter your email" />
           </div>
@@ -68,9 +68,9 @@ export function ForgotPasswordTemplateComponent({
 
         <CardFooter>
           {slots.footer || (
-            <p className="text-sm text-center w-full text-[var(--tekton-text-muted-foreground)]">
+            <p className="text-sm text-center w-full text-[var(--text-muted-foreground)]">
               Remember your password?{' '}
-              <a href="#" className="text-[var(--tekton-text-primary)] hover:underline">
+              <a href="#" className="text-[var(--text-primary)] hover:underline">
                 Back to login
               </a>
             </p>
@@ -85,43 +85,7 @@ export function ForgotPasswordTemplateComponent({
 /**
  * Forgot Password Template Definition
  */
-export const ForgotPasswordTemplate: ScreenTemplate = {
-  id: 'auth.forgot-password',
-  name: 'Forgot Password',
-  category: 'auth',
-  description: 'Password reset screen with email input',
-
-  skeleton: {
-    shell: 'centered-card',
-    page: 'auth-page',
-    sections: [
-      {
-        id: 'forgot-password-form',
-        name: 'Forgot Password Form',
-        slot: 'main',
-        required: true,
-        Component: ForgotPasswordTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'button_label'],
-    optional: [],
-    slots: ['logo', 'footer'],
-  },
-
-  requiredComponents: ['Button', 'Input', 'Form', 'Card', 'Label'],
-
-  Component: ForgotPasswordTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['auth', 'password', 'reset', 'forgot'],
-};
+export const ForgotPasswordTemplate = createTemplateFromCatalog(
+  'auth.forgot-password',
+  ForgotPasswordTemplateComponent
+);

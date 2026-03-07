@@ -12,6 +12,7 @@ import type {
   ComponentType,
   ValidationContext,
 } from './types.js';
+import { SCREEN_COMPONENT_TYPES } from './types.js';
 
 // ============================================================================
 // Component Type Validation
@@ -20,30 +21,7 @@ import type {
 /**
  * Component type enum - 20 component types
  */
-const COMPONENT_TYPES: ComponentType[] = [
-  // Primitive (10)
-  'Button',
-  'Input',
-  'Text',
-  'Heading',
-  'Checkbox',
-  'Radio',
-  'Switch',
-  'Slider',
-  'Badge',
-  'Avatar',
-  // Composed (10)
-  'Card',
-  'Modal',
-  'Tabs',
-  'Table',
-  'Link',
-  'List',
-  'Image',
-  'Form',
-  'Dropdown',
-  'Progress',
-];
+const COMPONENT_TYPES: ComponentType[] = [...SCREEN_COMPONENT_TYPES];
 
 // ============================================================================
 // Token ID Pattern Validation

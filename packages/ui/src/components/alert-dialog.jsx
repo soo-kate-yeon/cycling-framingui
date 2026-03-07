@@ -18,7 +18,7 @@ const AlertDialogPortal = AlertDialogPrimitive.Portal;
 const AlertDialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Overlay
     className={cn(
-      'fixed inset-0 z-50 bg-[var(--tekton-bg-background)]/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'fixed inset-0 z-50 bg-[var(--bg-background)]/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
       className
     )}
     {...props}
@@ -32,7 +32,7 @@ const AlertDialogContent = React.forwardRef(({ className, ...props }, ref) => (
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-[var(--tekton-spacing-4)] border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-background)] p-[var(--tekton-spacing-6)] shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-[var(--tekton-radius-lg)]',
+        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-[var(--spacing-4)] border border-[var(--border-default)] bg-[var(--bg-background)] p-[var(--spacing-6)] shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-[var(--radius-lg)]',
         className
       )}
       {...props}
@@ -43,7 +43,7 @@ AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 const AlertDialogHeader = ({ className, ...props }) => (
   <div
     className={cn(
-      'flex flex-col space-y-[var(--tekton-spacing-2)] text-center sm:text-left',
+      'flex flex-col space-y-[var(--spacing-2)] text-center sm:text-left',
       className
     )}
     {...props}
@@ -53,7 +53,7 @@ AlertDialogHeader.displayName = 'AlertDialogHeader';
 const AlertDialogFooter = ({ className, ...props }) => (
   <div
     className={cn(
-      'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-[var(--tekton-spacing-2)]',
+      'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-[var(--spacing-2)]',
       className
     )}
     {...props}
@@ -71,7 +71,7 @@ AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
 const AlertDialogDescription = React.forwardRef(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-[var(--tekton-bg-muted-foreground)]', className)}
+    className={cn('text-sm text-[var(--bg-muted-foreground)]', className)}
     {...props}
   />
 ));
@@ -85,7 +85,7 @@ const AlertDialogCancel = React.forwardRef(({ className, ...props }, ref) => (
     ref={ref}
     className={cn(
       buttonVariants({ variant: 'outline' }),
-      'mt-[var(--tekton-spacing-2)] sm:mt-0',
+      'mt-[var(--spacing-2)] sm:mt-0',
       className
     )}
     {...props}

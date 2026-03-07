@@ -28,7 +28,7 @@ The result? A codebase where every AI-generated component looks different.
 FramingUI provides Claude with a **structured design vocabulary** through:
 
 - **Type-safe components** from `@framingui/ui`
-- **Semantic design tokens** like `var(--tekton-bg-primary)`
+- **Semantic design tokens** like `var(--bg-primary)`
 - **Consistent patterns** enforced through component APIs
 
 ## Setup: Teaching Claude About FramingUI
@@ -58,22 +58,22 @@ Import from `@framingui/ui`:
 All styling uses CSS custom properties:
 
 **Colors:**
-- `var(--tekton-bg-primary)` - Primary brand color
-- `var(--tekton-bg-secondary)` - Secondary accent
-- `var(--tekton-bg-destructive)` - Error/danger state
-- `var(--tekton-bg-muted)` - Muted backgrounds
-- `var(--tekton-bg-accent)` - Accent highlights
-- `var(--tekton-bg-card)` - Card backgrounds
+- `var(--bg-primary)` - Primary brand color
+- `var(--bg-secondary)` - Secondary accent
+- `var(--bg-destructive)` - Error/danger state
+- `var(--bg-muted)` - Muted backgrounds
+- `var(--bg-accent)` - Accent highlights
+- `var(--bg-card)` - Card backgrounds
 
 **Spacing:**
-- `var(--tekton-spacing-1)` through `var(--tekton-spacing-8)`
+- `var(--spacing-1)` through `var(--spacing-8)`
 
 **Border Radius:**
-- `var(--tekton-radius-sm)`, `var(--tekton-radius-md)`, `var(--tekton-radius-lg)`, `var(--tekton-radius-xl)`
+- `var(--radius-sm)`, `var(--radius-md)`, `var(--radius-lg)`, `var(--radius-xl)`
 
 ### Code Generation Rules
 
-1. **Never hardcode colors** - Always use `var(--tekton-*)` tokens
+1. **Never hardcode colors** - Always use `var(--*)` tokens
 2. **Import from @framingui/ui** - Not from local component files
 3. **Use semantic names** - `primary`, not `blue`
 4. **Prefer components over HTML** - Use `<Button>` instead of `<button>`
@@ -139,7 +139,7 @@ export function ProfileCard({ name, email }: ProfileCardProps) {
         <CardTitle>{name}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">{email}</p>
+        <p className="text-sm text-[var(--bg-muted-foreground)]">{email}</p>
       </CardContent>
       <CardFooter>
         <Button variant="default">Edit Profile</Button>
@@ -151,7 +151,7 @@ export function ProfileCard({ name, email }: ProfileCardProps) {
 
 **Benefits:**
 - Uses FramingUI Card components
-- Semantic tokens: `var(--tekton-bg-muted-foreground)`
+- Semantic tokens: `var(--bg-muted-foreground)`
 - Automatically adapts to theme
 - Consistent with other components
 
@@ -181,24 +181,24 @@ const stats = [
 
 export function StatsGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--tekton-spacing-4)]">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--spacing-4)]">
       {stats.map((stat) => (
         <Card key={stat.title}>
-          <CardContent className="p-[var(--tekton-spacing-6)]">
+          <CardContent className="p-[var(--spacing-6)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+                <p className="text-sm text-[var(--bg-muted-foreground)]">
                   {stat.title}
                 </p>
-                <p className="text-2xl font-bold mt-[var(--tekton-spacing-2)]">
+                <p className="text-2xl font-bold mt-[var(--spacing-2)]">
                   {stat.value}
                 </p>
-                <p className="text-sm text-[var(--tekton-bg-primary)] mt-[var(--tekton-spacing-1)]">
+                <p className="text-sm text-[var(--bg-primary)] mt-[var(--spacing-1)]">
                   {stat.change}
                 </p>
               </div>
-              <div className="p-[var(--tekton-spacing-3)] bg-[var(--tekton-bg-primary)]/10 rounded-[var(--tekton-radius-lg)]">
-                <stat.icon className="w-6 h-6 text-[var(--tekton-bg-primary)]" />
+              <div className="p-[var(--spacing-3)] bg-[var(--bg-primary)]/10 rounded-[var(--radius-lg)]">
+                <stat.icon className="w-6 h-6 text-[var(--bg-primary)]" />
               </div>
             </div>
           </CardContent>
@@ -249,7 +249,7 @@ export function UsersTable() {
             {users.map((user) => (
               <TableRow key={user.email}>
                 <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell className="text-[var(--tekton-bg-muted-foreground)]">
+                <TableCell className="text-[var(--bg-muted-foreground)]">
                   {user.email}
                 </TableCell>
                 <TableCell>{user.role}</TableCell>
@@ -303,14 +303,14 @@ Create a dashboard layout with sidebar and header using our custom tokens
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen">
-      <aside className="w-[var(--app-sidebar-width)] border-r border-[var(--tekton-border-default)]">
+      <aside className="w-[var(--app-sidebar-width)] border-r border-[var(--border-default)]">
         {/* Sidebar content */}
       </aside>
       <div className="flex-1 flex flex-col">
-        <header className="h-[var(--app-header-height)] border-b border-[var(--tekton-border-default)]">
+        <header className="h-[var(--app-header-height)] border-b border-[var(--border-default)]">
           {/* Header content */}
         </header>
-        <main className="flex-1 overflow-auto p-[var(--tekton-spacing-6)]">
+        <main className="flex-1 overflow-auto p-[var(--spacing-6)]">
           {children}
         </main>
       </div>
@@ -329,7 +329,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 ### 2. Reference Design Tokens in Prompts
 
 ❌ "Make the text gray"
-✅ "Use var(--tekton-bg-muted-foreground) for the text color"
+✅ "Use var(--bg-muted-foreground) for the text color"
 
 ### 3. Ask for Semantic Variants
 
@@ -339,7 +339,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 ### 4. Iterate with Consistency Checks
 
 ```
-Review the code and ensure all colors use var(--tekton-*) tokens
+Review the code and ensure all colors use var(--*) tokens
 ```
 
 ## Measuring Success
@@ -351,7 +351,7 @@ After setting up FramingUI with Claude, audit your components:
 grep -r "bg-blue\|text-red\|#[0-9A-F]\{6\}" src/
 
 # Check for token usage (should be everywhere)
-grep -r "var(--tekton-" src/
+grep -r "var(--" src/
 ```
 
 ## Next Steps

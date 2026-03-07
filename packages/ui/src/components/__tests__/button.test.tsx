@@ -44,7 +44,7 @@ describe('Button', () => {
     it('applies default variant when no variant is specified', () => {
       const { container } = render(<Button>Default</Button>);
       const button = container.querySelector('button');
-      expect(button?.className).toContain('bg-[var(--tekton-bg-primary)]');
+      expect(button?.className).toContain('bg-[var(--bg-primary)]');
     });
   });
 
@@ -117,25 +117,25 @@ describe('Button', () => {
     it('applies Tekton token-based styles', () => {
       render(<Button>Tokenized</Button>);
       const button = screen.getByRole('button');
-      expect(button.className).toMatch(/var\(--tekton-/);
+      expect(button.className).toMatch(/var\(--/);
     });
 
     it('uses Tekton spacing tokens', () => {
       const { container } = render(<Button>Spacing</Button>);
       const button = container.querySelector('button');
-      expect(button?.className).toContain('px-[var(--tekton-spacing-4)]');
+      expect(button?.className).toContain('px-[var(--spacing-4)]');
     });
 
     it('uses Tekton radius tokens', () => {
       const { container } = render(<Button>Radius</Button>);
       const button = container.querySelector('button');
-      expect(button?.className).toContain('rounded-[var(--tekton-radius-xl)]');
+      expect(button?.className).toContain('rounded-[var(--radius-xl)]');
     });
 
     it('uses Tekton color tokens for variants', () => {
       const { container } = render(<Button variant="destructive">Destructive</Button>);
       const button = container.querySelector('button');
-      expect(button?.className).toContain('bg-[var(--tekton-bg-destructive)]');
+      expect(button?.className).toContain('bg-[var(--bg-destructive)]');
     });
   });
 

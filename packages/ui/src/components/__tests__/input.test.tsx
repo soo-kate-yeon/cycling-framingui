@@ -153,25 +153,25 @@ describe('Input', () => {
     it('applies Tekton token-based styles', () => {
       render(<Input />);
       const input = screen.getByRole('textbox');
-      expect(input.className).toMatch(/var\(--tekton-/);
+      expect(input.className).toMatch(/var\(--/);
     });
 
     it('uses Tekton spacing tokens', () => {
       render(<Input />);
       const input = screen.getByRole('textbox');
-      expect(input.className).toContain('px-[var(--tekton-spacing-3)]');
+      expect(input.className).toContain('px-[var(--spacing-3)]');
     });
 
     it('uses Tekton radius tokens', () => {
       render(<Input />);
       const input = screen.getByRole('textbox');
-      expect(input.className).toContain('rounded-[var(--tekton-radius-md)]');
+      expect(input.className).toContain('rounded-[var(--radius-md)]');
     });
 
     it('uses Tekton border tokens', () => {
       render(<Input />);
       const input = screen.getByRole('textbox');
-      expect(input.className).toContain('border-[var(--tekton-border-input)]');
+      expect(input.className).toContain('border-[var(--border-input)]');
     });
   });
 

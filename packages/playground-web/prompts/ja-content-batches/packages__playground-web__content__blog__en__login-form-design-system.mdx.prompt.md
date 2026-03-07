@@ -234,7 +234,7 @@ export function LoginForm() {
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="space-y-[var(--tekton-spacing-4)]">
+          <CardContent className="space-y-[var(--spacing-4)]">
             <FormField
               control={form.control}
               name="email"
@@ -262,14 +262,14 @@ export function LoginForm() {
               )}
             />
           </CardContent>
-          <CardFooter className="flex flex-col space-y-[var(--tekton-spacing-4)]">
+          <CardFooter className="flex flex-col space-y-[var(--spacing-4)]">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
             <div className="text-sm text-center">
               <a
                 href="/forgot-password"
-                className="text-[var(--tekton-bg-primary)] hover:underline"
+                className="text-[var(--bg-primary)] hover:underline"
               >
                 Forgot your password?
               </a>
@@ -284,7 +284,7 @@ export function LoginForm() {
 
 ### Key Features
 
-✅ **Design Tokens**: All spacing uses `var(--tekton-spacing-*)`, colors use `var(--tekton-bg-*)`
+✅ **Design Tokens**: All spacing uses `var(--spacing-*)`, colors use `var(--bg-*)`
 ✅ **Type Safety**: Zod schema provides runtime validation + TypeScript types
 ✅ **Accessibility**: FramingUI Form components connect labels, inputs, and error messages
 ✅ **Loading States**: Button disables during submission
@@ -362,15 +362,15 @@ export function EnhancedLoginForm() {
         <CardTitle>Welcome Back</CardTitle>
         <CardDescription>Choose your preferred sign in method</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-[var(--tekton-spacing-4)]">
+      <CardContent className="space-y-[var(--spacing-4)]">
         {/* Social Login Buttons */}
-        <div className="grid grid-cols-2 gap-[var(--tekton-spacing-4)]">
+        <div className="grid grid-cols-2 gap-[var(--spacing-4)]">
           <Button variant="outline" onClick={() => handleSocialLogin('github')} type="button">
-            <Github className="mr-[var(--tekton-spacing-2)] h-4 w-4" />
+            <Github className="mr-[var(--spacing-2)] h-4 w-4" />
             GitHub
           </Button>
           <Button variant="outline" onClick={() => handleSocialLogin('google')} type="button">
-            <Mail className="mr-[var(--tekton-spacing-2)] h-4 w-4" />
+            <Mail className="mr-[var(--spacing-2)] h-4 w-4" />
             Google
           </Button>
         </div>
@@ -380,7 +380,7 @@ export function EnhancedLoginForm() {
             <Separator />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-[var(--tekton-bg-background)] px-[var(--tekton-spacing-2)] text-[var(--tekton-bg-muted-foreground)]">
+            <span className="bg-[var(--bg-background)] px-[var(--spacing-2)] text-[var(--bg-muted-foreground)]">
               Or continue with
             </span>
           </div>
@@ -390,7 +390,7 @@ export function EnhancedLoginForm() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-[var(--tekton-spacing-4)]"
+            className="space-y-[var(--spacing-4)]"
           >
             <FormField
               control={form.control}
@@ -422,11 +422,11 @@ export function EnhancedLoginForm() {
               control={form.control}
               name="remember"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-[var(--tekton-spacing-3)] space-y-0">
+                <FormItem className="flex flex-row items-start space-x-[var(--spacing-3)] space-y-0">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
-                  <div className="space-y-[var(--tekton-spacing-1)] leading-none">
+                  <div className="space-y-[var(--spacing-1)] leading-none">
                     <FormLabel>Remember me</FormLabel>
                   </div>
                 </FormItem>
@@ -439,9 +439,9 @@ export function EnhancedLoginForm() {
         </Form>
       </CardContent>
       <CardFooter className="flex justify-center">
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Don't have an account?{' '}
-          <a href="/signup" className="text-[var(--tekton-bg-primary)] hover:underline">
+          <a href="/signup" className="text-[var(--bg-primary)] hover:underline">
             Sign up
           </a>
         </p>
@@ -518,7 +518,7 @@ All FramingUI components support:
 ### Center on Page
 
 ```tsx
-<div className="flex min-h-screen items-center justify-center p-[var(--tekton-spacing-4)]">
+<div className="flex min-h-screen items-center justify-center p-[var(--spacing-4)]">
   <EnhancedLoginForm />
 </div>
 ```
@@ -551,7 +551,7 @@ async function onSubmit(data: LoginFormData) {
 // In JSX:
 {
   apiError && (
-    <p className="text-sm text-[var(--tekton-bg-destructive)]" role="alert">
+    <p className="text-sm text-[var(--bg-destructive)]" role="alert">
       {apiError}
     </p>
   );

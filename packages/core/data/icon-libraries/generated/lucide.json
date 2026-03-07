@@ -1,0 +1,261 @@
+{
+  "id": "lucide",
+  "name": "Lucide Icons",
+  "version": "0.469.0",
+  "license": "ISC",
+  "description": "Beautiful & consistent icons. Community-driven fork of Feather Icons.",
+  "website": "https://lucide.dev",
+  "totalIcons": 1500,
+  "categories": [
+    "ui",
+    "arrows",
+    "brand",
+    "communication",
+    "device",
+    "file",
+    "media",
+    "navigation",
+    "shapes",
+    "weather"
+  ],
+  "sizeMapping": {
+    "xs": 12,
+    "sm": 16,
+    "md": 24,
+    "lg": 32,
+    "xl": 48
+  },
+  "frameworks": {
+    "react": {
+      "packageName": "lucide-react",
+      "importStatement": "import { {icons} } from 'lucide-react';",
+      "componentPattern": "{PascalName}"
+    },
+    "vue": {
+      "packageName": "lucide-vue-next",
+      "importStatement": "import { {icons} } from 'lucide-vue-next';",
+      "componentPattern": "{PascalName}"
+    }
+  },
+  "icons": {
+    "home": { "aliases": ["house"], "category": "navigation", "tags": ["building", "main"] },
+    "search": {
+      "aliases": ["magnifying-glass", "find"],
+      "category": "ui",
+      "tags": ["look", "query"]
+    },
+    "user": { "aliases": ["person", "profile"], "category": "ui", "tags": ["avatar", "account"] },
+    "settings": { "aliases": ["cog", "gear"], "category": "ui", "tags": ["config", "preferences"] },
+    "menu": {
+      "aliases": ["hamburger", "bars"],
+      "category": "navigation",
+      "tags": ["nav", "toggle"]
+    },
+    "x": { "aliases": ["close", "cancel"], "category": "ui", "tags": ["dismiss", "remove"] },
+    "check": { "aliases": ["checkmark", "tick"], "category": "ui", "tags": ["done", "complete"] },
+    "plus": { "aliases": ["add", "new"], "category": "ui", "tags": ["create", "insert"] },
+    "minus": { "aliases": ["subtract", "remove"], "category": "ui", "tags": ["delete", "less"] },
+    "chevron-left": { "aliases": ["back", "previous"], "category": "arrows", "tags": ["nav"] },
+    "chevron-right": { "aliases": ["forward", "next"], "category": "arrows", "tags": ["nav"] },
+    "chevron-up": { "aliases": ["collapse", "less"], "category": "arrows", "tags": ["nav"] },
+    "chevron-down": { "aliases": ["expand", "more"], "category": "arrows", "tags": ["nav"] },
+    "arrow-left": { "aliases": ["back"], "category": "arrows", "tags": ["direction"] },
+    "arrow-right": { "aliases": ["forward"], "category": "arrows", "tags": ["direction"] },
+    "arrow-up": { "aliases": ["up"], "category": "arrows", "tags": ["direction"] },
+    "arrow-down": { "aliases": ["down"], "category": "arrows", "tags": ["direction"] },
+    "heart": { "aliases": ["like", "favorite"], "category": "ui", "tags": ["love", "health"] },
+    "star": { "aliases": ["rating", "bookmark"], "category": "ui", "tags": ["review", "favorite"] },
+    "bell": {
+      "aliases": ["notification", "alert"],
+      "category": "communication",
+      "tags": ["notify"]
+    },
+    "mail": {
+      "aliases": ["email", "envelope"],
+      "category": "communication",
+      "tags": ["message", "inbox"]
+    },
+    "phone": {
+      "aliases": ["call", "mobile"],
+      "category": "device",
+      "tags": ["contact", "telephone"]
+    },
+    "calendar": { "aliases": ["date", "schedule"], "category": "ui", "tags": ["event", "time"] },
+    "clock": { "aliases": ["time", "timer"], "category": "ui", "tags": ["duration", "watch"] },
+    "map-pin": {
+      "aliases": ["location", "marker"],
+      "category": "navigation",
+      "tags": ["place", "gps"]
+    },
+    "shopping-cart": {
+      "aliases": ["cart", "basket"],
+      "category": "ui",
+      "tags": ["commerce", "buy"]
+    },
+    "credit-card": {
+      "aliases": ["payment", "card"],
+      "category": "ui",
+      "tags": ["finance", "money"]
+    },
+    "download": { "aliases": ["save", "export"], "category": "ui", "tags": ["arrow-down"] },
+    "upload": { "aliases": ["import"], "category": "ui", "tags": ["arrow-up"] },
+    "trash-2": { "aliases": ["delete", "remove"], "category": "ui", "tags": ["bin", "garbage"] },
+    "edit": { "aliases": ["pencil", "modify"], "category": "ui", "tags": ["write", "change"] },
+    "copy": { "aliases": ["duplicate", "clone"], "category": "ui", "tags": ["paste"] },
+    "share-2": {
+      "aliases": ["share", "send"],
+      "category": "communication",
+      "tags": ["social", "forward"]
+    },
+    "filter": { "aliases": ["funnel", "sort"], "category": "ui", "tags": ["refine"] },
+    "eye": { "aliases": ["view", "visible", "show"], "category": "ui", "tags": ["see", "watch"] },
+    "eye-off": { "aliases": ["hide", "invisible"], "category": "ui", "tags": ["hidden", "blind"] },
+    "lock": { "aliases": ["secure", "locked"], "category": "ui", "tags": ["security", "private"] },
+    "unlock": { "aliases": ["open"], "category": "ui", "tags": ["access"] },
+    "image": { "aliases": ["photo", "picture"], "category": "media", "tags": ["gallery", "img"] },
+    "video": { "aliases": ["movie", "film"], "category": "media", "tags": ["play", "record"] },
+    "music": { "aliases": ["audio", "sound"], "category": "media", "tags": ["song", "note"] },
+    "file": { "aliases": ["document", "paper"], "category": "file", "tags": ["doc"] },
+    "folder": { "aliases": ["directory"], "category": "file", "tags": ["organize", "group"] },
+    "bookmark": { "aliases": ["save", "favorite"], "category": "ui", "tags": ["mark", "flag"] },
+    "link": { "aliases": ["url", "chain"], "category": "ui", "tags": ["hyperlink", "connect"] },
+    "external-link": {
+      "aliases": ["new-tab", "open-external"],
+      "category": "ui",
+      "tags": ["launch"]
+    },
+    "refresh-cw": { "aliases": ["reload", "sync"], "category": "ui", "tags": ["update", "rotate"] },
+    "info": { "aliases": ["information", "about"], "category": "ui", "tags": ["help", "details"] },
+    "alert-circle": {
+      "aliases": ["warning", "error"],
+      "category": "ui",
+      "tags": ["danger", "caution"]
+    },
+    "check-circle": {
+      "aliases": ["success", "done"],
+      "category": "ui",
+      "tags": ["complete", "valid"]
+    },
+    "x-circle": { "aliases": ["error", "failed"], "category": "ui", "tags": ["cancel", "invalid"] },
+    "help-circle": {
+      "aliases": ["question", "faq"],
+      "category": "ui",
+      "tags": ["support", "info"]
+    },
+    "sun": { "aliases": ["light", "day"], "category": "weather", "tags": ["bright", "theme"] },
+    "moon": { "aliases": ["dark", "night"], "category": "weather", "tags": ["theme", "sleep"] },
+    "globe": { "aliases": ["world", "earth"], "category": "ui", "tags": ["international", "web"] },
+    "log-out": { "aliases": ["logout", "exit"], "category": "ui", "tags": ["leave", "signout"] },
+    "log-in": { "aliases": ["login", "enter"], "category": "ui", "tags": ["signin", "access"] },
+    "users": { "aliases": ["team", "group"], "category": "ui", "tags": ["people", "members"] },
+    "message-circle": {
+      "aliases": ["chat", "comment"],
+      "category": "communication",
+      "tags": ["bubble", "talk"]
+    },
+    "send": {
+      "aliases": ["submit", "paper-plane"],
+      "category": "communication",
+      "tags": ["post", "deliver"]
+    },
+    "inbox": {
+      "aliases": ["mailbox"],
+      "category": "communication",
+      "tags": ["receive", "messages"]
+    },
+    "archive": { "aliases": ["storage"], "category": "file", "tags": ["save", "store"] },
+    "tag": { "aliases": ["label"], "category": "ui", "tags": ["mark", "category"] },
+    "hash": { "aliases": ["hashtag", "number"], "category": "ui", "tags": ["pound", "topic"] },
+    "at-sign": {
+      "aliases": ["mention", "email"],
+      "category": "communication",
+      "tags": ["address"]
+    },
+    "paperclip": {
+      "aliases": ["attachment", "attach"],
+      "category": "ui",
+      "tags": ["file", "clip"]
+    },
+    "camera": { "aliases": ["photo"], "category": "device", "tags": ["picture", "capture"] },
+    "mic": {
+      "aliases": ["microphone", "voice"],
+      "category": "device",
+      "tags": ["audio", "record"]
+    },
+    "volume-2": { "aliases": ["sound", "speaker"], "category": "media", "tags": ["audio", "loud"] },
+    "volume-x": { "aliases": ["mute", "silent"], "category": "media", "tags": ["quiet", "off"] },
+    "play": { "aliases": ["start"], "category": "media", "tags": ["begin", "run"] },
+    "pause": { "aliases": ["stop"], "category": "media", "tags": ["halt", "wait"] },
+    "skip-forward": { "aliases": ["next"], "category": "media", "tags": ["forward"] },
+    "skip-back": { "aliases": ["previous"], "category": "media", "tags": ["rewind"] },
+    "maximize-2": { "aliases": ["fullscreen", "expand"], "category": "ui", "tags": ["enlarge"] },
+    "minimize-2": {
+      "aliases": ["exit-fullscreen", "shrink"],
+      "category": "ui",
+      "tags": ["reduce"]
+    },
+    "grid": { "aliases": ["table", "layout"], "category": "ui", "tags": ["gallery", "matrix"] },
+    "list": { "aliases": ["rows", "lines"], "category": "ui", "tags": ["items", "menu"] },
+    "layers": { "aliases": ["stack"], "category": "ui", "tags": ["group", "combine"] },
+    "layout": { "aliases": ["template"], "category": "ui", "tags": ["design", "structure"] },
+    "sidebar": { "aliases": ["panel"], "category": "ui", "tags": ["navigation", "menu"] },
+    "sliders": {
+      "aliases": ["controls", "adjustments"],
+      "category": "ui",
+      "tags": ["settings", "tune"]
+    },
+    "trending-up": {
+      "aliases": ["growth", "increase"],
+      "category": "ui",
+      "tags": ["chart", "positive"]
+    },
+    "trending-down": {
+      "aliases": ["decline", "decrease"],
+      "category": "ui",
+      "tags": ["chart", "negative"]
+    },
+    "bar-chart-2": {
+      "aliases": ["analytics", "stats"],
+      "category": "ui",
+      "tags": ["data", "graph"]
+    },
+    "pie-chart": { "aliases": ["donut"], "category": "ui", "tags": ["data", "percentage"] },
+    "activity": {
+      "aliases": ["pulse", "health"],
+      "category": "ui",
+      "tags": ["heartbeat", "monitor"]
+    },
+    "zap": { "aliases": ["flash", "lightning"], "category": "ui", "tags": ["power", "energy"] },
+    "shield": {
+      "aliases": ["security", "protection"],
+      "category": "ui",
+      "tags": ["safe", "guard"]
+    },
+    "key": { "aliases": ["password", "access"], "category": "ui", "tags": ["unlock", "auth"] },
+    "gift": { "aliases": ["present"], "category": "ui", "tags": ["reward", "bonus"] },
+    "award": {
+      "aliases": ["trophy", "medal"],
+      "category": "ui",
+      "tags": ["winner", "achievement"]
+    },
+    "flag": { "aliases": ["report", "mark"], "category": "ui", "tags": ["country", "alert"] },
+    "thumbs-up": { "aliases": ["like", "approve"], "category": "ui", "tags": ["positive", "good"] },
+    "thumbs-down": {
+      "aliases": ["dislike", "disapprove"],
+      "category": "ui",
+      "tags": ["negative", "bad"]
+    },
+    "smile": { "aliases": ["happy", "emoji"], "category": "ui", "tags": ["face", "positive"] },
+    "frown": { "aliases": ["sad", "unhappy"], "category": "ui", "tags": ["face", "negative"] },
+    "more-horizontal": {
+      "aliases": ["ellipsis", "dots"],
+      "category": "ui",
+      "tags": ["menu", "options"]
+    },
+    "more-vertical": {
+      "aliases": ["kebab", "dots-vertical"],
+      "category": "ui",
+      "tags": ["menu", "options"]
+    }
+  }
+}

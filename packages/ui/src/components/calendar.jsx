@@ -24,31 +24,31 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
         months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
         month: 'space-y-4',
         caption: 'flex justify-center pt-1 relative items-center',
-        caption_label: 'text-sm font-medium text-[var(--tekton-bg-foreground)]',
+        caption_label: 'text-sm font-medium text-[var(--bg-foreground)]',
         nav: 'space-x-1 flex items-center',
         nav_button: cn(
-          'inline-flex items-center justify-center whitespace-nowrap rounded-[var(--tekton-radius-md)] text-sm font-medium ring-offset-[var(--tekton-bg-background)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-[var(--tekton-bg-accent)] hover:text-[var(--tekton-bg-accent-foreground)] h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+          'inline-flex items-center justify-center whitespace-nowrap rounded-[var(--radius-md)] text-sm font-medium ring-offset-[var(--bg-background)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-[var(--bg-accent)] hover:text-[var(--bg-accent-foreground)] h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
         ),
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
         table: 'w-full border-collapse space-y-1',
         head_row: 'flex',
         head_cell:
-          'text-[var(--tekton-text-muted-foreground)] rounded-[var(--tekton-radius-md)] w-9 font-normal text-[0.8rem]',
+          'text-[var(--text-muted-foreground)] rounded-[var(--radius-md)] w-9 font-normal text-[0.8rem]',
         row: 'flex w-full mt-2',
-        cell: 'h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-[var(--tekton-radius-md)] [&:has([aria-selected].day-outside)]:bg-[var(--tekton-bg-accent)]/50 [&:has([aria-selected])]:bg-[var(--tekton-bg-accent)] first:[&:has([aria-selected])]:rounded-l-[var(--tekton-radius-md)] last:[&:has([aria-selected])]:rounded-r-[var(--tekton-radius-md)] focus-within:relative focus-within:z-20',
+        cell: 'h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-[var(--radius-md)] [&:has([aria-selected].day-outside)]:bg-[var(--bg-accent)]/50 [&:has([aria-selected])]:bg-[var(--bg-accent)] first:[&:has([aria-selected])]:rounded-l-[var(--radius-md)] last:[&:has([aria-selected])]:rounded-r-[var(--radius-md)] focus-within:relative focus-within:z-20',
         day: cn(
-          'inline-flex items-center justify-center whitespace-nowrap rounded-[var(--tekton-radius-md)] text-sm font-medium ring-offset-[var(--tekton-bg-background)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-[var(--tekton-bg-accent)] hover:text-[var(--tekton-bg-accent-foreground)] h-9 w-9 p-0 font-normal aria-selected:opacity-100'
+          'inline-flex items-center justify-center whitespace-nowrap rounded-[var(--radius-md)] text-sm font-medium ring-offset-[var(--bg-background)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-[var(--bg-accent)] hover:text-[var(--bg-accent-foreground)] h-9 w-9 p-0 font-normal aria-selected:opacity-100'
         ),
         day_range_end: 'day-range-end',
         day_selected:
-          'bg-[var(--tekton-bg-primary)] text-[var(--tekton-bg-primary-foreground)] hover:bg-[var(--tekton-bg-primary)] hover:text-[var(--tekton-bg-primary-foreground)] focus:bg-[var(--tekton-bg-primary)] focus:text-[var(--tekton-bg-primary-foreground)]',
-        day_today: 'bg-[var(--tekton-bg-accent)] text-[var(--tekton-bg-accent-foreground)]',
+          'bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)] hover:bg-[var(--bg-primary)] hover:text-[var(--bg-primary-foreground)] focus:bg-[var(--bg-primary)] focus:text-[var(--bg-primary-foreground)]',
+        day_today: 'bg-[var(--bg-accent)] text-[var(--bg-accent-foreground)]',
         day_outside:
-          'day-outside text-[var(--tekton-text-muted-foreground)] opacity-50 aria-selected:bg-[var(--tekton-bg-accent)]/50 aria-selected:text-[var(--tekton-text-muted-foreground)] aria-selected:opacity-30',
-        day_disabled: 'text-[var(--tekton-text-muted-foreground)] opacity-50',
+          'day-outside text-[var(--text-muted-foreground)] opacity-50 aria-selected:bg-[var(--bg-accent)]/50 aria-selected:text-[var(--text-muted-foreground)] aria-selected:opacity-30',
+        day_disabled: 'text-[var(--text-muted-foreground)] opacity-50',
         day_range_middle:
-          'aria-selected:bg-[var(--tekton-bg-accent)] aria-selected:text-[var(--tekton-bg-accent-foreground)]',
+          'aria-selected:bg-[var(--bg-accent)] aria-selected:text-[var(--bg-accent-foreground)]',
         day_hidden: 'invisible',
         ...classNames,
       }}

@@ -16,7 +16,7 @@ import { cn } from '../lib/utils';
 const RadioGroup = React.forwardRef(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Root
-      className={cn('grid gap-[var(--tekton-spacing-2)]', className)}
+      className={cn('grid gap-[var(--spacing-2)]', className)}
       {...props}
       ref={ref}
     />
@@ -28,7 +28,7 @@ const RadioGroupItem = React.forwardRef(({ className, ...props }, ref) => {
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        'aspect-square h-4 w-4 rounded-[var(--tekton-radius-full)] border border-[var(--tekton-border-input)] text-[var(--tekton-bg-primary)] ring-offset-[var(--tekton-bg-background)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        'aspect-square h-4 w-4 rounded-[var(--radius-full)] border border-[var(--border-input)] text-[var(--bg-primary)] ring-offset-[var(--bg-background)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
       {...props}

@@ -19,13 +19,13 @@ import { PreviewBanner } from '../PreviewBanner';
 
 // Editorial Tech fallback tokens - Pure Grayscale, Airy Canvas
 const EDITORIAL_TECH_FALLBACK: Record<string, string> = {
-  '--tekton-bg-canvas': '#FFFFFF',
-  '--tekton-text-primary': '#171717',
-  '--tekton-text-secondary': '#737373',
-  '--tekton-border-default': '#F5F5F5',
-  '--tekton-radius-none': '0px',
-  '--tekton-radius-full': '9999px',
-  '--tekton-font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+  '--bg-canvas': '#FFFFFF',
+  '--text-primary': '#171717',
+  '--text-secondary': '#737373',
+  '--border-default': '#F5F5F5',
+  '--radius-none': '0px',
+  '--radius-full': '9999px',
+  '--font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
 };
 
 export function EditorialTechSolutionsPage() {

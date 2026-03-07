@@ -9,16 +9,16 @@ import { PreviewBanner } from '../PreviewBanner';
 
 // Classic Magazine fallback tokens
 const CLASSIC_MAGAZINE_FALLBACK: Record<string, string> = {
-  '--tekton-bg-canvas': '#FFFFFF',
-  '--tekton-text-primary': '#000000',
-  '--tekton-border-default': '#E5E5E5',
-  '--tekton-radius-none': '0px',
-  '--tekton-radius-sm': '0px',
-  '--tekton-radius-md': '0px',
-  '--tekton-radius-lg': '0px',
-  '--tekton-font-serif': 'Merriweather, Georgia, serif',
-  '--tekton-font-display': 'Playfair Display, serif',
-  '--tekton-color-accent': '#E11D48',
+  '--bg-canvas': '#FFFFFF',
+  '--text-primary': '#000000',
+  '--border-default': '#E5E5E5',
+  '--radius-none': '0px',
+  '--radius-sm': '0px',
+  '--radius-md': '0px',
+  '--radius-lg': '0px',
+  '--font-serif': 'Merriweather, Georgia, serif',
+  '--font-display': 'Playfair Display, serif',
+  '--color-accent': '#E11D48',
 };
 
 export function ClassicMagazineArticlePage() {

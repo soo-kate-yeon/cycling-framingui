@@ -106,7 +106,7 @@ export const WithHelperText = {
     <div className="grid w-full max-w-sm items-center gap-1.5">
       <Label htmlFor="email-2">Email</Label>
       <Input type="email" id="email-2" placeholder="Email" />
-      <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+      <p className="text-sm text-[var(--bg-muted-foreground)]">
         We'll never share your email.
       </p>
     </div>
@@ -123,11 +123,11 @@ export const WithError = {
         type="email"
         id="email-3"
         placeholder="Email"
-        className="border-[var(--tekton-bg-destructive)]"
+        className="border-[var(--bg-destructive)]"
         aria-invalid="true"
         aria-describedby="email-error"
       />
-      <p id="email-error" className="text-sm text-[var(--tekton-bg-destructive)]">
+      <p id="email-error" className="text-sm text-[var(--bg-destructive)]">
         Please enter a valid email address.
       </p>
     </div>

@@ -213,7 +213,7 @@ describe('RadioGroup', () => {
         </RadioGroup>
       );
       const group = container.firstChild;
-      expect(group.className).toContain('gap-[var(--tekton-spacing-2)]');
+      expect(group.className).toContain('gap-[var(--spacing-2)]');
     });
     it('applies Tekton token-based styles to RadioGroupItem', () => {
       render(
@@ -222,7 +222,7 @@ describe('RadioGroup', () => {
         </RadioGroup>
       );
       const radio = screen.getByRole('radio');
-      expect(radio.className).toMatch(/var\(--tekton-/);
+      expect(radio.className).toMatch(/var\(--/);
     });
     it('uses Tekton radius tokens', () => {
       render(
@@ -231,7 +231,7 @@ describe('RadioGroup', () => {
         </RadioGroup>
       );
       const radio = screen.getByLabelText('Option');
-      expect(radio.className).toContain('rounded-[var(--tekton-radius-full)]');
+      expect(radio.className).toContain('rounded-[var(--radius-full)]');
     });
     it('uses Tekton border tokens', () => {
       render(
@@ -240,7 +240,7 @@ describe('RadioGroup', () => {
         </RadioGroup>
       );
       const radio = screen.getByLabelText('Option');
-      expect(radio.className).toContain('border-[var(--tekton-border-input)]');
+      expect(radio.className).toContain('border-[var(--border-input)]');
     });
     it('uses Tekton color tokens', () => {
       render(
@@ -249,7 +249,7 @@ describe('RadioGroup', () => {
         </RadioGroup>
       );
       const radio = screen.getByLabelText('Option');
-      expect(radio.className).toContain('text-[var(--tekton-bg-primary)]');
+      expect(radio.className).toContain('text-[var(--bg-primary)]');
     });
   });
   // Additional Edge Cases

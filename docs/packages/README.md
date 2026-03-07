@@ -11,6 +11,7 @@ FramingUI는 **디자인 토큰 기반의 엔드투엔드 UI 디자인 시스템
 - `mcp-server` exposes Tekton capabilities to AI agents, while `esbuild-plugin` enforces token compliance at build time.
 - Use this page to understand dependency direction before choosing integration points.
 - For implementation details, jump from this page to each package-specific doc.
+- For consumer install and upgrade commands, see [Install And Update Guide](./install-update.md).
 
 ---
 
@@ -122,3 +123,4 @@ Claude Code의 `.claude/mcp.json`에 설정을 추가하면, AI가 Tekton 디자
 - [**@framingui/styled**](./styled.md) - 토큰 강제 styled-components 래퍼
 - [**@framingui/esbuild-plugin**](./esbuild-plugin.md) - 빌드 타임 토큰 검증
 - [**@framingui/mcp-server**](./mcp-server.md) - Claude Code MCP 서버
+- [**Install And Update Guide**](./install-update.md) - consumer install, update, and troubleshooting

@@ -43,6 +43,8 @@ vi.mock('@/lib/supabase/client', () => ({
 Object.defineProperty(window, 'location', {
   value: {
     origin: 'http://localhost:3000',
+    search: '',
+    assign: vi.fn(),
   },
   writable: true,
 });
@@ -69,9 +71,14 @@ describe('signInWithGoogle', () => {
           access_type: 'offline',
           prompt: 'consent',
         },
+        skipBrowserRedirect: true,
       },
     });
-    expect(result.url).toBe(mockUrl);
+    expect(result.url).toContain('https://accounts.google.com/o/oauth2/auth');
+    expect(result.url).toContain(
+      `redirect_to=${encodeURIComponent('http://localhost:3000/auth/callback')}`
+    );
+    expect(window.location.assign).toHaveBeenCalledWith(result.url);
     expect(result.error).toBeNull();
   });
 
@@ -122,9 +129,15 @@ describe('signInWithGitHub', () => {
       provider: 'github',
       options: {
         redirectTo: 'http://localhost:3000/auth/callback',
+        queryParams: undefined,
+        skipBrowserRedirect: true,
       },
     });
-    expect(result.url).toBe(mockUrl);
+    expect(result.url).toContain('https://github.com/login/oauth/authorize');
+    expect(result.url).toContain(
+      `redirect_to=${encodeURIComponent('http://localhost:3000/auth/callback')}`
+    );
+    expect(window.location.assign).toHaveBeenCalledWith(result.url);
     expect(result.error).toBeNull();
   });
 

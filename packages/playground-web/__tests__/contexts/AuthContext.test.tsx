@@ -12,14 +12,18 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import type { Session, User } from '@supabase/supabase-js';
 import type { UserLicense } from '@/lib/db/types';
 
+const { mockAuthHelperOnAuthStateChange, authCallbackRef } = vi.hoisted(() => ({
+  mockAuthHelperOnAuthStateChange: vi.fn(),
+  authCallbackRef: {
+    current: null as ((event: string, session: Session | null) => void) | null,
+  },
+}));
+
 // Mock Supabase client
 const mockSignInWithOAuth = vi.fn();
 const mockSignOut = vi.fn();
 const mockGetSession = vi.fn();
 const mockFrom = vi.fn();
-const mockSelect = vi.fn();
-const mockEq = vi.fn();
-const mockOrder = vi.fn();
 const mockOnAuthStateChange = vi.fn();
 
 vi.mock('@/lib/supabase/client', () => ({
@@ -40,8 +44,9 @@ vi.mock('@/lib/auth/supabase-auth', () => ({
   signInWithGitHub: vi.fn().mockResolvedValue({ url: 'https://github.com/oauth', error: null }),
   signOut: vi.fn().mockResolvedValue({ error: null }),
   onAuthStateChange: vi.fn((callback) => {
-    mockOnAuthStateChange.mockImplementation(callback);
-    return vi.fn(); // unsubscribe function
+    authCallbackRef.current = callback;
+    mockAuthHelperOnAuthStateChange(callback);
+    return vi.fn();
   }),
 }));
 
@@ -84,12 +89,16 @@ describe('AuthProvider', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    authCallbackRef.current = null;
 
-    // Setup mock chain for license fetching
-    mockFrom.mockReturnValue({ select: mockSelect });
-    mockSelect.mockReturnValue({ eq: mockEq });
-    mockEq.mockReturnValue({ order: mockOrder });
-    mockOrder.mockResolvedValue({ data: [], error: null });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: [] }),
+        text: async () => '',
+      })
+    );
 
     // Setup onAuthStateChange to return unsubscribe function
     mockOnAuthStateChange.mockReturnValue({
@@ -139,10 +148,14 @@ describe('AuthProvider', () => {
       error: null,
     });
 
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
@@ -227,10 +240,14 @@ describe('useAuth hook', () => {
       error: null,
     });
 
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
@@ -336,10 +353,14 @@ describe('logout function', () => {
       data: { session: mockSession },
       error: null,
     });
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
     mockOnAuthStateChange.mockReturnValue({
       data: { subscription: { unsubscribe: vi.fn() } },
     });
@@ -399,10 +420,14 @@ describe('hasLicense function', () => {
       data: { session: mockSession },
       error: null,
     });
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
     mockOnAuthStateChange.mockReturnValue({
       data: { subscription: { unsubscribe: vi.fn() } },
     });
@@ -460,10 +485,14 @@ describe('toggleLike function', () => {
       data: { session: mockSession },
       error: null,
     });
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
     mockOnAuthStateChange.mockReturnValue({
       data: { subscription: { unsubscribe: vi.fn() } },
     });
@@ -518,19 +547,22 @@ describe('onAuthStateChange listener', () => {
       error: null,
     });
 
-    mockOnAuthStateChange.mockImplementation((cb) => {
-      authCallback = cb;
-      return {
-        data: { subscription: { unsubscribe: vi.fn() } },
-      };
-    });
+    authCallback = ((event: string, session: Session | null) =>
+      authCallbackRef.current?.(event as any, session)) as (
+      event: string,
+      session: Session | null
+    ) => void;
   });
 
   it('should update user state on SIGNED_IN event', async () => {
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
@@ -556,10 +588,14 @@ describe('onAuthStateChange listener', () => {
       error: null,
     });
 
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
@@ -585,10 +621,14 @@ describe('onAuthStateChange listener', () => {
       error: null,
     });
 
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
@@ -617,10 +657,14 @@ describe('onAuthStateChange listener', () => {
       error: null,
     });
 
-    mockOrder.mockResolvedValue({
-      data: mockLicenses,
-      error: null,
-    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ licenses: mockLicenses }),
+        text: async () => '',
+      })
+    );
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
@@ -653,6 +697,13 @@ describe('onAuthStateChange listener', () => {
   });
 
   it('should handle auth state change errors', async () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockRejectedValue(new Error('License fetch failed'))
+    );
+
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
     });
@@ -661,15 +712,18 @@ describe('onAuthStateChange listener', () => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    // Simulate error during state change
-    mockOrder.mockRejectedValueOnce(new Error('License fetch failed'));
-
     await act(async () => {
       await authCallback('SIGNED_IN', mockSession);
     });
 
     await waitFor(() => {
-      expect(result.current.error).toBeTruthy();
+      expect(result.current.user?.id).toBe('user-123');
+      expect(result.current.userData?.licenses).toEqual([]);
+      expect(result.current.error).toBeNull();
     });
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Unexpected error fetching licenses:',
+      expect.any(Error)
+    );
   });
 });

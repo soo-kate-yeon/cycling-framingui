@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { templateRegistry } from '@framingui/ui';
+import { loadTemplateDefinition } from '@framingui/core';
 import { authenticateMcpRequest } from '@/lib/mcp/auth-helper';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const { id: templateId } = await params;
 
-    const template = templateRegistry.get(templateId);
+    const template = loadTemplateDefinition(templateId);
     if (!template) {
       return NextResponse.json(
         { success: false, error: `Template "${templateId}" not found.` },
@@ -29,7 +29,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       {
         status: 200,
         headers: {
-          'Cache-Control': 'public, s-maxage=3600',
+          'Cache-Control': 'private, no-store',
+          Vary: 'Authorization',
           ...auth.rateLimitHeaders,
         },
       }

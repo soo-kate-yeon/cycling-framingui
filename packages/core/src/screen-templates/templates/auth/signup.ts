@@ -36,9 +36,9 @@ export const SignupComponent: FC<ScreenTemplateProps> = ({ slots, className, tex
   return {
     type: 'div',
     props: {
-      className: `min-h-screen flex items-center justify-center bg-[var(--tekton-bg-base)] ${className ?? ''}`,
+      className: `min-h-screen flex items-center justify-center bg-[var(--bg-base)] ${className ?? ''}`,
       style: {
-        padding: 'var(--tekton-layout-padding-mobile)',
+        padding: 'var(--layout-padding-mobile)',
       },
     },
     children: [
@@ -47,8 +47,8 @@ export const SignupComponent: FC<ScreenTemplateProps> = ({ slots, className, tex
         props: {
           className: 'w-full max-w-md',
           style: {
-            padding: 'var(--tekton-spacing-8)',
-            gap: 'var(--tekton-spacing-6)',
+            padding: 'var(--spacing-8)',
+            gap: 'var(--spacing-6)',
           },
         },
         children: [
@@ -72,7 +72,7 @@ export const SignupComponent: FC<ScreenTemplateProps> = ({ slots, className, tex
               {
                 type: 'p',
                 props: {
-                  className: 'text-sm text-[var(--tekton-text-secondary)]',
+                  className: 'text-sm text-[var(--text-secondary)]',
                 },
                 children: [defaultTexts.subtitle],
               },
@@ -229,7 +229,7 @@ export const SignupComponent: FC<ScreenTemplateProps> = ({ slots, className, tex
           {
             type: 'div',
             props: {
-              className: 'text-center text-sm text-[var(--tekton-text-secondary)]',
+              className: 'text-center text-sm text-[var(--text-secondary)]',
             },
             children: [
               '이미 계정이 있으신가요? ',
@@ -237,7 +237,7 @@ export const SignupComponent: FC<ScreenTemplateProps> = ({ slots, className, tex
                 type: 'a',
                 props: {
                   href: '/login',
-                  className: 'text-[var(--tekton-text-link)] hover:underline',
+                  className: 'text-[var(--text-link)] hover:underline',
                 },
                 children: [defaultTexts.loginLink],
               },

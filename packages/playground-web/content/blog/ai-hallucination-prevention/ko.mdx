@@ -109,9 +109,9 @@ FramingUI는 간단한 원칙으로 AI 환각을 해결합니다:
 ### 작동 방식
 
 1. **시맨틱 토큰이 원시 값을 대체**
-   - `bg-blue-600` 대신 → `var(--tekton-bg-primary)`
-   - `p-4` 대신 → `var(--tekton-spacing-4)`
-   - `rounded-lg` 대신 → `var(--tekton-radius-lg)`
+   - `bg-blue-600` 대신 → `var(--bg-primary)`
+   - `p-4` 대신 → `var(--spacing-4)`
+   - `rounded-lg` 대신 → `var(--radius-lg)`
 
 2. **타입 안전 컴포넌트 API**
    - Button은 `className="bg-red-500"`을 허용하지 않음
@@ -184,10 +184,10 @@ import { Card, CardHeader, CardContent, Avatar, Button } from '@framingui/ui';
 
 export function SettingsPanel({ user }: SettingsPanelProps) {
   return (
-    <div className="max-w-4xl mx-auto p-[var(--tekton-spacing-6)]">
+    <div className="max-w-4xl mx-auto p-[var(--spacing-6)]">
       <Card>
-        <CardContent className="p-[var(--tekton-spacing-8)]">
-          <div className="flex items-center gap-[var(--tekton-spacing-4)] mb-[var(--tekton-spacing-6)]">
+        <CardContent className="p-[var(--spacing-8)]">
+          <div className="flex items-center gap-[var(--spacing-4)] mb-[var(--spacing-6)]">
             <Avatar
               src={user.avatar}
               alt={user.name}
@@ -195,7 +195,7 @@ export function SettingsPanel({ user }: SettingsPanelProps) {
             />
             <div>
               <h2 className="text-2xl font-bold">{user.name}</h2>
-              <p className="text-[var(--tekton-text-muted)]">{user.email}</p>
+              <p className="text-[var(--text-muted)]">{user.email}</p>
             </div>
           </div>
 
@@ -205,7 +205,7 @@ export function SettingsPanel({ user }: SettingsPanelProps) {
         </CardContent>
       </Card>
 
-      <Card className="mt-[var(--tekton-spacing-6)]">
+      <Card className="mt-[var(--spacing-6)]">
         <CardHeader>
           <h3 className="text-xl font-bold">환경설정</h3>
         </CardHeader>
@@ -218,7 +218,7 @@ export function SettingsPanel({ user }: SettingsPanelProps) {
 
 **환각 카운트:**
 - ✅ 0개의 하드코딩된 색상 (모두 시맨틱 토큰 사용)
-- ✅ 0개의 임의 간격 (모두 `var(--tekton-spacing-*)` 사용)
+- ✅ 0개의 임의 간격 (모두 `var(--spacing-*)` 사용)
 - ✅ 0개의 임의 border radius (Card 컴포넌트에서 상속)
 
 **장점:** 테마 변경, 브랜드 업데이트, 반응형 브레이크포인트에 자동 적응.
@@ -240,7 +240,7 @@ pnpm add @framingui/ui @framingui/core
 
 ## 중요: 환각 방지 규칙
 
-1. **절대 색상을 하드코딩하지 않기** — `var(--tekton-*)` 토큰만 사용
+1. **절대 색상을 하드코딩하지 않기** — `var(--*)` 토큰만 사용
 2. **Tailwind 색상을 임의로 만들지 않기** — `bg-blue-600`, `text-red-500` 등 금지
 3. **항상 @framingui/ui에서 import** — 컴포넌트를 재생성하지 않기
 4. **시맨틱 variant 사용** — `className="bg-blue-600"` 대신 `variant="primary"`
@@ -248,20 +248,20 @@ pnpm add @framingui/ui @framingui/core
 ## 사용 가능한 디자인 토큰
 
 ### 색상 (시맨틱)
-- `--tekton-bg-primary` — Primary 브랜드 색상
-- `--tekton-bg-secondary` — Secondary 액션
-- `--tekton-bg-destructive` — 에러/삭제
-- `--tekton-bg-muted` — Muted 배경
-- `--tekton-bg-accent` — 강조
-- `--tekton-text-primary` — 메인 텍스트
-- `--tekton-text-muted` — 보조 텍스트
+- `--bg-primary` — Primary 브랜드 색상
+- `--bg-secondary` — Secondary 액션
+- `--bg-destructive` — 에러/삭제
+- `--bg-muted` — Muted 배경
+- `--bg-accent` — 강조
+- `--text-primary` — 메인 텍스트
+- `--text-muted` — 보조 텍스트
 
 ### 간격 (일관된 스케일)
-- `--tekton-spacing-1`부터 `--tekton-spacing-16`까지
-- 사용: `p-[var(--tekton-spacing-4)]`
+- `--spacing-1`부터 `--spacing-16`까지
+- 사용: `p-[var(--spacing-4)]`
 
 ### Border Radius
-- `--tekton-radius-sm`, `--tekton-radius-md`, `--tekton-radius-lg`, `--tekton-radius-xl`
+- `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`
 
 ## 컴포넌트 라이브러리
 
@@ -311,24 +311,24 @@ const stats = [
 
 export function StatsGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--tekton-spacing-4)]">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--spacing-4)]">
       {stats.map((stat) => (
         <Card key={stat.title}>
-          <CardContent className="p-[var(--tekton-spacing-6)]">
+          <CardContent className="p-[var(--spacing-6)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[var(--tekton-text-muted)]">
+                <p className="text-sm text-[var(--text-muted)]">
                   {stat.title}
                 </p>
-                <p className="text-2xl font-bold mt-[var(--tekton-spacing-2)]">
+                <p className="text-2xl font-bold mt-[var(--spacing-2)]">
                   {stat.value}
                 </p>
-                <p className="text-sm text-[var(--tekton-text-primary)] mt-[var(--tekton-spacing-1)]">
+                <p className="text-sm text-[var(--text-primary)] mt-[var(--spacing-1)]">
                   {stat.change}
                 </p>
               </div>
-              <div className="p-[var(--tekton-spacing-3)] bg-[var(--tekton-bg-primary)]/10 rounded-[var(--tekton-radius-lg)]">
-                <stat.icon className="w-6 h-6 text-[var(--tekton-bg-primary)]" />
+              <div className="p-[var(--spacing-3)] bg-[var(--bg-primary)]/10 rounded-[var(--radius-lg)]">
+                <stat.icon className="w-6 h-6 text-[var(--bg-primary)]" />
               </div>
             </div>
           </CardContent>
@@ -351,7 +351,7 @@ v0 프로젝트 지침에 추가:
 
 ```
 @framingui/ui 컴포넌트를 디자인 토큰과 함께 사용:
-- 모든 색상은 var(--tekton-*) 토큰 사용
+- 모든 색상은 var(--*) 토큰 사용
 - 하드코딩된 Tailwind 색상 금지
 - @framingui/ui에서 컴포넌트 import
 ```
@@ -363,7 +363,7 @@ v0 프로젝트 지침에 추가:
 ```
 # 디자인 시스템 규칙
 - @framingui/ui에서만 UI 컴포넌트 import
-- 모든 색상과 간격에 var(--tekton-*) 디자인 토큰 사용
+- 모든 색상과 간격에 var(--*) 디자인 토큰 사용
 - 색상 하드코딩 금지: bg-blue-600, text-red-500 등 사용 불가
 - 시맨틱 variant 사용: className="bg-blue-600" 대신 variant="primary"
 ```
@@ -374,7 +374,7 @@ v0 프로젝트 지침에 추가:
 
 ```
 FramingUI 디자인 시스템 사용:
-1. 모든 색상은 var(--tekton-*) 토큰 사용
+1. 모든 색상은 var(--*) 토큰 사용
 2. @framingui/ui에서 컴포넌트 사용
 3. Tailwind 색상 하드코딩 금지
 4. 시맨틱 variant만 사용
@@ -392,7 +392,7 @@ grep -r "bg-\(blue\|red\|green\|indigo\|purple\|pink\|yellow\)" src/
 grep -r "#[0-9A-Fa-f]\{6\}" src/
 
 # 디자인 토큰 사용 찾기 (모든 곳에 있어야 함)
-grep -r "var(--tekton-" src/ | wc -l
+grep -r "var(--" src/ | wc -l
 ```
 
 **목표:** 하드코딩된 색상 0개, 토큰 사용 100%.
@@ -423,12 +423,12 @@ grep -r "var(--tekton-" src/ | wc -l
 
 ```tsx
 // ❌ 나쁨: 반은 토큰, 반은 하드코딩
-<div className="bg-[var(--tekton-bg-primary)] p-4 rounded-lg">
+<div className="bg-[var(--bg-primary)] p-4 rounded-lg">
 ```
 
 ```tsx
 // ✅ 좋음: 모두 토큰
-<div className="bg-[var(--tekton-bg-primary)] p-[var(--tekton-spacing-4)] rounded-[var(--tekton-radius-lg)]">
+<div className="bg-[var(--bg-primary)] p-[var(--spacing-4)] rounded-[var(--radius-lg)]">
 ```
 
 ### 실수 2: AI에게 시스템을 가르치지 않음

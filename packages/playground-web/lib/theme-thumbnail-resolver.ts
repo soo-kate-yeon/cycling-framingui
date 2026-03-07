@@ -54,16 +54,16 @@ function resolveRef(ref: string, tokens: any): string | null {
 }
 
 export interface ThumbnailVars {
-  '--tekton-bg-canvas': string;
-  '--tekton-bg-surface': string;
-  '--tekton-bg-secondary': string;
-  '--tekton-text-primary': string;
-  '--tekton-text-secondary': string;
-  '--tekton-text-tertiary': string;
-  '--tekton-action-primary': string;
-  '--tekton-action-primary-text': string;
-  '--tekton-border-default': string;
-  '--tekton-border-emphasis': string;
+  '--bg-canvas': string;
+  '--bg-surface': string;
+  '--bg-secondary': string;
+  '--text-primary': string;
+  '--text-secondary': string;
+  '--text-tertiary': string;
+  '--action-primary': string;
+  '--action-primary-text': string;
+  '--border-default': string;
+  '--border-emphasis': string;
   [key: string]: string; // for radius tokens
 }
 
@@ -159,22 +159,22 @@ function resolveTheme(themeJson: any): ThumbnailVars {
   if (radius && typeof radius === 'object') {
     for (const [k, v] of Object.entries(radius)) {
       if (typeof v === 'string') {
-        radiusVars[`--tekton-radius-${k}`] = v;
+        radiusVars[`--radius-${k}`] = v;
       }
     }
   }
 
   return {
-    '--tekton-bg-canvas': bgCanvas,
-    '--tekton-bg-surface': bgSurface,
-    '--tekton-bg-secondary': bgSecondary,
-    '--tekton-text-primary': textPrimary,
-    '--tekton-text-secondary': textSecondary,
-    '--tekton-text-tertiary': textTertiary,
-    '--tekton-action-primary': actionPrimary,
-    '--tekton-action-primary-text': actionPrimaryText,
-    '--tekton-border-default': borderDefault,
-    '--tekton-border-emphasis': borderEmphasis,
+    '--bg-canvas': bgCanvas,
+    '--bg-surface': bgSurface,
+    '--bg-secondary': bgSecondary,
+    '--text-primary': textPrimary,
+    '--text-secondary': textSecondary,
+    '--text-tertiary': textTertiary,
+    '--action-primary': actionPrimary,
+    '--action-primary-text': actionPrimaryText,
+    '--border-default': borderDefault,
+    '--border-emphasis': borderEmphasis,
     ...radiusVars,
   };
 }

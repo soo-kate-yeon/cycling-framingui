@@ -14,7 +14,7 @@ const Card = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      'rounded-[var(--tekton-radius-lg)] border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-card)] text-[var(--tekton-bg-card-foreground)] shadow-sm',
+      'rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--bg-card-foreground)] shadow-sm',
       className
     )}
     {...props}
@@ -25,7 +25,7 @@ const CardHeader = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      'flex flex-col space-y-[var(--tekton-spacing-2)] p-[var(--tekton-spacing-6)]',
+      'flex flex-col space-y-[var(--spacing-2)] p-[var(--spacing-6)]',
       className
     )}
     {...props}
@@ -43,19 +43,19 @@ CardTitle.displayName = 'CardTitle';
 const CardDescription = React.forwardRef(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn('text-sm text-[var(--tekton-bg-muted-foreground)]', className)}
+    className={cn('text-sm text-[var(--bg-muted-foreground)]', className)}
     {...props}
   />
 ));
 CardDescription.displayName = 'CardDescription';
 const CardContent = React.forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('p-[var(--tekton-spacing-6)] pt-0', className)} {...props} />
+  <div ref={ref} className={cn('p-[var(--spacing-6)] pt-0', className)} {...props} />
 ));
 CardContent.displayName = 'CardContent';
 const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('flex items-center p-[var(--tekton-spacing-6)] pt-0', className)}
+    className={cn('flex items-center p-[var(--spacing-6)] pt-0', className)}
     {...props}
   />
 ));

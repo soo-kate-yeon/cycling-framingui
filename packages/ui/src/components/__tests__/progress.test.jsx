@@ -114,21 +114,21 @@ describe('Progress', () => {
     it('applies Tekton token-based styles', () => {
       const { container } = render(<Progress value={50} />);
       const progress = container.firstChild;
-      expect(progress.className).toMatch(/var\(--tekton-/);
+      expect(progress.className).toMatch(/var\(--/);
     });
     it('uses Tekton radius tokens', () => {
       const { container } = render(<Progress value={50} />);
       const progress = container.firstChild;
-      expect(progress.className).toContain('rounded-[var(--tekton-radius-full)]');
+      expect(progress.className).toContain('rounded-[var(--radius-full)]');
     });
     it('uses Tekton background tokens for track', () => {
       const { container } = render(<Progress value={50} />);
       const progress = container.firstChild;
-      expect(progress.className).toContain('bg-[var(--tekton-bg-secondary)]');
+      expect(progress.className).toContain('bg-[var(--bg-secondary)]');
     });
     it('uses Tekton background tokens for indicator', () => {
       const { container } = render(<Progress value={50} />);
-      const indicator = container.querySelector('[class*="bg-[var(--tekton-bg-primary)]"]');
+      const indicator = container.querySelector('[class*="bg-[var(--bg-primary)]"]');
       expect(indicator).toBeInTheDocument();
     });
     it('has consistent sizing', () => {

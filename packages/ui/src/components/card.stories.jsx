@@ -96,7 +96,7 @@ export const WithForm = {
               <input
                 id="name"
                 placeholder="Enter your name"
-                className="flex h-10 w-full rounded-md border border-[var(--tekton-border-input)] bg-transparent px-3 py-2 text-sm"
+                className="flex h-10 w-full rounded-md border border-[var(--border-input)] bg-transparent px-3 py-2 text-sm"
               />
             </div>
             <div className="flex flex-col space-y-1.5">
@@ -107,7 +107,7 @@ export const WithForm = {
                 id="email"
                 type="email"
                 placeholder="Enter your email"
-                className="flex h-10 w-full rounded-md border border-[var(--tekton-border-input)] bg-transparent px-3 py-2 text-sm"
+                className="flex h-10 w-full rounded-md border border-[var(--border-input)] bg-transparent px-3 py-2 text-sm"
               />
             </div>
           </div>
@@ -132,7 +132,7 @@ export const Dashboard = {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">$45,231.89</div>
-        <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">+20.1% from last month</p>
+        <p className="text-xs text-[var(--bg-muted-foreground)]">+20.1% from last month</p>
       </CardContent>
     </Card>
   ),
@@ -152,7 +152,7 @@ export const Notification = {
           <span className="text-2xl">📧</span>
           <div className="flex-1 space-y-1">
             <p className="text-sm font-medium leading-none">New message</p>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+            <p className="text-sm text-[var(--bg-muted-foreground)]">
               You have a new message from John
             </p>
           </div>
@@ -161,7 +161,7 @@ export const Notification = {
           <span className="text-2xl">🔔</span>
           <div className="flex-1 space-y-1">
             <p className="text-sm font-medium leading-none">Reminder</p>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">Meeting at 3:00 PM</p>
+            <p className="text-sm text-[var(--bg-muted-foreground)]">Meeting at 3:00 PM</p>
           </div>
         </div>
       </CardContent>

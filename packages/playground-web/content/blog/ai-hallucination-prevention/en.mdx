@@ -109,9 +109,9 @@ FramingUI solves AI hallucination with a simple principle:
 ### How It Works
 
 1. **Semantic Tokens Replace Raw Values**
-   - Instead of `bg-blue-600` → `var(--tekton-bg-primary)`
-   - Instead of `p-4` → `var(--tekton-spacing-4)`
-   - Instead of `rounded-lg` → `var(--tekton-radius-lg)`
+   - Instead of `bg-blue-600` → `var(--bg-primary)`
+   - Instead of `p-4` → `var(--spacing-4)`
+   - Instead of `rounded-lg` → `var(--radius-lg)`
 
 2. **Type-Safe Component API**
    - Button doesn't accept `className="bg-red-500"`
@@ -184,10 +184,10 @@ import { Card, CardHeader, CardContent, Avatar, Button } from '@framingui/ui';
 
 export function SettingsPanel({ user }: SettingsPanelProps) {
   return (
-    <div className="max-w-4xl mx-auto p-[var(--tekton-spacing-6)]">
+    <div className="max-w-4xl mx-auto p-[var(--spacing-6)]">
       <Card>
-        <CardContent className="p-[var(--tekton-spacing-8)]">
-          <div className="flex items-center gap-[var(--tekton-spacing-4)] mb-[var(--tekton-spacing-6)]">
+        <CardContent className="p-[var(--spacing-8)]">
+          <div className="flex items-center gap-[var(--spacing-4)] mb-[var(--spacing-6)]">
             <Avatar
               src={user.avatar}
               alt={user.name}
@@ -195,7 +195,7 @@ export function SettingsPanel({ user }: SettingsPanelProps) {
             />
             <div>
               <h2 className="text-2xl font-bold">{user.name}</h2>
-              <p className="text-[var(--tekton-text-muted)]">{user.email}</p>
+              <p className="text-[var(--text-muted)]">{user.email}</p>
             </div>
           </div>
 
@@ -205,7 +205,7 @@ export function SettingsPanel({ user }: SettingsPanelProps) {
         </CardContent>
       </Card>
 
-      <Card className="mt-[var(--tekton-spacing-6)]">
+      <Card className="mt-[var(--spacing-6)]">
         <CardHeader>
           <h3 className="text-xl font-bold">Preferences</h3>
         </CardHeader>
@@ -218,7 +218,7 @@ export function SettingsPanel({ user }: SettingsPanelProps) {
 
 **Hallucination count:**
 - ✅ 0 hardcoded colors (all use semantic tokens)
-- ✅ 0 arbitrary spacing (all use `var(--tekton-spacing-*)`)
+- ✅ 0 arbitrary spacing (all use `var(--spacing-*)`)
 - ✅ 0 random border radius (inherited from Card component)
 
 **Benefit:** Automatically adapts to theme changes, brand updates, and responsive breakpoints.
@@ -240,7 +240,7 @@ Create `.claude/project-knowledge.md`:
 
 ## CRITICAL: Anti-Hallucination Rules
 
-1. **NEVER hardcode colors** — Use `var(--tekton-*)` tokens only
+1. **NEVER hardcode colors** — Use `var(--*)` tokens only
 2. **NEVER invent Tailwind colors** — No `bg-blue-600`, `text-red-500`, etc.
 3. **ALWAYS import from @framingui/ui** — Never recreate components
 4. **USE semantic variants** — `variant="primary"` not `className="bg-blue-600"`
@@ -248,20 +248,20 @@ Create `.claude/project-knowledge.md`:
 ## Available Design Tokens
 
 ### Colors (Semantic)
-- `--tekton-bg-primary` — Primary brand color
-- `--tekton-bg-secondary` — Secondary actions
-- `--tekton-bg-destructive` — Errors/deletions
-- `--tekton-bg-muted` — Muted backgrounds
-- `--tekton-bg-accent` — Highlights
-- `--tekton-text-primary` — Main text
-- `--tekton-text-muted` — Secondary text
+- `--bg-primary` — Primary brand color
+- `--bg-secondary` — Secondary actions
+- `--bg-destructive` — Errors/deletions
+- `--bg-muted` — Muted backgrounds
+- `--bg-accent` — Highlights
+- `--text-primary` — Main text
+- `--text-muted` — Secondary text
 
 ### Spacing (Consistent Scale)
-- `--tekton-spacing-1` through `--tekton-spacing-16`
-- Use: `p-[var(--tekton-spacing-4)]`
+- `--spacing-1` through `--spacing-16`
+- Use: `p-[var(--spacing-4)]`
 
 ### Border Radius
-- `--tekton-radius-sm`, `--tekton-radius-md`, `--tekton-radius-lg`, `--tekton-radius-xl`
+- `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`
 
 ## Component Library
 
@@ -311,24 +311,24 @@ const stats = [
 
 export function StatsGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--tekton-spacing-4)]">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--spacing-4)]">
       {stats.map((stat) => (
         <Card key={stat.title}>
-          <CardContent className="p-[var(--tekton-spacing-6)]">
+          <CardContent className="p-[var(--spacing-6)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[var(--tekton-text-muted)]">
+                <p className="text-sm text-[var(--text-muted)]">
                   {stat.title}
                 </p>
-                <p className="text-2xl font-bold mt-[var(--tekton-spacing-2)]">
+                <p className="text-2xl font-bold mt-[var(--spacing-2)]">
                   {stat.value}
                 </p>
-                <p className="text-sm text-[var(--tekton-text-primary)] mt-[var(--tekton-spacing-1)]">
+                <p className="text-sm text-[var(--text-primary)] mt-[var(--spacing-1)]">
                   {stat.change}
                 </p>
               </div>
-              <div className="p-[var(--tekton-spacing-3)] bg-[var(--tekton-bg-primary)]/10 rounded-[var(--tekton-radius-lg)]">
-                <stat.icon className="w-6 h-6 text-[var(--tekton-bg-primary)]" />
+              <div className="p-[var(--spacing-3)] bg-[var(--bg-primary)]/10 rounded-[var(--radius-lg)]">
+                <stat.icon className="w-6 h-6 text-[var(--bg-primary)]" />
               </div>
             </div>
           </CardContent>
@@ -351,7 +351,7 @@ Add to your v0 project instructions:
 
 ```
 Use @framingui/ui components with design tokens:
-- All colors must use var(--tekton-*) tokens
+- All colors must use var(--*) tokens
 - No hardcoded Tailwind colors allowed
 - Import components from @framingui/ui
 ```
@@ -363,7 +363,7 @@ Add to `.cursorrules`:
 ```
 # Design System Rules
 - Import UI components from @framingui/ui only
-- Use var(--tekton-*) design tokens for all colors and spacing
+- Use var(--*) design tokens for all colors and spacing
 - Never hardcode colors: no bg-blue-600, text-red-500, etc.
 - Use semantic variants: variant="primary" instead of className="bg-blue-600"
 ```
@@ -374,7 +374,7 @@ Paste this in your first message:
 
 ```
 Use FramingUI design system:
-1. All colors via var(--tekton-*) tokens
+1. All colors via var(--*) tokens
 2. Components from @framingui/ui
 3. No hardcoded Tailwind colors
 4. Semantic variants only
@@ -392,7 +392,7 @@ grep -r "bg-\(blue\|red\|green\|indigo\|purple\|pink\|yellow\)" src/
 grep -r "#[0-9A-Fa-f]\{6\}" src/
 
 # Find design token usage (should be everywhere)
-grep -r "var(--tekton-" src/ | wc -l
+grep -r "var(--" src/ | wc -l
 ```
 
 **Goal:** 0 hardcoded colors, 100% token usage.
@@ -423,12 +423,12 @@ grep -r "var(--tekton-" src/ | wc -l
 
 ```tsx
 // ❌ BAD: Half tokens, half hardcoded
-<div className="bg-[var(--tekton-bg-primary)] p-4 rounded-lg">
+<div className="bg-[var(--bg-primary)] p-4 rounded-lg">
 ```
 
 ```tsx
 // ✅ GOOD: All tokens
-<div className="bg-[var(--tekton-bg-primary)] p-[var(--tekton-spacing-4)] rounded-[var(--tekton-radius-lg)]">
+<div className="bg-[var(--bg-primary)] p-[var(--spacing-4)] rounded-[var(--radius-lg)]">
 ```
 
 ### Mistake 2: Not Teaching AI Your System

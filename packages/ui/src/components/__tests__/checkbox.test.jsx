@@ -136,27 +136,27 @@ describe('Checkbox', () => {
     it('applies Tekton token-based styles', () => {
       const { container } = render(<Checkbox />);
       const checkbox = container.firstChild;
-      expect(checkbox.className).toMatch(/var\(--tekton-/);
+      expect(checkbox.className).toMatch(/var\(--/);
     });
     it('uses Tekton radius tokens', () => {
       const { container } = render(<Checkbox />);
       const checkbox = container.firstChild;
-      expect(checkbox.className).toContain('rounded-[var(--tekton-radius-sm)]');
+      expect(checkbox.className).toContain('rounded-[var(--radius-sm)]');
     });
     it('uses Tekton border tokens', () => {
       const { container } = render(<Checkbox />);
       const checkbox = container.firstChild;
-      expect(checkbox.className).toContain('border-[var(--tekton-border-input)]');
+      expect(checkbox.className).toContain('border-[var(--border-input)]');
     });
     it('uses Tekton color tokens for checked state', () => {
       const { container } = render(<Checkbox />);
       const checkbox = container.firstChild;
-      expect(checkbox.className).toContain('data-[state=checked]:bg-[var(--tekton-bg-primary)]');
+      expect(checkbox.className).toContain('data-[state=checked]:bg-[var(--bg-primary)]');
     });
     it('uses Tekton background tokens', () => {
       const { container } = render(<Checkbox />);
       const checkbox = container.firstChild;
-      expect(checkbox.className).toContain('ring-offset-[var(--tekton-bg-background)]');
+      expect(checkbox.className).toContain('ring-offset-[var(--bg-background)]');
     });
   });
   // Additional Edge Cases

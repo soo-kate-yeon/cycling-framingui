@@ -3,8 +3,7 @@
  * SPEC-MCP-004 Phase 3.5: Validates screen definitions with helpful feedback
  */
 
-// [SPEC-MCP-007:W-001] @framingui/core import 제거, API 기반 컴포넌트 카탈로그로 대체
-import { fetchComponentList, fetchComponent } from '../api/data-client.js';
+import { fetchComponent } from '../api/data-client.js';
 import type {
   ValidateScreenDefinitionInput,
   ValidateScreenDefinitionOutput,
@@ -15,26 +14,12 @@ import type {
 } from '../schemas/mcp-schemas.js';
 import { ScreenDefinitionSchema } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
+import {
+  getScreenComponentTypes,
+  isSupportedScreenComponentType,
+} from './screen-component-contract.js';
 
-/**
- * 컴포넌트 카탈로그 로컬 캐시 (validateComponentType에서 사용)
- * API 결과를 일시적으로 저장하여 반복 검증 시 재사용
- */
-let _componentCatalogCache: string[] | null = null;
 const _componentPropsCache: Map<string, any> = new Map();
-
-async function getComponentCatalog(): Promise<string[]> {
-  if (_componentCatalogCache) {
-    return _componentCatalogCache;
-  }
-  const result = await fetchComponentList();
-  if (!result.ok) {
-    return _componentCatalogCache ?? [];
-  }
-  // API 컴포넌트는 id (소문자)로 저장, 검증에서 name (PascalCase)도 필요
-  _componentCatalogCache = result.data.map((c: any) => c.name);
-  return _componentCatalogCache;
-}
 
 async function getPropsData(componentId: string): Promise<any | null> {
   if (_componentPropsCache.has(componentId)) {
@@ -288,8 +273,7 @@ function validateSectionPattern(
 }
 
 /**
- * Validate component type (async - API 기반 카탈로그 사용)
- * [SPEC-MCP-007:W-001] @framingui/core COMPONENT_CATALOG 제거
+ * Validate component type against the shared screen contract catalog
  */
 async function validateComponentType(
   type: string,
@@ -299,40 +283,38 @@ async function validateComponentType(
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
 
-  const catalog = await getComponentCatalog();
-  // Check if component type exists in catalog (case-insensitive comparison)
-  const catalogLower = catalog.map((c: string) => c.toLowerCase());
+  const catalog = getScreenComponentTypes();
   const typeLower = type.toLowerCase();
+  const matchingType = catalog.find(componentType => componentType.toLowerCase() === typeLower);
 
-  if (!catalogLower.includes(typeLower)) {
+  if (!isSupportedScreenComponentType(matchingType ?? type)) {
     const similar = getSimilarValues(type, catalog);
 
     if (strict) {
       errors.push({
         path,
         code: 'UNKNOWN_COMPONENT',
-        message: `Unknown component type: "${type}"`,
-        expected: 'A component from @framingui/ui catalog',
+        message: `Unknown screen component type: "${type}"`,
+        expected: `One of: ${catalog.join(', ')}`,
         received: type,
         suggestion:
           similar.length > 0
             ? `Did you mean: ${similar.join(', ')}?`
-            : 'Use list-components tool to see available components',
+            : 'Use the shared screen-generation component contract',
       });
     } else {
       warnings.push({
         path,
         code: 'CUSTOM_COMPONENT',
-        message: `Component "${type}" not found in catalog - ensure it's a valid custom component`,
+        message: `Component "${type}" is outside the shared screen-generation contract`,
         recommendation:
           similar.length > 0
             ? `Did you mean: ${similar.join(', ')}?`
-            : 'Use list-components tool to see available components',
+            : `Supported screen components: ${catalog.join(', ')}`,
       });
     }
   } else {
-    // Check casing
-    const correctCase = catalog.find((c: string) => c.toLowerCase() === typeLower);
+    const correctCase = matchingType;
     if (correctCase && correctCase !== type) {
       warnings.push({
         path,

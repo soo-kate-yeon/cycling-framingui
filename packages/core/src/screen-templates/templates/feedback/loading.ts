@@ -17,7 +17,7 @@ export const LoadingComponent: FC<ScreenTemplateProps> = ({ className, texts }) 
   return {
     type: 'div',
     props: {
-      className: `min-h-screen flex items-center justify-center bg-[var(--tekton-bg-base)] ${className ?? ''}`,
+      className: `min-h-screen flex items-center justify-center bg-[var(--bg-base)] ${className ?? ''}`,
     },
     children: [
       {
@@ -35,7 +35,7 @@ export const LoadingComponent: FC<ScreenTemplateProps> = ({ className, texts }) 
           {
             type: 'p',
             props: {
-              className: 'text-sm text-[var(--tekton-text-secondary)]',
+              className: 'text-sm text-[var(--text-secondary)]',
             },
             children: [defaultTexts.message],
           },

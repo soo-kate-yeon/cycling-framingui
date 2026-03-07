@@ -26,8 +26,8 @@ import {
   CardTitle,
 } from '../../components/card';
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Verification Template Component
@@ -47,18 +47,18 @@ export function VerificationTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
       <Card className="w-full max-w-md">
         <CardHeader>
-          {slots.icon && <div className="mb-[var(--tekton-spacing-4)]">{slots.icon}</div>}
+          {slots.icon && <div className="mb-[var(--spacing-4)]">{slots.icon}</div>}
           <CardTitle>{title}</CardTitle>
           <CardDescription>{subtitle}</CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-[var(--tekton-spacing-4)]">
+        <CardContent className="space-y-[var(--spacing-4)]">
           {/* Email Display */}
-          <div className="bg-[var(--tekton-bg-muted)] p-[var(--tekton-spacing-3)] rounded-[var(--tekton-radius-md)] text-center">
+          <div className="bg-[var(--bg-muted)] p-[var(--spacing-3)] rounded-[var(--radius-md)] text-center">
             <p className="text-sm font-medium">{userEmail}</p>
           </div>
 
@@ -68,9 +68,9 @@ export function VerificationTemplateComponent({
           {/* Resend Link */}
           {showResend && (
             <div className="text-center">
-              <p className="text-sm text-[var(--tekton-text-muted-foreground)]">
+              <p className="text-sm text-[var(--text-muted-foreground)]">
                 Didn&apos;t receive the email?{' '}
-                <button className="text-[var(--tekton-text-primary)] hover:underline">
+                <button className="text-[var(--text-primary)] hover:underline">
                   Resend
                 </button>
               </p>
@@ -80,9 +80,9 @@ export function VerificationTemplateComponent({
 
         <CardFooter>
           {slots.footer || (
-            <p className="text-sm text-center w-full text-[var(--tekton-text-muted-foreground)]">
+            <p className="text-sm text-center w-full text-[var(--text-muted-foreground)]">
               Wrong email?{' '}
-              <a href="#" className="text-[var(--tekton-text-primary)] hover:underline">
+              <a href="#" className="text-[var(--text-primary)] hover:underline">
                 Change email address
               </a>
             </p>
@@ -97,43 +97,7 @@ export function VerificationTemplateComponent({
 /**
  * Verification Template Definition
  */
-export const VerificationTemplate: ScreenTemplate = {
-  id: 'auth.verification',
-  name: 'Email Verification',
-  category: 'auth',
-  description: 'Email verification screen with resend option',
-
-  skeleton: {
-    shell: 'centered-card',
-    page: 'auth-page',
-    sections: [
-      {
-        id: 'verification-message',
-        name: 'Verification Message',
-        slot: 'main',
-        required: true,
-        Component: VerificationTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'button_label'],
-    optional: ['show_resend', 'user_email'],
-    slots: ['icon', 'footer'],
-  },
-
-  requiredComponents: ['Button', 'Card'],
-
-  Component: VerificationTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['auth', 'verification', 'email', 'confirm'],
-};
+export const VerificationTemplate = createTemplateFromCatalog(
+  'auth.verification',
+  VerificationTemplateComponent
+);

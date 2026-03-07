@@ -1,7 +1,7 @@
 /**
  * MCP Tool: list-icon-libraries
  * API 기반으로 아이콘 라이브러리 목록 반환
- * (로컬 .moai/icon-libraries/generated/ 읽기 → framingui.com API fetch)
+ * (hosted icon library catalog fetch)
  * [SPEC-ICON-001]
  */
 

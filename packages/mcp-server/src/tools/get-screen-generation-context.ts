@@ -10,6 +10,7 @@ import {
   fetchScreenExamples,
   fetchTemplate,
 } from '../api/data-client.js';
+import { getScreenComponentTypes } from './screen-component-contract.js';
 import type {
   GetScreenGenerationContextInput,
   GetScreenGenerationContextOutput,
@@ -23,6 +24,36 @@ import { matchTemplates } from '../data/template-matcher.js';
 import { getAllRecipes } from '../data/recipe-resolver.js';
 import { generateHints } from '../data/hint-generator.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
+
+const TEMPLATE_CONFIDENCE_THRESHOLD = 20;
+const DEFAULT_COMPONENT_CANDIDATES = ['Card', 'Heading', 'Text', 'Button', 'Badge', 'Separator'];
+const CATEGORY_COMPONENT_HINTS: Record<string, string[]> = {
+  auth: ['Form', 'Input', 'Button', 'Heading', 'Text', 'Link'],
+  dashboard: ['Card', 'Heading', 'Text', 'Badge', 'Table', 'Button'],
+  form: ['Form', 'Input', 'Button', 'Heading', 'Text', 'Checkbox'],
+  feedback: ['Card', 'Heading', 'Text', 'Badge', 'Button'],
+  marketing: ['Heading', 'Text', 'Card', 'Button', 'Image', 'Badge'],
+  core: ['Card', 'Heading', 'Text', 'Button', 'Badge'],
+};
+
+function shouldIncludeTemplateMatch(match: {
+  category: string;
+  confidence: number;
+  matchedKeywords: string[];
+}): boolean {
+  if (match.confidence >= TEMPLATE_CONFIDENCE_THRESHOLD) {
+    return true;
+  }
+
+  if (
+    ['auth', 'dashboard', 'feedback'].includes(match.category) &&
+    match.matchedKeywords.length > 0
+  ) {
+    return true;
+  }
+
+  return false;
+}
 
 /**
  * Screen Definition JSON Schema for reference
@@ -118,11 +149,30 @@ const SCREEN_DEFINITION_SCHEMA = {
 /**
  * API에서 컴포넌트 정보 조회
  */
+function componentNameToId(name: string): string {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/\s+/g, '-')
+    .toLowerCase();
+}
+
+function fallbackComponentInfo(componentName: string): ContextComponentInfo {
+  return {
+    id: componentNameToId(componentName),
+    name: componentName,
+    category: 'core',
+    description: `${componentName} component from the shared screen-generation contract`,
+    importStatement: `import { ${componentName} } from '@framingui/ui';`,
+    props: [],
+    variants: undefined,
+  };
+}
+
 async function getComponentInfo(componentIds: string[]): Promise<ContextComponentInfo[]> {
   const components: ContextComponentInfo[] = [];
 
-  for (const id of componentIds) {
-    const result = await fetchComponent(id.toLowerCase());
+  for (const name of componentIds) {
+    const result = await fetchComponent(componentNameToId(name));
     if (result.ok) {
       const component = result.data;
       components.push({
@@ -135,7 +185,10 @@ async function getComponentInfo(componentIds: string[]): Promise<ContextComponen
         props: component.props ?? [],
         variants: component.variants,
       });
+      continue;
     }
+
+    components.push(fallbackComponentInfo(name));
   }
 
   return components;
@@ -171,6 +224,42 @@ function extractComponentTypes(template: any): string[] {
   }
 
   return Array.from(types);
+}
+
+function getRecommendedComponentTypes(options: {
+  bestMatch?: ContextTemplateMatch;
+  themeRecipes?: ThemeRecipeInfo[];
+}): string[] {
+  const componentTypes = new Set<string>();
+
+  for (const componentType of DEFAULT_COMPONENT_CANDIDATES) {
+    componentTypes.add(componentType);
+  }
+
+  if (options.bestMatch?.requiredComponents) {
+    for (const componentType of options.bestMatch.requiredComponents) {
+      componentTypes.add(componentType);
+    }
+  }
+
+  if (options.bestMatch?.category && CATEGORY_COMPONENT_HINTS[options.bestMatch.category]) {
+    for (const componentType of CATEGORY_COMPONENT_HINTS[options.bestMatch.category]!) {
+      componentTypes.add(componentType);
+    }
+  }
+
+  if (options.themeRecipes) {
+    for (const recipe of options.themeRecipes) {
+      if (recipe.componentType) {
+        const normalized =
+          recipe.componentType.charAt(0).toUpperCase() + recipe.componentType.slice(1);
+        componentTypes.add(normalized);
+      }
+    }
+  }
+
+  const supported = new Set(getScreenComponentTypes());
+  return Array.from(componentTypes).filter(componentType => supported.has(componentType));
 }
 
 /**
@@ -234,7 +323,7 @@ export async function getScreenGenerationContextTool(
 
     if (templateMatches.length > 0) {
       const match = templateMatches[0];
-      if (match) {
+      if (match && shouldIncludeTemplateMatch(match)) {
         // API를 통해 템플릿 상세 정보 조회 [SPEC-MCP-007:E-002]
         const templateResult = await fetchTemplate(match.templateId);
         const templateData = templateResult.ok ? templateResult.data : null;
@@ -256,14 +345,7 @@ export async function getScreenGenerationContextTool(
       }
     }
 
-    // 2. Get component information
-    // Add common components if no specific match
-    if (componentTypes.length === 0) {
-      componentTypes = ['card', 'heading', 'text', 'button'];
-    }
-    const components = await getComponentInfo(componentTypes);
-
-    // 3. Get examples if requested
+    // 2. Get examples if requested
     let examples: ScreenExample[] | undefined;
     if (input.includeExamples !== false) {
       // API를 통해 스크린 예제 조회 [SPEC-MCP-007:E-007]
@@ -292,7 +374,7 @@ export async function getScreenGenerationContextTool(
       examples = filtered.length > 0 ? filtered : undefined;
     }
 
-    // 4. Get theme recipes if theme specified
+    // 3. Get theme recipes if theme specified
     let themeRecipes: ThemeRecipeInfo[] | undefined;
     if (input.themeId) {
       const themeResult = await fetchTheme(input.themeId);
@@ -300,6 +382,17 @@ export async function getScreenGenerationContextTool(
         themeRecipes = await getThemeRecipeInfo(input.themeId);
       }
     }
+
+    // 4. Get component information from shared contract + template + recipes
+    const recommendedComponentTypes = getRecommendedComponentTypes({
+      bestMatch,
+      themeRecipes,
+    });
+    componentTypes =
+      componentTypes.length > 0
+        ? Array.from(new Set([...recommendedComponentTypes, ...componentTypes]))
+        : recommendedComponentTypes;
+    const components = await getComponentInfo(componentTypes);
 
     // 5. Generate contextual hints
     const hints = generateHints(input.description, input.themeId);

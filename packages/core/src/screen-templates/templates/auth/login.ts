@@ -34,9 +34,9 @@ export const LoginComponent: FC<ScreenTemplateProps> = ({ slots, className, text
   return {
     type: 'div',
     props: {
-      className: `min-h-screen flex items-center justify-center bg-[var(--tekton-bg-base)] ${className ?? ''}`,
+      className: `min-h-screen flex items-center justify-center bg-[var(--bg-base)] ${className ?? ''}`,
       style: {
-        padding: 'var(--tekton-layout-padding-mobile)',
+        padding: 'var(--layout-padding-mobile)',
       },
     },
     children: [
@@ -45,8 +45,8 @@ export const LoginComponent: FC<ScreenTemplateProps> = ({ slots, className, text
         props: {
           className: 'w-full max-w-md',
           style: {
-            padding: 'var(--tekton-spacing-8)',
-            gap: 'var(--tekton-spacing-6)',
+            padding: 'var(--spacing-8)',
+            gap: 'var(--spacing-6)',
           },
         },
         children: [
@@ -70,7 +70,7 @@ export const LoginComponent: FC<ScreenTemplateProps> = ({ slots, className, text
               {
                 type: 'p',
                 props: {
-                  className: 'text-sm text-[var(--tekton-text-secondary)]',
+                  className: 'text-sm text-[var(--text-secondary)]',
                 },
                 children: [defaultTexts.subtitle],
               },
@@ -158,14 +158,14 @@ export const LoginComponent: FC<ScreenTemplateProps> = ({ slots, className, text
                 type: 'a',
                 props: {
                   href: '/forgot-password',
-                  className: 'text-[var(--tekton-text-link)] hover:underline',
+                  className: 'text-[var(--text-link)] hover:underline',
                 },
                 children: [defaultTexts.forgotPassword],
               },
               {
                 type: 'div',
                 props: {
-                  className: 'text-[var(--tekton-text-secondary)]',
+                  className: 'text-[var(--text-secondary)]',
                 },
                 children: [
                   '계정이 없으신가요? ',
@@ -173,7 +173,7 @@ export const LoginComponent: FC<ScreenTemplateProps> = ({ slots, className, text
                     type: 'a',
                     props: {
                       href: '/signup',
-                      className: 'text-[var(--tekton-text-link)] hover:underline',
+                      className: 'text-[var(--text-link)] hover:underline',
                     },
                     children: [defaultTexts.signupLink],
                   },

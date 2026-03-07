@@ -11,8 +11,8 @@ import type { TektonTokens } from '@framingui/tokens';
  * Token accessor that returns CSS variable references
  *
  * @example
- * tokens.bg.surface.default -> 'var(--tekton-bg-surface-default)'
- * tokens.spacing[4] -> 'var(--tekton-spacing-4)'
+ * tokens.bg.surface.default -> 'var(--bg-surface-default)'
+ * tokens.spacing[4] -> 'var(--spacing-4)'
  */
 export const tokens: TektonTokens = new Proxy({} as TektonTokens, {
   get(_target, category: string) {
@@ -32,14 +32,14 @@ function createCategoryProxy(category: string): any {
     get(_target, key: string | symbol) {
       // Handle special property access for string coercion
       if (key === 'toString' || key === 'valueOf') {
-        return () => `var(--tekton-${category})`;
+        return () => `var(--${category})`;
       }
 
       // Handle Symbol.toPrimitive for template literals
       if (key === Symbol.toPrimitive) {
         return (hint: string) => {
           if (hint === 'string' || hint === 'default') {
-            return `var(--tekton-${category})`;
+            return `var(--${category})`;
           }
           return null;
         };

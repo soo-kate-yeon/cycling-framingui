@@ -121,13 +121,13 @@ describe('Separator', () => {
     it('applies Tekton token-based styles', () => {
       const { container } = render(<Separator />);
       const separator = container.firstChild as HTMLElement;
-      expect(separator.className).toContain('bg-[var(--tekton-border-default)]');
+      expect(separator.className).toContain('bg-[var(--border-default)]');
     });
 
     it('uses Tekton border color tokens', () => {
       const { container } = render(<Separator />);
       const separator = container.firstChild as HTMLElement;
-      expect(separator.className).toMatch(/var\(--tekton-border-default\)/);
+      expect(separator.className).toMatch(/var\(--border-default\)/);
     });
 
     it('maintains consistent styling across orientations', () => {
@@ -137,8 +137,8 @@ describe('Separator', () => {
       const hSep = horizontal.firstChild as HTMLElement;
       const vSep = vertical.firstChild as HTMLElement;
 
-      expect(hSep.className).toContain('bg-[var(--tekton-border-default)]');
-      expect(vSep.className).toContain('bg-[var(--tekton-border-default)]');
+      expect(hSep.className).toContain('bg-[var(--border-default)]');
+      expect(vSep.className).toContain('bg-[var(--border-default)]');
     });
   });
 

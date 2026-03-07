@@ -31,7 +31,7 @@ const NavigationMenuList = React.forwardRef(({ className, ...props }, ref) => (
   <NavigationMenuPrimitive.List
     ref={ref}
     className={cn(
-      'group flex flex-1 list-none items-center justify-center gap-[var(--tekton-spacing-1)]',
+      'group flex flex-1 list-none items-center justify-center gap-[var(--spacing-1)]',
       className
     )}
     {...props}
@@ -40,7 +40,7 @@ const NavigationMenuList = React.forwardRef(({ className, ...props }, ref) => (
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName;
 const NavigationMenuItem = NavigationMenuPrimitive.Item;
 const navigationMenuTriggerStyle = cva(
-  'group inline-flex h-10 w-max items-center justify-center rounded-[var(--tekton-radius-md)] bg-[var(--tekton-bg-background)] px-[var(--tekton-spacing-4)] py-[var(--tekton-spacing-2)] text-sm font-medium transition-colors hover:bg-[var(--tekton-bg-accent)] hover:text-[var(--tekton-bg-accent-foreground)] focus:bg-[var(--tekton-bg-accent)] focus:text-[var(--tekton-bg-accent-foreground)] focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-[var(--tekton-bg-accent)]/50 data-[state=open]:bg-[var(--tekton-bg-accent)]/50'
+  'group inline-flex h-10 w-max items-center justify-center rounded-[var(--radius-md)] bg-[var(--bg-background)] px-[var(--spacing-4)] py-[var(--spacing-2)] text-sm font-medium transition-colors hover:bg-[var(--bg-accent)] hover:text-[var(--bg-accent-foreground)] focus:bg-[var(--bg-accent)] focus:text-[var(--bg-accent-foreground)] focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-[var(--bg-accent)]/50 data-[state=open]:bg-[var(--bg-accent)]/50'
 );
 const NavigationMenuTrigger = React.forwardRef(({ className, children, ...props }, ref) => (
   <NavigationMenuPrimitive.Trigger
@@ -85,7 +85,7 @@ const NavigationMenuViewport = React.forwardRef(({ className, ...props }, ref) =
   <div className={cn('absolute left-0 top-full flex justify-center')}>
     <NavigationMenuPrimitive.Viewport
       className={cn(
-        'origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-[var(--tekton-radius-md)] border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-popover)] text-[var(--tekton-text-popover-foreground)] shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]',
+        'origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-[var(--radius-md)] border border-[var(--border-default)] bg-[var(--bg-popover)] text-[var(--text-popover-foreground)] shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]',
         className
       )}
       ref={ref}
@@ -103,7 +103,7 @@ const NavigationMenuIndicator = React.forwardRef(({ className, ...props }, ref) 
     )}
     {...props}
   >
-    <div className="relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-[var(--tekton-border-default)] shadow-md" />
+    <div className="relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-[var(--border-default)] shadow-md" />
   </NavigationMenuPrimitive.Indicator>
 ));
 NavigationMenuIndicator.displayName = NavigationMenuPrimitive.Indicator.displayName;

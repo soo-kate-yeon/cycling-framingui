@@ -54,7 +54,7 @@ export function formatToolError(error: ApiError, context?: string): string {
   switch (error.code) {
     case 'AUTH_FAILED':
     case 'NOT_AUTHENTICATED':
-      return `${prefix}Authentication failed. Please run \`whoami\` first or check your API key.`;
+      return `${prefix}Authentication failed. Check your login session or API key and try again.`;
     case 'FORBIDDEN':
       return `${prefix}${error.message}`;
     case 'NOT_FOUND':

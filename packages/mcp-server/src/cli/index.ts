@@ -10,6 +10,13 @@ export {};
 const command = process.argv[2];
 
 switch (command) {
+  case '--version':
+  case '-v': {
+    const { printVersion } = await import('./version.js');
+    printVersion();
+    break;
+  }
+
   case 'login': {
     const { loginCommand } = await import('./login.js');
     try {

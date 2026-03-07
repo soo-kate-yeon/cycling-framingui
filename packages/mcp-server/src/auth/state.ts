@@ -17,9 +17,6 @@ const authCache = new MemoryCache<VerifyResponse>();
 // Current authentication state
 let currentAuthData: VerifyResponse | null = null;
 
-// whoami 도구 호출 완료 여부 (서버 사이드 게이트)
-let whoamiCompleted = false;
-
 // Raw API key (API 데이터 클라이언트에서 Bearer 헤더로 사용)
 let rawApiKey: string | null = null;
 
@@ -72,26 +69,9 @@ export function getRawApiKey(): string | null {
  */
 export function clearAuthData(): void {
   currentAuthData = null;
-  whoamiCompleted = false;
   rawApiKey = null;
   authCache.clear();
   info('Authentication data cleared');
-}
-
-/**
- * whoami 도구 호출 완료 표시
- */
-export function setWhoamiCompleted(): void {
-  whoamiCompleted = true;
-  info('whoami completed - all tools unlocked');
-}
-
-/**
- * whoami 도구 호출 여부 확인
- * @returns whoami가 호출되었으면 true
- */
-export function isWhoamiCompleted(): boolean {
-  return whoamiCompleted;
 }
 
 /**

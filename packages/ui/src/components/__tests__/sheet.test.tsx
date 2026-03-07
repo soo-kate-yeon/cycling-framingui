@@ -85,7 +85,7 @@ describe('Sheet', () => {
       await userEvent.click(screen.getByRole('button'));
       await waitFor(() => {
         const sheet = screen.getByRole('dialog');
-        expect(sheet.className).toMatch(/var\(--tekton-/);
+        expect(sheet.className).toMatch(/var\(--/);
       });
     });
   });

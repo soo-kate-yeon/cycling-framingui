@@ -3,7 +3,7 @@
  * [SPEC-COMPONENT-001-C]
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'vitest-axe';
@@ -214,7 +214,7 @@ describe('Form', () => {
       );
 
       // FormMessage는 tekton destructive 토큰 사용
-      expect(screen.getByTestId('message')).toHaveClass('text-[var(--tekton-bg-destructive)]');
+      expect(screen.getByTestId('message')).toHaveClass('text-[var(--bg-destructive)]');
     });
   });
 

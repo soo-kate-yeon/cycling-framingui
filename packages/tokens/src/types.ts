@@ -8,7 +8,7 @@
  * Token reference type - represents a CSS variable reference
  * REQ-STY-004: Generate semantic CSS variable references
  */
-export type TokenReference = `var(--tekton-${string})`;
+export type TokenReference = `var(--${string})`;
 
 /**
  * Background tokens

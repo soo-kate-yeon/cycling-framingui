@@ -1,0 +1,86 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+const { mockFetchThemeList, mockFetchTheme } = vi.hoisted(() => ({
+  mockFetchThemeList: vi.fn(),
+  mockFetchTheme: vi.fn(),
+}));
+
+vi.mock('../../src/api/data-client.ts', () => ({
+  fetchThemeList: mockFetchThemeList,
+  fetchTheme: mockFetchTheme,
+}));
+
+import { clearAuthData, setAuthData } from '../../src/auth/state.ts';
+import { listThemesTool } from '../../src/tools/list-themes.ts';
+import { previewThemeTool } from '../../src/tools/preview-theme.ts';
+import { whoamiTool } from '../../src/tools/whoami.ts';
+
+const AUTH_FIXTURE = {
+  valid: true,
+  user: {
+    id: 'theme-user',
+    email: 'theme-user@example.com',
+    plan: 'pro',
+  },
+  themes: {
+    licensed: ['pebble'],
+  },
+  licenses: [
+    {
+      themeId: 'pebble',
+      tier: 'pro',
+      type: 'individual' as const,
+      isActive: true,
+      expiresAt: '2026-12-31T00:00:00.000Z',
+    },
+  ],
+};
+
+describe('Phase 2: theme authority consistency', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    clearAuthData();
+    setAuthData(AUTH_FIXTURE);
+  });
+
+  afterEach(() => {
+    clearAuthData();
+  });
+
+  it('fails list-themes explicitly when licensed themes exist but the fetched list is empty', async () => {
+    mockFetchThemeList.mockResolvedValueOnce({
+      ok: true,
+      data: [],
+    });
+
+    const whoami = await whoamiTool();
+    const listThemes = await listThemesTool();
+
+    expect(whoami.success).toBe(true);
+    expect(whoami.licensedThemes).toContain('pebble');
+
+    expect(listThemes.success).toBe(false);
+    expect(listThemes.error).toContain('THEME_AUTHORITY_INCONSISTENT');
+    expect(listThemes.error).toContain('pebble');
+  });
+
+  it('rewrites preview-theme not-found into an entitlement inconsistency error for licensed themes', async () => {
+    mockFetchTheme.mockResolvedValueOnce({
+      ok: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Theme "pebble" not found.',
+      },
+    });
+
+    const whoami = await whoamiTool();
+    const preview = await previewThemeTool({ themeId: 'pebble' });
+
+    expect(whoami.success).toBe(true);
+    expect(whoami.licensedThemes).toContain('pebble');
+
+    expect(preview.success).toBe(false);
+    expect(preview.error).toContain('THEME_AUTHORITY_INCONSISTENT');
+    expect(preview.error).toContain('Requested theme: "pebble"');
+  });
+});

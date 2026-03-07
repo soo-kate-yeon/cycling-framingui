@@ -205,10 +205,10 @@ export function EmailField() {
         onChange={(e) => setEmail(e.target.value)}
         aria-invalid={isInvalid}
         aria-describedby={isInvalid ? 'signup-email-error' : undefined}
-        className={isInvalid ? 'border-[var(--tekton-bg-destructive)]' : undefined}
+        className={isInvalid ? 'border-[var(--bg-destructive)]' : undefined}
       />
       {isInvalid && (
-        <p id="signup-email-error" className="text-sm text-[var(--tekton-bg-destructive)]">
+        <p id="signup-email-error" className="text-sm text-[var(--bg-destructive)]">
           Enter a valid email address.
         </p>
       )}

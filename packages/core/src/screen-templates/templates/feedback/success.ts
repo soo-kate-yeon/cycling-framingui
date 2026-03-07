@@ -19,7 +19,7 @@ export const SuccessComponent: FC<ScreenTemplateProps> = ({ className, texts }) 
   return {
     type: 'div',
     props: {
-      className: `min-h-screen flex items-center justify-center bg-[var(--tekton-bg-base)] ${className ?? ''}`,
+      className: `min-h-screen flex items-center justify-center bg-[var(--bg-base)] ${className ?? ''}`,
     },
     children: [
       {
@@ -46,7 +46,7 @@ export const SuccessComponent: FC<ScreenTemplateProps> = ({ className, texts }) 
           {
             type: 'p',
             props: {
-              className: 'text-sm text-[var(--tekton-text-secondary)] mb-4',
+              className: 'text-sm text-[var(--text-secondary)] mb-4',
             },
             children: [defaultTexts.message],
           },

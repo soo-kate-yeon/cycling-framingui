@@ -31,7 +31,7 @@ export const ProfileComponent: FC<ScreenTemplateProps> = ({ slots, className, te
   return {
     type: 'div',
     props: {
-      className: `min-h-screen bg-[var(--tekton-bg-base)] ${className ?? ''}`,
+      className: `min-h-screen bg-[var(--bg-base)] ${className ?? ''}`,
     },
     children: [
       {
@@ -49,7 +49,7 @@ export const ProfileComponent: FC<ScreenTemplateProps> = ({ slots, className, te
             props: {
               className: 'flex-1 overflow-auto',
               style: {
-                padding: 'var(--tekton-layout-padding-desktop)',
+                padding: 'var(--layout-padding-desktop)',
               },
             },
             children: [
@@ -76,7 +76,7 @@ export const ProfileComponent: FC<ScreenTemplateProps> = ({ slots, className, te
                       {
                         type: 'p',
                         props: {
-                          className: 'text-[var(--tekton-text-secondary)]',
+                          className: 'text-[var(--text-secondary)]',
                         },
                         children: [defaultTexts.subtitle],
                       },

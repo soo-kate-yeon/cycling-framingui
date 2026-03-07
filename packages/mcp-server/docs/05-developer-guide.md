@@ -56,10 +56,10 @@ pnpm inspect
 
 ### Environment Variables
 
-| Variable         | Required | Default                 | Description                                              |
-| ---------------- | -------- | ----------------------- | -------------------------------------------------------- |
-| `FRAMINGUI_API_KEY` | Yes\*    | —                       | API key for authentication. \*Or use `framingui-mcp login`  |
-| `FRAMINGUI_API_URL` | No       | `https://framingui.com` | API endpoint (use `http://localhost:3000` for local dev) |
+| Variable            | Required | Default                 | Description                                                |
+| ------------------- | -------- | ----------------------- | ---------------------------------------------------------- |
+| `FRAMINGUI_API_KEY` | Yes\*    | —                       | API key for authentication. \*Or use `framingui-mcp login` |
+| `FRAMINGUI_API_URL` | No       | `https://framingui.com` | API endpoint (use `http://localhost:3000` for local dev)   |
 
 ---
 
@@ -68,7 +68,7 @@ pnpm inspect
 ```
 packages/mcp-server/
 ├── src/
-│   ├── index.ts           # MCP server: tool/prompt registration, auth guards
+│   ├── index.ts           # MCP server: tool/prompt registration, auth checks
 │   ├── cli/               # CLI: login, logout, status, init
 │   ├── auth/              # Auth: verify, guard, state, cache, theme-access
 │   ├── tools/             # 17 MCP tool implementations
@@ -85,9 +85,9 @@ packages/mcp-server/
 
 | Module     | Role                                                                  |
 | ---------- | --------------------------------------------------------------------- |
-| `index.ts` | MCP server entry: registers 17 tools + 2 prompts, applies auth guards |
+| `index.ts` | MCP server entry: registers 17 tools + 2 prompts, applies auth checks |
 | `cli/`     | CLI subcommand router: `login` (OAuth), `logout`, `status`, `init`    |
-| `auth/`    | Auth layer: API key verification, guard enforcement, license gating   |
+| `auth/`    | Auth layer: API key verification, auth gating, license resolution     |
 | `tools/`   | Tool logic: each file exports one tool handler                        |
 | `prompts/` | MCP prompts: `getting-started`, `screen-workflow`                     |
 | `schemas/` | Zod schemas for input validation                                      |
@@ -185,7 +185,6 @@ describe('whoamiTool', () => {
 ```typescript
 // Use specific error types
 throw new AuthRequiredError(); // not: throw new Error('auth required')
-throw new WhoamiRequiredError();
 throw new ValidationError(message);
 ```
 

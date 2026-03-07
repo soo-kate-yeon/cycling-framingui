@@ -8,10 +8,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { FreeTrialModal } from '@/components/modals/FreeTrialModal';
+import { GlobalLanguageProvider } from '@/contexts/GlobalLanguageContext';
 
-const { mockUseAuth, mockTrackFunnelPrimaryCtaClick } = vi.hoisted(() => ({
+const { mockUseAuth, mockTrackFunnelPrimaryCtaClick, mockUseGlobalLanguage } = vi.hoisted(() => ({
   mockUseAuth: vi.fn(),
   mockTrackFunnelPrimaryCtaClick: vi.fn(),
+  mockUseGlobalLanguage: vi.fn(),
 }));
 
 vi.mock('@/contexts/AuthContext', () => ({
@@ -21,6 +23,15 @@ vi.mock('@/contexts/AuthContext', () => ({
 vi.mock('@/lib/analytics', () => ({
   trackFunnelPrimaryCtaClick: mockTrackFunnelPrimaryCtaClick,
 }));
+
+vi.mock('@/contexts/GlobalLanguageContext', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/contexts/GlobalLanguageContext')>();
+
+  return {
+    ...actual,
+    useGlobalLanguage: mockUseGlobalLanguage,
+  };
+});
 
 function createMockResponse({
   ok,
@@ -42,6 +53,19 @@ function createMockResponse({
 }
 
 describe('FreeTrialModal', () => {
+  function renderModal(onStartTrial = vi.fn()) {
+    return render(
+      <GlobalLanguageProvider>
+        <FreeTrialModal
+          isOpen={true}
+          onClose={vi.fn()}
+          onStartTrial={onStartTrial}
+          onDismissForever={vi.fn()}
+        />
+      </GlobalLanguageProvider>
+    );
+  }
+
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
@@ -51,6 +75,10 @@ describe('FreeTrialModal', () => {
     mockUseAuth.mockReturnValue({
       user: { id: 'user-1', email: 'test@example.com' },
       login: vi.fn(),
+    });
+    mockUseGlobalLanguage.mockReturnValue({
+      locale: 'ko',
+      setLocale: vi.fn(),
     });
   });
 
@@ -69,7 +97,7 @@ describe('FreeTrialModal', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const onStartTrial = vi.fn();
-    render(<FreeTrialModal isOpen={true} onClose={vi.fn()} onStartTrial={onStartTrial} />);
+    renderModal(onStartTrial);
 
     await waitFor(() => {
       expect(onStartTrial).toHaveBeenCalledTimes(1);
@@ -90,7 +118,7 @@ describe('FreeTrialModal', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
 
-    render(<FreeTrialModal isOpen={true} onClose={vi.fn()} onStartTrial={vi.fn()} />);
+    renderModal();
 
     expect(await screen.findByText('체험 생성 중 오류가 발생했습니다')).toBeInTheDocument();
 
@@ -119,7 +147,7 @@ describe('FreeTrialModal', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
 
-    render(<FreeTrialModal isOpen={true} onClose={vi.fn()} onStartTrial={vi.fn()} />);
+    renderModal();
 
     expect(await screen.findByText('이미 체험을 사용했습니다')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(1);

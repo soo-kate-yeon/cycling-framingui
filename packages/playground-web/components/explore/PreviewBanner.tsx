@@ -62,8 +62,8 @@ export function PreviewBanner({ templateId }: PreviewBannerProps) {
     const detectBackgroundColor = () => {
       const rootStyles = window.getComputedStyle(document.documentElement);
 
-      // 1. CSS 변수 --tekton-bg-canvas 확인
-      let bgColor = rootStyles.getPropertyValue('--tekton-bg-canvas').trim();
+      // 1. CSS 변수 --bg-canvas 확인
+      let bgColor = rootStyles.getPropertyValue('--bg-canvas').trim();
 
       // CSS 변수가 없고 재시도 가능하면 재시도
       if (!bgColor && retryCount < MAX_RETRIES) {

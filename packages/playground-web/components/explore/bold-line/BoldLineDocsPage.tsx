@@ -24,13 +24,13 @@ import { PreviewBanner } from '../PreviewBanner';
 
 // Bold-line fallback tokens
 const BOLD_LINE_FALLBACK: Record<string, string> = {
-  '--tekton-bg-canvas': '#FFFFFF',
-  '--tekton-text-primary': '#000000',
-  '--tekton-border-default': '#000000',
-  '--tekton-radius-none': '0px',
-  '--tekton-radius-sm': '0px',
-  '--tekton-radius-md': '0px',
-  '--tekton-radius-lg': '0px',
+  '--bg-canvas': '#FFFFFF',
+  '--text-primary': '#000000',
+  '--border-default': '#000000',
+  '--radius-none': '0px',
+  '--radius-sm': '0px',
+  '--radius-md': '0px',
+  '--radius-lg': '0px',
 };
 
 export function BoldLineDocsPage() {

@@ -115,7 +115,7 @@ export const FormExample = {
             Marketing emails
           </Label>
         </div>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)] pl-6">
+        <p className="text-sm text-[var(--bg-muted-foreground)] pl-6">
           Receive emails about new products and features.
         </p>
       </div>
@@ -126,7 +126,7 @@ export const FormExample = {
             Security updates
           </Label>
         </div>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)] pl-6">
+        <p className="text-sm text-[var(--bg-muted-foreground)] pl-6">
           Receive emails about your account security.
         </p>
       </div>
@@ -140,12 +140,12 @@ export const WithError = {
   render: () => (
     <div className="space-y-2">
       <div className="flex items-center space-x-2">
-        <Checkbox id="error-checkbox" className="border-[var(--tekton-bg-destructive)]" />
+        <Checkbox id="error-checkbox" className="border-[var(--bg-destructive)]" />
         <Label htmlFor="error-checkbox" className="cursor-pointer">
           Required checkbox
         </Label>
       </div>
-      <p className="text-sm text-[var(--tekton-bg-destructive)] pl-6">
+      <p className="text-sm text-[var(--bg-destructive)] pl-6">
         You must accept the terms and conditions
       </p>
     </div>

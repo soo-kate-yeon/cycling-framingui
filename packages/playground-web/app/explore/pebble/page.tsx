@@ -18,52 +18,52 @@ import {
 } from 'recharts';
 
 const PEBBLE_FALLBACK: Record<string, string> = {
-  '--tekton-bg-canvas': '#F3F5F7',
-  '--tekton-bg-surface': '#FFFFFF',
-  '--tekton-text-primary': '#111827',
-  '--tekton-text-secondary': '#6B7280',
-  '--tekton-text-tertiary': '#9CA3AF',
-  '--tekton-border-default': '#E5E7EB',
-  '--tekton-border-emphasis': '#D1D5DB',
-  '--tekton-action-primary': '#3B82F6',
-  '--tekton-action-primary-text': '#FFFFFF',
+  '--bg-canvas': '#F3F5F7',
+  '--bg-surface': '#FFFFFF',
+  '--text-primary': '#111827',
+  '--text-secondary': '#6B7280',
+  '--text-tertiary': '#9CA3AF',
+  '--border-default': '#E5E7EB',
+  '--border-emphasis': '#D1D5DB',
+  '--action-primary': '#3B82F6',
+  '--action-primary-text': '#FFFFFF',
 
-  '--tekton-bg-background': '#F3F5F7',
-  '--tekton-bg-foreground': '#111827',
-  '--tekton-bg-card': '#FFFFFF',
-  '--tekton-bg-card-foreground': '#111827',
-  '--tekton-bg-popover': '#FFFFFF',
-  '--tekton-bg-popover-foreground': '#111827',
-  '--tekton-bg-primary': '#3B82F6',
-  '--tekton-bg-primary-foreground': '#FFFFFF',
-  '--tekton-bg-secondary': '#E5E7EB',
-  '--tekton-bg-secondary-foreground': '#111827',
-  '--tekton-bg-muted': '#E5E7EB',
-  '--tekton-bg-muted-foreground': '#6B7280',
-  '--tekton-bg-accent': '#DBEAFE',
-  '--tekton-bg-accent-foreground': '#1E40AF',
-  '--tekton-bg-destructive': '#EF4444',
-  '--tekton-bg-destructive-foreground': '#FFFFFF',
-  '--tekton-border-input': '#E5E7EB',
-  '--tekton-border-ring': '#3B82F6',
+  '--bg-background': '#F3F5F7',
+  '--bg-foreground': '#111827',
+  '--bg-card': '#FFFFFF',
+  '--bg-card-foreground': '#111827',
+  '--bg-popover': '#FFFFFF',
+  '--bg-popover-foreground': '#111827',
+  '--bg-primary': '#3B82F6',
+  '--bg-primary-foreground': '#FFFFFF',
+  '--bg-secondary': '#E5E7EB',
+  '--bg-secondary-foreground': '#111827',
+  '--bg-muted': '#E5E7EB',
+  '--bg-muted-foreground': '#6B7280',
+  '--bg-accent': '#DBEAFE',
+  '--bg-accent-foreground': '#1E40AF',
+  '--bg-destructive': '#EF4444',
+  '--bg-destructive-foreground': '#FFFFFF',
+  '--border-input': '#E5E7EB',
+  '--border-ring': '#3B82F6',
 
-  '--tekton-radius-sm': '12px',
-  '--tekton-radius-md': '16px',
-  '--tekton-radius-lg': '24px',
-  '--tekton-radius-xl': '32px',
-  '--tekton-radius-none': '0',
-  '--tekton-radius-full': '9999px',
-  '--tekton-spacing-0': '0',
-  '--tekton-spacing-1': '4px',
-  '--tekton-spacing-2': '8px',
-  '--tekton-spacing-3': '12px',
-  '--tekton-spacing-4': '16px',
-  '--tekton-spacing-5': '20px',
-  '--tekton-spacing-6': '24px',
-  '--tekton-spacing-8': '32px',
-  '--tekton-spacing-10': '40px',
-  '--tekton-spacing-12': '48px',
-  '--tekton-spacing-16': '64px',
+  '--radius-sm': '12px',
+  '--radius-md': '16px',
+  '--radius-lg': '24px',
+  '--radius-xl': '32px',
+  '--radius-none': '0',
+  '--radius-full': '9999px',
+  '--spacing-0': '0',
+  '--spacing-1': '4px',
+  '--spacing-2': '8px',
+  '--spacing-3': '12px',
+  '--spacing-4': '16px',
+  '--spacing-5': '20px',
+  '--spacing-6': '24px',
+  '--spacing-8': '32px',
+  '--spacing-10': '40px',
+  '--spacing-12': '48px',
+  '--spacing-16': '64px',
 };
 
 export default function PebbleDemo() {
@@ -76,30 +76,30 @@ export default function PebbleDemo() {
 
   return (
     <div
-      className={`h-screen overflow-hidden flex flex-col md:flex-row bg-[var(--tekton-bg-canvas)] text-[var(--tekton-text-primary)] font-sans transition-opacity duration-500 pt-12 ${themeLoaded ? 'opacity-100' : 'opacity-0'}`}
+      className={`h-screen overflow-hidden flex flex-col md:flex-row bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans transition-opacity duration-500 pt-12 ${themeLoaded ? 'opacity-100' : 'opacity-0'}`}
     >
       <PreviewBanner templateId="pebble" templateName="Pebble" />
 
-      <aside className="hidden md:flex flex-col w-64 lg:w-72 border-r border-[var(--tekton-border-default)] bg-[var(--tekton-bg-surface)] h-full overflow-y-auto shrink-0">
+      <aside className="hidden md:flex flex-col w-64 lg:w-72 border-r border-[var(--border-default)] bg-[var(--bg-surface)] h-full overflow-y-auto shrink-0">
         <div className="p-6">
           <Link
             href="/explore"
             className="inline-flex items-center gap-2 mb-10 hover:opacity-70 transition-opacity"
           >
-            <span className="text-xl font-bold tracking-tighter text-[var(--tekton-text-primary)]">
+            <span className="text-xl font-bold tracking-tighter text-[var(--text-primary)]">
               framingui
             </span>
-            <span className="text-xs font-medium text-[var(--tekton-text-secondary)]">studio</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">studio</span>
           </Link>
           <div className="flex items-center gap-3 mb-6 px-1">
-            <div className="w-6 h-6 rounded-full bg-[var(--tekton-action-primary)] shadow-sm"></div>
+            <div className="w-6 h-6 rounded-full bg-[var(--action-primary)] shadow-sm"></div>
             <span className="font-bold tracking-tight truncate">Pebble Co.</span>
           </div>
         </div>
         <nav className="flex-1 px-4 flex flex-col gap-2">
           <button
             onClick={() => setActiveTab('page')}
-            className={`text-sm font-medium px-4 py-3 rounded-[var(--tekton-radius-lg)] transition-colors text-left flex items-center justify-between group ${activeTab === 'page' ? 'bg-[var(--tekton-border-default)] text-[var(--tekton-text-primary)]' : 'text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)]'}`}
+            className={`text-sm font-medium px-4 py-3 rounded-[var(--radius-lg)] transition-colors text-left flex items-center justify-between group ${activeTab === 'page' ? 'bg-[var(--border-default)] text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)]'}`}
           >
             <span>{locale === 'ko' ? '페이지 예시' : 'Page Example'}</span>
             <ChevronRight
@@ -109,7 +109,7 @@ export default function PebbleDemo() {
           </button>
           <button
             onClick={() => setActiveTab('component')}
-            className={`text-sm font-medium px-4 py-3 rounded-[var(--tekton-radius-lg)] transition-colors text-left flex items-center justify-between group ${activeTab === 'component' ? 'bg-[var(--tekton-border-default)] text-[var(--tekton-text-primary)]' : 'text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)]'}`}
+            className={`text-sm font-medium px-4 py-3 rounded-[var(--radius-lg)] transition-colors text-left flex items-center justify-between group ${activeTab === 'component' ? 'bg-[var(--border-default)] text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)]'}`}
           >
             <span>{locale === 'ko' ? '컴포넌트 갤러리' : 'Component Gallery'}</span>
             <ChevronRight
@@ -120,7 +120,7 @@ export default function PebbleDemo() {
 
           <Link
             href="/explore/pebble/feed"
-            className="text-sm font-medium px-4 py-3 rounded-[var(--tekton-radius-lg)] transition-colors text-left flex items-center justify-between group text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)]"
+            className="text-sm font-medium px-4 py-3 rounded-[var(--radius-lg)] transition-colors text-left flex items-center justify-between group text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)]"
           >
             <span>{locale === 'ko' ? '소셜 피드 인터페이스' : 'Social Feed Interface'}</span>
             <ChevronRight
@@ -131,28 +131,28 @@ export default function PebbleDemo() {
         </nav>
       </aside>
 
-      <header className="md:hidden shrink-0 border-b border-[var(--tekton-border-default)] bg-[var(--tekton-bg-surface)] flex items-center justify-between px-4 h-14 z-40 relative">
+      <header className="md:hidden shrink-0 border-b border-[var(--border-default)] bg-[var(--bg-surface)] flex items-center justify-between px-4 h-14 z-40 relative">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-full bg-[var(--tekton-action-primary)] shadow-sm"></div>
+          <div className="w-5 h-5 rounded-full bg-[var(--action-primary)] shadow-sm"></div>
           <span className="font-bold tracking-tight text-sm">Pebble Co.</span>
         </div>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 -mr-2 text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] transition-colors"
+          className="p-2 -mr-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
         >
           {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </header>
 
       {mobileMenuOpen && (
-        <div className="md:hidden absolute inset-x-0 top-[104px] bottom-0 bg-[var(--tekton-bg-surface)] z-50 overflow-y-auto shadow-xl">
+        <div className="md:hidden absolute inset-x-0 top-[104px] bottom-0 bg-[var(--bg-surface)] z-50 overflow-y-auto shadow-xl">
           <nav className="flex flex-col gap-2 p-4">
             <button
               onClick={() => {
                 setActiveTab('page');
                 setMobileMenuOpen(false);
               }}
-              className={`text-lg font-medium px-4 py-4 rounded-[var(--tekton-radius-lg)] transition-colors text-left ${activeTab === 'page' ? 'bg-[var(--tekton-border-default)] text-[var(--tekton-text-primary)]' : 'text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)]'}`}
+              className={`text-lg font-medium px-4 py-4 rounded-[var(--radius-lg)] transition-colors text-left ${activeTab === 'page' ? 'bg-[var(--border-default)] text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)]'}`}
             >
               {locale === 'ko' ? '페이지 예시' : 'Page Example'}
             </button>
@@ -161,7 +161,7 @@ export default function PebbleDemo() {
                 setActiveTab('component');
                 setMobileMenuOpen(false);
               }}
-              className={`text-lg font-medium px-4 py-4 rounded-[var(--tekton-radius-lg)] transition-colors text-left ${activeTab === 'component' ? 'bg-[var(--tekton-border-default)] text-[var(--tekton-text-primary)]' : 'text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)]'}`}
+              className={`text-lg font-medium px-4 py-4 rounded-[var(--radius-lg)] transition-colors text-left ${activeTab === 'component' ? 'bg-[var(--border-default)] text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)]'}`}
             >
               {locale === 'ko' ? '컴포넌트 갤러리' : 'Component Gallery'}
             </button>
@@ -169,7 +169,7 @@ export default function PebbleDemo() {
             <Link
               href="/explore/pebble/feed"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-lg font-medium px-4 py-4 rounded-[var(--tekton-radius-lg)] transition-colors text-left text-[var(--tekton-text-secondary)] hover:text-[var(--tekton-text-primary)] hover:bg-[var(--tekton-bg-canvas)]"
+              className="text-lg font-medium px-4 py-4 rounded-[var(--radius-lg)] transition-colors text-left text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)]"
             >
               {locale === 'ko' ? '소셜 피드 인터페이스' : 'Social Feed Interface'}
             </Link>
@@ -193,10 +193,10 @@ function OverviewDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h2>
         <div className="flex items-center gap-2">
-          <button className="flex-1 sm:flex-none h-9 px-4 py-2 bg-[var(--tekton-bg-surface)] border border-[var(--tekton-border-default)] rounded-[var(--tekton-radius-md)] text-sm font-medium hover:bg-[var(--tekton-bg-canvas)] transition-colors">
+          <button className="flex-1 sm:flex-none h-9 px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-[var(--radius-md)] text-sm font-medium hover:bg-[var(--bg-canvas)] transition-colors">
             Download Export
           </button>
-          <button className="flex-1 sm:flex-none h-9 px-4 py-2 bg-[var(--tekton-action-primary)] text-[var(--tekton-action-primary-text)] rounded-[var(--tekton-radius-md)] text-sm font-medium hover:opacity-90 transition-opacity">
+          <button className="flex-1 sm:flex-none h-9 px-4 py-2 bg-[var(--action-primary)] text-[var(--action-primary-text)] rounded-[var(--radius-md)] text-sm font-medium hover:opacity-90 transition-opacity">
             New Project
           </button>
         </div>
@@ -216,29 +216,29 @@ function OverviewDashboard() {
         ].map((stat) => (
           <div
             key={stat.title}
-            className="rounded-[var(--tekton-radius-lg)] border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-surface)] text-[var(--tekton-text-primary)] shadow-sm min-w-0"
+            className="rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm min-w-0"
           >
             <div className="p-4 md:p-6 flex flex-row items-center justify-between space-y-0 pb-2">
               <h3 className="tracking-tight text-xs md:text-sm font-medium truncate pr-2">
                 {stat.title}
               </h3>
-              <stat.icon className="h-4 w-4 text-[var(--tekton-text-secondary)] shrink-0" />
+              <stat.icon className="h-4 w-4 text-[var(--text-secondary)] shrink-0" />
             </div>
             <div className="px-4 md:px-6 pb-4 md:pb-6 pt-0">
               <div className="text-lg md:text-2xl font-bold tabular-nums truncate">
                 {stat.value}
               </div>
-              <p className="text-xs text-[var(--tekton-text-secondary)] truncate">{stat.sub}</p>
+              <p className="text-xs text-[var(--text-secondary)] truncate">{stat.sub}</p>
             </div>
           </div>
         ))}
       </div>
 
       <div className="grid gap-4 grid-cols-1 lg:grid-cols-7">
-        <div className="lg:col-span-4 rounded-[var(--tekton-radius-lg)] border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-surface)] text-[var(--tekton-text-primary)] shadow-sm overflow-hidden">
+        <div className="lg:col-span-4 rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm overflow-hidden">
           <div className="flex flex-col space-y-1.5 p-6 pb-2">
             <h3 className="font-semibold leading-none tracking-tight">Revenue Overview</h3>
-            <p className="text-xs text-[var(--tekton-text-secondary)]">
+            <p className="text-xs text-[var(--text-secondary)]">
               Growth metrics for the past 12 months.
             </p>
           </div>
@@ -246,10 +246,10 @@ function OverviewDashboard() {
             <OverviewChart />
           </div>
         </div>
-        <div className="lg:col-span-3 rounded-[var(--tekton-radius-lg)] border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-surface)] text-[var(--tekton-text-primary)] shadow-sm">
+        <div className="lg:col-span-3 rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm">
           <div className="flex flex-col space-y-1.5 p-6">
             <h3 className="font-semibold leading-none tracking-tight">Recent Activity</h3>
-            <p className="text-sm text-[var(--tekton-text-secondary)]">
+            <p className="text-sm text-[var(--text-secondary)]">
               24 new sales recorded today.
             </p>
           </div>
@@ -263,12 +263,12 @@ function OverviewDashboard() {
                 { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+$39.00' },
               ].map((user) => (
                 <div key={user.email} className="flex items-center gap-3 min-w-0">
-                  <span className="relative flex shrink-0 overflow-hidden rounded-full h-9 w-9 bg-[var(--tekton-bg-canvas)] items-center justify-center border border-[var(--tekton-border-default)] text-[var(--tekton-text-secondary)] font-bold">
+                  <span className="relative flex shrink-0 overflow-hidden rounded-full h-9 w-9 bg-[var(--bg-canvas)] items-center justify-center border border-[var(--border-default)] text-[var(--text-secondary)] font-bold">
                     {user.name[0]}
                   </span>
                   <div className="min-w-0 flex-1 space-y-0.5">
                     <p className="text-sm font-medium leading-none truncate">{user.name}</p>
-                    <p className="text-xs text-[var(--tekton-text-secondary)] truncate">
+                    <p className="text-xs text-[var(--text-secondary)] truncate">
                       {user.email}
                     </p>
                   </div>
@@ -280,10 +280,10 @@ function OverviewDashboard() {
         </div>
       </div>
 
-      <div className="rounded-[var(--tekton-radius-lg)] border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-surface)] shadow-sm">
+      <div className="rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm">
         <div className="flex flex-col space-y-1.5 p-6">
           <h3 className="font-semibold leading-none tracking-tight">Recent Transactions</h3>
-          <p className="text-sm text-[var(--tekton-text-secondary)]">
+          <p className="text-sm text-[var(--text-secondary)]">
             A summary of your latest transactions.
           </p>
         </div>
@@ -291,17 +291,17 @@ function OverviewDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[var(--tekton-border-default)]">
-                  <th className="text-left font-medium text-[var(--tekton-text-secondary)] pb-3">
+                <tr className="border-b border-[var(--border-default)]">
+                  <th className="text-left font-medium text-[var(--text-secondary)] pb-3">
                     Invoice
                   </th>
-                  <th className="text-left font-medium text-[var(--tekton-text-secondary)] pb-3">
+                  <th className="text-left font-medium text-[var(--text-secondary)] pb-3">
                     Status
                   </th>
-                  <th className="text-left font-medium text-[var(--tekton-text-secondary)] pb-3">
+                  <th className="text-left font-medium text-[var(--text-secondary)] pb-3">
                     Method
                   </th>
-                  <th className="text-right font-medium text-[var(--tekton-text-secondary)] pb-3">
+                  <th className="text-right font-medium text-[var(--text-secondary)] pb-3">
                     Amount
                   </th>
                 </tr>
@@ -321,17 +321,17 @@ function OverviewDashboard() {
                 ].map((tx) => (
                   <tr
                     key={tx.invoice}
-                    className="border-b border-[var(--tekton-border-default)] last:border-0"
+                    className="border-b border-[var(--border-default)] last:border-0"
                   >
                     <td className="py-3 font-medium">{tx.invoice}</td>
                     <td className="py-3">
                       <span
-                        className={`inline-flex items-center rounded-[var(--tekton-radius-full)] px-2.5 py-0.5 text-xs font-medium ${tx.status === 'Paid' ? 'bg-green-100 text-green-800' : tx.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}
+                        className={`inline-flex items-center rounded-[var(--radius-full)] px-2.5 py-0.5 text-xs font-medium ${tx.status === 'Paid' ? 'bg-green-100 text-green-800' : tx.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}
                       >
                         {tx.status}
                       </span>
                     </td>
-                    <td className="py-3 text-[var(--tekton-text-secondary)]">{tx.method}</td>
+                    <td className="py-3 text-[var(--text-secondary)]">{tx.method}</td>
                     <td className="py-3 text-right font-medium">{tx.amount}</td>
                   </tr>
                 ))}

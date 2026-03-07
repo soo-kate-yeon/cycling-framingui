@@ -24,7 +24,7 @@ const Command = React.forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      'flex h-full w-full flex-col overflow-hidden rounded-[var(--tekton-radius-md)] bg-[var(--tekton-bg-popover)] text-[var(--tekton-text-popover-foreground)]',
+      'flex h-full w-full flex-col overflow-hidden rounded-[var(--radius-md)] bg-[var(--bg-popover)] text-[var(--text-popover-foreground)]',
       className
     )}
     {...props}
@@ -40,11 +40,11 @@ const CommandDialog = ({
     <CommandPrimitive.Dialog
       {...props}
       className={cn(
-        'fixed inset-0 z-50 bg-[var(--tekton-bg-background)]/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'
+        'fixed inset-0 z-50 bg-[var(--bg-background)]/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'
       )}
     >
-      <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-[var(--tekton-border-default)] bg-[var(--tekton-bg-background)] p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
-        <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-[var(--tekton-text-muted-foreground)] [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+      <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-[var(--border-default)] bg-[var(--bg-background)] p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+        <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-[var(--text-muted-foreground)] [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
           {children}
         </Command>
       </div>
@@ -57,7 +57,7 @@ const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div
-    className="flex items-center border-b border-[var(--tekton-border-default)] px-3"
+    className="flex items-center border-b border-[var(--border-default)] px-3"
     cmdk-input-wrapper=""
   >
     <svg
@@ -78,7 +78,7 @@ const CommandInput = React.forwardRef<
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        'flex h-11 w-full rounded-[var(--tekton-radius-md)] bg-transparent py-3 text-sm outline-none placeholder:text-[var(--tekton-text-muted-foreground)] disabled:cursor-not-allowed disabled:opacity-50',
+        'flex h-11 w-full rounded-[var(--radius-md)] bg-transparent py-3 text-sm outline-none placeholder:text-[var(--text-muted-foreground)] disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
       {...props}
@@ -105,7 +105,7 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-6 text-center text-sm text-[var(--tekton-text-muted-foreground)]"
+    className="py-6 text-center text-sm text-[var(--text-muted-foreground)]"
     {...props}
   />
 ));
@@ -118,7 +118,7 @@ const CommandGroup = React.forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-      'overflow-hidden p-1 text-[var(--tekton-bg-foreground)] [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-[var(--tekton-text-muted-foreground)]',
+      'overflow-hidden p-1 text-[var(--bg-foreground)] [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-[var(--text-muted-foreground)]',
       className
     )}
     {...props}
@@ -132,7 +132,7 @@ const CommandSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
     ref={ref}
-    className={cn('-mx-1 h-px bg-[var(--tekton-border-default)]', className)}
+    className={cn('-mx-1 h-px bg-[var(--border-default)]', className)}
     {...props}
   />
 ));
@@ -145,7 +145,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-[var(--tekton-radius-sm)] px-2 py-1.5 text-sm outline-none aria-selected:bg-[var(--tekton-bg-accent)] aria-selected:text-[var(--tekton-bg-accent-foreground)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-default select-none items-center rounded-[var(--radius-sm)] px-2 py-1.5 text-sm outline-none aria-selected:bg-[var(--bg-accent)] aria-selected:text-[var(--bg-accent-foreground)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className
     )}
     {...props}
@@ -157,7 +157,7 @@ const CommandShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanE
   return (
     <span
       className={cn(
-        'ml-auto text-xs tracking-widest text-[var(--tekton-text-muted-foreground)]',
+        'ml-auto text-xs tracking-widest text-[var(--text-muted-foreground)]',
         className
       )}
       {...props}

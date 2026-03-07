@@ -36,7 +36,7 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   render: () => (
-    <Command className="w-[450px] rounded-lg border border-[var(--tekton-border-border)] shadow-md">
+    <Command className="w-[450px] rounded-lg border border-[var(--border-border)] shadow-md">
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -62,7 +62,7 @@ export const Default: Story = {
  */
 export const WithShortcuts: Story = {
   render: () => (
-    <Command className="w-[450px] rounded-lg border border-[var(--tekton-border-border)] shadow-md">
+    <Command className="w-[450px] rounded-lg border border-[var(--border-border)] shadow-md">
       <CommandInput placeholder="Search commands..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -105,7 +105,7 @@ export const WithShortcuts: Story = {
  */
 export const WithGroupsAndIcons: Story = {
   render: () => (
-    <Command className="w-[450px] rounded-lg border border-[var(--tekton-border-border)] shadow-md">
+    <Command className="w-[450px] rounded-lg border border-[var(--border-border)] shadow-md">
       <CommandInput placeholder="Search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -169,16 +169,16 @@ export const Dialog: Story = {
     return (
       <>
         <div className="text-center">
-          <p className="text-sm text-[var(--tekton-text-muted-foreground)]">
+          <p className="text-sm text-[var(--text-muted-foreground)]">
             Press{' '}
-            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-[var(--tekton-border-border)] bg-[var(--tekton-bg-muted)] px-1.5 font-mono text-[10px] font-medium text-[var(--tekton-text-muted-foreground)] opacity-100">
+            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-[var(--border-border)] bg-[var(--bg-muted)] px-1.5 font-mono text-[10px] font-medium text-[var(--text-muted-foreground)] opacity-100">
               <span className="text-xs">⌘</span>K
             </kbd>{' '}
             to open the command palette
           </p>
           <button
             onClick={() => setOpen(true)}
-            className="mt-4 rounded-[var(--tekton-radius-md)] bg-[var(--tekton-bg-primary)] px-4 py-2 text-sm text-[var(--tekton-bg-primary-foreground)] hover:bg-[var(--tekton-bg-primary)]/90"
+            className="mt-4 rounded-[var(--radius-md)] bg-[var(--bg-primary)] px-4 py-2 text-sm text-[var(--bg-primary-foreground)] hover:bg-[var(--bg-primary)]/90"
           >
             Open Command Palette
           </button>
@@ -210,7 +210,7 @@ export const Dialog: Story = {
  */
 export const Compact: Story = {
   render: () => (
-    <Command className="w-[350px] rounded-lg border border-[var(--tekton-border-border)]">
+    <Command className="w-[350px] rounded-lg border border-[var(--border-border)]">
       <CommandInput placeholder="Quick search..." />
       <CommandList className="max-h-[200px]">
         <CommandEmpty>No results.</CommandEmpty>
@@ -229,7 +229,7 @@ export const Compact: Story = {
  */
 export const MultipleGroups: Story = {
   render: () => (
-    <Command className="w-[500px] rounded-lg border border-[var(--tekton-border-border)] shadow-md">
+    <Command className="w-[500px] rounded-lg border border-[var(--border-border)] shadow-md">
       <CommandInput placeholder="Search everything..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>

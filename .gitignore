@@ -1,21 +1,36 @@
 # ============================================
 # MoAI-ADK Package Distribution .gitignore
 # ============================================
-# Version: 0.28.0
+# Version: 0.33.0
+# Updated: 2026-01-10
 # Purpose: Essential patterns for user projects
 # ============================================
 
-# ---------------------------------------------
-# Build Artifacts
-# ---------------------------------------------
+# ===========================================
+# Go Build Artifacts
+# ===========================================
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+cover.out
+cover.html
+cpu.prof
+mem.prof
+
+# ===========================================
+# Build Artifacts & Distribution
+# ===========================================
 build/
 dist/
 *.egg-info/
 *.egg
 
-# ---------------------------------------------
-# Python Cache & Database
-# ---------------------------------------------
+# ===========================================
+# Python Cache & Bytecode
+# ===========================================
 __pycache__/
 .pytest_cache/
 *.pyc
@@ -29,9 +44,9 @@ __pycache__/
 *.rdb
 *.dbm
 
-# ---------------------------------------------
+# ===========================================
 # Virtual Environments
-# ---------------------------------------------
+# ===========================================
 venv/
 .venv/
 env/
@@ -39,9 +54,16 @@ env/
 .uv_cache/
 .uv-cache/
 
-# ---------------------------------------------
+# ===========================================
+# Test Coverage
+# ===========================================
+.coverage
+coverage.json
+htmlcov/
+
+# ===========================================
 # IDE & Editors
-# ---------------------------------------------
+# ===========================================
 .vscode/
 .idea/
 *.swp
@@ -56,9 +78,9 @@ env/
 *.suo
 .#*
 
-# ---------------------------------------------
+# ===========================================
 # OS Files
-# ---------------------------------------------
+# ===========================================
 # Mac
 .DS_Store
 .AppleDouble
@@ -78,17 +100,110 @@ ehthumbs.db
 # Linux
 .directory
 
-# ---------------------------------------------
+# ===========================================
+# Logs & Temporary Files
+# ===========================================
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# ===========================================
+# Backups
+# ===========================================
+.moai-backups/
+*.backup/
+*-backup/
+*_backup_*/
+
+# ===========================================
+# Secrets and Credentials (CRITICAL)
+# ===========================================
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Certificate files
+*.pem
+*.p12
+*.pfx
+*.jks
+
+# Private keys (specific patterns to avoid false positives)
+# FIXED: Issue #237 - Replaced overly broad *key* and *secret* patterns
+*-key.*
+*_key.*
+*.key.*
+*-secret-key.*
+*-api-key.*
+api-key-*
+secret-key-*
+private-key*
+*-secret.*
+*_secret.*
+*.secret.*
+secret-*.*
+
+# Credential patterns in environment files
+*_secret=*
+*_token=*
+
+# Cloud provider credentials
+.aws/config
+.aws/credentials
+
+# ===========================================
+# Claude Code Configuration (MoAI-ADK)
+# ===========================================
+.claude/agents/
+.claude/commands/
+.claude/hooks/
+.claude/output-styles/
+.claude/rules/
+.claude/skills/
+.claude/settings.json
+.claude/settings.local.json
+.claude/settings.local.*.json
+.claude/.env.local*
+.claude/local/
+.claude/plans/
+.claude/agent-memory/
+.claude/worktrees/
+
+# ===========================================
+# Local-Only Files (never sync via git pull)
+# ===========================================
+.moai/status_line.sh
+.moai/memory/
+.moai/worktrees/
+
+# ===========================================
 # Node.js (for docs/Nextra)
-# ---------------------------------------------
+# ===========================================
 node_modules/
 *.tsbuildinfo
 .tscache/
 .next/
 out/
 
-# TypeScript compilation outputs (prevent committing build artifacts)
-# Only exclude from source/test directories in packages
+# ===========================================
+# Build Tools & Frameworks
+# ===========================================
+.turbo/
+.nuxt/
+dist-ssr/
+
+# ===========================================
+# Deployment & CI/CD
+# ===========================================
+.vercel/
+.netlify/
+.firebase/
+
+# User Custom Patterns (preserved by moai update)
 packages/*/src/**/*.js
 packages/*/src/**/*.d.ts
 packages/*/src/**/*.js.map
@@ -105,144 +220,32 @@ packages/*/*.setup.js
 packages/*/*.setup.d.ts
 packages/*/*.setup.js.map
 packages/*/*.setup.d.ts.map
-
-# Root level config build artifacts
 playwright.config.js
 playwright.config.d.ts
 playwright.config.js.map
 playwright.config.d.ts.map
-
-# Accessibility test build artifacts
 tests/accessibility/**/*.js
 tests/accessibility/**/*.d.ts
 tests/accessibility/**/*.js.map
 tests/accessibility/**/*.d.ts.map
-
-# ---------------------------------------------
-# Logs & Temporary Files
-# ---------------------------------------------
-*.log
-logs/
-*.tmp
-*.temp
-*.bak
-*.backup
-
-# ---------------------------------------------
-# Test Coverage
-# ---------------------------------------------
-# Python coverage
-.coverage
-coverage.json
-htmlcov/
-.pytest_cache/
-
-# JavaScript/TypeScript coverage
 coverage/
 packages/*/coverage/
 *.lcov
-
-# Test-generated data
 .tekton/
 .tekton-test/
 packages/*/.tekton/
 packages/*/.tekton-test/
 test-exports/
-
-# Playwright test artifacts
 playwright-report/
 test-results/
 .playwright/
-
-# ---------------------------------------------
-# Environment Variables & Secrets
-# ---------------------------------------------
-.env
-.env.*
-!.env.example
-
-# Certificate files
-*.pem
-*.p12
-*.pfx
-*.jks
-
-# Private keys and certificates (specific patterns to avoid false positives)
-# FIXED: Issue #237 - Replaced overly broad *key* and *secret* patterns
-# Old patterns caused false positives for: keyboard-config, hotkey, monkey-patch, etc.
-*-key.*
-*_key.*
-*.key.*
-*-secret-key.*
-*-api-key.*
-api-key-*
-secret-key-*
-private-key*
-*-secret.*
-*_secret.*
-*.secret.*
-secret-*.*
-
-# Exceptions: Allow source code files with key-related names
 !**/lib/security/api-key.ts
 !**/lib/security/*-key.ts
-
-# API credentials patterns
-*_secret=*
-*_token=*
-
-# Cloud provider credentials
-.aws/config
-.aws/credentials
-.vercel/
-.netlify/
-.firebase/
-
-# Claude Code Skills Secrets
-.claude/skills/*/.env*
-.claude/skills/*/secrets/
-.claude/skills/*/*/*secret*
-.claude/skills/*/*/*key*
-.claude/skills/*/*/*token*
-
-# ---------------------------------------------
-# Backups
-# ---------------------------------------------
-.moai-backups/
-*.backup/
-*-backup/
-*_backup_*/
-
-# ---------------------------------------------
-# Claude Code Local Configuration
-# ---------------------------------------------
-.claude/settings.local.json
-.claude/settings.local.*.json
-.claude/.env.local*
-.claude/local/
-
-# ---------------------------------------------
-# MoAI Directory Management
-# ---------------------------------------------
-# Tracked in git: config/, memory/, scripts/, specs/, themes/
-# User-generated content: logs/, cache/, reports/, etc.
-
 .moai/*
-!.moai/config/
-!.moai/config/**
-!.moai/memory/
-!.moai/memory/**
-!.moai/scripts/
-!.moai/scripts/**
 !.moai/specs/
 !.moai/specs/**
 !.moai/themes/
 !.moai/themes/**
-
-# Legacy config format (migrated to YAML in v0.32.0)
-.moai/config/config.json
-
-# .moai local-only directories (user projects only)
 .moai/cache/
 .moai/logs/
 .moai/docs/
@@ -254,46 +257,15 @@ secret-*.*
 .moai/error_logs/
 .moai/temp/
 .moai/work/
-
-# .moai local development scripts (not distributed)
 .moai/scripts/phase*.py
 .moai/scripts/phase*.sh
 .moai/scripts/sync-*.sh
 .moai/scripts/sync-*.py
 .moai/scripts/*sync*.sh
 .moai/scripts/__pycache__/
-
-# ---------------------------------------------
-# CI/CD
-# ---------------------------------------------
 .github/workflows/*.yml.bak
 .gitlab-ci.yml.bak
-
-# ---------------------------------------------
-# Package Distribution
-# ---------------------------------------------
-# uv.lock is intentionally included for reproducible builds
-# Add to .gitignore if needed per project
-# uv.lock
 packages/studio-mcp/coverage/
-# Secrets and Credentials (CRITICAL)
-# Skill-specific credentials
-# Claude Code Configuration
-# Environment files
-# Updated: 2026-01-10
-# Python Cache & Bytecode
-# Build Tools & Frameworks
-.turbo/
-# Credential patterns in environment files
-# Deployment & CI/CD
-# Build Artifacts & Distribution
-dist-ssr/
-# Version: 0.33.0
-# ===========================================
-# Private keys (specific patterns to avoid false positives)
-.nuxt/
 service-account.json
-.DS_Store
-# Legal documents are now tracked in git (public information)
 workflow_logs.txt
 tekton-mkt-487515-*.json

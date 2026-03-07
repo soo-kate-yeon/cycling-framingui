@@ -12,10 +12,11 @@ npm install @framingui/mcp-server
 
 ```bash
 # npx로 즉시 실행
-npx @framingui/mcp-server
+npx -y @framingui/mcp-server@latest
 
 # 또는 전역 설치 후 실행
-npm install -g @framingui/mcp-server
+npm install -g @framingui/mcp-server@latest
+framingui-mcp --version
 framingui-mcp
 ```
 
@@ -26,7 +27,7 @@ framingui-mcp
 프로젝트에 FramingUI를 한 줄로 설정합니다.
 
 ```bash
-npx @framingui/mcp-server init
+npx -y @framingui/mcp-server@latest init
 ```
 
 이 명령어는 다음을 자동으로 수행합니다:
@@ -84,6 +85,8 @@ npx @framingui/mcp-server init
 
 설정 완료 후 Claude Code를 재시작하면, AI에게 자연어로 화면 생성을 요청할 수 있습니다.
 
+이미 `.mcp.json` 에 `framingui` entry 가 있다면, 최신 CLI의 `init` 은 그 entry 를 `npx -y @framingui/mcp-server@latest` 형태로 갱신합니다.
+
 ---
 
 ## 핵심 역할
@@ -110,13 +113,15 @@ AI 에이전트가 이 서버를 통해 다음 작업을 수행할 수 있습니
     "tekton": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@framingui/mcp-server"]
+      "args": ["-y", "@framingui/mcp-server@latest"]
     }
   }
 }
 ```
 
 설정 후 Claude Code를 재시작하면, AI가 Tekton 디자인 시스템 도구를 자동으로 사용할 수 있습니다.
+
+`whoami` is optional. Use it to inspect the current session and licensed themes, but authenticated tool calls do not require a prior `whoami` request.
 
 ---
 

@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/app/*": ["./app/*"],
+      "@framingui/core": ["../core/dist/index.d.ts"],
+      "@framingui/ui": ["../ui/dist/index.d.mts"],
+      "@framingui/mcp-server/schemas": ["../mcp-server/dist/schemas/mcp-schemas.d.ts"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "components/landing/landing-backup", ".next"]
+}

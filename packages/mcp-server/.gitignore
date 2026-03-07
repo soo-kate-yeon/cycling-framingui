@@ -9,6 +9,7 @@ dist/
 # Test artifacts
 coverage/
 .framingui-test/
+.framingui/
 
 # Dependencies
 node_modules/

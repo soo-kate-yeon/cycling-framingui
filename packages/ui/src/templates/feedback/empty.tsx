@@ -18,8 +18,8 @@
  */
 
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Empty Template Component
@@ -38,16 +38,16 @@ export function EmptyTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
-      <div className="max-w-md text-center space-y-[var(--tekton-spacing-6)]">
+      <div className="max-w-md text-center space-y-[var(--spacing-6)]">
         {/* Empty Icon/Illustration */}
         {slots.illustration || (
           <div className="flex justify-center">
-            <div className="rounded-full bg-[var(--tekton-bg-muted)] p-[var(--tekton-spacing-8)]">
+            <div className="rounded-full bg-[var(--bg-muted)] p-[var(--spacing-8)]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-16 w-16 text-[var(--tekton-text-muted-foreground)]"
+                className="h-16 w-16 text-[var(--text-muted-foreground)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -64,9 +64,9 @@ export function EmptyTemplateComponent({
         )}
 
         {/* Empty Message */}
-        <div className="space-y-[var(--tekton-spacing-2)]">
+        <div className="space-y-[var(--spacing-2)]">
           <h2 className="text-2xl font-bold">{title}</h2>
-          <p className="text-[var(--tekton-text-muted-foreground)]">{message}</p>
+          <p className="text-[var(--text-muted-foreground)]">{message}</p>
         </div>
 
         {/* CTA Button */}
@@ -78,7 +78,7 @@ export function EmptyTemplateComponent({
 
         {/* Help Text */}
         {slots.helpText && (
-          <div className="text-sm text-[var(--tekton-text-muted-foreground)]">{slots.helpText}</div>
+          <div className="text-sm text-[var(--text-muted-foreground)]">{slots.helpText}</div>
         )}
       </div>
       {children}
@@ -89,43 +89,4 @@ export function EmptyTemplateComponent({
 /**
  * Empty Template Definition
  */
-export const EmptyTemplate: ScreenTemplate = {
-  id: 'feedback.empty',
-  name: 'Empty',
-  category: 'feedback',
-  description: 'Empty state screen with call-to-action',
-
-  skeleton: {
-    shell: 'centered',
-    page: 'feedback-page',
-    sections: [
-      {
-        id: 'empty-state',
-        name: 'Empty State',
-        slot: 'main',
-        required: true,
-        Component: EmptyTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'message', 'cta_label'],
-    optional: ['show_cta'],
-    slots: ['illustration', 'helpText'],
-  },
-
-  requiredComponents: ['Button'],
-
-  Component: EmptyTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['feedback', 'empty', 'state', 'no-data'],
-};
+export const EmptyTemplate = createTemplateFromCatalog('feedback.empty', EmptyTemplateComponent);

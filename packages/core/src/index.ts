@@ -116,6 +116,25 @@ export {
   type ValidationResult as SchemaValidationResult,
 } from './schema-validation.js';
 
+// Catalog-backed template definitions
+export {
+  SCREEN_TEMPLATE_DEFINITIONS,
+  listTemplateDefinitions,
+  listTemplateDefinitionsByCategory,
+  searchTemplateDefinitions,
+  loadTemplateDefinition,
+} from './catalog/templates/index.js';
+export type {
+  ScreenTemplateDefinition,
+  TemplateCategory,
+  TemplateLayoutType,
+  TemplateResponsiveBreakpoint,
+  TemplateResponsiveLayout,
+  TemplateSectionDefinition,
+  TemplateLayoutDefinition,
+  TemplateCustomizableDefinition,
+} from './catalog/templates/index.js';
+
 // Layout Tokens (SPEC-LAYOUT-001)
 // Note: TokenReference is already exported from token-resolver.ts
 export type {
@@ -347,6 +366,7 @@ export {
   type ScreenMeta,
   type ScreenDefinition,
   type ValidationContext,
+  SCREEN_COMPONENT_TYPES,
   isComponentDefinition,
   isScreenDefinition,
   // Validation

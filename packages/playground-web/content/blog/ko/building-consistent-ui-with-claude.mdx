@@ -28,7 +28,7 @@ Claude Code는 컨텍스트를 이해하고 프로덕션 준비 코드를 생성
 FramingUI는 Claude에게 다음을 통해 **구조화된 디자인 어휘**를 제공합니다:
 
 - `@framingui/ui`의 **타입 안전 컴포넌트**
-- `var(--tekton-bg-primary)` 같은 **시맨틱 디자인 토큰**
+- `var(--bg-primary)` 같은 **시맨틱 디자인 토큰**
 - 컴포넌트 API를 통해 강제되는 **일관된 패턴**
 
 ## 설정: Claude에게 FramingUI 가르치기
@@ -58,22 +58,22 @@ FramingUI는 Claude에게 다음을 통해 **구조화된 디자인 어휘**를 
 모든 스타일링은 CSS 커스텀 속성을 사용합니다:
 
 **색상:**
-- `var(--tekton-bg-primary)` - Primary 브랜드 색상
-- `var(--tekton-bg-secondary)` - Secondary 강조
-- `var(--tekton-bg-destructive)` - 오류/위험 상태
-- `var(--tekton-bg-muted)` - Muted 배경
-- `var(--tekton-bg-accent)` - Accent 하이라이트
-- `var(--tekton-bg-card)` - Card 배경
+- `var(--bg-primary)` - Primary 브랜드 색상
+- `var(--bg-secondary)` - Secondary 강조
+- `var(--bg-destructive)` - 오류/위험 상태
+- `var(--bg-muted)` - Muted 배경
+- `var(--bg-accent)` - Accent 하이라이트
+- `var(--bg-card)` - Card 배경
 
 **간격:**
-- `var(--tekton-spacing-1)`부터 `var(--tekton-spacing-8)`까지
+- `var(--spacing-1)`부터 `var(--spacing-8)`까지
 
 **테두리 반경:**
-- `var(--tekton-radius-sm)`, `var(--tekton-radius-md)`, `var(--tekton-radius-lg)`, `var(--tekton-radius-xl)`
+- `var(--radius-sm)`, `var(--radius-md)`, `var(--radius-lg)`, `var(--radius-xl)`
 
 ### 코드 생성 규칙
 
-1. **색상을 하드코딩하지 마세요** - 항상 `var(--tekton-*)` 토큰 사용
+1. **색상을 하드코딩하지 마세요** - 항상 `var(--*)` 토큰 사용
 2. **@framingui/ui에서 임포트** - 로컬 컴포넌트 파일이 아님
 3. **시맨틱 이름 사용** - `blue`가 아닌 `primary`
 4. **HTML보다 컴포넌트 선호** - `<button>` 대신 `<Button>` 사용
@@ -139,7 +139,7 @@ export function ProfileCard({ name, email }: ProfileCardProps) {
         <CardTitle>{name}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">{email}</p>
+        <p className="text-sm text-[var(--bg-muted-foreground)]">{email}</p>
       </CardContent>
       <CardFooter>
         <Button variant="default">프로필 수정</Button>
@@ -151,7 +151,7 @@ export function ProfileCard({ name, email }: ProfileCardProps) {
 
 **장점:**
 - FramingUI Card 컴포넌트 사용
-- 시맨틱 토큰: `var(--tekton-bg-muted-foreground)`
+- 시맨틱 토큰: `var(--bg-muted-foreground)`
 - 자동으로 테마에 적응
 - 다른 컴포넌트와 일관성 유지
 
@@ -181,24 +181,24 @@ const stats = [
 
 export function StatsGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--tekton-spacing-4)]">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--spacing-4)]">
       {stats.map((stat) => (
         <Card key={stat.title}>
-          <CardContent className="p-[var(--tekton-spacing-6)]">
+          <CardContent className="p-[var(--spacing-6)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+                <p className="text-sm text-[var(--bg-muted-foreground)]">
                   {stat.title}
                 </p>
-                <p className="text-2xl font-bold mt-[var(--tekton-spacing-2)]">
+                <p className="text-2xl font-bold mt-[var(--spacing-2)]">
                   {stat.value}
                 </p>
-                <p className="text-sm text-[var(--tekton-bg-primary)] mt-[var(--tekton-spacing-1)]">
+                <p className="text-sm text-[var(--bg-primary)] mt-[var(--spacing-1)]">
                   {stat.change}
                 </p>
               </div>
-              <div className="p-[var(--tekton-spacing-3)] bg-[var(--tekton-bg-primary)]/10 rounded-[var(--tekton-radius-lg)]">
-                <stat.icon className="w-6 h-6 text-[var(--tekton-bg-primary)]" />
+              <div className="p-[var(--spacing-3)] bg-[var(--bg-primary)]/10 rounded-[var(--radius-lg)]">
+                <stat.icon className="w-6 h-6 text-[var(--bg-primary)]" />
               </div>
             </div>
           </CardContent>
@@ -249,7 +249,7 @@ export function UsersTable() {
             {users.map((user) => (
               <TableRow key={user.email}>
                 <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell className="text-[var(--tekton-bg-muted-foreground)]">
+                <TableCell className="text-[var(--bg-muted-foreground)]">
                   {user.email}
                 </TableCell>
                 <TableCell>{user.role}</TableCell>
@@ -303,14 +303,14 @@ export function UsersTable() {
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen">
-      <aside className="w-[var(--app-sidebar-width)] border-r border-[var(--tekton-border-default)]">
+      <aside className="w-[var(--app-sidebar-width)] border-r border-[var(--border-default)]">
         {/* 사이드바 내용 */}
       </aside>
       <div className="flex-1 flex flex-col">
-        <header className="h-[var(--app-header-height)] border-b border-[var(--tekton-border-default)]">
+        <header className="h-[var(--app-header-height)] border-b border-[var(--border-default)]">
           {/* 헤더 내용 */}
         </header>
-        <main className="flex-1 overflow-auto p-[var(--tekton-spacing-6)]">
+        <main className="flex-1 overflow-auto p-[var(--spacing-6)]">
           {children}
         </main>
       </div>
@@ -329,7 +329,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 ### 2. 프롬프트에서 디자인 토큰 참조
 
 ❌ "텍스트를 회색으로 만들어줘"
-✅ "텍스트 색상에 var(--tekton-bg-muted-foreground) 사용해줘"
+✅ "텍스트 색상에 var(--bg-muted-foreground) 사용해줘"
 
 ### 3. 시맨틱 변형 요청
 
@@ -339,7 +339,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 ### 4. 일관성 체크로 반복
 
 ```
-코드를 검토하고 모든 색상이 var(--tekton-*) 토큰을 사용하는지 확인해줘
+코드를 검토하고 모든 색상이 var(--*) 토큰을 사용하는지 확인해줘
 ```
 
 ## 성공 측정
@@ -351,7 +351,7 @@ Claude와 FramingUI 설정 후 컴포넌트 감사:
 grep -r "bg-blue\|text-red\|#[0-9A-F]\{6\}" src/
 
 # 토큰 사용 확인 (모든 곳에 있어야 함)
-grep -r "var(--tekton-" src/
+grep -r "var(--" src/
 ```
 
 ## 다음 단계

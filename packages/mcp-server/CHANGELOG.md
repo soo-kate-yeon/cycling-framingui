@@ -2,6 +2,67 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.8] - 2026-03-07
+
+### Fixed
+
+- Switched `screen-component-contract` to consume `SCREEN_COMPONENT_TYPES` through the published `@framingui/core` API instead of a monorepo-only source import, fixing MCP startup in consumer installs.
+
+## [0.6.7] - 2026-03-07
+
+### Fixed
+
+- Replaced a leaked monorepo-only import in `screen-component-contract` with the public `@framingui/core` export so installed consumer projects can reconnect to the MCP server correctly.
+
+## [0.6.6] - 2026-03-07
+
+### Fixed
+
+- Added a real `framingui-mcp --version` / `-v` CLI path so version checks no longer boot the stdio server.
+- Updated `framingui-mcp init` to rewrite stale `framingui` entries in `.mcp.json` to the canonical `npx -y @framingui/mcp-server@latest` config.
+
+## [0.6.5] - 2026-03-07
+
+### Fixed
+
+- Removed the hidden `whoami` prerequisite from the MCP workflow contract so authenticated sessions can call theme and generation tools directly.
+- Unified theme entitlement checks across `whoami`, `list-themes`, and `preview-theme` and fail explicitly on authority mismatches instead of returning misleading empty or not-found responses.
+- Synced screen validation and generation onto one shared component contract, improved generation output quality, and enriched generation context responses.
+- Corrected the runtime server version banner and updated tool descriptions away from legacy local `.moai` wording.
+
+### Changed
+
+- Raised the minimum published `@framingui/core` and `@framingui/ui` dependency versions to include the latest screen contract and peer-dependency fixes.
+
+## [0.6.4] - 2026-03-07
+
+### Fixed
+
+- Disabled shared auth-route caching for theme access checks so MCP sessions no longer reuse stale authorization state.
+- Kept theme and component discovery aligned with the refreshed token and template catalogs used by the hosted API routes.
+
+### Changed
+
+- Raised the published `@framingui/core` and `@framingui/ui` dependency floor to the versions that include the prefixless token migration and latest catalog fixes.
+
+## [0.6.3] - 2026-03-06
+
+### Fixed
+
+- Treated empty `list-themes` responses as invalid when the authenticated session already has licensed themes, preventing blank theme lists from being cached in MCP memory.
+- Added `editorial-tech` to the master-account premium theme set so `whoami` and downstream tools stay aligned with the actual catalog.
+
+## [0.6.2] - 2026-03-06
+
+### Changed
+
+- `preview-screen-template` now emits `@framingui/ui/templates` imports so generated code uses the template-only entrypoint.
+- Raised the minimum supported `@framingui/core` and `@framingui/ui` versions to consume the catalog-backed template exports.
+
+### Testing
+
+- Replaced legacy registry-based template tool tests with API-based coverage for template listing and preview behavior.
+
 ## [0.6.1] - 2026-03-06
 
 ### Fixed

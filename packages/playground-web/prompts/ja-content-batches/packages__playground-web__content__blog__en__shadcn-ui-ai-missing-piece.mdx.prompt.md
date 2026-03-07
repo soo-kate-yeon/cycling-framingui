@@ -171,8 +171,8 @@ FramingUI solves this by forking shadcn UI and integrating **design tokens** dir
 </Button>
 
 // Under the hood:
-// bg-[var(--tekton-bg-primary)]
-// hover:bg-[var(--tekton-bg-primary)]/90
+// bg-[var(--bg-primary)]
+// hover:bg-[var(--bg-primary)]/90
 ```
 ````
 
@@ -185,7 +185,7 @@ import { Button } from '@framingui/ui';
 
 function LoginForm() {
   return (
-    <div className="space-y-[var(--tekton-spacing-4)]">
+    <div className="space-y-[var(--spacing-4)]">
       <Button variant="default">Sign In</Button>
       <Button variant="outline">Create Account</Button>
       <Button variant="destructive">Delete</Button>
@@ -200,8 +200,8 @@ Every button automatically inherits your theme's colors, spacing, and border rad
 
 When AI generates code using FramingUI, it can't hallucinate colors because:
 
-1. **Single source of truth**: All colors come from `var(--tekton-*)` tokens
-2. **Semantic naming**: `--tekton-bg-primary` is unambiguous
+1. **Single source of truth**: All colors come from `var(--*)` tokens
+2. **Semantic naming**: `--bg-primary` is unambiguous
 3. **OKLCH foundation**: Colors are perceptually uniform, ensuring consistent brightness
 
 ### Example: AI-Generated Card
@@ -218,14 +218,14 @@ function ProductCard({ title, description, price }: ProductCardProps) {
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold text-[var(--tekton-bg-primary)]">${price}</p>
+        <p className="text-2xl font-bold text-[var(--bg-primary)]">${price}</p>
       </CardContent>
     </Card>
   );
 }
 ```
 
-Notice how the AI uses tokens (`var(--tekton-bg-primary)`) instead of guessing `text-blue-600` or `#3B82F6`.
+Notice how the AI uses tokens (`var(--bg-primary)`) instead of guessing `text-blue-600` or `#3B82F6`.
 
 ## OKLCH: The Secret Sauce
 
@@ -254,7 +254,7 @@ Then add this to your Cursor rules (`.cursorrules`):
 ```
 When generating UI components:
 - Always import from @framingui/ui
-- Use var(--tekton-*) tokens for colors, spacing, and radius
+- Use var(--*) tokens for colors, spacing, and radius
 - Never hardcode color values or spacing
 ```
 
@@ -271,9 +271,9 @@ Import components from @framingui/ui:
 
 Design tokens (use these instead of Tailwind colors):
 
-- Colors: var(--tekton-bg-primary), var(--tekton-bg-secondary)
-- Spacing: var(--tekton-spacing-2), var(--tekton-spacing-4)
-- Radius: var(--tekton-radius-md), var(--tekton-radius-lg)
+- Colors: var(--bg-primary), var(--bg-secondary)
+- Spacing: var(--spacing-2), var(--spacing-4)
+- Radius: var(--radius-md), var(--radius-lg)
 ```
 
 ## Migration from Shadcn UI

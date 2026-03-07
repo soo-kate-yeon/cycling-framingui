@@ -4,7 +4,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { templateRegistry } from '@framingui/ui';
+import {
+  listTemplateDefinitions,
+  listTemplateDefinitionsByCategory,
+  searchTemplateDefinitions,
+  type TemplateCategory,
+} from '@framingui/core';
 import { authenticateMcpRequest } from '@/lib/mcp/auth-helper';
 
 export async function GET(request: NextRequest) {
@@ -20,17 +25,17 @@ export async function GET(request: NextRequest) {
 
     // 카테고리 또는 전체 템플릿 조회
     let templates = category
-      ? templateRegistry.getByCategory(category as any)
-      : templateRegistry.getAll();
+      ? listTemplateDefinitionsByCategory(category as TemplateCategory)
+      : listTemplateDefinitions();
 
     // 검색 필터 적용
     if (search) {
-      templates = templateRegistry
-        .search(search)
-        .filter((t: any) => (category ? t.category === category : true));
+      templates = searchTemplateDefinitions(search).filter((t) =>
+        category ? t.category === category : true
+      );
     }
 
-    const templateMetas = templates.map((t: any) => ({
+    const templateMetas = templates.map((t) => ({
       id: t.id,
       name: t.name,
       category: t.category,
@@ -50,7 +55,8 @@ export async function GET(request: NextRequest) {
       {
         status: 200,
         headers: {
-          'Cache-Control': 'public, s-maxage=3600',
+          'Cache-Control': 'private, no-store',
+          Vary: 'Authorization',
           ...auth.rateLimitHeaders,
         },
       }

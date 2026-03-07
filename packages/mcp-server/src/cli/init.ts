@@ -9,6 +9,7 @@ import { execSync } from 'node:child_process';
 import readline from 'node:readline';
 import { generateGuide, type Framework } from './guide-template.js';
 import { generateClaudeMdSection, generateAgentsMdSection } from './agent-md-templates.js';
+import { upsertFraminguiServerConfig, type McpConfig } from './mcp-config.js';
 
 // ─── 상수 ──────────────────────────────────────────────
 
@@ -183,45 +184,26 @@ function setupCSS(cwd: string, framework: Framework): void {
 
 // ─── Step 5: MCP 설정 ──────────────────────────────────
 
-interface McpConfig {
-  mcpServers?: Record<string, unknown>;
-}
-
 function setupMCP(cwd: string): void {
   const mcpPath = path.join(cwd, '.mcp.json');
 
-  const framinguiServer = {
-    type: 'stdio' as const,
-    command: 'npx',
-    args: ['-y', '@framingui/mcp-server'],
-  };
-
   if (fileExists(mcpPath)) {
-    // 기존 파일에 framingui 서버 추가
     const raw = fs.readFileSync(mcpPath, 'utf-8');
     const config = JSON.parse(raw) as McpConfig;
+    const result = upsertFraminguiServerConfig(config);
 
-    if (!config.mcpServers) {
-      config.mcpServers = {};
-    }
-
-    if ('framingui' in config.mcpServers) {
-      logDetail('.mcp.json (이미 설정됨, skip)');
+    if (!result.updated) {
+      logDetail('.mcp.json (already using latest FramingUI server config)');
       return;
     }
 
-    config.mcpServers['framingui'] = framinguiServer;
-    fs.writeFileSync(mcpPath, JSON.stringify(config, null, 2) + '\n', 'utf-8');
-    logDetail('.mcp.json 업데이트 완료');
+    fs.writeFileSync(mcpPath, JSON.stringify(result.config, null, 2) + '\n', 'utf-8');
+    logDetail(
+      result.created ? '.mcp.json 업데이트 완료' : '.mcp.json framingui 서버를 latest로 갱신 완료'
+    );
   } else {
-    // 새 파일 생성
-    const config = {
-      mcpServers: {
-        framingui: framinguiServer,
-      },
-    };
-
-    fs.writeFileSync(mcpPath, JSON.stringify(config, null, 2) + '\n', 'utf-8');
+    const result = upsertFraminguiServerConfig({});
+    fs.writeFileSync(mcpPath, JSON.stringify(result.config, null, 2) + '\n', 'utf-8');
     logDetail('.mcp.json 생성 완료');
   }
 }

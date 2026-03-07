@@ -34,7 +34,7 @@ export const Default = {
     <div className="w-[300px]">
       <div className="space-y-1">
         <h4 className="text-sm font-medium leading-none">Radix Primitives</h4>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           An open-source UI component library.
         </p>
       </div>
@@ -103,21 +103,21 @@ export const SectionDivider = {
     <div className="w-[400px] space-y-4">
       <div>
         <h3 className="text-lg font-semibold">Section 1</h3>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Content for the first section
         </p>
       </div>
       <Separator />
       <div>
         <h3 className="text-lg font-semibold">Section 2</h3>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Content for the second section
         </p>
       </div>
       <Separator />
       <div>
         <h3 className="text-lg font-semibold">Section 3</h3>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Content for the third section
         </p>
       </div>

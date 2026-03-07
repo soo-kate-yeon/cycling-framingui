@@ -22,81 +22,96 @@
 
 @layer base {
   * {
-    @apply border-[var(--tekton-border-default)];
+    @apply border-[var(--border-default)];
   }
 
   body {
-    @apply bg-[var(--tekton-bg-background)] text-[var(--tekton-bg-foreground)];
+    @apply bg-[var(--bg-background)] text-[var(--bg-foreground)];
   }
 }
 
 /* ========================================
-   Tekton Token Defaults
+   Standard Design Tokens
    Fallback values when theme is not loaded
    These are overridden by theme-loader.ts
    ======================================== */
 
 :root {
   /* Background Tokens */
-  --tekton-bg-background: oklch(0.99 0.005 265);
-  --tekton-bg-foreground: oklch(0.2 0.04 265);
-  --tekton-bg-card: oklch(1 0 0);
-  --tekton-bg-card-foreground: oklch(0.2 0.04 265);
-  --tekton-bg-popover: oklch(1 0 0);
-  --tekton-bg-popover-foreground: oklch(0.2 0.04 265);
-  --tekton-bg-primary: oklch(0.55 0.12 265);
-  --tekton-bg-primary-foreground: oklch(1 0 0);
-  --tekton-bg-secondary: oklch(0.96 0.01 265);
-  --tekton-bg-secondary-foreground: oklch(0.2 0.04 265);
-  --tekton-bg-muted: oklch(0.99 0.005 265);
-  --tekton-bg-muted-foreground: oklch(0.6 0.03 265);
-  --tekton-bg-accent: oklch(0.96 0.01 265);
-  --tekton-bg-accent-foreground: oklch(0.2 0.04 265);
-  --tekton-bg-destructive: oklch(0.55 0.22 30);
-  --tekton-bg-destructive-foreground: oklch(1 0 0);
+  --bg-background: oklch(0.99 0.005 265);
+  --bg-foreground: oklch(0.2 0.04 265);
+  --bg-card: oklch(1 0 0);
+  --bg-card-foreground: oklch(0.2 0.04 265);
+  --bg-popover: oklch(1 0 0);
+  --bg-popover-foreground: oklch(0.2 0.04 265);
+  --bg-primary: oklch(0.55 0.12 265);
+  --bg-primary-foreground: oklch(1 0 0);
+  --bg-secondary: oklch(0.96 0.01 265);
+  --bg-secondary-foreground: oklch(0.2 0.04 265);
+  --bg-muted: oklch(0.99 0.005 265);
+  --bg-muted-foreground: oklch(0.6 0.03 265);
+  --bg-accent: oklch(0.96 0.01 265);
+  --bg-accent-foreground: oklch(0.2 0.04 265);
+  --bg-destructive: oklch(0.55 0.22 30);
+  --bg-destructive-foreground: oklch(1 0 0);
 
   /* Border Tokens */
-  --tekton-border-default: oklch(0.92 0.015 265);
-  --tekton-border-input: oklch(0.96 0.01 265);
-  --tekton-border-ring: oklch(0.55 0.12 265);
+  --border-default: oklch(0.92 0.015 265);
+  --border-input: oklch(0.96 0.01 265);
+  --border-ring: oklch(0.55 0.12 265);
+
+  /* Semantic aliases for legacy template/component names */
+  --bg-base: var(--bg-background);
+  --bg-success: oklch(0.72 0.16 150);
+
+  --text-foreground: var(--bg-foreground);
+  --text-card-foreground: var(--bg-card-foreground);
+  --text-popover-foreground: var(--bg-popover-foreground);
+  --text-muted-foreground: var(--bg-muted-foreground);
+  --text-link: var(--bg-primary);
+  --text-success: var(--bg-success);
+  --text-destructive: var(--bg-destructive);
+
+  --border-border: var(--border-default);
+  --border-primary: var(--border-ring);
 
   /* Radius Tokens */
-  --tekton-radius-xs: 2px;
-  --tekton-radius-sm: 4px;
-  --tekton-radius-md: 6px;
-  --tekton-radius-lg: 8px;
-  --tekton-radius-xl: 12px;
-  --tekton-radius-2xl: 16px;
-  --tekton-radius-3xl: 24px;
-  --tekton-radius-full: 9999px;
-  --tekton-radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+  --radius-none: 0;
 
   /* Spacing Tokens */
-  --tekton-spacing-0: 0;
-  --tekton-spacing-1: 4px;
-  --tekton-spacing-2: 8px;
-  --tekton-spacing-3: 12px;
-  --tekton-spacing-4: 16px;
-  --tekton-spacing-5: 20px;
-  --tekton-spacing-6: 24px;
-  --tekton-spacing-8: 32px;
-  --tekton-spacing-10: 40px;
-  --tekton-spacing-12: 48px;
-  --tekton-spacing-16: 64px;
-  --tekton-spacing-20: 80px;
-  --tekton-spacing-24: 96px;
+  --spacing-0: 0;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
 
   /* Motion Tokens [SPEC-UI-001] [TAG-018] */
-  --tekton-motion-duration-instant: 0ms;
-  --tekton-motion-duration-fast: 100ms;
-  --tekton-motion-duration-moderate: 200ms;
-  --tekton-motion-duration-slow: 300ms;
-  --tekton-motion-duration-complex: 500ms;
-  --tekton-motion-easing-linear: linear;
-  --tekton-motion-easing-standard: cubic-bezier(0, 0, 0.2, 1);
-  --tekton-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
-  --tekton-motion-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
-  --tekton-motion-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --motion-duration-instant: 0ms;
+  --motion-duration-fast: 100ms;
+  --motion-duration-moderate: 200ms;
+  --motion-duration-slow: 300ms;
+  --motion-duration-complex: 500ms;
+  --motion-easing-linear: linear;
+  --motion-easing-standard: cubic-bezier(0, 0, 0.2, 1);
+  --motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --motion-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --motion-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
 }
 
 /* ========================================
@@ -106,26 +121,40 @@
 
 [data-theme*="-dark"],
 .dark {
-  --tekton-bg-background: oklch(0.15 0.02 265);
-  --tekton-bg-foreground: oklch(0.95 0.005 265);
-  --tekton-bg-card: oklch(0.2 0.03 265);
-  --tekton-bg-card-foreground: oklch(0.95 0.005 265);
-  --tekton-bg-popover: oklch(0.2 0.03 265);
-  --tekton-bg-popover-foreground: oklch(0.95 0.005 265);
-  --tekton-bg-primary: oklch(0.6 0.14 265);
-  --tekton-bg-primary-foreground: oklch(0.1 0.01 265);
-  --tekton-bg-secondary: oklch(0.25 0.03 265);
-  --tekton-bg-secondary-foreground: oklch(0.95 0.005 265);
-  --tekton-bg-muted: oklch(0.18 0.02 265);
-  --tekton-bg-muted-foreground: oklch(0.7 0.02 265);
-  --tekton-bg-accent: oklch(0.25 0.03 265);
-  --tekton-bg-accent-foreground: oklch(0.95 0.005 265);
-  --tekton-bg-destructive: oklch(0.5 0.2 30);
-  --tekton-bg-destructive-foreground: oklch(1 0 0);
+  --bg-background: oklch(0.15 0.02 265);
+  --bg-foreground: oklch(0.95 0.005 265);
+  --bg-card: oklch(0.2 0.03 265);
+  --bg-card-foreground: oklch(0.95 0.005 265);
+  --bg-popover: oklch(0.2 0.03 265);
+  --bg-popover-foreground: oklch(0.95 0.005 265);
+  --bg-primary: oklch(0.6 0.14 265);
+  --bg-primary-foreground: oklch(0.1 0.01 265);
+  --bg-secondary: oklch(0.25 0.03 265);
+  --bg-secondary-foreground: oklch(0.95 0.005 265);
+  --bg-muted: oklch(0.18 0.02 265);
+  --bg-muted-foreground: oklch(0.7 0.02 265);
+  --bg-accent: oklch(0.25 0.03 265);
+  --bg-accent-foreground: oklch(0.95 0.005 265);
+  --bg-destructive: oklch(0.5 0.2 30);
+  --bg-destructive-foreground: oklch(1 0 0);
 
-  --tekton-border-default: oklch(0.3 0.03 265);
-  --tekton-border-input: oklch(0.25 0.03 265);
-  --tekton-border-ring: oklch(0.6 0.14 265);
+  --border-default: oklch(0.3 0.03 265);
+  --border-input: oklch(0.25 0.03 265);
+  --border-ring: oklch(0.6 0.14 265);
+
+  --bg-base: var(--bg-background);
+  --bg-success: oklch(0.68 0.14 150);
+
+  --text-foreground: var(--bg-foreground);
+  --text-card-foreground: var(--bg-card-foreground);
+  --text-popover-foreground: var(--bg-popover-foreground);
+  --text-muted-foreground: var(--bg-muted-foreground);
+  --text-link: var(--bg-primary);
+  --text-success: var(--bg-success);
+  --text-destructive: var(--bg-destructive);
+
+  --border-border: var(--border-default);
+  --border-primary: var(--border-ring);
 }
 
 /* ========================================
@@ -136,7 +165,7 @@
 @layer utilities {
   /* Focus visible states */
   .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--tekton-bg-background)];
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-background)];
   }
 
   /* Reduced motion support */
@@ -166,26 +195,26 @@
 
 @layer components {
   /* Scrollbar styling */
-  .tekton-scrollbar {
+  .ui-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: var(--tekton-bg-muted) transparent;
+    scrollbar-color: var(--bg-muted) transparent;
   }
 
-  .tekton-scrollbar::-webkit-scrollbar {
+  .ui-scrollbar::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
-  .tekton-scrollbar::-webkit-scrollbar-track {
+  .ui-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  .tekton-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--tekton-bg-muted);
-    border-radius: var(--tekton-radius-full);
+  .ui-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--bg-muted);
+    border-radius: var(--radius-full);
   }
 
-  .tekton-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--tekton-bg-muted-foreground);
+  .ui-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--bg-muted-foreground);
   }
 }

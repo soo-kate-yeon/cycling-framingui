@@ -1,6 +1,5 @@
 /**
  * whoami 도구 - 유저 tier/라이선스 정보 반환
- * 모든 MCP 도구 사용 전 필수 호출 (서버 사이드 강제)
  *
  * 반환 정보:
  * - plan: 유저 구독 플랜 (free/pro/enterprise/master)
@@ -10,13 +9,13 @@
  */
 
 import type { WhoamiOutput } from '../schemas/mcp-schemas.js';
-import { getAuthData, setAuthData, setWhoamiCompleted } from '../auth/state.js';
+import { getAuthData, setAuthData } from '../auth/state.js';
 import { isMasterAccount, PREMIUM_THEMES } from '../auth/theme-access.js';
 import { addMcpUtmParams } from '../utils/url-utils.js';
 
 /**
  * whoami 도구 구현
- * 인증된 유저의 tier 정보를 반환하고 whoamiCompleted 플래그를 설정
+ * 인증된 유저의 tier/라이선스 스냅샷을 반환
  */
 export async function whoamiTool(): Promise<WhoamiOutput> {
   const authData = getAuthData();
@@ -85,9 +84,6 @@ export async function whoamiTool(): Promise<WhoamiOutput> {
       }
     }
   }
-
-  // whoami 완료 플래그 설정 (서버 사이드 게이트 해제)
-  setWhoamiCompleted();
 
   return {
     success: true,

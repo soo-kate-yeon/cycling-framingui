@@ -40,7 +40,7 @@ export const ConfirmationComponent: FC<ScreenTemplateProps> = ({ className, text
           {
             type: 'p',
             props: {
-              className: 'text-sm text-[var(--tekton-text-secondary)] mb-4',
+              className: 'text-sm text-[var(--text-secondary)] mb-4',
             },
             children: [defaultTexts.message],
           },

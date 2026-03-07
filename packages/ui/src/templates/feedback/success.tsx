@@ -18,8 +18,8 @@
  */
 
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Success Template Component
@@ -38,16 +38,16 @@ export function SuccessTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
-      <div className="max-w-md text-center space-y-[var(--tekton-spacing-6)]">
+      <div className="max-w-md text-center space-y-[var(--spacing-6)]">
         {/* Success Icon */}
         {slots.icon || (
           <div className="flex justify-center">
-            <div className="rounded-full bg-[var(--tekton-bg-success)] bg-opacity-10 p-[var(--tekton-spacing-4)]">
+            <div className="rounded-full bg-[var(--bg-success)] bg-opacity-10 p-[var(--spacing-4)]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-[var(--tekton-text-success)]"
+                className="h-12 w-12 text-[var(--text-success)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -64,14 +64,14 @@ export function SuccessTemplateComponent({
         )}
 
         {/* Success Message */}
-        <div className="space-y-[var(--tekton-spacing-2)]">
+        <div className="space-y-[var(--spacing-2)]">
           <h2 className="text-2xl font-bold">{title}</h2>
-          <p className="text-[var(--tekton-text-muted-foreground)]">{message}</p>
+          <p className="text-[var(--text-muted-foreground)]">{message}</p>
         </div>
 
         {/* Success Details */}
         {slots.details && (
-          <div className="text-left bg-[var(--tekton-bg-muted)] p-[var(--tekton-spacing-4)] rounded-[var(--tekton-radius-md)] text-sm">
+          <div className="text-left bg-[var(--bg-muted)] p-[var(--spacing-4)] rounded-[var(--radius-md)] text-sm">
             {slots.details}
           </div>
         )}
@@ -87,7 +87,7 @@ export function SuccessTemplateComponent({
 
         {/* Additional Actions */}
         {slots.additionalActions && (
-          <div className="flex flex-col gap-[var(--tekton-spacing-3)]">
+          <div className="flex flex-col gap-[var(--spacing-3)]">
             {slots.additionalActions}
           </div>
         )}
@@ -100,43 +100,7 @@ export function SuccessTemplateComponent({
 /**
  * Success Template Definition
  */
-export const SuccessTemplate: ScreenTemplate = {
-  id: 'feedback.success',
-  name: 'Success',
-  category: 'feedback',
-  description: 'Success state screen with confirmation message',
-
-  skeleton: {
-    shell: 'centered',
-    page: 'feedback-page',
-    sections: [
-      {
-        id: 'success-message',
-        name: 'Success Message',
-        slot: 'main',
-        required: true,
-        Component: SuccessTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'message', 'cta_label'],
-    optional: ['show_cta'],
-    slots: ['icon', 'details', 'additionalActions'],
-  },
-
-  requiredComponents: ['Button'],
-
-  Component: SuccessTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['feedback', 'success', 'confirmation', 'state'],
-};
+export const SuccessTemplate = createTemplateFromCatalog(
+  'feedback.success',
+  SuccessTemplateComponent
+);

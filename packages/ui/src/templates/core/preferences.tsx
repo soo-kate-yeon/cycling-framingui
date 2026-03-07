@@ -19,8 +19,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/card';
 import { Button } from '../../components/button';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Preferences Template Component
@@ -39,22 +39,22 @@ export function PreferencesTemplateComponent({
     <div className={`min-h-screen flex ${className}`}>
       {/* Settings Navigation */}
       {slots.settingsNav && (
-        <aside className="w-64 border-r border-[var(--tekton-border-default)] p-[var(--tekton-spacing-4)] bg-[var(--tekton-bg-muted)]">
+        <aside className="w-64 border-r border-[var(--border-default)] p-[var(--spacing-4)] bg-[var(--bg-muted)]">
           {slots.settingsNav}
         </aside>
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-[var(--tekton-spacing-8)]">
+      <main className="flex-1 p-[var(--spacing-8)]">
         <div className="max-w-3xl">
           {/* Header */}
-          <div className="mb-[var(--tekton-spacing-8)]">
-            <h1 className="text-3xl font-bold mb-[var(--tekton-spacing-2)]">{title}</h1>
-            <p className="text-[var(--tekton-text-muted-foreground)]">{subtitle}</p>
+          <div className="mb-[var(--spacing-8)]">
+            <h1 className="text-3xl font-bold mb-[var(--spacing-2)]">{title}</h1>
+            <p className="text-[var(--text-muted-foreground)]">{subtitle}</p>
           </div>
 
           {/* Settings Sections */}
-          <div className="space-y-[var(--tekton-spacing-6)]">
+          <div className="space-y-[var(--spacing-6)]">
             {/* General Settings */}
             {slots.generalSettings && (
               <Card>
@@ -93,7 +93,7 @@ export function PreferencesTemplateComponent({
           </div>
 
           {/* Save Button */}
-          <div className="mt-[var(--tekton-spacing-8)] flex justify-end gap-[var(--tekton-spacing-4)]">
+          <div className="mt-[var(--spacing-8)] flex justify-end gap-[var(--spacing-4)]">
             <Button variant="outline">Cancel</Button>
             <Button>{saveLabel}</Button>
           </div>
@@ -107,49 +107,7 @@ export function PreferencesTemplateComponent({
 /**
  * Preferences Template Definition
  */
-export const PreferencesTemplate: ScreenTemplate = {
-  id: 'core.preferences',
-  name: 'Preferences',
-  category: 'form',
-  description: 'Settings and preferences page with categorized options',
-
-  skeleton: {
-    shell: 'sidebar-layout',
-    page: 'settings-page',
-    sections: [
-      {
-        id: 'preferences-content',
-        name: 'Preferences Content',
-        slot: 'main',
-        required: true,
-        Component: PreferencesTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'sidebar',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'save_label'],
-    optional: [],
-    slots: [
-      'settingsNav',
-      'generalSettings',
-      'appearanceSettings',
-      'notificationsSettings',
-      'additionalSettings',
-    ],
-  },
-
-  requiredComponents: ['Button', 'Card', 'Switch', 'Select'],
-
-  Component: PreferencesTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['core', 'settings', 'preferences', 'configuration'],
-};
+export const PreferencesTemplate = createTemplateFromCatalog(
+  'core.preferences',
+  PreferencesTemplateComponent
+);

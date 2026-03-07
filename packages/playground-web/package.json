@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "start": "next start -p 3001",
     "lint": "eslint app components lib __tests__ --ext .ts,.tsx,.js,.jsx",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --project tsconfig.typecheck.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

@@ -24,13 +24,13 @@ const Progress = React.forwardRef<
     aria-valuemin={0}
     aria-valuemax={100}
     className={cn(
-      'relative h-4 w-full overflow-hidden rounded-[var(--tekton-radius-full)] bg-[var(--tekton-bg-secondary)]',
+      'relative h-4 w-full overflow-hidden rounded-[var(--radius-full)] bg-[var(--bg-secondary)]',
       className
     )}
     {...props}
   >
     <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-[var(--tekton-bg-primary)] transition-all"
+      className="h-full w-full flex-1 bg-[var(--bg-primary)] transition-all"
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </ProgressPrimitive.Root>

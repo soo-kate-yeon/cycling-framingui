@@ -109,7 +109,7 @@ export const ImageGallery: Story = {
       <div className="flex w-max space-x-4 p-4">
         {Array.from({ length: 10 }).map((_, i) => (
           <div key={i} className="shrink-0 overflow-hidden rounded-md w-[250px] h-[200px]">
-            <div className="h-full w-full bg-[var(--tekton-bg-muted)] flex items-center justify-center">
+            <div className="h-full w-full bg-[var(--bg-muted)] flex items-center justify-center">
               Image {i + 1}
             </div>
           </div>
@@ -131,8 +131,8 @@ export const ChatMessages: Story = {
             <div
               className={`rounded-lg p-3 max-w-[70%] ${
                 i % 2 === 0
-                  ? 'bg-[var(--tekton-bg-muted)]'
-                  : 'bg-[var(--tekton-bg-primary)] text-[var(--tekton-bg-primary-foreground)]'
+                  ? 'bg-[var(--bg-muted)]'
+                  : 'bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)]'
               }`}
             >
               <p className="text-sm">Message {i + 1}</p>
@@ -154,7 +154,7 @@ export const LongText: Story = {
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Article Title</h3>
         {Array.from({ length: 10 }).map((_, i) => (
-          <p key={i} className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+          <p key={i} className="text-sm text-[var(--bg-muted-foreground)]">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
             exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

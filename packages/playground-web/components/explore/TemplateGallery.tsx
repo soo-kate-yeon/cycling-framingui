@@ -107,8 +107,8 @@ export function TemplateGallery({
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '400px',
-          fontSize: 'var(--tekton-font-size-base, 16px)',
-          color: 'var(--tekton-text-muted-foreground, #6b7280)',
+          fontSize: 'var(--font-size-base, 16px)',
+          color: 'var(--text-muted-foreground, #6b7280)',
         }}
       >
         {i18n.gallery.noTemplates}

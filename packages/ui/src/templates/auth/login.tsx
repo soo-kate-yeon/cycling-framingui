@@ -29,8 +29,8 @@ import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { Label } from '../../components/label';
 import { Separator } from '../../components/separator';
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Login Template Component
@@ -50,24 +50,24 @@ export function LoginTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
       <Card className="w-full max-w-md">
         <CardHeader>
-          {slots.logo && <div className="mb-[var(--tekton-spacing-4)]">{slots.logo}</div>}
+          {slots.logo && <div className="mb-[var(--spacing-4)]">{slots.logo}</div>}
           <CardTitle>{title}</CardTitle>
           <CardDescription>{subtitle}</CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-[var(--tekton-spacing-4)]">
+        <CardContent className="space-y-[var(--spacing-4)]">
           {/* Email Input */}
-          <div className="space-y-[var(--tekton-spacing-2)]">
+          <div className="space-y-[var(--spacing-2)]">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="Enter your email" />
           </div>
 
           {/* Password Input */}
-          <div className="space-y-[var(--tekton-spacing-2)]">
+          <div className="space-y-[var(--spacing-2)]">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               {slots.forgotPassword && <div>{slots.forgotPassword}</div>}
@@ -77,7 +77,7 @@ export function LoginTemplateComponent({
 
           {/* Remember Me */}
           {showRememberMe && slots.rememberMe && (
-            <div className="flex items-center space-x-[var(--tekton-spacing-2)]">
+            <div className="flex items-center space-x-[var(--spacing-2)]">
               {slots.rememberMe}
             </div>
           )}
@@ -93,12 +93,12 @@ export function LoginTemplateComponent({
                   <Separator />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-[var(--tekton-bg-background)] px-[var(--tekton-spacing-2)] text-[var(--tekton-text-muted-foreground)]">
+                  <span className="bg-[var(--bg-background)] px-[var(--spacing-2)] text-[var(--text-muted-foreground)]">
                     Or continue with
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-[var(--tekton-spacing-4)]">
+              <div className="grid grid-cols-2 gap-[var(--spacing-4)]">
                 {slots.socialLogin}
               </div>
             </>
@@ -107,9 +107,9 @@ export function LoginTemplateComponent({
 
         <CardFooter>
           {slots.footer || (
-            <p className="text-sm text-center w-full text-[var(--tekton-text-muted-foreground)]">
+            <p className="text-sm text-center w-full text-[var(--text-muted-foreground)]">
               Don&apos;t have an account?{' '}
-              <a href="#" className="text-[var(--tekton-text-primary)] hover:underline">
+              <a href="#" className="text-[var(--text-primary)] hover:underline">
                 Sign up
               </a>
             </p>
@@ -124,43 +124,4 @@ export function LoginTemplateComponent({
 /**
  * Login Template Definition
  */
-export const LoginTemplate: ScreenTemplate = {
-  id: 'auth.login',
-  name: 'Login',
-  category: 'auth',
-  description: 'Standard login screen with email and password',
-
-  skeleton: {
-    shell: 'centered-card',
-    page: 'auth-page',
-    sections: [
-      {
-        id: 'login-form',
-        name: 'Login Form',
-        slot: 'main',
-        required: true,
-        Component: LoginTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['title', 'subtitle', 'button_label'],
-    optional: ['social_login', 'remember_me'],
-    slots: ['logo', 'forgotPassword', 'rememberMe', 'socialLogin', 'footer'],
-  },
-
-  requiredComponents: ['Button', 'Input', 'Form', 'Card', 'Label'],
-
-  Component: LoginTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-01-31',
-  updated: '2026-01-31',
-  tags: ['auth', 'login', 'form'],
-};
+export const LoginTemplate = createTemplateFromCatalog('auth.login', LoginTemplateComponent);

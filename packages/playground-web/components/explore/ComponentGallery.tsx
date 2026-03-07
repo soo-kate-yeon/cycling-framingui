@@ -107,10 +107,10 @@ export function ComponentGallery() {
   return (
     <div className="w-full pb-20 animate-in fade-in duration-500">
       <div className="mb-8 sm:mb-10 lg:mb-16 max-w-3xl">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2 sm:mb-3 text-[var(--tekton-bg-foreground)]">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2 sm:mb-3 text-[var(--bg-foreground)]">
           Component Gallery
         </h2>
-        <p className="text-[var(--tekton-bg-muted-foreground)] text-sm sm:text-base lg:text-lg leading-relaxed">
+        <p className="text-[var(--bg-muted-foreground)] text-sm sm:text-base lg:text-lg leading-relaxed">
           Beautifully designed components that you can copy and paste into your apps. Accessible.
           Customizable. Open Source.
         </p>
@@ -161,7 +161,7 @@ export function ComponentGallery() {
               <div className="flex items-center justify-between gap-3">
                 <Label htmlFor="airplane-mode" className="flex flex-col space-y-1">
                   <span>Airplane Mode</span>
-                  <span className="font-normal leading-snug text-[var(--tekton-bg-muted-foreground)] text-xs sm:text-sm">
+                  <span className="font-normal leading-snug text-[var(--bg-muted-foreground)] text-xs sm:text-sm">
                     Turn off all incoming connections.
                   </span>
                 </Label>
@@ -170,7 +170,7 @@ export function ComponentGallery() {
               <div className="flex items-center justify-between gap-3">
                 <Label htmlFor="marketing-emails" className="flex flex-col space-y-1">
                   <span>Marketing Emails</span>
-                  <span className="font-normal leading-snug text-[var(--tekton-bg-muted-foreground)] text-xs sm:text-sm">
+                  <span className="font-normal leading-snug text-[var(--bg-muted-foreground)] text-xs sm:text-sm">
                     Receive emails about new products.
                   </span>
                 </Label>
@@ -221,19 +221,19 @@ export function ComponentGallery() {
           {/* Notifications */}
           <Card className="shadow-none p-4 sm:p-6 space-y-4">
             <div className="flex items-start space-x-3 sm:space-x-4">
-              <Bell className="mt-0.5 h-5 w-5 shrink-0 text-[var(--tekton-bg-foreground)]" />
+              <Bell className="mt-0.5 h-5 w-5 shrink-0 text-[var(--bg-foreground)]" />
               <div className="space-y-1 min-w-0">
                 <p className="text-sm font-medium leading-none">Everything is updated</p>
-                <p className="text-xs sm:text-sm text-[var(--tekton-bg-muted-foreground)]">
+                <p className="text-xs sm:text-sm text-[var(--bg-muted-foreground)]">
                   You have no pending updates.
                 </p>
               </div>
             </div>
             <div className="flex items-start space-x-3 sm:space-x-4">
-              <Mail className="mt-0.5 h-5 w-5 shrink-0 text-[var(--tekton-bg-foreground)]" />
+              <Mail className="mt-0.5 h-5 w-5 shrink-0 text-[var(--bg-foreground)]" />
               <div className="space-y-1 min-w-0">
                 <p className="text-sm font-medium leading-none">New message received</p>
-                <p className="text-xs sm:text-sm text-[var(--tekton-bg-muted-foreground)]">
+                <p className="text-xs sm:text-sm text-[var(--bg-muted-foreground)]">
                   Alice replied to your comment.
                 </p>
               </div>
@@ -243,7 +243,7 @@ export function ComponentGallery() {
           {/* Nav & Sidebar — MCP 레시피: 내부 섹션 구분은 spacing만, divider 없음 */}
           <Card className="shadow-none overflow-hidden">
             <div className="px-4 sm:px-6 py-4">
-              <Label className="uppercase tracking-wide text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <Label className="uppercase tracking-wide text-xs text-[var(--bg-muted-foreground)]">
                 Navigation
               </Label>
             </div>
@@ -259,8 +259,8 @@ export function ComponentGallery() {
                   key={item.label}
                   className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-left transition-colors ${
                     item.active
-                      ? 'bg-[var(--tekton-bg-primary)] text-[var(--tekton-bg-primary-foreground)]'
-                      : 'text-[var(--tekton-bg-muted-foreground)] hover:text-[var(--tekton-bg-foreground)] hover:bg-[var(--tekton-bg-muted)]'
+                      ? 'bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)]'
+                      : 'text-[var(--bg-muted-foreground)] hover:text-[var(--bg-foreground)] hover:bg-[var(--bg-muted)]'
                   }`}
                 >
                   {item.label}
@@ -276,7 +276,7 @@ export function ComponentGallery() {
               ].map((item) => (
                 <button
                   key={item.label}
-                  className="w-full flex items-center gap-3 px-2 py-2 text-sm font-medium text-[var(--tekton-bg-muted-foreground)] hover:text-[var(--tekton-bg-foreground)] hover:bg-[var(--tekton-bg-muted)] transition-colors"
+                  className="w-full flex items-center gap-3 px-2 py-2 text-sm font-medium text-[var(--bg-muted-foreground)] hover:text-[var(--bg-foreground)] hover:bg-[var(--bg-muted)] transition-colors"
                 >
                   <item.icon className="h-4 w-4 shrink-0" />
                   <span>{item.label}</span>
@@ -302,7 +302,7 @@ export function ComponentGallery() {
               </Avatar>
               <div>
                 <p className="text-sm font-semibold">shadcn</p>
-                <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">m@example.com</p>
+                <p className="text-xs text-[var(--bg-muted-foreground)]">m@example.com</p>
               </div>
               <Button variant="outline" className="w-full mt-2 text-xs h-8">
                 View Profile
@@ -325,7 +325,7 @@ export function ComponentGallery() {
 
           <Card className="shadow-none p-4 sm:p-6 space-y-6">
             <div className="space-y-3">
-              <Label className="uppercase tracking-wide text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <Label className="uppercase tracking-wide text-xs text-[var(--bg-muted-foreground)]">
                 Labels & Badges
               </Label>
               <div className="flex flex-wrap gap-2">
@@ -337,7 +337,7 @@ export function ComponentGallery() {
             </div>
 
             <div className="space-y-3">
-              <Label className="uppercase tracking-wide text-xs text-[var(--tekton-bg-muted-foreground)]">
+              <Label className="uppercase tracking-wide text-xs text-[var(--bg-muted-foreground)]">
                 Action Buttons
               </Label>
               <div className="flex flex-wrap gap-2">
@@ -364,7 +364,7 @@ export function ComponentGallery() {
           <Card className="shadow-none p-4 sm:p-6">
             <div className="space-y-4">
               <div>
-                <h4 className="font-semibold leading-none uppercase tracking-wide text-xs text-[var(--tekton-bg-muted-foreground)] mb-3">
+                <h4 className="font-semibold leading-none uppercase tracking-wide text-xs text-[var(--bg-muted-foreground)] mb-3">
                   Overlays & Modals
                 </h4>
                 <div className="flex flex-wrap gap-3">
@@ -425,7 +425,7 @@ export function ComponentGallery() {
                       <div className="grid gap-4">
                         <div className="space-y-2">
                           <h4 className="font-semibold leading-none text-sm">Dimensions</h4>
-                          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+                          <p className="text-sm text-[var(--bg-muted-foreground)]">
                             Set the dimensions for the layer.
                           </p>
                         </div>

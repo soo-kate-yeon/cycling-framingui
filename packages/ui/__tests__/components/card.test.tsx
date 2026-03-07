@@ -103,10 +103,10 @@ describe('Card', () => {
         </Card>
       );
 
-      expect(screen.getByTestId('card')).toHaveClass('bg-[var(--tekton-bg-card)]');
-      expect(screen.getByTestId('card')).toHaveClass('text-[var(--tekton-bg-card-foreground)]');
+      expect(screen.getByTestId('card')).toHaveClass('bg-[var(--bg-card)]');
+      expect(screen.getByTestId('card')).toHaveClass('text-[var(--bg-card-foreground)]');
       expect(screen.getByTestId('description')).toHaveClass(
-        'text-[var(--tekton-bg-muted-foreground)]'
+        'text-[var(--bg-muted-foreground)]'
       );
     });
   });

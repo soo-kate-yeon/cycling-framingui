@@ -90,7 +90,7 @@ describe('Select', () => {
     it('uses Tekton tokens', () => {
       renderSelect();
       const trigger = screen.getByRole('combobox');
-      expect(trigger.className).toMatch(/var\(--tekton-/);
+      expect(trigger.className).toMatch(/var\(--/);
     });
   });
 });

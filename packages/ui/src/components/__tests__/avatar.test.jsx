@@ -144,7 +144,7 @@ describe('Avatar', () => {
     it('applies Tekton token-based styles to Avatar', () => {
       const { container } = render(<Avatar />);
       const avatar = container.firstChild;
-      expect(avatar.className).toContain('rounded-[var(--tekton-radius-full)]');
+      expect(avatar.className).toContain('rounded-[var(--radius-full)]');
     });
     it('applies Tekton token-based styles to AvatarFallback', () => {
       render(
@@ -153,7 +153,7 @@ describe('Avatar', () => {
         </Avatar>
       );
       const fallback = screen.getByText('JD');
-      expect(fallback.className).toContain('bg-[var(--tekton-bg-muted)]');
+      expect(fallback.className).toContain('bg-[var(--bg-muted)]');
     });
     it('uses full radius token for circular shape', () => {
       const { container } = render(
@@ -161,7 +161,7 @@ describe('Avatar', () => {
           <AvatarFallback>AB</AvatarFallback>
         </Avatar>
       );
-      const elements = container.querySelectorAll('[class*="rounded-[var(--tekton-radius-full)]"]');
+      const elements = container.querySelectorAll('[class*="rounded-[var(--radius-full)]"]');
       expect(elements.length).toBeGreaterThan(0);
     });
     it('maintains consistent sizing', () => {

@@ -232,7 +232,7 @@ describe('Dialog', () => {
         const dialog = screen.getByRole('dialog');
         expect(dialog).toBeInTheDocument();
         // Check that dialog has Tekton token classes
-        expect(dialog.className).toMatch(/var\(--tekton-/);
+        expect(dialog.className).toMatch(/var\(--/);
       });
     });
     it('uses Tekton spacing tokens in content', async () => {
@@ -245,7 +245,7 @@ describe('Dialog', () => {
       );
       await waitFor(() => {
         const content = screen.getByRole('dialog');
-        expect(content.className).toContain('p-[var(--tekton-spacing-6)]');
+        expect(content.className).toContain('p-[var(--spacing-6)]');
       });
     });
     it('uses Tekton radius tokens', async () => {
@@ -258,7 +258,7 @@ describe('Dialog', () => {
       );
       await waitFor(() => {
         const content = screen.getByRole('dialog');
-        expect(content.className).toContain('rounded-[var(--tekton-radius-lg)]');
+        expect(content.className).toContain('rounded-[var(--radius-lg)]');
       });
     });
     it('uses Tekton border tokens', async () => {
@@ -271,7 +271,7 @@ describe('Dialog', () => {
       );
       await waitFor(() => {
         const content = screen.getByRole('dialog');
-        expect(content.className).toContain('border-[var(--tekton-border-default)]');
+        expect(content.className).toContain('border-[var(--border-default)]');
       });
     });
   });

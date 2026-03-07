@@ -97,7 +97,7 @@ export const SettingsForm: Story = {
             <Label htmlFor="marketing-emails" className="cursor-pointer">
               Marketing emails
             </Label>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+            <p className="text-sm text-[var(--bg-muted-foreground)]">
               Receive emails about new products and features.
             </p>
           </div>
@@ -108,7 +108,7 @@ export const SettingsForm: Story = {
             <Label htmlFor="security-emails" className="cursor-pointer">
               Security emails
             </Label>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+            <p className="text-sm text-[var(--bg-muted-foreground)]">
               Receive emails about your account security.
             </p>
           </div>
@@ -119,7 +119,7 @@ export const SettingsForm: Story = {
             <Label htmlFor="newsletter" className="cursor-pointer">
               Newsletter
             </Label>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+            <p className="text-sm text-[var(--bg-muted-foreground)]">
               Receive our weekly newsletter.
             </p>
           </div>
@@ -138,7 +138,7 @@ export const PrivacySettings: Story = {
     <div className="w-full max-w-sm space-y-4 rounded-lg border p-4">
       <div>
         <h3 className="text-lg font-semibold">Privacy Settings</h3>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Manage your privacy preferences
         </p>
       </div>
@@ -181,7 +181,7 @@ export const Controlled: Story = {
             {checked ? 'Enabled' : 'Disabled'}
           </Label>
         </div>
-        <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
+        <p className="text-sm text-[var(--bg-muted-foreground)]">
           Current state: {checked ? 'ON' : 'OFF'}
         </p>
       </div>

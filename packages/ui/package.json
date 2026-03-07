@@ -1,6 +1,6 @@
 {
   "name": "@framingui/ui",
-  "version": "0.6.2",
+  "version": "0.6.5",
   "description": "FramingUI Reference Component Library",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -8,6 +8,10 @@
     ".": {
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.mts"
+    },
+    "./templates": {
+      "import": "./dist/templates/index.mjs",
+      "types": "./dist/templates/index.d.mts"
     },
     "./styles": "./styles/tokens.css"
   },
@@ -48,7 +52,8 @@
     "accessibility"
   ],
   "dependencies": {
-    "@framingui/tokens": "^0.3.3"
+    "@framingui/core": "workspace:^0.4.6",
+    "@framingui/tokens": "workspace:^0.3.5"
   },
   "peerDependencies": {
     "@hookform/resolvers": "^3.0.0",
@@ -82,7 +87,7 @@
     "react-dom": "^18.0.0 || ^19.0.0",
     "react-hook-form": "^7.0.0",
     "tailwind-merge": "^2.0.0",
-    "zod": "^3.20.0"
+    "zod": "^3.20.0 || ^4.0.0"
   },
   "devDependencies": {
     "@axe-core/react": "^4.8.0",

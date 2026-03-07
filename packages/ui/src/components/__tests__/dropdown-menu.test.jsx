@@ -100,7 +100,7 @@ describe('DropdownMenu', () => {
       await userEvent.click(screen.getByRole('button'));
       await waitFor(() => {
         const menu = screen.getByRole('menu');
-        expect(menu.className).toMatch(/var\(--tekton-/);
+        expect(menu.className).toMatch(/var\(--/);
       });
     });
   });

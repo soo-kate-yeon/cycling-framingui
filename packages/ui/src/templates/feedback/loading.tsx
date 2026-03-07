@@ -16,8 +16,8 @@
  * IMPACT: 템플릿 오류 시 사용자 로딩 상태 인지 불가
  */
 
-import type { ScreenTemplate, ScreenTemplateProps } from '../types';
-import { DEFAULT_RESPONSIVE_LAYOUT } from '../types';
+import type { ScreenTemplateProps } from '../types';
+import { createTemplateFromCatalog } from '../create-template';
 
 /**
  * Loading Template Component
@@ -34,17 +34,17 @@ export function LoadingTemplateComponent({
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+      className={`min-h-screen flex items-center justify-center p-[var(--spacing-4)] ${className}`}
     >
-      <div className="flex flex-col items-center gap-[var(--tekton-spacing-4)]">
+      <div className="flex flex-col items-center gap-[var(--spacing-4)]">
         {/* Loading Spinner */}
         {slots.spinner || (
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--tekton-border-primary)]" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--border-primary)]" />
         )}
 
         {/* Loading Message */}
         {showMessage && (
-          <p className="text-sm text-[var(--tekton-text-muted-foreground)]">{message}</p>
+          <p className="text-sm text-[var(--text-muted-foreground)]">{message}</p>
         )}
       </div>
       {children}
@@ -55,43 +55,7 @@ export function LoadingTemplateComponent({
 /**
  * Loading Template Definition
  */
-export const LoadingTemplate: ScreenTemplate = {
-  id: 'feedback.loading',
-  name: 'Loading',
-  category: 'feedback',
-  description: 'Loading state screen with spinner and optional message',
-
-  skeleton: {
-    shell: 'centered',
-    page: 'feedback-page',
-    sections: [
-      {
-        id: 'loading-indicator',
-        name: 'Loading Indicator',
-        slot: 'main',
-        required: true,
-        Component: LoadingTemplateComponent,
-      },
-    ],
-  },
-
-  layout: {
-    type: 'centered',
-    responsive: DEFAULT_RESPONSIVE_LAYOUT,
-  },
-
-  customizable: {
-    texts: ['message'],
-    optional: ['show_message'],
-    slots: ['spinner'],
-  },
-
-  requiredComponents: [],
-
-  Component: LoadingTemplateComponent,
-
-  version: '1.0.0',
-  created: '2026-02-01',
-  updated: '2026-02-01',
-  tags: ['feedback', 'loading', 'spinner', 'state'],
-};
+export const LoadingTemplate = createTemplateFromCatalog(
+  'feedback.loading',
+  LoadingTemplateComponent
+);

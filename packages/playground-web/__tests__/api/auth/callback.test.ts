@@ -1,9 +1,6 @@
 /**
  * OAuth Callback Route Tests
  * SPEC-AUTH-001: Supabase 인증 통합
- *
- * WHY: OAuth 콜백 처리 로직의 동작 검증 및 에러 처리 테스트
- * IMPACT: OAuth 플로우의 품질 보장 및 보안 강화
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -11,23 +8,19 @@ import { GET } from '@/app/api/auth/callback/route';
 import { NextRequest } from 'next/server';
 import type { User } from '@supabase/supabase-js';
 
-// Mock Supabase server client
+const { mockCreateOrUpdateUser } = vi.hoisted(() => ({
+  mockCreateOrUpdateUser: vi.fn(),
+}));
+
 const mockExchangeCodeForSession = vi.fn();
-const mockGetUserById = vi.fn();
 
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(async () => ({
     auth: {
       exchangeCodeForSession: mockExchangeCodeForSession,
-      admin: {
-        getUserById: mockGetUserById,
-      },
     },
   })),
 }));
-
-// Mock createOrUpdateUser
-const mockCreateOrUpdateUser = vi.fn();
 
 vi.mock('@/lib/db/users', () => ({
   createOrUpdateUser: mockCreateOrUpdateUser,
@@ -35,7 +28,15 @@ vi.mock('@/lib/db/users', () => ({
 
 describe('GET /api/auth/callback', () => {
   const validCode = 'valid-authorization-code-12345';
-  const validState = 'valid-csrf-state-token-67890';
+
+  const mockUser: User = {
+    id: 'user-123',
+    email: 'test@example.com',
+    app_metadata: {},
+    user_metadata: {},
+    aud: 'authenticated',
+    created_at: '2024-01-01T00:00:00Z',
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -47,386 +48,202 @@ describe('GET /api/auth/callback', () => {
     vi.restoreAllMocks();
   });
 
-  describe('Parameter Validation', () => {
-    it('should return error when state parameter is missing (CSRF protection)', async () => {
-      const request = new NextRequest(`http://localhost:3000/api/auth/callback?code=${validCode}`);
+  it('returns missing_code when authorization code is absent', async () => {
+    const request = new NextRequest('http://localhost:3000/api/auth/callback');
 
-      const response = await GET(request);
+    const response = await GET(request);
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=missing_state');
-      expect(console.error).toHaveBeenCalledWith(
-        '[OAuth Callback] Missing state parameter - CSRF protection failed'
-      );
-    });
-
-    it('should return error when authorization code is missing', async () => {
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=missing_code');
-      expect(console.error).toHaveBeenCalledWith('[OAuth Callback] Missing authorization code');
-    });
-
-    it('should return error when both code and state are missing', async () => {
-      const request = new NextRequest('http://localhost:3000/api/auth/callback');
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=missing_state');
-    });
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toContain('/auth/login?error=missing_code');
+    expect(console.error).toHaveBeenCalledWith('[OAuth Callback] Missing authorization code');
   });
 
-  describe('Code Exchange', () => {
-    it('should successfully exchange authorization code for session', async () => {
-      const mockUser: User = {
-        id: 'user-123',
-        email: 'test@example.com',
-        app_metadata: {},
-        user_metadata: {},
-        aud: 'authenticated',
-        created_at: '2024-01-01T00:00:00Z',
-      };
+  it('passes through provider error parameters', async () => {
+    const request = new NextRequest(
+      'http://localhost:3000/api/auth/callback?error=access_denied&error_description=cancelled'
+    );
 
-      mockExchangeCodeForSession.mockResolvedValue({
-        data: {
-          session: {
-            access_token: 'access-token',
-            refresh_token: 'refresh-token',
-            expires_in: 3600,
-            user: mockUser,
-          },
+    const response = await GET(request);
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toContain('/auth/login?error=access_denied');
+    expect(mockExchangeCodeForSession).not.toHaveBeenCalled();
+  });
+
+  it('exchanges the code, creates the user, and redirects home by default', async () => {
+    mockExchangeCodeForSession.mockResolvedValue({
+      data: {
+        session: {
+          access_token: 'access-token',
+          refresh_token: 'refresh-token',
+          expires_in: 3600,
           user: mockUser,
         },
-        error: null,
-      });
-
-      mockCreateOrUpdateUser.mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z',
-      });
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(mockExchangeCodeForSession).toHaveBeenCalledWith(validCode);
-      expect(mockCreateOrUpdateUser).toHaveBeenCalledWith(mockUser);
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/dashboard');
+        user: mockUser,
+      },
+      error: null,
     });
 
-    it('should return error when code exchange fails', async () => {
-      mockExchangeCodeForSession.mockResolvedValue({
-        data: {
-          session: null,
-          user: null,
-        },
-        error: {
-          message: 'Invalid authorization code',
-          code: '400',
-        },
-      });
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=invalid-code&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=exchange_failed');
-      expect(console.error).toHaveBeenCalledWith(
-        '[OAuth Callback] Code exchange failed:',
-        expect.objectContaining({
-          error: 'Invalid authorization code',
-          code: '400',
-        })
-      );
-    });
-
-    it('should return error when session is null after exchange', async () => {
-      mockExchangeCodeForSession.mockResolvedValue({
-        data: {
-          session: null,
-          user: null,
-        },
-        error: null,
-      });
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=invalid_session');
-    });
-
-    it('should return error when user is null after exchange', async () => {
-      mockExchangeCodeForSession.mockResolvedValue({
-        data: {
-          session: {
-            access_token: 'token',
-            refresh_token: 'refresh',
-            expires_in: 3600,
-          },
-          user: null,
-        },
-        error: null,
-      });
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=invalid_session');
-    });
-  });
-
-  describe('User Creation/Update', () => {
-    const mockUser: User = {
+    mockCreateOrUpdateUser.mockResolvedValue({
       id: 'user-123',
       email: 'test@example.com',
-      app_metadata: {},
-      user_metadata: {},
-      aud: 'authenticated',
       created_at: '2024-01-01T00:00:00Z',
-    };
-
-    beforeEach(() => {
-      mockExchangeCodeForSession.mockResolvedValue({
-        data: {
-          session: {
-            access_token: 'access-token',
-            refresh_token: 'refresh-token',
-            expires_in: 3600,
-            user: mockUser,
-          },
-          user: mockUser,
-        },
-        error: null,
-      });
+      updated_at: '2024-01-01T00:00:00Z',
     });
 
-    it('should create or update user profile successfully', async () => {
-      mockCreateOrUpdateUser.mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z',
-      });
+    const request = new NextRequest(`http://localhost:3000/api/auth/callback?code=${validCode}`);
 
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
+    const response = await GET(request);
 
-      const response = await GET(request);
-
-      expect(mockCreateOrUpdateUser).toHaveBeenCalledWith(mockUser);
-      expect(console.log).toHaveBeenCalledWith(
-        '[OAuth Callback] User authenticated successfully:',
-        {
-          userId: 'user-123',
-          email: 'test@example.com',
-        }
-      );
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/dashboard');
-    });
-
-    it('should return error when user creation returns null', async () => {
-      mockCreateOrUpdateUser.mockResolvedValue(null);
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=user_creation_failed');
-      expect(console.error).toHaveBeenCalledWith(
-        '[OAuth Callback] Failed to create/update user profile'
-      );
-    });
-
-    it('should return error when user creation throws error', async () => {
-      mockCreateOrUpdateUser.mockRejectedValue(new Error('Database connection failed'));
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=database_error');
-      expect(console.error).toHaveBeenCalledWith(
-        '[OAuth Callback] Database error during user creation:',
-        expect.any(Error)
-      );
-    });
+    expect(mockExchangeCodeForSession).toHaveBeenCalledWith(validCode);
+    expect(mockCreateOrUpdateUser).toHaveBeenCalledWith(mockUser);
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toBe('http://localhost:3000/');
   });
 
-  describe('Redirect Behavior', () => {
-    it('should redirect to dashboard on successful authentication', async () => {
-      const mockUser: User = {
-        id: 'user-123',
-        email: 'test@example.com',
-        app_metadata: {},
-        user_metadata: {},
-        aud: 'authenticated',
-        created_at: '2024-01-01T00:00:00Z',
-      };
-
-      mockExchangeCodeForSession.mockResolvedValue({
-        data: {
-          session: {
-            access_token: 'token',
-            refresh_token: 'refresh',
-            expires_in: 3600,
-            user: mockUser,
-          },
+  it('redirects to a cookie-provided internal path when present', async () => {
+    mockExchangeCodeForSession.mockResolvedValue({
+      data: {
+        session: {
+          access_token: 'access-token',
+          refresh_token: 'refresh-token',
+          expires_in: 3600,
           user: mockUser,
         },
-        error: null,
-      });
-
-      mockCreateOrUpdateUser.mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z',
-      });
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toBe('http://localhost:3000/dashboard');
+        user: mockUser,
+      },
+      error: null,
     });
 
-    it('should redirect to login with error parameter on failures', async () => {
-      mockExchangeCodeForSession.mockResolvedValue({
-        data: {
-          session: null,
-          user: null,
-        },
-        error: {
-          message: 'OAuth error',
-        },
-      });
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      const location = response.headers.get('Location') || '';
-      expect(location).toContain('/auth/login');
-      expect(location).toContain('error=');
+    mockCreateOrUpdateUser.mockResolvedValue({
+      id: 'user-123',
+      email: 'test@example.com',
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
     });
+
+    const request = new NextRequest(`http://localhost:3000/api/auth/callback?code=${validCode}`);
+    request.cookies.set('oauth_return_url', encodeURIComponent('/pricing'));
+
+    const response = await GET(request);
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toBe('http://localhost:3000/pricing');
   });
 
-  describe('Error Handling', () => {
-    it('should handle unexpected errors gracefully', async () => {
-      mockExchangeCodeForSession.mockRejectedValue(new Error('Unexpected network error'));
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('/auth/login?error=unexpected_error');
-      expect(console.error).toHaveBeenCalledWith(
-        '[OAuth Callback] Unexpected error:',
-        expect.any(Error)
-      );
+  it('handles exchange failure', async () => {
+    mockExchangeCodeForSession.mockResolvedValue({
+      data: {
+        session: null,
+        user: null,
+      },
+      error: {
+        message: 'Invalid authorization code',
+        code: '400',
+        status: 400,
+      },
     });
 
-    it('should preserve origin URL in redirects', async () => {
-      const request = new NextRequest(`https://example.com/api/auth/callback?state=${validState}`);
+    const request = new NextRequest('http://localhost:3000/api/auth/callback?code=invalid-code');
 
-      const response = await GET(request);
+    const response = await GET(request);
 
-      expect(response.status).toBe(302);
-      const location = response.headers.get('Location') || '';
-      expect(location).toContain('https://example.com');
-    });
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toContain('/auth/login?error=exchange_failed');
   });
 
-  describe('CSRF Protection', () => {
-    it('should validate state parameter presence', async () => {
-      const request = new NextRequest(`http://localhost:3000/api/auth/callback?code=${validCode}`);
-
-      const response = await GET(request);
-
-      expect(response.status).toBe(302);
-      expect(response.headers.get('Location')).toContain('error=missing_state');
-      expect(console.error).toHaveBeenCalledWith(
-        '[OAuth Callback] Missing state parameter - CSRF protection failed'
-      );
+  it('handles invalid_grant as code_expired', async () => {
+    mockExchangeCodeForSession.mockResolvedValue({
+      data: {
+        session: null,
+        user: null,
+      },
+      error: {
+        message: 'Code expired',
+        code: 'invalid_grant',
+        status: 400,
+      },
     });
 
-    it('should accept valid state parameter', async () => {
-      const mockUser: User = {
-        id: 'user-123',
-        email: 'test@example.com',
-        app_metadata: {},
-        user_metadata: {},
-        aud: 'authenticated',
-        created_at: '2024-01-01T00:00:00Z',
-      };
+    const request = new NextRequest('http://localhost:3000/api/auth/callback?code=expired-code');
 
-      mockExchangeCodeForSession.mockResolvedValue({
-        data: {
-          session: {
-            access_token: 'token',
-            refresh_token: 'refresh',
-            expires_in: 3600,
-            user: mockUser,
-          },
+    const response = await GET(request);
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toContain('/auth/login?error=code_expired');
+  });
+
+  it('returns invalid_session when exchange succeeds without session data', async () => {
+    mockExchangeCodeForSession.mockResolvedValue({
+      data: {
+        session: null,
+        user: null,
+      },
+      error: null,
+    });
+
+    const request = new NextRequest(`http://localhost:3000/api/auth/callback?code=${validCode}`);
+
+    const response = await GET(request);
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toContain('/auth/login?error=invalid_session');
+  });
+
+  it('returns user_creation_failed when profile persistence returns null', async () => {
+    mockExchangeCodeForSession.mockResolvedValue({
+      data: {
+        session: {
+          access_token: 'access-token',
+          refresh_token: 'refresh-token',
+          expires_in: 3600,
           user: mockUser,
         },
-        error: null,
-      });
-
-      mockCreateOrUpdateUser.mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z',
-      });
-
-      const request = new NextRequest(
-        `http://localhost:3000/api/auth/callback?code=${validCode}&state=${validState}`
-      );
-
-      const response = await GET(request);
-
-      // Should not fail due to state validation
-      expect(response.headers.get('Location')).not.toContain('missing_state');
+        user: mockUser,
+      },
+      error: null,
     });
+    mockCreateOrUpdateUser.mockResolvedValue(null);
+
+    const request = new NextRequest(`http://localhost:3000/api/auth/callback?code=${validCode}`);
+
+    const response = await GET(request);
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toContain('/auth/login?error=user_creation_failed');
+  });
+
+  it('returns database_error when profile persistence throws', async () => {
+    mockExchangeCodeForSession.mockResolvedValue({
+      data: {
+        session: {
+          access_token: 'access-token',
+          refresh_token: 'refresh-token',
+          expires_in: 3600,
+          user: mockUser,
+        },
+        user: mockUser,
+      },
+      error: null,
+    });
+    mockCreateOrUpdateUser.mockRejectedValue(new Error('Database connection failed'));
+
+    const request = new NextRequest(`http://localhost:3000/api/auth/callback?code=${validCode}`);
+
+    const response = await GET(request);
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toContain('/auth/login?error=database_error');
+  });
+
+  it('handles unexpected errors gracefully', async () => {
+    mockExchangeCodeForSession.mockRejectedValue(new Error('Unexpected network error'));
+
+    const request = new NextRequest(`http://localhost:3000/api/auth/callback?code=${validCode}`);
+
+    const response = await GET(request);
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get('Location')).toContain('/auth/login?error=unexpected_error');
   });
 });
