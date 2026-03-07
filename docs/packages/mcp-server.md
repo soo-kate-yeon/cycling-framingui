@@ -125,6 +125,8 @@ AI 에이전트가 이 서버를 통해 다음 작업을 수행할 수 있습니
 
 `licensedThemes` is always the canonical current theme-id list that MCP tools can actually open. Legacy stored license ids such as `default` are normalized before they reach MCP responses so `whoami`, `list-themes`, and `preview-theme` stay aligned.
 
+Production MCP routes no longer depend on deployment-time `.moai` filesystem access. Theme catalog metadata is bundled into the runtime so serverless deployments keep `verify`, `list-themes`, and `preview-theme` consistent.
+
 ---
 
 ## 16개 도구 카탈로그
