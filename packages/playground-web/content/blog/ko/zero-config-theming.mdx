@@ -1,0 +1,307 @@
+---
+title: "제로 설정 테마: FramingUI로 테마 설정 고통 없애기"
+description: "FramingUI의 제로 설정 테마로 복잡한 테마 구성 과정을 제거하세요. Tailwind 설정 편집도, CSS 변수 설정도 필요 없습니다."
+date: "2025-03-07"
+author:
+  name: "FramingUI Team"
+tags:
+  - theming
+  - design-tokens
+  - mcp
+  - tailwind
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+## 테마 설정 세금
+
+디자인 시스템을 세팅해본 적 있다면 이 과정이 익숙할 겁니다:
+
+1. `tailwind.config.js`에 브랜드 컬러 추가
+2. 라이트/다크 모드를 위한 CSS 변수 정의
+3. 자동완성을 위한 TypeScript 타입 업데이트
+4. 디자인이 바뀌면 모든 걸 수동으로 동기화
+5. 아무것도 안 깨지길 기도
+
+이 "테마 설정 세금"은 UI 코드 한 줄 쓰기 전에 몇 시간을 잡아먹습니다. 그리고 디자이너가 색상이나 간격 값을 조정할 때마다 이 사이클을 반복해야 합니다.
+
+**이 모든 걸 건너뛸 수 있다면?**
+
+## 전통적 방식: 설정 지옥
+
+일반적인 테마 설정이 어떤 모습인지 봅시다.
+
+### Tailwind 설정 편집
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          // ...10개 더
+          900: '#0c4a6e',
+        },
+        // secondary, accent 등도 반복
+      },
+      spacing: {
+        // 커스텀 간격 값
+      },
+      fontFamily: {
+        // 커스텀 폰트
+      },
+    },
+  },
+};
+```
+
+### CSS 변수 설정
+
+```css
+:root {
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  /* ...50개 이상의 변수 */
+}
+
+[data-theme='dark'] {
+  --color-primary-50: #0c4a6e;
+  /* ...팔레트를 뒤집어야 함 */
+}
+```
+
+### TypeScript 동기화
+
+```ts
+// types/theme.d.ts
+declare module 'tailwindcss/defaultTheme' {
+  interface DefaultColors {
+    primary: {
+      50: string;
+      100: string;
+      // ...설정과 수동 동기화
+    };
+  }
+}
+```
+
+**문제는?** 세 개의 진실의 원천. 수동 동기화. 단일 소스 없음. 오타 하나면 전부 깨집니다.
+
+## FramingUI 방식: 제로 설정 테마
+
+FramingUI는 설정 파일을 완전히 없앱니다. 토큰을 **한 번만** 정의하면, 나머지는 자동입니다.
+
+### 1. 테마 정의 (한 번만)
+
+```typescript
+// framingui.config.ts
+import { defineConfig } from '@framingui/core';
+
+export default defineConfig({
+  themes: {
+    light: {
+      colors: {
+        primary: '#0066cc',
+        secondary: '#6b7280',
+        background: '#ffffff',
+        text: '#111827',
+      },
+      spacing: {
+        base: '1rem',
+        scale: 1.5,
+      },
+    },
+    dark: {
+      colors: {
+        primary: '#3b82f6',
+        background: '#1f2937',
+        text: '#f9fafb',
+      },
+    },
+  },
+});
+```
+
+끝입니다. Tailwind 설정 없음. CSS 변수 파일 없음. TypeScript 선언 없음.
+
+### 2. 모든 게 자동 생성됨
+
+`npx @framingui/cli build`를 실행하면 FramingUI가:
+
+- Tailwind 설정 생성
+- 양쪽 테마를 위한 CSS 변수 생성
+- 자동완성이 있는 TypeScript 타입 빌드
+- 색상 스케일 출력 (50-900 단계)
+- 다크 모드 전환 처리
+
+모두 하나의 설정 파일에서.
+
+### 3. MCP 통합: 생각 없이 테마 적용
+
+FramingUI의 MCP 서버를 Claude Code (또는 다른 MCP 클라이언트)에 연결하면, AI 에이전트가 테마 토큰에 직접 접근할 수 있습니다.
+
+**프롬프트 예시:**
+
+> "primary 배경과 secondary 텍스트로 가격 카드 만들어줘"
+
+**Claude Code 출력:**
+
+```tsx
+<div className="bg-primary-500 text-secondary-700 dark:bg-primary-600 dark:text-secondary-200">
+  {/* 가격 콘텐츠 */}
+</div>
+```
+
+추측한 색상 없음. 수동 검색 없음. Claude가 정확한 테마를 알고 있습니다.
+
+## 작동 원리: 단일 진실의 원천
+
+FramingUI는 **토큰 우선 아키텍처**를 사용합니다:
+
+1. **토큰을 정의**합니다 (`framingui.config.ts`에서 의미론적이고 읽기 쉽게)
+2. **FramingUI가 컴파일**합니다 (플랫폼별 형식으로: CSS, Tailwind, JS)
+3. **MCP가 토큰 노출**합니다 (AI 에이전트가 생성에 사용)
+4. **UI가 일관성 유지**합니다 (디자인, 코드, AI 출력 전반에 걸쳐)
+
+```
+framingui.config.ts
+       ↓
+  [FramingUI Build]
+       ↓
+  ├── tailwind.config.js (자동 생성)
+  ├── tokens.css (CSS 변수)
+  ├── tokens.ts (TypeScript 타입)
+  └── MCP 스키마 (AI가 읽을 수 있음)
+```
+
+모든 출력은 **파생**되며, 수동으로 작성하지 않습니다. 토큰 하나를 바꾸면 모든 게 업데이트됩니다.
+
+## 실전 예시: 새 테마 추가하기
+
+디자이너가 새로운 "midnight" 테마를 건네줬다고 해봅시다.
+
+### 전통적 방식 (30분 이상)
+
+1. `tailwind.config.js` 편집 (새 색상 팔레트 추가)
+2. CSS 변수 파일 업데이트 (라이트 + 다크 변형)
+3. TypeScript 타입 조정
+4. 수동 테스트
+5. 오타와 불일치 수정
+6. 재배포
+
+### FramingUI 방식 (2분)
+
+```typescript
+// framingui.config.ts
+export default defineConfig({
+  themes: {
+    light: { /* 기존 */ },
+    dark: { /* 기존 */ },
+    midnight: {  // ← 이것만 추가
+      colors: {
+        primary: '#a78bfa',
+        background: '#0f0a1e',
+        text: '#e0e7ff',
+      },
+    },
+  },
+});
+```
+
+`npx @framingui/cli build` 실행. 끝.
+
+- Tailwind 설정: 업데이트됨
+- CSS 변수: 생성됨
+- TypeScript 타입: 동기화됨
+- MCP 스키마: AI 사용 준비됨
+
+**수동 편집 없음. 불일치 위험 없음.**
+
+## 제로 설정이 중요한 이유
+
+### 개발자에게
+
+- **빠른 설정** — 몇 시간이 아닌 몇 분
+- **적은 유지보수** — 업데이트할 파일 하나
+- **타입 안전성** — 자동완성이 항상 실제와 일치
+- **수동 동기화 없음** — 모든 게 토큰에서 파생
+
+### 팀에게
+
+- **단일 진실의 원천** — 디자이너와 개발자가 같은 토큰 사용
+- **쉬운 온보딩** — 새 개발자가 취약한 설정 패턴을 배울 필요 없음
+- **확장 가능** — 테마나 토큰 추가가 복잡도를 기하급수적으로 증가시키지 않음
+
+### AI 워크플로우에게
+
+- **일관된 출력** — AI 에이전트가 추측이 아닌 실제 토큰 사용
+- **할루시네이션 없음** — 브랜드 컬러가 `primary`일 때 Claude가 `bg-brand-purple`을 만들어낼 수 없음
+- **즉각 업데이트** — 토큰 변경하면 AI가 즉시 새 값 인식
+
+## 시작하기
+
+프로젝트에서 테마 설정 고통을 없애고 싶으신가요?
+
+### 1. FramingUI 설치
+
+```bash
+npm install @framingui/core @framingui/mcp-server
+```
+
+### 2. 설정 초기화
+
+```bash
+npx @framingui/cli init
+```
+
+스타터 토큰이 포함된 `framingui.config.ts`가 생성됩니다.
+
+### 3. 토큰 빌드
+
+```bash
+npx @framingui/cli build
+```
+
+이제 Tailwind 설정, CSS 변수, TypeScript 타입이 자동 생성되었습니다.
+
+### 4. (선택) MCP 연결
+
+Claude Code나 다른 MCP 클라이언트를 사용한다면:
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "command": "npx",
+      "args": ["@framingui/mcp-server"]
+    }
+  }
+}
+```
+
+이제 AI 에이전트가 테마 토큰에 직접 접근할 수 있습니다.
+
+## 결론
+
+테마 설정이 모든 프로젝트에서 세금이 되어서는 안 됩니다. FramingUI의 제로 설정 접근법으로:
+
+- **Tailwind 설정 편집 없음** — 자동 생성
+- **CSS 변수 파일 없음** — 자동 생성
+- **TypeScript 동기화 문제 없음** — 자동 생성
+- **단일 진실의 원천** — `framingui.config.ts` 하나
+
+토큰을 한 번 정의하세요. 나머지는 FramingUI가 처리합니다.
+
+**테마 설정 고통을 없앨 준비 되셨나요?** [FramingUI 시작하기 →](https://framingui.dev/docs/getting-started)
+
+---
+
+**다음 단계:**
+
+- [FramingUI MCP 설정 가이드](/blog/ko/claude-code-mcp-setup-guide) — AI 에이전트를 테마에 연결
+- [디자인 토큰 베스트 프랙티스](/blog/ko/design-tokens-best-practices) — 토큰 아키텍처 배우기
+- [Claude로 일관된 UI 만들기](/blog/ko/building-consistent-ui-with-claude) — AI 기반 컴포넌트 생성
