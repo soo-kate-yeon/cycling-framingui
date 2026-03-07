@@ -10,6 +10,7 @@ import readline from 'node:readline';
 import { generateGuide, type Framework } from './guide-template.js';
 import { generateClaudeMdSection, generateAgentsMdSection } from './agent-md-templates.js';
 import { upsertFraminguiServerConfig, type McpConfig } from './mcp-config.js';
+import { buildAddCommand, detectPackageManager, type PackageManager } from './package-manager.js';
 
 // ─── 상수 ──────────────────────────────────────────────
 
@@ -73,23 +74,8 @@ function detectFramework(cwd: string): Framework | null {
 
 // ─── Step 2: 패키지 매니저 감지 및 설치 ─────────────────
 
-type PackageManager = 'pnpm' | 'yarn' | 'bun' | 'npm';
-
-function detectPackageManager(cwd: string): PackageManager {
-  if (fileExists(path.join(cwd, 'pnpm-lock.yaml'))) {
-    return 'pnpm';
-  }
-  if (fileExists(path.join(cwd, 'yarn.lock'))) {
-    return 'yarn';
-  }
-  if (fileExists(path.join(cwd, 'bun.lock')) || fileExists(path.join(cwd, 'bun.lockb'))) {
-    return 'bun';
-  }
-  return 'npm';
-}
-
 function installPackages(cwd: string, pm: PackageManager): void {
-  const cmd = `${pm} add ${PACKAGES_TO_INSTALL.join(' ')}`;
+  const cmd = buildAddCommand(pm, PACKAGES_TO_INSTALL);
   logDetail(cmd);
   execSync(cmd, { cwd, stdio: 'inherit' });
 }

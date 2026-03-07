@@ -2,18 +2,39 @@
 
 /**
  * Framingui MCP CLI 라우터
- * 서브커맨드: login, logout, status, (없으면 MCP 서버 시작)
+ * 서브커맨드: help, guide, commands, login, logout, status, init, update, server
  */
 
 export {};
 
 const command = process.argv[2];
+const args = process.argv.slice(3);
 
 switch (command) {
+  case '--help':
+  case '-h':
+  case 'help': {
+    const { printHelp } = await import('./help.js');
+    printHelp();
+    break;
+  }
+
+  case 'guide': {
+    const { printGuide } = await import('./help.js');
+    printGuide();
+    break;
+  }
+
   case '--version':
   case '-v': {
     const { printVersion } = await import('./version.js');
     printVersion();
+    break;
+  }
+
+  case 'commands': {
+    const { commandsCommand } = await import('./commands.js');
+    commandsCommand(args);
     break;
   }
 
@@ -46,9 +67,39 @@ switch (command) {
     break;
   }
 
-  default: {
-    // 서브커맨드 없음 → MCP stdio 서버 시작 (기존 동작 유지)
+  case 'update': {
+    const { updateCommand } = await import('./update.js');
+    try {
+      updateCommand(args);
+    } catch (err) {
+      console.error(err instanceof Error ? err.message : String(err));
+      process.exit(1);
+    }
+    break;
+  }
+
+  case 'server': {
     await import('../index.js');
+    break;
+  }
+
+  case undefined: {
+    const { isInteractiveTerminal, printGuide } = await import('./help.js');
+
+    if (isInteractiveTerminal()) {
+      printGuide();
+      break;
+    }
+
+    await import('../index.js');
+    break;
+  }
+
+  default: {
+    const { printHelp } = await import('./help.js');
+    console.error(`Unknown command: ${command}`);
+    printHelp();
+    process.exit(1);
     break;
   }
 }

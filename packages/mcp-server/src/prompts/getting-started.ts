@@ -78,7 +78,24 @@ Before creating screen definitions:
 3. Identify components needed for your screen
 \`\`\`
 
-## Step 5: Generate Your First Screen
+## Step 5: Discover Slash Commands (Optional but Recommended)
+
+If your MCP client supports slash menus, tab completion, or command palettes, expose the FramingUI command registry:
+
+- \`/screen\` - full screen generation
+- \`/section\` - section generation or replacement
+- \`/draft\` - structural screen draft before codegen
+- \`/responsive\` - responsive optimization with density controls
+- \`/a11y\` - accessibility review
+- \`/theme-swap\` - reapply a screen under a different theme
+- \`/doctor\` - setup diagnosis
+- \`/install-check\` - dependency and environment checks
+- \`/export\` - artifact export
+- \`/update\` - refresh installed FramingUI packages in a project
+
+If your client does not support native slash commands, use the \`slash-commands\` and \`command-help\` prompts as a fallback help surface.
+
+## Step 6: Generate Your First Screen
 
 Follow the 3-step workflow:
 

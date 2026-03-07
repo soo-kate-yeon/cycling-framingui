@@ -98,13 +98,17 @@ npx @framingui/mcp-server init
 
 ### CLI Commands
 
-| Command                                    | Description           |
-| ------------------------------------------ | --------------------- |
-| `npx -y @framingui/mcp-server@latest`      | MCP stdio 서버 시작   |
-| `npx -y @framingui/mcp-server@latest init` | 프로젝트 초기 설정    |
-| `framingui-mcp login`                      | 브라우저 OAuth 로그인 |
-| `framingui-mcp logout`                     | 로그아웃              |
-| `framingui-mcp status`                     | 인증 상태 확인        |
+| Command                                    | Description              |
+| ------------------------------------------ | ------------------------ |
+| `npx -y @framingui/mcp-server@latest`      | MCP stdio 서버 시작      |
+| `npx -y @framingui/mcp-server@latest init` | 프로젝트 초기 설정       |
+| `framingui-mcp help`                       | CLI 도움말               |
+| `framingui-mcp commands --format json`     | command adapter export   |
+| `framingui-mcp login`                      | 브라우저 OAuth 로그인    |
+| `framingui-mcp logout`                     | 로그아웃                 |
+| `framingui-mcp status`                     | 인증 상태 확인           |
+| `framingui-mcp update --check`             | 패키지 업데이트 점검     |
+| `framingui-mcp server`                     | MCP stdio 서버 명시 시작 |
 
 ## Development Quick Start
 
@@ -602,7 +606,7 @@ See [Package Guide](../../docs/packages/mcp-server.md) for complete setup instru
 
 ## MCP Prompts (Universal Guidance)
 
-The MCP server provides 2 built-in prompts that work across all MCP clients:
+The MCP server provides 9 built-in prompts that work across all MCP clients:
 
 ### 1. getting-started
 
@@ -630,11 +634,49 @@ The MCP server provides 2 built-in prompts that work across all MCP clients:
 - Step 4/4: validate-environment
 - Complete examples and troubleshooting
 
-**When to use**: Production screen generation, workflow clarification
+**When to use**: Production screen generation and `/screen`, `/section`, `/draft` style workflows
+
+### 3. responsive-workflow
+
+**Purpose**: Responsive optimization workflow behind `/responsive`
+
+### 4. a11y-workflow
+
+**Purpose**: Accessibility audit workflow behind `/a11y`
+
+### 5. theme-swap-workflow
+
+**Purpose**: Theme application workflow behind `/theme-swap`
+
+### 6. doctor-workflow
+
+**Purpose**: Environment diagnosis workflow behind `/doctor` and `/install-check`
+
+### 7. slash-commands
+
+**Purpose**: Slash command catalog for FramingUI design workflows
+
+### 8. command-help
+
+**Purpose**: Detailed help for one slash command including usage, options, examples, and MCP workflow mapping
+
+### 9. update-workflow
+
+**Purpose**: Maintenance workflow behind `/update`
+
+### CLI adapter export
+
+You can export client-oriented slash command adapters from the CLI:
+
+```bash
+framingui-mcp commands --client codex --format json
+framingui-mcp commands --client claude-code --format markdown
+framingui-mcp commands --client cursor --command /responsive --format text
+```
 
 **Note**: These prompts are platform-agnostic and work with Claude Code, OpenAI Codex, Cursor, Windsurf, and any MCP-compatible client.
 
-**Total Prompts**: 2
+**Total Prompts**: 9
 
 ### 11. Preview Screen Template
 

@@ -5,6 +5,29 @@ All notable changes to the Tekton project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.10] - 2026-03-07
+
+### Added
+
+- **@framingui/mcp-server**: 슬래시 커맨드 레지스트리 및 클라이언트 adapter export 추가
+  - `/screen`, `/section`, `/draft`, `/responsive`, `/a11y`, `/theme-swap`, `/doctor`, `/install-check`, `/export`, `/update` 명령 계약 추가
+  - `commands --client codex|claude-code|cursor --format json|markdown|text` 지원
+  - `slash-commands`, `command-help`, `responsive-workflow`, `a11y-workflow`, `theme-swap-workflow`, `doctor-workflow`, `update-workflow` 프롬프트 추가
+
+### Changed
+
+- **@framingui/mcp-server**: CLI 첫 실행 UX 개선
+  - interactive TTY에서 `npx @framingui/mcp-server` 실행 시 온보딩 가이드 출력
+  - MCP stdio 서버는 `framingui-mcp server` 또는 non-interactive stdio에서 명시적으로 시작
+- **@framingui/mcp-server**: `framingui-mcp update` 추가
+  - 설치된 `@framingui/*` 패키지와 `tailwindcss-animate`를 감지해 package-manager 별 업데이트 명령 생성 및 실행
+
+### Fixed
+
+- **@framingui/mcp-server**: MCP prompt/help surface와 CLI command surface를 단일 registry로 정렬
+  - prompt catalog와 command help metadata를 공통 command contract에 맞게 정비
+  - client별 slash help/tab-help 연동을 위한 canonical metadata 제공
+
 ## [0.5.3] - 2026-02-28
 
 ### Fixed
