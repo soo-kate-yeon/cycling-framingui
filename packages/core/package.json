@@ -27,7 +27,7 @@
     "directory": "packages/core"
   },
   "scripts": {
-    "build": "tsc && node ./scripts/copy-bundled-generated-data.mjs",
+    "build": "node ./scripts/generate-bundled-theme-module.mjs && tsc && node ./scripts/copy-bundled-generated-data.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

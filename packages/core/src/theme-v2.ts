@@ -7,6 +7,7 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { getGeneratedDataDir } from './generated-data-dir.js';
+import { BUNDLED_THEMES, BUNDLED_THEME_LIST } from './generated/bundled-themes.js';
 
 // ============================================================================
 // V2.1 Theme Types (Visual DNA Only - No Layout)
@@ -254,6 +255,14 @@ function getThemesDir(): string | null {
   return getGeneratedDataDir(import.meta.url, 'themes');
 }
 
+function cloneTheme(theme: ThemeV2): ThemeV2 {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(theme);
+  }
+
+  return JSON.parse(JSON.stringify(theme)) as ThemeV2;
+}
+
 // ============================================================================
 // Theme Loading Functions
 // ============================================================================
@@ -270,31 +279,30 @@ export function loadThemeV2(themeId: string): ThemeV2 | null {
   }
 
   const themesDir = getThemesDir();
-  if (!themesDir || !existsSync(themesDir)) {
-    return null;
-  }
+  if (themesDir && existsSync(themesDir)) {
+    const themePath = join(themesDir, `${themeId}.json`);
 
-  const themePath = join(themesDir, `${themeId}.json`);
+    if (existsSync(themePath)) {
+      try {
+        const content = readFileSync(themePath, 'utf-8');
+        const theme = JSON.parse(content) as ThemeV2;
 
-  if (!existsSync(themePath)) {
-    return null;
-  }
+        // Validate schema version
+        if (theme.schemaVersion !== '2.1') {
+          console.warn(`Theme ${themeId} has invalid schema version: ${theme.schemaVersion}`);
+          return null;
+        }
 
-  try {
-    const content = readFileSync(themePath, 'utf-8');
-    const theme = JSON.parse(content) as ThemeV2;
-
-    // Validate schema version
-    if (theme.schemaVersion !== '2.1') {
-      console.warn(`Theme ${themeId} has invalid schema version: ${theme.schemaVersion}`);
-      return null;
+        return theme;
+      } catch (error) {
+        console.error(`Failed to load theme ${themeId}:`, error);
+        return null;
+      }
     }
-
-    return theme;
-  } catch (error) {
-    console.error(`Failed to load theme ${themeId}:`, error);
-    return null;
   }
+
+  const bundledTheme = BUNDLED_THEMES[themeId];
+  return bundledTheme ? cloneTheme(bundledTheme) : null;
 }
 
 /**
@@ -303,29 +311,31 @@ export function loadThemeV2(themeId: string): ThemeV2 | null {
  */
 export function listThemesV2(): ThemeMetaV2[] {
   const themesDir = getThemesDir();
-  if (!themesDir || !existsSync(themesDir)) {
-    return [];
-  }
+  if (themesDir && existsSync(themesDir)) {
+    const files = readdirSync(themesDir).filter(f => f.endsWith('.json'));
+    const themes: ThemeMetaV2[] = [];
 
-  const files = readdirSync(themesDir).filter(f => f.endsWith('.json'));
-  const themes: ThemeMetaV2[] = [];
+    for (const file of files) {
+      const themeId = file.replace('.json', '');
+      const theme = loadThemeV2(themeId);
 
-  for (const file of files) {
-    const themeId = file.replace('.json', '');
-    const theme = loadThemeV2(themeId);
+      if (theme) {
+        themes.push({
+          id: theme.id,
+          name: theme.name,
+          description: theme.description,
+          brandTone: theme.brandTone,
+          schemaVersion: theme.schemaVersion,
+        });
+      }
+    }
 
-    if (theme) {
-      themes.push({
-        id: theme.id,
-        name: theme.name,
-        description: theme.description,
-        brandTone: theme.brandTone,
-        schemaVersion: theme.schemaVersion,
-      });
+    if (themes.length > 0) {
+      return themes;
     }
   }
 
-  return themes;
+  return BUNDLED_THEME_LIST.map(theme => ({ ...theme }));
 }
 
 /**
@@ -339,11 +349,14 @@ export function themeExistsV2(themeId: string): boolean {
   }
 
   const themesDir = getThemesDir();
-  if (!themesDir) {
-    return false;
+  if (themesDir) {
+    const themePath = join(themesDir, `${themeId}.json`);
+    if (existsSync(themePath)) {
+      return true;
+    }
   }
 
-  return existsSync(join(themesDir, `${themeId}.json`));
+  return themeId in BUNDLED_THEMES;
 }
 
 // ============================================================================
