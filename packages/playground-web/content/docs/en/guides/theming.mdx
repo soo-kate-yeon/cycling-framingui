@@ -1,97 +1,330 @@
 ---
 title: "Theming"
-description: "Customize FramingUI themes with token overrides and dark mode configuration"
+description: "Customize FramingUI themes: select, modify, save, and configure dark mode"
+order: 3
 ---
 
 # Theming
 
-FramingUI is a token-first design system. You can start from a built-in theme, then override only the tokens your product needs.
+FramingUI is a token-first design system. Start with a built-in theme, customize what you need, and save your changes.
 
-## Built-in Themes (7)
+## Built-in Themes
 
-| Theme ID | Use Case |
-| --- | --- |
-| `classic-magazine` | Editorial and content-heavy products |
-| `editorial-tech` | Documentation and knowledge products |
-| `dark-boldness` | High-contrast dark dashboards |
-| `minimal-workspace` | Focused productivity interfaces |
-| `neutral-workspace` | Balanced business applications |
-| `pebble` | Soft, friendly consumer UI |
-| `square-minimalism` | Geometric, compact enterprise UI |
+FramingUI ships with 7 production-ready themes:
 
-## Apply A Theme
+| Theme | Best For | Vibe |
+| --- | --- | --- |
+| `classic-magazine` | Editorial, blogs, content sites | Traditional, readable |
+| `editorial-tech` | Documentation, knowledge bases | Clean, technical |
+| `dark-boldness` | Dashboards, analytics | High-contrast, dramatic |
+| `minimal-workspace` | Productivity tools, SaaS | Focused, distraction-free |
+| `neutral-workspace` | Enterprise, business apps | Professional, balanced |
+| `pebble` | Consumer apps, social | Soft, friendly |
+| `square-minimalism` | Admin panels, fintech | Geometric, compact |
 
-Import a theme CSS file in your app root.
+## 1. Select a Theme
+
+Import the theme CSS in your app entry point:
 
 ```tsx
 // app/layout.tsx (Next.js)
-import '@framingui/tokens/themes/square-minimalism.css';
+import '@framingui/tokens/themes/minimal-workspace.css';
 import '@framingui/ui/styles';
 ```
 
-## Override Tokens
+```tsx
+// pages/_app.tsx (Next.js Pages)
+import '@framingui/tokens/themes/pebble.css';
+import '@framingui/ui/styles';
+```
 
-Create overrides in your global CSS. Keep variable names in the `--*` namespace.
+```tsx
+// main.tsx (Vite)
+import '@framingui/tokens/themes/editorial-tech.css';
+import '@framingui/ui/styles';
+```
+
+## 2. Modify Tokens
+
+Override tokens in your global CSS file:
 
 ```css
 /* app/globals.css */
+
+/* Brand colors */
+:root {
+  --bg-primary: oklch(0.56 0.18 257);            /* Custom purple */
+  --bg-primary-foreground: oklch(0.98 0 0);      /* White text on primary */
+  --bg-accent: oklch(0.72 0.14 200);             /* Accent blue */
+}
+
+/* Typography */
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --text-base: 15px;                              /* Slightly larger base */
+  --leading-normal: 1.6;                          /* More line height */
+}
+
+/* Spacing & Radius */
+:root {
+  --radius-lg: 12px;                              /* Rounder corners */
+  --spacing-4: 1.25rem;                           /* More generous gaps */
+}
+```
+
+### Scoped Overrides
+
+Apply custom tokens to specific sections:
+
+```css
+/* Only for pricing page */
+.pricing-section {
+  --bg-card: oklch(0.99 0.01 250);
+  --border-default: oklch(0.88 0.02 250);
+  --radius-lg: 16px;
+}
+```
+
+```tsx
+<section className="pricing-section">
+  <Card>
+    <h2>Pro Plan</h2>
+    <Button>Subscribe</Button>
+  </Card>
+</section>
+```
+
+## 3. Save Your Theme
+
+### Option A: Commit to Git
+
+Your theme is just CSS variables. Commit `globals.css` to your repo:
+
+```bash
+git add app/globals.css
+git commit -m "feat: customize theme tokens"
+```
+
+### Option B: Create a Custom Theme File
+
+Extract your overrides into a reusable file:
+
+```css
+/* styles/themes/my-brand.css */
 :root {
   --bg-primary: oklch(0.56 0.18 257);
   --bg-primary-foreground: oklch(0.98 0 0);
-  --radius-lg: 14px;
-  --spacing-4: 1rem;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --radius-lg: 12px;
 }
 ```
 
-Use scoped overrides when only one area needs a custom look.
+Import it after the base theme:
 
-```css
-.pricing-surface {
-  --bg-card: oklch(0.99 0.01 250);
-  --border-default: oklch(0.88 0.02 250);
+```tsx
+import '@framingui/tokens/themes/minimal-workspace.css';
+import '../styles/themes/my-brand.css';  // Your overrides
+import '@framingui/ui/styles';
+```
+
+### Option C: Dynamic Theme Switching
+
+Allow users to switch themes:
+
+```tsx
+'use client';
+import { useState, useEffect } from 'react';
+
+const themes = [
+  'minimal-workspace',
+  'pebble',
+  'editorial-tech',
+];
+
+export function ThemeSwitcher() {
+  const [theme, setTheme] = useState('minimal-workspace');
+
+  useEffect(() => {
+    // Remove all theme classes
+    themes.forEach(t => document.documentElement.classList.remove(t));
+    // Add selected theme
+    document.documentElement.classList.add(theme);
+  }, [theme]);
+
+  return (
+    <select value={theme} onChange={e => setTheme(e.target.value)}>
+      {themes.map(t => (
+        <option key={t} value={t}>{t}</option>
+      ))}
+    </select>
+  );
 }
 ```
 
-## Dark Mode Setup
+Load theme-specific CSS dynamically or pre-load all themes with class-based scoping.
 
-Use class-based switching and override only tokens that should change.
+## 4. Dark Mode Setup
+
+FramingUI themes support dark mode via class-based switching.
+
+### Basic Dark Mode
+
+Override tokens inside `.dark` selector:
 
 ```css
+/* app/globals.css */
+
+/* Light mode (default) */
 :root {
   --bg-background: oklch(1 0 0);
   --bg-foreground: oklch(0.2 0 0);
+  --bg-card: oklch(0.99 0 0);
+  --border-default: oklch(0.89 0 0);
 }
 
+/* Dark mode */
 .dark {
   --bg-background: oklch(0.16 0.01 260);
   --bg-foreground: oklch(0.96 0.01 260);
   --bg-card: oklch(0.2 0.01 260);
+  --bg-card-foreground: oklch(0.96 0.01 260);
   --border-default: oklch(0.32 0.01 260);
+  --bg-muted: oklch(0.24 0.01 260);
 }
 ```
 
+### Dark Mode Toggle
+
 ```tsx
-// app/providers.tsx
+'use client';
 import { useEffect, useState } from 'react';
+import { Button } from '@framingui/ui';
 
 export function ThemeModeToggle() {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
+    // Check system preference on mount
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setDark(isDark);
+  }, []);
+
+  useEffect(() => {
     document.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem('theme-mode', dark ? 'dark' : 'light');
   }, [dark]);
 
   return (
-    <button onClick={() => setDark(v => !v)}>
-      {dark ? 'Switch to Light' : 'Switch to Dark'}
-    </button>
+    <Button variant="ghost" onClick={() => setDark(v => !v)}>
+      {dark ? '🌙' : '☀️'}
+    </Button>
   );
 }
 ```
 
-## Recommended Workflow
+### Persist User Preference
 
-1. Pick the closest base theme.
-2. Override brand color and typography tokens first.
-3. Validate contrast in both light and dark mode.
-4. Keep component code unchanged and let tokens drive visual changes.
+```tsx
+'use client';
+import { useEffect, useState } from 'react';
+
+export function useDarkMode() {
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    // Read saved preference
+    const saved = localStorage.getItem('theme-mode');
+    if (saved) {
+      setDark(saved === 'dark');
+    } else {
+      // Fallback to system preference
+      setDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem('theme-mode', dark ? 'dark' : 'light');
+  }, [dark]);
+
+  return [dark, setDark] as const;
+}
+```
+
+### Next.js `next-themes` Integration
+
+```bash
+npm install next-themes
+```
+
+```tsx
+// app/providers.tsx
+'use client';
+import { ThemeProvider } from 'next-themes';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+```tsx
+// app/layout.tsx
+import { Providers } from './providers';
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
+```
+
+```tsx
+// components/theme-toggle.tsx
+'use client';
+import { useTheme } from 'next-themes';
+import { Button } from '@framingui/ui';
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <Button
+      variant="ghost"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+    >
+      {theme === 'dark' ? '🌙' : '☀️'}
+    </Button>
+  );
+}
+```
+
+## Best Practices
+
+1. **Start with the closest theme** — Don't customize from scratch
+2. **Override only what you need** — Keep most tokens as-is
+3. **Test both modes** — Verify contrast in light and dark
+4. **Use OKLCH colors** — Better perceptual uniformity than hex/rgb
+5. **Document your changes** — Add comments in CSS for team clarity
+
+## Workflow Summary
+
+1. Pick a base theme from the 7 built-in options
+2. Import it in your app entry point
+3. Override specific tokens in `globals.css`
+4. Add dark mode overrides inside `.dark { ... }`
+5. Commit CSS to version control or extract to custom theme file
+6. Use `next-themes` or custom toggle for dark mode switching
+
+## Next Steps
+
+- [Design Tokens](/docs/en/guides/design-tokens) — Deep dive into token system
+- [Components](/docs/en/components/button) — See themed components in action
+- [MCP Integration](/docs/en/guides/mcp-integration) — Let AI understand your theme

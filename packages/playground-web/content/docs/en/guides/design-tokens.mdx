@@ -1,0 +1,213 @@
+---
+title: "Design Tokens"
+description: "Understand how FramingUI uses design tokens for colors, typography, spacing, and why AI needs them"
+order: 2
+---
+
+# Design Tokens
+
+Design tokens are the single source of truth for your design system. Instead of hardcoding `#3B82F6` everywhere, you use `--color-primary` — and AI can understand it.
+
+## What Are Design Tokens?
+
+Design tokens are named variables that represent visual design decisions:
+
+```css
+/* Instead of this ❌ */
+.button {
+  background: #3B82F6;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Use tokens ✅ */
+.button {
+  background: var(--bg-primary);
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+```
+
+When you change `--bg-primary`, every component updates automatically.
+
+## Why AI Needs Tokens
+
+AI tools like Claude Code generate UI code. Without tokens, they hardcode colors and spacing — creating inconsistent, unmaintainable code.
+
+With tokens, AI can:
+- ✅ Generate UI that matches your brand instantly
+- ✅ Maintain consistency across all generated code
+- ✅ Respond to design changes without rewriting components
+- ✅ Understand semantic intent ("primary action" vs "#3B82F6")
+
+**Example:** Ask Claude Code:
+
+> "Create a danger button with proper spacing"
+
+**Without tokens:**
+```tsx
+<button className="bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+```
+
+**With tokens (FramingUI):**
+```tsx
+<Button variant="destructive">Delete</Button>
+```
+
+The second version automatically uses `--bg-destructive`, `--spacing-*`, and `--radius-*` from your theme.
+
+## Token Categories
+
+### 1. Colors
+
+Semantic color tokens that adapt to light/dark mode:
+
+```css
+--bg-background       /* Page background */
+--bg-foreground       /* Text color */
+--bg-primary          /* Brand primary */
+--bg-primary-foreground /* Text on primary */
+--bg-destructive      /* Danger actions */
+--bg-muted            /* Subtle backgrounds */
+--border-default      /* Default borders */
+--border-input        /* Form borders */
+```
+
+### 2. Typography
+
+```css
+--font-sans           /* Body font family */
+--font-mono           /* Code font family */
+
+--text-xs             /* 12px */
+--text-sm             /* 14px */
+--text-base           /* 16px */
+--text-lg             /* 18px */
+--text-xl             /* 20px */
+--text-2xl            /* 24px */
+
+--font-normal         /* 400 */
+--font-medium         /* 500 */
+--font-semibold       /* 600 */
+--font-bold           /* 700 */
+
+--leading-tight       /* 1.25 */
+--leading-normal      /* 1.5 */
+--leading-relaxed     /* 1.75 */
+```
+
+### 3. Spacing
+
+```css
+--spacing-1           /* 0.25rem (4px) */
+--spacing-2           /* 0.5rem (8px) */
+--spacing-3           /* 0.75rem (12px) */
+--spacing-4           /* 1rem (16px) */
+--spacing-6           /* 1.5rem (24px) */
+--spacing-8           /* 2rem (32px) */
+--spacing-12          /* 3rem (48px) */
+```
+
+### 4. Radius (Border Radius)
+
+```css
+--radius-sm           /* 4px */
+--radius-md           /* 6px */
+--radius-lg           /* 8px */
+--radius-xl           /* 12px */
+--radius-full         /* 9999px */
+```
+
+### 5. Shadows
+
+```css
+--shadow-sm           /* Subtle elevation */
+--shadow-md           /* Card elevation */
+--shadow-lg           /* Modal elevation */
+```
+
+## Using Tokens in Your Code
+
+### In CSS
+
+```css
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-sm);
+}
+```
+
+### In Tailwind (via FramingUI)
+
+FramingUI maps tokens to Tailwind utilities:
+
+```tsx
+<div className="bg-card border border-default rounded-lg p-6 shadow-sm">
+  <h2 className="text-xl font-semibold text-foreground">Card Title</h2>
+  <p className="text-sm text-muted-foreground">Description</p>
+</div>
+```
+
+### In Components
+
+```tsx
+import { Button, Card } from '@framingui/ui';
+
+export function PricingCard() {
+  return (
+    <Card className="p-6">
+      <h3 className="text-2xl font-bold">Pro Plan</h3>
+      <p className="text-muted-foreground">$29/month</p>
+      <Button className="mt-4">Subscribe</Button>
+    </Card>
+  );
+}
+```
+
+## Token Naming Convention
+
+FramingUI uses semantic naming:
+
+- `--bg-*` → Background colors
+- `--border-*` → Border colors
+- `--text-*` → Font sizes
+- `--spacing-*` → Margins and paddings
+- `--radius-*` → Border radius values
+- `--shadow-*` → Box shadows
+
+This naming helps both humans and AI understand intent.
+
+## Overriding Tokens
+
+You can override any token in your global CSS:
+
+```css
+/* app/globals.css */
+:root {
+  --bg-primary: oklch(0.56 0.18 257);       /* Custom brand color */
+  --font-sans: 'Inter', system-ui, sans-serif; /* Custom font */
+  --radius-lg: 12px;                         /* Rounder corners */
+  --spacing-4: 1.25rem;                      /* More generous spacing */
+}
+```
+
+See [Theming](/docs/en/guides/theming) for advanced customization.
+
+## Best Practices
+
+1. **Always use tokens** — Never hardcode colors or spacing
+2. **Use semantic names** — `--bg-primary` not `--blue-500`
+3. **Test in both modes** — Verify light and dark mode
+4. **Let AI help** — With MCP, AI can suggest appropriate tokens
+5. **Document custom tokens** — Add comments for team clarity
+
+## Next Steps
+
+- [Theming](/docs/en/guides/theming) — Customize your theme
+- [MCP Integration](/docs/en/guides/mcp-integration) — Let AI understand your tokens
+- [Components](/docs/en/components/button) — See tokens in action

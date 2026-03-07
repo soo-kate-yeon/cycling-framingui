@@ -1,0 +1,342 @@
+---
+title: "MCP Integration"
+description: "Connect FramingUI MCP server to Claude Code, Cursor, and Windsurf with real usage examples"
+order: 4
+---
+
+# MCP Integration
+
+Let your AI tool understand your design system. With FramingUI MCP, Claude Code, Cursor, and Windsurf can generate consistent, token-based UI code.
+
+## What is MCP?
+
+**Model Context Protocol (MCP)** is an open standard that lets AI tools access external context and tools. FramingUI MCP provides:
+
+- 🎨 Design token information
+- 🧩 Component API reference
+- 🎭 Available themes and their tokens
+- 🔍 Token search and recommendations
+
+## Quick Setup
+
+Run this in your project root:
+
+```bash
+npx @framingui/mcp-server init
+```
+
+This command:
+1. Creates `.mcp.json` configuration
+2. Updates Tailwind config to include FramingUI paths
+3. Ensures `@framingui/ui/styles` is importable
+4. Installs dependencies if needed
+
+## Connect to AI Tools
+
+All three tools read `.mcp.json` from your project root:
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@framingui/mcp-server"]
+    }
+  }
+}
+```
+
+### Claude Code
+
+1. Run `npx @framingui/mcp-server init` in project root
+2. Open project in Claude Code
+3. Restart Claude Code (Cmd/Ctrl + Shift + P → "Reload Window")
+4. Verify: Ask "List available FramingUI themes"
+
+### Cursor
+
+1. Confirm `.mcp.json` exists at workspace root
+2. Open project in Cursor
+3. Restart Cursor or reload window (Cmd/Ctrl + Shift + P → "Reload Window")
+4. Verify: Ask "What design tokens does FramingUI provide?"
+
+### Windsurf
+
+1. Ensure `.mcp.json` is at project root
+2. Open project in Windsurf
+3. Restart Windsurf
+4. Verify: Ask "Show me FramingUI component list"
+
+## Real Usage Examples
+
+### Example 1: Generate Consistent UI
+
+**Prompt:**
+> "Create a pricing card component with title, price, features list, and CTA button using FramingUI"
+
+**Without MCP (❌ inconsistent):**
+```tsx
+export function PricingCard() {
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-6">
+      <h3 className="text-2xl font-bold text-gray-900">Pro Plan</h3>
+      <p className="text-4xl font-bold text-blue-600 mt-2">$29<span className="text-base font-normal text-gray-500">/mo</span></p>
+      <ul className="mt-4 space-y-2">
+        <li className="text-gray-700">✓ Unlimited projects</li>
+        <li className="text-gray-700">✓ Priority support</li>
+      </ul>
+      <button className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+        Get Started
+      </button>
+    </div>
+  );
+}
+```
+
+**With MCP (✅ uses tokens):**
+```tsx
+import { Button, Card } from '@framingui/ui';
+
+export function PricingCard() {
+  return (
+    <Card className="p-6">
+      <h3 className="text-2xl font-bold text-foreground">Pro Plan</h3>
+      <p className="text-4xl font-bold text-primary mt-2">
+        $29<span className="text-base font-normal text-muted-foreground">/mo</span>
+      </p>
+      <ul className="mt-4 space-y-2 text-foreground">
+        <li>✓ Unlimited projects</li>
+        <li>✓ Priority support</li>
+      </ul>
+      <Button className="mt-6 w-full">Get Started</Button>
+    </Card>
+  );
+}
+```
+
+### Example 2: Explore Available Tokens
+
+**Prompt:**
+> "What color tokens are available for backgrounds?"
+
+**MCP Response:**
+```
+Available background color tokens:
+- --bg-background: Page background
+- --bg-foreground: Text on background
+- --bg-card: Card/panel background
+- --bg-card-foreground: Text on card
+- --bg-primary: Brand primary color
+- --bg-primary-foreground: Text on primary
+- --bg-secondary: Secondary color
+- --bg-muted: Subtle backgrounds
+- --bg-accent: Accent highlights
+- --bg-destructive: Error/danger backgrounds
+```
+
+You can then ask:
+> "Use --bg-muted for the sidebar"
+
+### Example 3: Implement Dark Mode
+
+**Prompt:**
+> "Add dark mode support to this dashboard layout"
+
+**MCP-Aware Response:**
+```tsx
+export function DashboardLayout({ children }) {
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="border-b border-default bg-card">
+        <div className="container mx-auto px-4 py-3">
+          <h1 className="text-xl font-semibold">Dashboard</h1>
+        </div>
+      </nav>
+      <main className="container mx-auto px-4 py-6">
+        {children}
+      </main>
+    </div>
+  );
+}
+```
+
+Now add dark mode toggle:
+```tsx
+// globals.css
+.dark {
+  --bg-background: oklch(0.16 0.01 260);
+  --bg-foreground: oklch(0.96 0.01 260);
+  --bg-card: oklch(0.2 0.01 260);
+  --border-default: oklch(0.32 0.01 260);
+}
+```
+
+### Example 4: Refactor Hardcoded Styles
+
+**Prompt:**
+> "Refactor this component to use FramingUI tokens instead of Tailwind arbitrary values"
+
+**Before:**
+```tsx
+<div className="bg-[#F5F5F5] border-[#E0E0E0] rounded-[8px] p-[24px]">
+  <h2 className="text-[#1A1A1A] text-[20px] font-[600]">Title</h2>
+</div>
+```
+
+**After (with MCP):**
+```tsx
+<div className="bg-muted border border-default rounded-lg p-6">
+  <h2 className="text-foreground text-xl font-semibold">Title</h2>
+</div>
+```
+
+### Example 5: Discover Component APIs
+
+**Prompt:**
+> "How do I use the Button component with an icon?"
+
+**MCP Response:**
+```tsx
+import { Button } from '@framingui/ui';
+
+// Icon-only button
+<Button size="icon" variant="ghost" aria-label="Settings">
+  <SettingsIcon />
+</Button>
+
+// Button with icon and text
+<Button>
+  <PlusIcon className="mr-2 h-4 w-4" />
+  Add Item
+</Button>
+
+// Icon on the right
+<Button>
+  Continue
+  <ArrowRightIcon className="ml-2 h-4 w-4" />
+</Button>
+```
+
+### Example 6: Theme Selection
+
+**Prompt:**
+> "Which theme works best for a SaaS admin dashboard?"
+
+**MCP Response:**
+```
+For SaaS admin dashboards, consider:
+
+1. **neutral-workspace** (recommended)
+   - Professional, balanced
+   - Good for data-heavy UIs
+   - Subtle, non-distracting
+
+2. **square-minimalism**
+   - Compact, efficient
+   - Geometric, modern
+   - Best for dense information
+
+3. **minimal-workspace**
+   - Clean, focused
+   - Reduces cognitive load
+   - Great for task-oriented UIs
+
+To apply:
+import '@framingui/tokens/themes/neutral-workspace.css';
+```
+
+## MCP Commands Reference
+
+| Command | Description |
+| --- | --- |
+| `npx @framingui/mcp-server init` | Bootstrap project with MCP config |
+| `framingui-mcp` | Start MCP server (stdio mode) |
+| `framingui-mcp login` | Authenticate via browser |
+| `framingui-mcp logout` | Clear local auth session |
+| `framingui-mcp status` | Check authentication status |
+
+## Troubleshooting
+
+### MCP not detected
+
+**Check `.mcp.json` location:**
+```bash
+ls -la .mcp.json
+```
+
+Should be at project root (same level as `package.json`).
+
+**Verify JSON syntax:**
+```bash
+cat .mcp.json | jq .
+```
+
+If jq is not installed: `brew install jq` (macOS) or check manually.
+
+**Restart AI tool** after creating/updating `.mcp.json`.
+
+### Token suggestions not working
+
+**Verify FramingUI is installed:**
+```bash
+npm list @framingui/tokens @framingui/ui
+```
+
+**Check imports in your app:**
+```tsx
+// Must import theme before ui/styles
+import '@framingui/tokens/themes/minimal-workspace.css';
+import '@framingui/ui/styles';
+```
+
+### Commands not recognized
+
+**Use npx for one-off commands:**
+```bash
+npx @framingui/mcp-server init
+npx @framingui/mcp-server
+```
+
+**Or install globally:**
+```bash
+npm install -g @framingui/mcp-server
+framingui-mcp init
+```
+
+### Authentication issues
+
+**Re-authenticate:**
+```bash
+framingui-mcp logout
+framingui-mcp login
+```
+
+Follow browser prompt and complete login flow.
+
+**Check status:**
+```bash
+framingui-mcp status
+```
+
+Should show active session with email/username.
+
+## Tips for Effective MCP Usage
+
+1. **Be specific about tokens** — "Use --bg-muted for sidebar" vs "make it gray"
+2. **Ask for component APIs** — "Show Button props" before building complex UIs
+3. **Request theme recommendations** — "Which theme fits a fintech app?"
+4. **Validate with MCP** — "Is this component using FramingUI tokens correctly?"
+5. **Explore incrementally** — Start with layout, then refine token usage
+
+## Next Steps
+
+- [Design Tokens](/docs/en/guides/design-tokens) — Master the token system
+- [Theming](/docs/en/guides/theming) — Customize your theme
+- [Components](/docs/en/components/button) — Explore component APIs
+
+## Learn More
+
+- [MCP Protocol Spec](https://modelcontextprotocol.io)
+- [FramingUI MCP on GitHub](https://github.com/tektonui/framingui-mcp)
+- [Claude Code MCP Docs](https://docs.anthropic.com/claude/docs/mcp)
