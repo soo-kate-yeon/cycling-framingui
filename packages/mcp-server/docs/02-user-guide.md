@@ -276,9 +276,9 @@ You: "Show me the login template"
 
 Run `npx @framingui/mcp-server login` or set `FRAMINGUI_API_KEY` environment variable.
 
-### "whoami required"
+### `whoami`
 
-Call `whoami` before using any other tool. Ask your AI assistant: "Check my Framingui account".
+`whoami` is optional. Use it to inspect `licensedThemes` and current account state, but authenticated tool calls can run without a prior `whoami` request.
 
 ### Theme not accessible
 

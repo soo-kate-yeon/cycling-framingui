@@ -22,7 +22,7 @@ Framingui MCP Server is a **stdio-based MCP protocol** server that communicates 
 **Key Components**:
 
 - **CLI Router**: Command routing for `login`, `logout`, `status`, `init`, and MCP server start
-- **Auth Layer**: OAuth login, API key verification, license gating, whoami enforcement
+- **Auth Layer**: OAuth login, API key verification, and license gating
 - **MCP Protocol Handler**: stdio-based JSON-RPC 2.0 tool/prompt registration
 - **17 MCP Tools**: Theme, component, template, and screen generation tools
 - **2 MCP Prompts**: Getting started and screen workflow guidance
@@ -31,7 +31,7 @@ Framingui MCP Server is a **stdio-based MCP protocol** server that communicates 
 
 1. **stdio-only**: No HTTP server — all communication via stdin/stdout (MCP standard)
 2. **Data-only output**: No file writes — AI assistant handles file operations
-3. **Auth-gated**: All tools require authentication and `whoami` call
+3. **Auth-gated**: Protected tools require authentication
 4. **Type safety**: Zod schemas for all input validation
 5. **Theme engine**: Theme recipes applied server-side for consistent styling
 
@@ -124,12 +124,8 @@ sequenceDiagram
     API-->>MCP: { valid: true, user, licenses, themes }
     MCP->>MCP: Cache auth data
 
-    AI->>MCP: whoami
-    MCP-->>AI: { plan, licensedThemes, ... }
-    MCP->>MCP: Set whoamiCompleted flag
-
     AI->>MCP: list-themes (or any tool)
-    MCP->>MCP: requireAuth() + requireWhoami() ✓
+    MCP->>MCP: requireAuth() ✓
     MCP-->>AI: Tool response
 ```
 
@@ -158,8 +154,8 @@ packages/mcp-server/
 │   │
 │   ├── auth/                 # Authentication layer
 │   │   ├── verify.ts         # API key verification (framingui.com)
-│   │   ├── guard.ts          # requireAuth() + requireWhoami() guards
-│   │   ├── state.ts          # Auth data & whoamiCompleted state
+│   │   ├── guard.ts          # requireAuth() guard
+│   │   ├── state.ts          # Auth data + raw API key state
 │   │   ├── cache.ts          # Verification cache (5-min TTL)
 │   │   └── theme-access.ts   # Theme license check + master accounts
 │   │
@@ -246,10 +242,10 @@ graph TD
 | Module                 | Responsibility                                                         |
 | ---------------------- | ---------------------------------------------------------------------- |
 | `cli/login.ts`         | Browser OAuth flow: localhost callback server → save credentials       |
-| `cli/credentials.ts`   | Read/write `~/.framingui/credentials.json`                                |
+| `cli/credentials.ts`   | Read/write `~/.framingui/credentials.json`                             |
 | `auth/verify.ts`       | `verifyApiKey()`: GET `framingui.com/api/mcp/verify` with Bearer token |
-| `auth/guard.ts`        | `requireAuth()` and `requireWhoami()` — throws if not met              |
-| `auth/state.ts`        | In-memory auth state: `authData`, `whoamiCompleted` flag               |
+| `auth/guard.ts`        | `requireAuth()` — throws when the session is unauthenticated           |
+| `auth/state.ts`        | In-memory auth state: verified auth data, cache, and raw API key       |
 | `auth/cache.ts`        | API key verification cache (5-minute TTL)                              |
 | `auth/theme-access.ts` | `PREMIUM_THEMES` list, `MASTER_EMAILS`, `isMasterAccount()`            |
 
@@ -259,7 +255,7 @@ Every tool call in `CallToolRequestSchema` handler:
 
 ```
 1. requireAuth()     → Throws AuthRequiredError if no valid credentials
-2. requireWhoami()   → Throws WhoamiRequiredError if whoami not called yet
+2. Tool execution     → Optional `whoami` may inspect the session, but is not required
    (skipped for whoami tool itself)
 3. Execute tool
 ```

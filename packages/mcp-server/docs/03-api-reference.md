@@ -22,7 +22,7 @@ Complete API reference for all 17 MCP tools in Framingui MCP Server v0.4.5.
 
 Verify your account, license status, and accessible themes.
 
-> **This must be called before any other tool.** All other tools will reject requests until `whoami` is called.
+> `whoami` is optional. Use it to inspect the current session and licensed themes. Authenticated tool calls do not require a prior `whoami` request.
 
 **Input Schema**:
 
@@ -79,7 +79,7 @@ interface WhoamiOutput {
 
 ### list-themes
 
-List all available themes from `.moai/themes/generated/`.
+List the themes accessible to the current authenticated session.
 
 **Input**: `{}` (no parameters)
 
@@ -123,7 +123,7 @@ Preview a theme and retrieve its full v2.1 theme data including design tokens.
 
 ### list-icon-libraries
 
-List all available icon libraries from `.moai/icon-libraries/generated/`.
+List all icon libraries accessible to the current hosted catalog.
 
 **Input**: `{}` (no parameters)
 
@@ -413,11 +413,11 @@ Basic screen definition validation with helpful feedback.
 
 ### Authentication Errors
 
-| Error                     | Cause                   | Solution                                       |
-| ------------------------- | ----------------------- | ---------------------------------------------- |
-| `Authentication required` | No API key found        | Run `framingui-mcp login` or set `FRAMINGUI_API_KEY` |
-| `whoami required`         | `whoami` not called yet | Call `whoami` first                            |
-| `API key is invalid`      | Expired or revoked key  | Re-run `framingui-mcp login`                      |
+| Error                          | Cause                                                  | Solution                                                     |
+| ------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------ |
+| `Authentication required`      | No API key found                                       | Run `framingui-mcp login` or set `FRAMINGUI_API_KEY`         |
+| `Authentication failed`        | Expired or revoked key                                 | Re-run `framingui-mcp login` or refresh the API key          |
+| `THEME_AUTHORITY_INCONSISTENT` | Session/license data disagrees with theme availability | Refresh authentication state and retry; report if persistent |
 
 ### Validation Errors
 

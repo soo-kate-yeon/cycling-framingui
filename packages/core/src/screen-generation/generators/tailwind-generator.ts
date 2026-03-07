@@ -106,8 +106,7 @@ export function tokenToTailwindClass(
   }
 
   if (category === 'font' || category === 'typography') {
-    const value = rest.join('-');
-    return prefix ? `${responsivePrefix}${prefix}-${value}` : '';
+    return '';
   }
 
   if (category === 'radius' || category === 'radii') {
@@ -122,8 +121,7 @@ export function tokenToTailwindClass(
 
   // Component-specific tokens
   if (layer === 'component') {
-    const value = rest.join('-');
-    return `${responsivePrefix}${prefix}-${category}-${value}`;
+    return '';
   }
 
   return '';

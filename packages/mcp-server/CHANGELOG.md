@@ -2,6 +2,19 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.5] - 2026-03-07
+
+### Fixed
+
+- Removed the hidden `whoami` prerequisite from the MCP workflow contract so authenticated sessions can call theme and generation tools directly.
+- Unified theme entitlement checks across `whoami`, `list-themes`, and `preview-theme` and fail explicitly on authority mismatches instead of returning misleading empty or not-found responses.
+- Synced screen validation and generation onto one shared component contract, improved generation output quality, and enriched generation context responses.
+- Corrected the runtime server version banner and updated tool descriptions away from legacy local `.moai` wording.
+
+### Changed
+
+- Raised the minimum published `@framingui/core` and `@framingui/ui` dependency versions to include the latest screen contract and peer-dependency fixes.
+
 ## [0.6.4] - 2026-03-07
 
 ### Fixed

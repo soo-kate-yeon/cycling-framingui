@@ -1,6 +1,6 @@
 # Framingui MCP Server Documentation
 
-Documentation for `@framingui/mcp-server` v0.4.5 — an stdio-based MCP server for AI-driven UI generation.
+Documentation for `@framingui/mcp-server` — an stdio-based MCP server for AI-driven UI generation.
 
 ## Documents
 
@@ -19,13 +19,13 @@ Documentation for `@framingui/mcp-server` v0.4.5 — an stdio-based MCP server f
 - **6 Premium Themes**: All require authentication
 - **stdio Protocol**: JSON-RPC 2.0 over stdin/stdout (no HTTP)
 - **OAuth Login**: `framingui-mcp login` for browser-based authentication
-- **whoami**: Mandatory first call every session
+- **whoami**: Optional session inspection tool
 
 ## Quick Reference
 
 ```bash
 # Install & setup
-npx @framingui/mcp-server init
+npx -y @framingui/mcp-server@latest init
 
 # Authenticate
 npx @framingui/mcp-server login
@@ -38,9 +38,10 @@ npx @framingui/mcp-server status
 
 | Date       | Version | Changes                                                        |
 | ---------- | ------- | -------------------------------------------------------------- |
+| 2026-03-07 | 0.6.5   | Workflow contract and install/update guidance synced           |
 | 2026-02-16 | 0.4.5   | Documentation updated: 17 tools, OAuth auth, 6 themes, English |
 | 2026-01-25 | 0.1.0   | Initial documentation                                          |
 
 ---
 
-**Package**: [@framingui/mcp-server](../../README.md) | **Spec**: [SPEC-MCP-002](../../.moai/specs/SPEC-MCP-002/spec.md)
+**Package**: [@framingui/mcp-server](../../README.md) | **Consumer Guide**: [Install And Update Guide](../../docs/packages/install-update.md)

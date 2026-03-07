@@ -31,10 +31,10 @@ This opens your browser for OAuth authentication. Your credentials are stored in
 - No free themes are available
 - Authentication verifies your license status
 
-## Step 2: Call whoami (Mandatory - Server Enforced)
+## Step 2: Call whoami (Recommended Session Check)
 
-**You MUST call the \`whoami\` tool before using any other tool.**
-All other tools will return an error until whoami is called.
+**Call the \`whoami\` tool when you want to inspect the current session.**
+It is useful right after login or when debugging theme access, but it is no longer a required first step.
 
 \`\`\`
 Call whoami (no parameters needed)
@@ -57,6 +57,8 @@ Use MCP tools to discover themes:
 2. Call preview-theme with a themeId to see design tokens
 3. Choose a theme for your project
 \`\`\`
+
+You can call \`list-themes\` and \`preview-theme\` directly after authentication without calling \`whoami\` first.
 
 **Available themes (all require license):**
 - classic-magazine - Classic magazine style
@@ -94,7 +96,7 @@ Follow the 3-step workflow:
 ## Common Mistakes to Avoid
 
 1. ❌ Skipping authentication - All themes require licenses
-2. ❌ Skipping whoami - All tools are blocked until whoami is called
+2. ❌ Assuming whoami is a hard prerequisite - it is optional session inspection, not a hidden unlock step
 3. ❌ Using non-existent theme IDs - Only 6 themes exist
 4. ❌ Skipping validate-screen-definition - Always validate before writing code
 5. ❌ Ignoring dependencies warnings - Check required packages before running code

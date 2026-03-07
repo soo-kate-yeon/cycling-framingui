@@ -13,29 +13,30 @@
  * Primitive: Button, Input, Text, Heading, Checkbox, Radio, Switch, Slider, Badge, Avatar
  * Composed: Card, Modal, Tabs, Table, Link, List, Image, Form, Dropdown, Progress
  */
-export type ComponentType =
-  // Primitive components (10)
-  | 'Button'
-  | 'Input'
-  | 'Text'
-  | 'Heading'
-  | 'Checkbox'
-  | 'Radio'
-  | 'Switch'
-  | 'Slider'
-  | 'Badge'
-  | 'Avatar'
-  // Composed components (10)
-  | 'Card'
-  | 'Modal'
-  | 'Tabs'
-  | 'Table'
-  | 'Link'
-  | 'List'
-  | 'Image'
-  | 'Form'
-  | 'Dropdown'
-  | 'Progress';
+export const SCREEN_COMPONENT_TYPES = [
+  'Button',
+  'Input',
+  'Text',
+  'Heading',
+  'Checkbox',
+  'Radio',
+  'Switch',
+  'Slider',
+  'Badge',
+  'Avatar',
+  'Card',
+  'Modal',
+  'Tabs',
+  'Table',
+  'Link',
+  'List',
+  'Image',
+  'Form',
+  'Dropdown',
+  'Progress',
+] as const;
+
+export type ComponentType = (typeof SCREEN_COMPONENT_TYPES)[number];
 
 /**
  * Component Definition - Specifies a component instance

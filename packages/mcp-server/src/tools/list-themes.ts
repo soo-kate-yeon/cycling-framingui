@@ -1,13 +1,18 @@
 /**
  * List Themes MCP Tool (v2.1)
  * API 기반으로 라이선스 보유 테마 목록 반환
- * (로컬 .moai/themes/generated/ 읽기 → framingui.com API fetch)
+ * framingui.com API 기반 테마 목록 조회
  */
 
 import { fetchThemeList } from '../api/data-client.js';
 import { formatToolError } from '../api/api-result.js';
 import type { ListThemesOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
+import {
+  formatThemeAuthorityInconsistencyError,
+  getLicensedThemeIds,
+  shouldFailThemeListForAuthorityMismatch,
+} from './theme-authority.js';
 
 /**
  * List available themes based on authentication status
@@ -18,10 +23,25 @@ export async function listThemesTool(): Promise<ListThemesOutput> {
     const result = await fetchThemeList();
 
     if (!result.ok) {
+      const licensedThemeIds = getLicensedThemeIds();
+      if (licensedThemeIds.length > 0) {
+        return {
+          success: false,
+          error: formatThemeAuthorityInconsistencyError({ licensedThemeIds }),
+        };
+      }
+
       return { success: false, error: formatToolError(result.error) };
     }
 
     const themes = result.data;
+    if (shouldFailThemeListForAuthorityMismatch(themes.length)) {
+      return {
+        success: false,
+        error: formatThemeAuthorityInconsistencyError({ licensedThemeIds: getLicensedThemeIds() }),
+      };
+    }
+
     return {
       success: true,
       themes: themes.map(theme => ({

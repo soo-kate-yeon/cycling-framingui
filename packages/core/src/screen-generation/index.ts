@@ -20,7 +20,7 @@ export type {
   ValidationContext,
 } from './types.js';
 
-export { isComponentDefinition, isScreenDefinition } from './types.js';
+export { SCREEN_COMPONENT_TYPES, isComponentDefinition, isScreenDefinition } from './types.js';
 
 // ============================================================================
 // Validation Schemas and Functions

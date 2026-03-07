@@ -5,6 +5,13 @@ All notable changes to @tekton/core will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.7] - 2026-03-07
+
+### Fixed
+
+- Exported the shared screen component contract used by MCP validation and generation so consumers no longer drift between validation and code generation paths.
+- Preserved generated screen text children and stopped emitting invalid Tailwind token utility classes in screen code output.
+
 ## [0.4.6] - 2026-03-07
 
 ### Changed

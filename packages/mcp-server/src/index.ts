@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { fileURLToPath } from 'node:url';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -10,12 +11,7 @@ import {
 import { info, error as logError } from './utils/logger.js';
 import { verifyApiKey } from './auth/verify.js';
 import { setAuthData, setRawApiKey } from './auth/state.js';
-import {
-  AuthRequiredError,
-  WhoamiRequiredError,
-  requireAuth,
-  requireWhoami,
-} from './auth/guard.js';
+import { AuthRequiredError, requireAuth } from './auth/guard.js';
 import { loadCredentials } from './cli/credentials.js';
 import { generateBlueprintTool } from './tools/generate-blueprint.js';
 import { previewThemeTool } from './tools/preview-theme.js';
@@ -35,6 +31,7 @@ import { getScreenGenerationContextTool } from './tools/get-screen-generation-co
 import { validateScreenDefinitionTool } from './tools/validate-screen-definition.js';
 import { validateEnvironmentTool } from './tools/validate-environment.js';
 import { whoamiTool } from './tools/whoami.js';
+import { readPackageJson } from './utils/package-json-reader.js';
 import { getGettingStartedPrompt } from './prompts/getting-started.js';
 import { getScreenWorkflowPrompt } from './prompts/screen-workflow.js';
 import {
@@ -57,10 +54,17 @@ import {
   ValidateEnvironmentInputSchema,
 } from './schemas/mcp-schemas.js';
 
+const packageJsonResult = readPackageJson(
+  fileURLToPath(new URL('../package.json', import.meta.url))
+);
+const serverVersion = packageJsonResult.success
+  ? packageJsonResult.packageJson?.version || '0.6.5'
+  : '0.6.5';
+
 const server = new Server(
   {
     name: 'framingui-mcp-server',
-    version: '0.5.4',
+    version: serverVersion,
   },
   {
     capabilities: {
@@ -128,9 +132,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       {
         name: 'whoami',
         description:
-          '[MANDATORY FIRST STEP] Verify your account, license status, and accessible themes.\n\n' +
-          'YOU MUST CALL THIS TOOL BEFORE ANY OTHER TOOL.\n' +
-          'All other tools will reject requests until whoami is called.\n\n' +
+          'Inspect the current authenticated session, license status, and accessible themes.\n\n' +
+          'Call this after login or when debugging theme access. It is recommended, but no longer a required first step.\n\n' +
           'RETURNS:\n' +
           '- plan: Your subscription tier (free/pro/enterprise/master)\n' +
           '- isMaster: Whether this is a master account with full access\n' +
@@ -201,7 +204,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       {
         name: 'list-icon-libraries',
         description:
-          'List all available icon libraries from .moai/icon-libraries/generated/\n\n' +
+          'List all icon libraries accessible to the current hosted catalog.\n\n' +
           'WHEN TO CALL:\n' +
           '- When user asks which icon libraries are available\n' +
           '- Before calling preview-icon-library to select a library\n' +
@@ -238,11 +241,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       {
         name: 'list-themes',
         description:
-          'List all available themes from .moai/themes/generated/\n\n' +
+          'List the themes accessible to the current authenticated session.\n\n' +
           'WHEN TO CALL:\n' +
           '- When user asks which themes are available\n' +
           '- Before calling preview-theme to select a theme\n' +
-          '- When deciding which themeId parameter to use in generate-blueprint or get-screen-generation-context\n\n' +
+          '- When deciding which themeId parameter to use in generate-blueprint or get-screen-generation-context\n' +
+          '- Works directly after authentication; no prior whoami call is required\n\n' +
           'RETURNS: Array of theme IDs with names and descriptions',
         inputSchema: {
           type: 'object',
@@ -259,7 +263,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           '- When user wants to see color palettes, typography, or spacing tokens\n' +
           '- To understand theme structure before using in generate-blueprint or get-screen-generation-context\n' +
           '- When user asks about theme customization options\n' +
-          '- When includeCSS=true, also returns pre-generated CSS variables via themeToCSS()\n\n' +
+          '- When includeCSS=true, also returns pre-generated CSS variables via themeToCSS()\n' +
+          '- Works directly after authentication; no prior whoami call is required\n\n' +
           'RETURNS: Complete theme data including colors, typography, spacing, and component tokens. ' +
           'Optionally includes CSS variables string when includeCSS is true.',
         inputSchema: {
@@ -664,8 +669,13 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
             type: 'text',
             text: JSON.stringify({
               success: false,
-              error:
-                '🔐 Authentication required to use FramingUI MCP tools.\n\n🎁 Start your FREE 3-day trial (no credit card):\n   → https://framingui.com/auth/signup?utm_source=mcp&utm_medium=cli&utm_campaign=auth_prompt\n\nAlready have an account? Run `framingui-mcp login`',
+              code: 'AUTH_REQUIRED',
+              error: 'Authentication required to use FramingUI MCP tools.',
+              nextAction:
+                'Run `framingui-mcp login` or set FRAMINGUI_API_KEY, then retry the same tool call.',
+              signupUrl:
+                'https://framingui.com/auth/signup?utm_source=mcp&utm_medium=cli&utm_campaign=auth_prompt',
+              retryable: true,
             }),
           },
         ],
@@ -680,51 +690,15 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
           type: 'text',
           text: JSON.stringify({
             success: false,
+            code: 'AUTH_CHECK_FAILED',
             error: 'Authentication check failed unexpectedly.',
             detail: e instanceof Error ? e.message : String(e),
+            retryable: true,
           }),
         },
       ],
       isError: true,
     };
-  }
-
-  // whoami 이외의 도구는 whoami 호출 후에만 사용 가능 (서버 사이드 강제)
-  if (name !== 'whoami') {
-    try {
-      requireWhoami();
-    } catch (e) {
-      if (e instanceof WhoamiRequiredError) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify({
-                success: false,
-                error: 'whoami required.',
-                hint: 'Please call the "whoami" tool first to verify your account and license status.',
-              }),
-            },
-          ],
-          isError: true,
-        };
-      }
-      // 예상치 못한 예외는 로깅 후 에러 반환 (silent swallow 방지)
-      logError(`Unexpected error in requireWhoami: ${e}`);
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: 'Whoami check failed unexpectedly.',
-              detail: e instanceof Error ? e.message : String(e),
-            }),
-          },
-        ],
-        isError: true,
-      };
-    }
   }
 
   try {
@@ -1012,7 +986,7 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
 // Server Initialization
 // ============================================================================
 
-info('Starting Framingui MCP Server v0.5.0...');
+info(`Starting Framingui MCP Server v${serverVersion}...`);
 
 // ============================================================================
 // Authentication: Credential Chain

@@ -1,7 +1,7 @@
 /**
  * Preview Theme MCP Tool (v2.1)
  * API 기반으로 테마 상세 데이터 조회
- * (로컬 .moai/themes/generated/ 읽기 → framingui.com API fetch)
+ * framingui.com API 기반 테마 상세 조회
  */
 
 import type { ThemeV2 } from '@framingui/core';
@@ -11,6 +11,11 @@ import { extractErrorMessage } from '../utils/error-handler.js';
 import { getAuthData } from '../auth/state.js';
 import { fetchTheme } from '../api/data-client.js';
 import { formatToolError } from '../api/api-result.js';
+import {
+  formatThemeAuthorityInconsistencyError,
+  getLicensedThemeIds,
+  shouldRewriteThemePreviewError,
+} from './theme-authority.js';
 
 /**
  * ThemeV2 (core) -> ThemeDefinition (ui) 어댑터
@@ -139,6 +144,16 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
     const themeResult = await fetchTheme(themeId);
 
     if (!themeResult.ok) {
+      if (shouldRewriteThemePreviewError(themeId, themeResult.error)) {
+        return {
+          success: false,
+          error: formatThemeAuthorityInconsistencyError({
+            licensedThemeIds: getLicensedThemeIds(),
+            requestedThemeId: themeId,
+          }),
+        };
+      }
+
       return {
         success: false,
         error: formatToolError(themeResult.error, `Theme "${themeId}"`),

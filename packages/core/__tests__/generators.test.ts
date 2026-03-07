@@ -423,6 +423,9 @@ describe('React Generator', () => {
       const componentWithoutChildren = {
         ...mockResolvedComponent,
         children: undefined,
+        props: {
+          variant: 'primary',
+        },
       };
 
       const context = {
@@ -436,6 +439,54 @@ describe('React Generator', () => {
 
       expect(jsx).toContain('/>');
       expect(jsx).not.toContain('</button>');
+    });
+
+    it('should render props.children text when resolved children are absent', () => {
+      const componentWithPropChildren = {
+        ...mockResolvedComponent,
+        children: undefined,
+        props: {
+          variant: 'primary',
+          children: 'Prop children text',
+        },
+      };
+
+      const context = {
+        depth: 0,
+        imports: new Set<string>(),
+        cssFramework: 'tailwind' as const,
+        format: 'typescript' as const,
+      };
+
+      const jsx = generateComponentJSX(componentWithPropChildren, context);
+
+      expect(jsx).toContain('Prop children text');
+      expect(jsx).toContain('</button>');
+      expect(jsx).not.toContain('/>');
+    });
+
+    it('should merge generated classes with props.className into one className attribute', () => {
+      const componentWithRecipeClass = {
+        ...mockResolvedComponent,
+        props: {
+          variant: 'primary',
+          children: 'Click me',
+          className: 'bg-white rounded-xl',
+        },
+      };
+
+      const context = {
+        depth: 0,
+        imports: new Set<string>(),
+        cssFramework: 'tailwind' as const,
+        format: 'typescript' as const,
+      };
+
+      const jsx = generateComponentJSX(componentWithRecipeClass, context);
+
+      expect(jsx.match(/className=/g)?.length).toBe(1);
+      expect(jsx).toContain('bg-white');
+      expect(jsx).toContain('rounded-xl');
     });
   });
 
@@ -616,7 +667,7 @@ describe('Generator Edge Cases', () => {
       const className = tokenToTailwindClass('var(--atomic-font-size-large)', {
         prop: 'fontSize',
       });
-      expect(className).toBe('text-size-large');
+      expect(className).toBe('');
     });
 
     it('should handle border radius tokens', () => {

@@ -366,6 +366,7 @@ export {
   type ScreenMeta,
   type ScreenDefinition,
   type ValidationContext,
+  SCREEN_COMPONENT_TYPES,
   isComponentDefinition,
   isScreenDefinition,
   // Validation

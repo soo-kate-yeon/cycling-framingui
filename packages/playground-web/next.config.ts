@@ -11,8 +11,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   // Workspace 패키지 transpile
-  // Note: @framingui/ui는 이미 'use client' 지시어가 포함된 pre-built ESM 번들을 제공하므로 제외
-  transpilePackages: ['@framingui/core'],
+  transpilePackages: ['@framingui/core', '@framingui/ui'],
   images: {
     remotePatterns: [
       {
@@ -22,7 +21,7 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack: (config) => {
-    const uiDistRoot = path.resolve(import.meta.dirname, '../ui/dist');
+    const uiSourceRoot = path.resolve(import.meta.dirname, '../ui/src');
 
     // pnpm symlink를 따라가지 않고 package.json exports 사용
     config.resolve.symlinks = false;
@@ -34,8 +33,8 @@ const nextConfig: NextConfig = {
     ];
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      '@framingui/ui$': path.join(uiDistRoot, 'index.mjs'),
-      '@framingui/ui/templates$': path.join(uiDistRoot, 'templates/index.mjs'),
+      '@framingui/ui$': path.join(uiSourceRoot, 'index.ts'),
+      '@framingui/ui/templates$': path.join(uiSourceRoot, 'templates/index.ts'),
     };
     return config;
   },

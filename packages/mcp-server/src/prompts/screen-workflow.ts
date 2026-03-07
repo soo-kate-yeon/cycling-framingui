@@ -17,6 +17,9 @@ export function getScreenWorkflowPrompt() {
 
 This is the **recommended production workflow** for generating screens with Framingui.
 
+Prerequisite: authenticate with \`framingui-mcp login\` or provide \`FRAMINGUI_API_KEY\`.
+Optional: call \`whoami\` if you want to inspect the current session and licensed themes before starting.
+
 ## Overview
 
 The 4-step workflow ensures:

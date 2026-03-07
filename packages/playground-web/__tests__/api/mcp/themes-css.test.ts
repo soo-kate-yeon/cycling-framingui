@@ -132,8 +132,6 @@ describe('GET /api/mcp/themes/[id]/css', () => {
 
       const request = new NextRequest('http://localhost:3001/api/mcp/themes/pebble/css');
       const response = await getThemeCSS(request, { params: Promise.resolve({ id: 'pebble' }) });
-      const data = await response.json();
-
       // 마스터 계정이라 403이 아닌 200 또는 404(테마 로드 실패)를 받아야 함
       expect(response.status).not.toBe(403);
     });

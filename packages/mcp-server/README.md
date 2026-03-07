@@ -6,7 +6,7 @@ Framingui MCP Server v2.0.0 - stdio-based MCP protocol implementation for Claude
 
 MCP (Model Context Protocol) server enabling AI-driven blueprint generation, theme preview, and production code export for the Framingui design system.
 
-**SPEC**: [SPEC-MCP-002 v2.0.0](../../.moai/specs/SPEC-MCP-002/spec.md) - stdio-based MCP Standard
+Consumer install and upgrade steps live in [docs/packages/install-update.md](../../docs/packages/install-update.md).
 
 ## Features
 
@@ -98,13 +98,13 @@ npx @framingui/mcp-server init
 
 ### CLI Commands
 
-| Command                          | Description           |
-| -------------------------------- | --------------------- |
-| `npx @framingui/mcp-server`      | MCP stdio 서버 시작   |
-| `npx @framingui/mcp-server init` | 프로젝트 초기 설정    |
-| `framingui-mcp login`            | 브라우저 OAuth 로그인 |
-| `framingui-mcp logout`           | 로그아웃              |
-| `framingui-mcp status`           | 인증 상태 확인        |
+| Command                                    | Description           |
+| ------------------------------------------ | --------------------- |
+| `npx -y @framingui/mcp-server@latest`      | MCP stdio 서버 시작   |
+| `npx -y @framingui/mcp-server@latest init` | 프로젝트 초기 설정    |
+| `framingui-mcp login`                      | 브라우저 OAuth 로그인 |
+| `framingui-mcp logout`                     | 로그아웃              |
+| `framingui-mcp status`                     | 인증 상태 확인        |
 
 ## Development Quick Start
 
@@ -124,7 +124,7 @@ pnpm inspect
 
 ### 3. Integrate with Claude Code
 
-See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-INTEGRATION.md) for complete setup instructions.
+See [Package Guide](../../docs/packages/mcp-server.md) for complete setup instructions.
 
 **Quick Config** (프로젝트 루트 `.mcp.json`):
 
@@ -134,7 +134,7 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
     "framingui": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@framingui/mcp-server"]
+      "args": ["-y", "@framingui/mcp-server@latest"]
     }
   }
 }
@@ -249,7 +249,7 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 
 **Tool**: `list-themes`
 
-**Description**: List all available themes from `.moai/themes/generated/`
+**Description**: List the themes accessible to the current authenticated session
 
 **Input**:
 
@@ -802,7 +802,7 @@ User: "What can I customize in the loading template?"
 → Customizable texts, slots, and optional features returned
 ```
 
-See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-INTEGRATION.md) for complete examples.
+See [Package Guide](../../docs/packages/mcp-server.md) for complete examples.
 
 ## Architecture
 
@@ -907,24 +907,11 @@ All functions use `MemoryCache` (10-min TTL) with `getStale()` fallback for netw
 
 ## Documentation
 
-### SPEC-MCP-002 v2.0.0 Documentation
+### Consumer Documentation
 
-- 📋 [Specification](../../.moai/specs/SPEC-MCP-002/spec.md) - Complete requirements
-- 📐 [Implementation Plan](../../.moai/specs/SPEC-MCP-002/plan.md) - Development roadmap
-- ✅ [Acceptance Criteria](../../.moai/specs/SPEC-MCP-002/acceptance.md) - AC-001 ~ AC-012
-- 🔄 [Handover Document](../../.moai/specs/SPEC-MCP-002/HANDOVER.md) - Implementation details
-
-### SPEC-MCP-003 v1.0.0 Documentation (Component & Template Discovery)
-
-- 📋 [Specification](../../.moai/specs/SPEC-MCP-003/spec.md) - Component & template discovery requirements
-- 🧩 Component Registry - 30+ UI components with metadata
-- 📄 Template Registry - 13 screen templates with customization boundaries
-
-### Integration Guides
-
-- 🤖 [Claude Code Integration](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-INTEGRATION.md) - Setup and usage
-- ✅ [Phase 5 Results](../../.moai/specs/SPEC-MCP-002/PHASE-5-RESULTS.md) - MCP Inspector validation
-- 🎯 [Phase 6 Completion](../../.moai/specs/SPEC-MCP-002/PHASE-6-COMPLETION.md) - Integration testing
+- 📦 [Install And Update Guide](../../docs/packages/install-update.md) - package install, upgrade, and cache troubleshooting
+- 🤖 [Package Guide](../../docs/packages/mcp-server.md) - setup and usage
+- 📘 [Local MCP Docs](./docs/README.md) - quick start, API reference, and integration notes
 
 ### Quick Links
 
@@ -988,7 +975,7 @@ pnpm inspect
 - **Data-Only Philosophy**: Claude Code handles all file operations
 - **Security**: No file system side effects from MCP tools
 
-**Visual Preview**: Use [SPEC-PLAYGROUND-001](../../.moai/specs/SPEC-PLAYGROUND-001/) for React-based rendering
+**Visual Preview**: Use the FramingUI playground app for React-based rendering and theme inspection.
 
 ## Contributing
 
@@ -1005,7 +992,6 @@ MIT
 
 ---
 
-**Version**: 0.6.0 (API-based data sources — no workspace dependencies)
-**Last Updated**: 2026-03-06
-**SPEC**: SPEC-MCP-002 v2.0.0, SPEC-LAYOUT-002 Phase 4, SPEC-MCP-003 v1.0.0, SPEC-MCP-007 v1.0.0
+**Version**: 0.6.5
+**Last Updated**: 2026-03-07
 **Total Tools**: 17

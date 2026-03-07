@@ -126,16 +126,16 @@ npx @framingui/mcp-server init
 
 ### What It Does
 
-| Step | Action                                                                 |
-| ---- | ---------------------------------------------------------------------- |
-| 1    | **Detect framework**: Next.js or Vite                                  |
-| 2    | **Install packages**: `@framingui/ui`, `tailwindcss-animate`           |
-| 3    | **Configure Tailwind**: Add content paths and animate plugin           |
-| 4    | **Setup CSS**: Add `@import '@framingui/ui/styles'` to `globals.css`   |
+| Step | Action                                                                    |
+| ---- | ------------------------------------------------------------------------- |
+| 1    | **Detect framework**: Next.js or Vite                                     |
+| 2    | **Install packages**: `@framingui/ui`, `tailwindcss-animate`              |
+| 3    | **Configure Tailwind**: Add content paths and animate plugin              |
+| 4    | **Setup CSS**: Add `@import '@framingui/ui/styles'` to `globals.css`      |
 | 5    | **Register MCP**: Create/update `.mcp.json` with Framingui server         |
 | 6    | **Generate guide**: Create `FRAMINGUI-GUIDE.md`                           |
 | 7    | **Update AI config**: Add Framingui workflow to `CLAUDE.md` / `AGENTS.md` |
-| 8    | **Print next steps**: Auth instructions and usage guide                |
+| 8    | **Print next steps**: Auth instructions and usage guide                   |
 
 ### Supported Frameworks
 
@@ -150,10 +150,10 @@ Auto-detected: `pnpm`, `yarn`, `bun`, `npm`
 
 ## Environment Variables
 
-| Variable         | Required    | Default                 | Description                                     |
-| ---------------- | ----------- | ----------------------- | ----------------------------------------------- |
+| Variable            | Required    | Default                 | Description                                        |
+| ------------------- | ----------- | ----------------------- | -------------------------------------------------- |
 | `FRAMINGUI_API_KEY` | Conditional | —                       | API key. Not needed if using `framingui-mcp login` |
-| `FRAMINGUI_API_URL` | No          | `https://framingui.com` | API endpoint                                    |
+| `FRAMINGUI_API_URL` | No          | `https://framingui.com` | API endpoint                                       |
 
 ### Credential Precedence
 
@@ -176,9 +176,9 @@ Auto-detected: `pnpm`, `yarn`, `bun`, `npm`
 - Check API key validity: `npx @framingui/mcp-server status`
 - Re-login: `npx @framingui/mcp-server login`
 
-### "whoami required"
+### `whoami`
 
-Your AI client must call `whoami` as the first tool. Ask it: "Check my Framingui account".
+`whoami` is optional. Ask for it when you want session diagnostics or licensed theme visibility, not as a required first tool.
 
 ### Generated Code Missing Theme Styles
 

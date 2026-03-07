@@ -184,10 +184,10 @@ importers:
         specifier: ^7.28.6
         version: 7.28.6
       '@framingui/core':
-        specifier: workspace:^0.4.6
+        specifier: workspace:^0.4.7
         version: link:../core
       '@framingui/ui':
-        specifier: workspace:^0.6.4
+        specifier: workspace:^0.6.5
         version: link:../ui
       '@modelcontextprotocol/sdk':
         specifier: ^1.26.0

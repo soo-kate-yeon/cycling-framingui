@@ -90,15 +90,27 @@ describe('GET /api/mcp/components', () => {
       expect(component).toHaveProperty('hasSubComponents');
     });
 
-    it('컴포넌트 목록에 30개가 포함된다 (전체 카탈로그)', async () => {
+    it('컴포넌트 목록에 shared screen contract 20개가 포함된다', async () => {
       mockAuthenticateMcpRequest.mockResolvedValueOnce(validAuth);
 
       const request = new NextRequest('http://localhost:3001/api/mcp/components');
       const response = await getComponents(request);
       const data = await response.json();
 
-      // 전체 카탈로그: Tier1(15) + Tier2(10) + Tier3(5) = 30
-      expect(data.count).toBe(30);
+      expect(data.count).toBe(20);
+    });
+
+    it('screen contract에 포함된 Heading과 Text를 노출하고 compound subcomponent는 숨긴다', async () => {
+      mockAuthenticateMcpRequest.mockResolvedValueOnce(validAuth);
+
+      const request = new NextRequest('http://localhost:3001/api/mcp/components');
+      const response = await getComponents(request);
+      const data = await response.json();
+      const ids = data.components.map((component: { id: string }) => component.id);
+
+      expect(ids).toContain('heading');
+      expect(ids).toContain('text');
+      expect(ids).not.toContain('card-header');
     });
   });
 });

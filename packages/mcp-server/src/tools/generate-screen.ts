@@ -7,6 +7,60 @@ import type { ScreenDefinition } from '@framingui/core';
 import type { GenerateScreenInput, GenerateScreenOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 import { extractDependencies } from '../utils/dependency-extractor.js';
+import {
+  findUnsupportedScreenComponentTypes,
+  getScreenComponentTypes,
+} from './screen-component-contract.js';
+import { applyRecipeToNode } from '../data/recipe-resolver.js';
+
+type ScreenDefinitionDraft = {
+  themeId?: string;
+  sections?: Array<{
+    components?: unknown[];
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+};
+
+function isScreenDefinitionDraft(value: unknown): value is ScreenDefinitionDraft {
+  return typeof value === 'object' && value !== null;
+}
+
+async function applyThemeRecipesToScreenDefinition(
+  screenDefinition: GenerateScreenInput['screenDefinition']
+): Promise<GenerateScreenInput['screenDefinition']> {
+  if (!isScreenDefinitionDraft(screenDefinition)) {
+    return screenDefinition;
+  }
+
+  if (!screenDefinition.themeId || !Array.isArray(screenDefinition.sections)) {
+    return screenDefinition;
+  }
+
+  const sections = await Promise.all(
+    screenDefinition.sections.map(async section => {
+      if (!Array.isArray(section.components) || section.components.length === 0) {
+        return section;
+      }
+
+      const components = await Promise.all(
+        section.components.map(component =>
+          applyRecipeToNode(component as never, screenDefinition.themeId!)
+        )
+      );
+
+      return {
+        ...section,
+        components,
+      };
+    })
+  );
+
+  return {
+    ...screenDefinition,
+    sections,
+  } as GenerateScreenInput['screenDefinition'];
+}
 
 /**
  * Generate production-ready code from JSON screen definition
@@ -18,7 +72,20 @@ export async function generateScreenTool(
   input: GenerateScreenInput
 ): Promise<GenerateScreenOutput> {
   try {
-    const { screenDefinition, outputFormat, options } = input;
+    const { outputFormat, options } = input;
+    const screenDefinition = await applyThemeRecipesToScreenDefinition(input.screenDefinition);
+
+    const unsupportedTypes = findUnsupportedScreenComponentTypes(screenDefinition);
+    if (unsupportedTypes.length > 0) {
+      return {
+        success: false,
+        errors: unsupportedTypes.map(
+          type =>
+            `Unsupported screen component "${type}". Supported types: ${getScreenComponentTypes().join(', ')}`
+        ),
+        error: 'Screen definition validation failed',
+      };
+    }
 
     // Step 1: Validate screen definition
     const { validateScreenDefinition } = await import('@framingui/core');

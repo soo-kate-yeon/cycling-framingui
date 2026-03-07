@@ -150,8 +150,6 @@ describe('GET /api/mcp/templates', () => {
 
       const request = new NextRequest('http://localhost:3001/api/mcp/templates?search=dashboard');
       const response = await getTemplates(request);
-      const data = await response.json();
-
       expect(response.status).toBe(200);
       expect(mockSearch).toHaveBeenCalledWith('dashboard');
     });

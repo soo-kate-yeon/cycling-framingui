@@ -160,15 +160,15 @@ npx @framingui/mcp-server login
 export FRAMINGUI_API_KEY=tk_live_xxx...
 ```
 
-### "whoami required" Error
+### `whoami`
 
-Your AI assistant must call `whoami` before any other tool. Simply ask it to check your account first.
+`whoami` is optional. Use it when you want to inspect the current session, plan, and licensed themes, but authenticated tool calls do not require it as a first step.
 
 ### MCP Server Not Detected
 
 1. Ensure `.mcp.json` exists in your project root
 2. Restart your AI assistant after adding `.mcp.json`
-3. Check that `npx @framingui/mcp-server` runs without errors
+3. Check that `npx -y @framingui/mcp-server@latest` runs without errors
 
 ## Next Steps
 
@@ -180,4 +180,4 @@ Your AI assistant must call `whoami` before any other tool. Simply ask it to che
 
 ---
 
-**Version**: 0.4.5 | **Last Updated**: 2026-02-16
+**Version**: 0.6.5 | **Last Updated**: 2026-03-07

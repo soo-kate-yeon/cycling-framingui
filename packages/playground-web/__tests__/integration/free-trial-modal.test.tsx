@@ -10,9 +10,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { FreeTrialModal } from '@/components/modals/FreeTrialModal';
 import { GlobalLanguageProvider } from '@/contexts/GlobalLanguageContext';
 
-const { mockUseAuth, mockTrackFunnelPrimaryCtaClick } = vi.hoisted(() => ({
+const { mockUseAuth, mockTrackFunnelPrimaryCtaClick, mockUseGlobalLanguage } = vi.hoisted(() => ({
   mockUseAuth: vi.fn(),
   mockTrackFunnelPrimaryCtaClick: vi.fn(),
+  mockUseGlobalLanguage: vi.fn(),
 }));
 
 vi.mock('@/contexts/AuthContext', () => ({
@@ -22,6 +23,15 @@ vi.mock('@/contexts/AuthContext', () => ({
 vi.mock('@/lib/analytics', () => ({
   trackFunnelPrimaryCtaClick: mockTrackFunnelPrimaryCtaClick,
 }));
+
+vi.mock('@/contexts/GlobalLanguageContext', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/contexts/GlobalLanguageContext')>();
+
+  return {
+    ...actual,
+    useGlobalLanguage: mockUseGlobalLanguage,
+  };
+});
 
 function createMockResponse({
   ok,
@@ -66,6 +76,10 @@ describe('FreeTrialModal', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       login: vi.fn(),
     });
+    mockUseGlobalLanguage.mockReturnValue({
+      locale: 'ko',
+      setLocale: vi.fn(),
+    });
   });
 
   afterEach(() => {
@@ -106,7 +120,7 @@ describe('FreeTrialModal', () => {
 
     renderModal();
 
-    expect(await screen.findByText('An error occurred while creating the trial')).toBeInTheDocument();
+    expect(await screen.findByText('체험 생성 중 오류가 발생했습니다')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -135,7 +149,7 @@ describe('FreeTrialModal', () => {
 
     renderModal();
 
-    expect(await screen.findByText('You have already used the trial')).toBeInTheDocument();
+    expect(await screen.findByText('이미 체험을 사용했습니다')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
