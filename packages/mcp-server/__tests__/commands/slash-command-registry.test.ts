@@ -48,6 +48,10 @@ describe('slash command registry', () => {
       'validate-environment',
     ]);
     expect(command?.promptRecipe).toBe('screen-workflow');
+    expect(command?.preflight?.required).toBe(true);
+    expect(command?.preflight?.steps).toContain(
+      'validate-environment (checkStyles: true, checkTailwind: true)'
+    );
   });
 
   it('absorbs density options into /responsive', () => {

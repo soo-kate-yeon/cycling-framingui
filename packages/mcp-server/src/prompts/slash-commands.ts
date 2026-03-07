@@ -22,6 +22,7 @@ ${commandLines}
 ## Notes
 
 - \`/responsive\` includes density control via \`--density preserve|denser|lighter\`
+- \`/screen\` and \`/section\` require a style-contract preflight (\`validate-environment\` with \`checkStyles: true\`) when project path is known
 - \`/update\` refreshes installed FramingUI packages in a target project
 - There is no standalone \`/density\`, \`/hierarchy\`, \`/palette\`, or \`/tone\` command in this phase
 - Use the \`command-help\` prompt with a command name to get detailed help for one command`,

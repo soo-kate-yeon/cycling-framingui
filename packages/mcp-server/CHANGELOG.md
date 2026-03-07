@@ -2,6 +2,18 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.11] - 2026-03-08
+
+### Added
+
+- Added style contract detection to environment diagnostics with explicit states: `framingui-native`, `host-utility`, `mixed`, and `unknown`.
+- Added required preflight metadata for `/screen` and `/section` so clients can run `validate-environment` style checks before generation when project context is known.
+
+### Changed
+
+- Updated screen and doctor workflows to treat style-contract preflight as a first-class generation guardrail.
+- Extended slash command help and adapter outputs to surface preflight steps and blocking conditions for style mismatch scenarios.
+
 ## [0.6.8] - 2026-03-07
 
 ### Fixed

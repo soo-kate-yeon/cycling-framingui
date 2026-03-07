@@ -1228,6 +1228,11 @@ export const ValidateEnvironmentInputSchema = z.object({
     .optional()
     .default(true)
     .describe('Also validate Tailwind CSS configuration for @framingui/ui compatibility'),
+  checkStyles: z
+    .boolean()
+    .optional()
+    .default(true)
+    .describe('Also validate the project style contract for @framingui/ui compatibility'),
 });
 
 export type ValidateEnvironmentInput = z.infer<typeof ValidateEnvironmentInputSchema>;
@@ -1259,6 +1264,18 @@ export const ValidateEnvironmentOutputSchema = z.object({
     })
     .optional()
     .describe('Tailwind CSS configuration validation for @framingui/ui compatibility'),
+  styles: z
+    .object({
+      styleContract: z.enum(['framingui-native', 'host-utility', 'mixed', 'unknown']),
+      cssFilesChecked: z.array(z.string()),
+      uiStylesImportFound: z.boolean(),
+      definedVariables: z.array(z.string()),
+      missingVariables: z.array(z.string()),
+      issues: z.array(z.string()),
+      fixes: z.array(z.string()),
+    })
+    .optional()
+    .describe('Style contract validation for @framingui/ui variable compatibility'),
   error: z.string().optional(),
 });
 

@@ -101,6 +101,11 @@ function renderMarkdown(
       `- Usage: \`${command.usage}\``,
       `- Prompt fallback: \`${command.promptRecipe}\``,
       `- Workflow: ${command.workflow.map(step => `\`${step}\``).join(' -> ')}`,
+      `- Required preflight: ${
+        command.preflight
+          ? `\`${command.preflight.steps.join(' -> ')}\` (${command.preflight.when})`
+          : 'none'
+      }`,
       `- Examples: ${command.examples.map(example => `\`${example}\``).join(', ')}`,
     ]),
   ].join('\n');
@@ -122,7 +127,9 @@ function renderText(commands: SlashCommandDefinition[], client: SlashCommandAdap
     '',
     ...commands.map(
       command =>
-        `${command.name}\n  ${command.summary}\n  Usage: ${command.usage}\n  Prompt: ${command.promptRecipe}`
+        `${command.name}\n  ${command.summary}\n  Usage: ${command.usage}\n  Prompt: ${command.promptRecipe}\n  Preflight: ${
+          command.preflight ? `${command.preflight.steps.join(' -> ')}` : 'none'
+        }`
     ),
   ].join('\n');
 }

@@ -57,6 +57,16 @@ Use the \`slash-commands\` prompt to inspect the full catalog, then call \`comma
 
   const exampleLines = command.examples.map(example => `- \`${example}\``).join('\n');
   const workflowLines = command.workflow.map(step => `- \`${step}\``).join('\n');
+  const preflightLines = command.preflight
+    ? [
+        `Required: \`${command.preflight.required ? 'yes' : 'no'}\``,
+        `When: ${command.preflight.when}`,
+        `Steps:`,
+        ...command.preflight.steps.map(step => `- \`${step}\``),
+        `Blocking conditions:`,
+        ...command.preflight.blockingConditions.map(condition => `- ${condition}`),
+      ].join('\n')
+    : 'None';
 
   return {
     messages: [
@@ -87,6 +97,10 @@ ${exampleLines}
 ## MCP workflow
 
 ${workflowLines}
+
+## Required preflight
+
+${preflightLines}
 
 ## Prompt fallback
 

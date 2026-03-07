@@ -6,14 +6,23 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { validateEnvironmentTool } from '../../src/tools/validate-environment.js';
 import * as packageJsonReader from '../../src/utils/package-json-reader.js';
+import * as styleContractReader from '../../src/utils/style-contract-reader.js';
 
 // package-json-reader 모듈 모킹
 vi.mock('../../src/utils/package-json-reader.js');
+vi.mock('../../src/utils/style-contract-reader.js');
 
 describe('validateEnvironmentTool', () => {
   beforeEach(() => {
     // 각 테스트 전에 모든 mock 초기화
     vi.clearAllMocks();
+    vi.mocked(styleContractReader.readStyleContract).mockReturnValue({
+      styleContract: 'unknown',
+      cssFilesChecked: [],
+      uiStylesImportFound: false,
+      definedVariables: [],
+      missingVariables: ['--bg-background', '--border-default', '--text-tertiary'],
+    });
   });
 
   describe('성공 케이스', () => {
@@ -387,6 +396,57 @@ describe('validateEnvironmentTool', () => {
         axios: '1.6.0',
         typescript: '>=5.0.0',
       });
+    });
+  });
+
+  describe('스타일 계약 검증', () => {
+    it('FramingUI-native 프로젝트를 감지해야 함', async () => {
+      vi.mocked(packageJsonReader.readPackageJson).mockReturnValue({
+        success: true,
+        packageJson: {},
+        installedPackages: {},
+      });
+      vi.mocked(styleContractReader.readStyleContract).mockReturnValue({
+        styleContract: 'framingui-native',
+        cssFilesChecked: ['/project/app/globals.css'],
+        uiStylesImportFound: true,
+        definedVariables: ['--bg-background', '--border-default', '--text-tertiary'],
+        missingVariables: [],
+      });
+
+      const result = await validateEnvironmentTool({
+        projectPath: '/project',
+        requiredPackages: [],
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.styles?.styleContract).toBe('framingui-native');
+      expect(result.styles?.issues).toEqual([]);
+    });
+
+    it('부분적으로만 변수 계약이 정의된 mixed 상태를 경고해야 함', async () => {
+      vi.mocked(packageJsonReader.readPackageJson).mockReturnValue({
+        success: true,
+        packageJson: {},
+        installedPackages: {},
+      });
+      vi.mocked(styleContractReader.readStyleContract).mockReturnValue({
+        styleContract: 'mixed',
+        cssFilesChecked: ['/project/app/globals.css'],
+        uiStylesImportFound: false,
+        definedVariables: ['--bg-background'],
+        missingVariables: ['--border-default', '--text-tertiary'],
+      });
+
+      const result = await validateEnvironmentTool({
+        projectPath: '/project',
+        requiredPackages: [],
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.styles?.styleContract).toBe('mixed');
+      expect(result.styles?.issues[0]).toContain('--border-default');
+      expect(result.styles?.issues[0]).toContain('--text-tertiary');
     });
   });
 });

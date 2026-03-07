@@ -1,6 +1,6 @@
 /**
  * MCP Prompts: Screen Generation Workflow
- * Step-by-step guide for the 4-step screen generation process
+ * Step-by-step guide for the production screen generation process
  */
 
 /**
@@ -22,12 +22,39 @@ Optional: call \`whoami\` if you want to inspect the current session and license
 
 ## Overview
 
-The 4-step workflow ensures:
+The workflow ensures:
 - ✅ Correct component usage with inline props/variants
 - ✅ Validated screen structure with auto-fix patches
 - ✅ Theme recipes applied via the theme engine (generate_screen)
 - ✅ All dependencies installed
 - ✅ Tailwind CSS properly configured
+- ✅ Style contract compatibility checked before relying on FramingUI component defaults
+
+## Step 0: Detect Style Contract
+
+Before generating or integrating a screen, determine which styling contract the target project already uses.
+
+- \`framingui-native\`: project imports FramingUI styles or defines the full FramingUI variable contract
+- \`host-utility\`: project styles screens with direct Tailwind utilities and does not expose FramingUI variables
+- \`mixed\`: project defines only some FramingUI variables, which is the highest-risk state for broken component styling
+
+**Rule:** do not silently mix a utility-first host page with FramingUI component default variants in the same screen. Either:
+- stay utility-first and use explicit classes, or
+- migrate the page to the FramingUI variable contract after confirming with the user
+
+**Enforcement:** if \`projectPath\` is known, Step 0 preflight is required before \`/screen\` or \`/section\` generation.
+Use:
+\`\`\`json
+{
+  "projectPath": "/path/to/project",
+  "requiredPackages": [],
+  "checkTailwind": true,
+  "checkStyles": true
+}
+\`\`\`
+Block generation when:
+- \`styles.styleContract === "mixed"\`
+- \`styles.styleContract === "host-utility"\` and the user did not explicitly choose \`--style-contract host-utility\`
 
 ## Step 1/4: Get Screen Generation Context
 
@@ -153,7 +180,8 @@ The 4-step workflow ensures:
 {
   "projectPath": "/path/to/package.json",
   "requiredPackages": ["@radix-ui/react-slot", "@radix-ui/react-avatar"],
-  "checkTailwind": true
+  "checkTailwind": true,
+  "checkStyles": true
 }
 \`\`\`
 
@@ -164,6 +192,10 @@ The 4-step workflow ensures:
 - \`tailwind\`: Tailwind config validation results
   - \`issues\`: Problems found
   - \`fixes\`: How to fix each issue
+- \`styles\`: Style contract validation results
+  - \`styleContract\`: framingui-native, host-utility, mixed, or unknown
+  - \`issues\`: CSS contract mismatch risks
+  - \`fixes\`: Recommended next actions before integration
 
 **Tailwind Validation Checks:**
 - ✅ tailwind.config.{ts,js,mjs,cjs} exists
@@ -181,6 +213,9 @@ The 4-step workflow ensures:
 
 \`\`\`
 User: "Create a login page with email/password fields"
+
+0. Call validate-environment({ projectPath: "...", requiredPackages: [], checkStyles: true })
+   -> Classify style contract and decide host-utility vs framingui-native before generation
 
 1. Call get-screen-generation-context({ description: "login page..." })
    → Receive template matches, components with inline props, schema
@@ -221,19 +256,22 @@ User: "Create a login page with email/password fields"
 **Components render without styles:**
 - Verify Tailwind content paths include @framingui/ui
 - Check tailwindcss-animate plugin is configured
+- Check whether the target project is \`host-utility\`, \`mixed\`, or \`framingui-native\`
+- If the project is utility-first, prefer explicit classes instead of relying on FramingUI component defaults
 - Run validate-environment to diagnose
 
 ---
 
 ## Best Practices
 
-1. ✅ Always follow all 4 steps in order
+1. ✅ Always run Step 0 preflight before generation when projectPath is known
 2. ✅ Validate before generating code (Step 2)
 3. ✅ Use generate_screen for theme application (Step 3) - do NOT write code manually
 4. ✅ Check environment before delivering code (Step 4)
 5. ✅ Use strict validation mode for production
 6. ✅ Include theme recipes for visual consistency
 7. ✅ Use inline props from context instead of guessing
+8. ✅ Confirm the target style contract before relying on CSS variables or component defaults
 
 ## Alternative Workflows
 

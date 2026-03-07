@@ -30,6 +30,12 @@ export interface SlashCommandDefinition {
   options: SlashCommandOption[];
   examples: string[];
   workflow: string[];
+  preflight?: {
+    required: boolean;
+    when: string;
+    steps: string[];
+    blockingConditions: string[];
+  };
   promptRecipe: string;
 }
 
@@ -38,7 +44,7 @@ const slashCommandRegistry: SlashCommandDefinition[] = [
     name: '/screen',
     summary: 'Generate a full screen from a natural-language description.',
     usage:
-      '/screen <description> [--theme <themeId>] [--platform web|mobile] [--template <id>] [--output draft|code]',
+      '/screen <description> [--theme <themeId>] [--platform web|mobile] [--template <id>] [--output draft|code] [--style-contract host-utility|framingui-native|migrate]',
     args: [
       {
         name: 'description',
@@ -65,6 +71,12 @@ const slashCommandRegistry: SlashCommandDefinition[] = [
         description: 'Return only a draft or full generated code.',
         values: ['draft', 'code'],
       },
+      {
+        name: '--style-contract',
+        description:
+          'Preserve host utility styling, target FramingUI-native variables, or request a migration.',
+        values: ['host-utility', 'framingui-native', 'migrate'],
+      },
     ],
     examples: [
       '/screen "B2B analytics dashboard with KPI cards and recent activity" --theme minimal-workspace',
@@ -76,13 +88,22 @@ const slashCommandRegistry: SlashCommandDefinition[] = [
       'generate_screen',
       'validate-environment',
     ],
+    preflight: {
+      required: true,
+      when: 'When projectPath is known before generation or integration.',
+      steps: ['validate-environment (checkStyles: true, checkTailwind: true)'],
+      blockingConditions: [
+        'styles.styleContract === mixed',
+        'styles.styleContract === host-utility unless --style-contract host-utility is explicitly selected',
+      ],
+    },
     promptRecipe: 'screen-workflow',
   },
   {
     name: '/section',
     summary: 'Generate or replace a section inside an existing screen.',
     usage:
-      '/section <description> [--slot header|main|sidebar|footer] [--into <screen-id|file>] [--replace <section-id>]',
+      '/section <description> [--slot header|main|sidebar|footer] [--into <screen-id|file>] [--replace <section-id>] [--style-contract host-utility|framingui-native|migrate]',
     args: [
       {
         name: 'description',
@@ -104,6 +125,12 @@ const slashCommandRegistry: SlashCommandDefinition[] = [
         name: '--replace',
         description: 'Existing section id to replace.',
       },
+      {
+        name: '--style-contract',
+        description:
+          'Preserve host utility styling, target FramingUI-native variables, or request a migration.',
+        values: ['host-utility', 'framingui-native', 'migrate'],
+      },
     ],
     examples: [
       '/section "stats summary with 4 KPI cards" --slot main --into dashboard.json',
@@ -115,6 +142,15 @@ const slashCommandRegistry: SlashCommandDefinition[] = [
       'validate-screen-definition',
       'generate_screen',
     ],
+    preflight: {
+      required: true,
+      when: 'When target screen file or project path is known.',
+      steps: ['validate-environment (checkStyles: true, checkTailwind: true)'],
+      blockingConditions: [
+        'styles.styleContract === mixed',
+        'styles.styleContract === host-utility unless --style-contract host-utility is explicitly selected',
+      ],
+    },
     promptRecipe: 'screen-workflow',
   },
   {

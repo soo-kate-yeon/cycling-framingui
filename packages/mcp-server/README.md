@@ -617,17 +617,18 @@ The MCP server provides 9 built-in prompts that work across all MCP clients:
 - Authentication setup (framingui-mcp login)
 - Theme exploration workflow
 - Component availability checking
-- 4-step screen generation workflow
+- style-contract preflight plus 4-step screen generation workflow
 - Common mistakes and troubleshooting
 
 **When to use**: First-time users, onboarding, workflow overview
 
 ### 2. screen-workflow
 
-**Purpose**: Detailed 4-step production workflow
+**Purpose**: Production workflow with style-contract preflight
 
 **Content**:
 
+- Step 0: detect the target style contract
 - Step 1/4: get-screen-generation-context
 - Step 2/4: validate-screen-definition
 - Step 3/4: generate_screen
@@ -650,7 +651,7 @@ The MCP server provides 9 built-in prompts that work across all MCP clients:
 
 ### 6. doctor-workflow
 
-**Purpose**: Environment diagnosis workflow behind `/doctor` and `/install-check`
+**Purpose**: Environment diagnosis workflow behind `/doctor` and `/install-check`, including style contract mismatch checks
 
 ### 7. slash-commands
 
