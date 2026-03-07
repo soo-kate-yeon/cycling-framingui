@@ -1,4 +1,4 @@
-import { SCREEN_COMPONENT_TYPES } from '../../../core/src/screen-generation/types.js';
+import { SCREEN_COMPONENT_TYPES } from '@framingui/core';
 
 type ScreenComponentNode = {
   type?: string;

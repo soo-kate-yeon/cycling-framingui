@@ -2,6 +2,18 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.8] - 2026-03-07
+
+### Fixed
+
+- Switched `screen-component-contract` to consume `SCREEN_COMPONENT_TYPES` through the published `@framingui/core` API instead of a monorepo-only source import, fixing MCP startup in consumer installs.
+
+## [0.6.7] - 2026-03-07
+
+### Fixed
+
+- Replaced a leaked monorepo-only import in `screen-component-contract` with the public `@framingui/core` export so installed consumer projects can reconnect to the MCP server correctly.
+
 ## [0.6.6] - 2026-03-07
 
 ### Fixed

@@ -184,7 +184,7 @@ importers:
         specifier: ^7.28.6
         version: 7.28.6
       '@framingui/core':
-        specifier: workspace:^0.4.7
+        specifier: workspace:^
         version: link:../core
       '@framingui/ui':
         specifier: workspace:^0.6.5
