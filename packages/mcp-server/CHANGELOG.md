@@ -2,6 +2,12 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.15] - 2026-03-08
+
+### Fixed
+
+- Fixed publish-integrity script repo-root resolution so `prepublishOnly` checks work when npm publish is executed from `packages/mcp-server`.
+
 ## [0.6.14] - 2026-03-08
 
 ### Changed
