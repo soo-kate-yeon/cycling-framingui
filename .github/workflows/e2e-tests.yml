@@ -39,7 +39,11 @@ jobs:
         working-directory: packages/playground-web
 
       - name: Build Next.js app
-        run: pnpm --filter @framingui/playground-web build
+        run: |
+          pnpm --filter @framingui/tokens build
+          pnpm --filter @framingui/core build
+          pnpm --filter @framingui/ui build
+          pnpm --filter @framingui/playground-web build
 
       - name: Run E2E tests
         run: pnpm --filter @framingui/playground-web test:e2e:smoke

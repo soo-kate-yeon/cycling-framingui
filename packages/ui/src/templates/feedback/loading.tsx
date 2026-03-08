@@ -43,9 +43,7 @@ export function LoadingTemplateComponent({
         )}
 
         {/* Loading Message */}
-        {showMessage && (
-          <p className="text-sm text-[var(--text-muted-foreground)]">{message}</p>
-        )}
+        {showMessage && <p className="text-sm text-[var(--text-muted-foreground)]">{message}</p>}
       </div>
       {children}
     </div>

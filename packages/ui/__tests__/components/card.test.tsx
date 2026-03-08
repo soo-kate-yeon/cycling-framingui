@@ -105,9 +105,7 @@ describe('Card', () => {
 
       expect(screen.getByTestId('card')).toHaveClass('bg-[var(--bg-card)]');
       expect(screen.getByTestId('card')).toHaveClass('text-[var(--bg-card-foreground)]');
-      expect(screen.getByTestId('description')).toHaveClass(
-        'text-[var(--bg-muted-foreground)]'
-      );
+      expect(screen.getByTestId('description')).toHaveClass('text-[var(--bg-muted-foreground)]');
     });
   });
 

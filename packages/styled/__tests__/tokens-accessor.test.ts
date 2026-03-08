@@ -108,9 +108,7 @@ describe('Token String Coercion', () => {
 
   it('should work in template literals', () => {
     const css = `background: ${tokens.bg.surface.default}; padding: ${tokens.spacing[4]};`;
-    expect(css).toBe(
-      'background: var(--bg-surface-default); padding: var(--spacing-4);'
-    );
+    expect(css).toBe('background: var(--bg-surface-default); padding: var(--spacing-4);');
   });
 
   it('should work in string concatenation', () => {
@@ -125,12 +123,8 @@ describe('Token String Coercion', () => {
 
 describe('Typography Token Access', () => {
   it('should access font family tokens', () => {
-    expect(String(tokens.typography.fontFamily.sans)).toBe(
-      'var(--typography-fontFamily-sans)'
-    );
-    expect(String(tokens.typography.fontFamily.mono)).toBe(
-      'var(--typography-fontFamily-mono)'
-    );
+    expect(String(tokens.typography.fontFamily.sans)).toBe('var(--typography-fontFamily-sans)');
+    expect(String(tokens.typography.fontFamily.mono)).toBe('var(--typography-fontFamily-mono)');
   });
 
   it('should access font size tokens', () => {
@@ -139,18 +133,12 @@ describe('Typography Token Access', () => {
   });
 
   it('should access font weight tokens', () => {
-    expect(String(tokens.typography.fontWeight.normal)).toBe(
-      'var(--typography-fontWeight-normal)'
-    );
-    expect(String(tokens.typography.fontWeight.bold)).toBe(
-      'var(--typography-fontWeight-bold)'
-    );
+    expect(String(tokens.typography.fontWeight.normal)).toBe('var(--typography-fontWeight-normal)');
+    expect(String(tokens.typography.fontWeight.bold)).toBe('var(--typography-fontWeight-bold)');
   });
 
   it('should access line height tokens', () => {
-    expect(String(tokens.typography.lineHeight.normal)).toBe(
-      'var(--typography-lineHeight-normal)'
-    );
+    expect(String(tokens.typography.lineHeight.normal)).toBe('var(--typography-lineHeight-normal)');
   });
 });
 

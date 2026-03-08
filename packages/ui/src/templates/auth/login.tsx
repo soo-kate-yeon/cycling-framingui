@@ -77,9 +77,7 @@ export function LoginTemplateComponent({
 
           {/* Remember Me */}
           {showRememberMe && slots.rememberMe && (
-            <div className="flex items-center space-x-[var(--spacing-2)]">
-              {slots.rememberMe}
-            </div>
+            <div className="flex items-center space-x-[var(--spacing-2)]">{slots.rememberMe}</div>
           )}
 
           {/* Sign In Button */}
@@ -98,9 +96,7 @@ export function LoginTemplateComponent({
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-[var(--spacing-4)]">
-                {slots.socialLogin}
-              </div>
+              <div className="grid grid-cols-2 gap-[var(--spacing-4)]">{slots.socialLogin}</div>
             </>
           )}
         </CardContent>

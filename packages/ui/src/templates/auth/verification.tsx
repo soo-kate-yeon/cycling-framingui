@@ -70,9 +70,7 @@ export function VerificationTemplateComponent({
             <div className="text-center">
               <p className="text-sm text-[var(--text-muted-foreground)]">
                 Didn&apos;t receive the email?{' '}
-                <button className="text-[var(--text-primary)] hover:underline">
-                  Resend
-                </button>
+                <button className="text-[var(--text-primary)] hover:underline">Resend</button>
               </p>
             </div>
           )}
