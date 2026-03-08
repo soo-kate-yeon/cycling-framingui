@@ -106,10 +106,13 @@ This limits discoverability and makes FramingUI feel like a tool bundle rather t
 - WHEN the CLI runs with no subcommand in a non-interactive stdio context THEN it SHALL preserve MCP server startup behavior.
 - WHEN `/update` or the equivalent CLI maintenance command is invoked THEN the system SHALL detect installed FramingUI packages and build the correct package-manager update command.
 - WHEN `/screen` is invoked THEN the workflow SHALL follow:
+  - `preview-theme` when a theme is selected or theme recipes will affect implementation
   - `get-screen-generation-context`
+  - `preview-component` whenever component props, variants, or availability remain ambiguous
+  - `list-icon-libraries` whenever icons or icon-only actions are introduced
   - `validate-screen-definition`
   - direct React code writing from the validated definition and component contracts
-  - `validate-environment` when a target project path is known
+  - `validate-environment` when a target project path is known, including post-generation source-file audit when generated code is available
 - WHEN `/section` is invoked THEN the workflow SHALL support section-scoped generation using component discovery and definition validation before optional codegen.
 - WHEN `/draft` is invoked THEN the workflow SHALL generate a structural draft without requiring code generation by default.
 - WHEN `/responsive` is invoked THEN the workflow SHALL support layout adaptation modes including:
@@ -161,6 +164,7 @@ Canonical usage:
 Primary result:
 - Validated screen definition and generated code when requested.
  - Template selections are hints for inspiration, not hard structural requirements.
+ - The workflow SHALL require an explicit style-contract decision before relying on FramingUI default variants.
 
 ### `/section`
 

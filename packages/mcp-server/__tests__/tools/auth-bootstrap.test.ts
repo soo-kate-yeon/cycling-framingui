@@ -48,6 +48,8 @@ describe('Phase 0 baseline: auth bootstrap', () => {
 
     expect(text).toContain('Recommended Session Check');
     expect(text).toContain('no longer a required first step');
+    expect(text).toContain('preview-component');
+    expect(text).toContain('@framingui/ui/styles');
     expect(text).not.toContain('MUST call the `whoami` tool before using any other tool');
   });
 

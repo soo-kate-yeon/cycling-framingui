@@ -42,7 +42,10 @@ describe('slash command registry', () => {
     const command = getSlashCommand('/screen');
 
     expect(command?.workflow).toEqual([
+      'preview-theme',
       'get-screen-generation-context',
+      'preview-component',
+      'list-icon-libraries',
       'validate-screen-definition',
       'validate-environment',
     ]);

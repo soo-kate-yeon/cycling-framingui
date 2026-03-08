@@ -2,6 +2,17 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.19] - 2026-03-08
+
+### Changed
+
+- Strengthened the `/screen` workflow contract so agents must resolve theme, component, and icon ambiguities before drafting.
+- Added explicit style-contract guidance for `host-utility` versus `framingui-native`, including a required `@import '@framingui/ui/styles';` check before relying on FramingUI default variants.
+
+### Fixed
+
+- Published the runtime `zod` dependency fix so installed consumers stop hitting `Cannot read properties of undefined (reading '_zod')` during `validate-screen-definition`.
+
 ## [0.6.18] - 2026-03-08
 
 ### Fixed

@@ -101,14 +101,16 @@ Follow the 3-step workflow:
 
 **Step 1/3:** Call \`get-screen-generation-context\` with your screen description
 - Returns: Template hints, component plan, section plan, definition starter, component suggestions with inline props, schema
+- If any component, theme, or icon decision is still ambiguous, call \`preview-component\`, \`preview-theme\`, or \`list-icon-libraries\` before drafting
 
 **Step 2/3:** Create Screen Definition JSON, then call \`validate-screen-definition\`
 - Returns: Validation results, errors with auto-fix patches, suggestions
 
 **After validation passes:** Write React code directly using the components and props from Step 1
+- If you choose the \`framingui-native\` style contract, ensure your global stylesheet imports \`@framingui/ui/styles\`
 
 **Step 3/3 (Optional):** Call \`validate-environment\` with project path
-- Returns: Missing packages, install commands, Tailwind config status
+- Returns: Missing packages, install commands, Tailwind config status, and optional source-file checks for raw HTML primitives
 
 ## Common Mistakes to Avoid
 
@@ -118,6 +120,8 @@ Follow the 3-step workflow:
 4. ❌ Skipping validate-screen-definition - Always validate before writing code
 5. ❌ Ignoring dependencies warnings - Check required packages before running code
 6. ❌ Using unlicensed themes - Only use themes from whoami licensedThemes list
+7. ❌ Claiming a component is unavailable without checking \`list-components\` or \`preview-component\`
+8. ❌ Relying on FramingUI default variants in \`framingui-native\` mode without importing \`@framingui/ui/styles\`
 
 ## Legacy note
 

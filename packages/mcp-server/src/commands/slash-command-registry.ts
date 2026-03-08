@@ -84,7 +84,10 @@ const slashCommandRegistry: SlashCommandDefinition[] = [
       '/screen "mobile login screen with social auth" --platform mobile',
     ],
     workflow: [
+      'preview-theme',
       'get-screen-generation-context',
+      'preview-component',
+      'list-icon-libraries',
       'validate-screen-definition',
       'validate-environment',
     ],
