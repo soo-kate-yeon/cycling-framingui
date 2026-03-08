@@ -2,6 +2,13 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.13] - 2026-03-08
+
+### Fixed
+
+- Replaced unpublished workspace dependency specifiers with public semver ranges for `@framingui/core` and `@framingui/ui`.
+- Restored `npx -y @framingui/mcp-server@latest` compatibility by removing `workspace:^` dependency entries from the published package metadata.
+
 ## [0.6.12] - 2026-03-08
 
 ### Added
