@@ -8,11 +8,26 @@ describe('prompt catalog', () => {
 
     expect(prompts).toContain('slash-commands');
     expect(prompts).toContain('command-help');
+    expect(prompts).toContain('screen');
+    expect(prompts).toContain('draft');
     expect(prompts).toContain('responsive-workflow');
     expect(prompts).toContain('a11y-workflow');
     expect(prompts).toContain('theme-swap-workflow');
     expect(prompts).toContain('doctor-workflow');
     expect(prompts).toContain('update-workflow');
+  });
+
+  it('provides screen and draft alias prompts', () => {
+    const screenPrompt = getPromptDefinition('screen');
+    const draftPrompt = getPromptDefinition('draft');
+
+    const screenText = screenPrompt?.getPrompt().messages[0]?.content.text ?? '';
+    const draftText = draftPrompt?.getPrompt().messages[0]?.content.text ?? '';
+
+    expect(screenText).toContain('# /screen');
+    expect(screenText).toContain('/screen <description>');
+    expect(draftText).toContain('# /draft');
+    expect(draftText).toContain('/draft <description>');
   });
 
   it('returns detailed help for a slash command', () => {

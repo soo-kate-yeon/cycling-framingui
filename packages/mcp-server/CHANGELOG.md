@@ -2,6 +2,16 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.12] - 2026-03-08
+
+### Added
+
+- Added prompt aliases `screen` and `draft` so MCP-only slash menus can expose `/framingui:screen` and `/framingui:draft` directly.
+
+### Changed
+
+- Updated prompt catalog and tests to include direct command-style prompt entries for screen and draft workflows.
+
 ## [0.6.11] - 2026-03-08
 
 ### Added

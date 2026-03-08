@@ -1,8 +1,10 @@
 import { getA11yWorkflowPrompt } from './a11y-workflow.js';
 import { getCommandHelpPrompt } from './command-help.js';
+import { getDraftCommandPrompt } from './draft-command.js';
 import { getDoctorWorkflowPrompt } from './doctor-workflow.js';
 import { getGettingStartedPrompt } from './getting-started.js';
 import { getResponsiveWorkflowPrompt } from './responsive-workflow.js';
+import { getScreenCommandPrompt } from './screen-command.js';
 import { getScreenWorkflowPrompt } from './screen-workflow.js';
 import { getSlashCommandsPrompt } from './slash-commands.js';
 import { getThemeSwapWorkflowPrompt } from './theme-swap-workflow.js';
@@ -42,6 +44,18 @@ const promptCatalog: PromptDefinition[] = [
     description: 'Detailed screen generation workflow for /screen, /section, and /draft flows',
     arguments: [],
     getPrompt: () => getScreenWorkflowPrompt(),
+  },
+  {
+    name: 'screen',
+    description: 'Alias prompt for /screen usage and workflow contract',
+    arguments: [],
+    getPrompt: () => getScreenCommandPrompt(),
+  },
+  {
+    name: 'draft',
+    description: 'Alias prompt for /draft usage and workflow contract',
+    arguments: [],
+    getPrompt: () => getDraftCommandPrompt(),
   },
   {
     name: 'responsive-workflow',
