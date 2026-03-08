@@ -113,23 +113,17 @@ export const SectionDivider: Story = {
     <div className="w-[400px] space-y-4">
       <div>
         <h3 className="text-lg font-semibold">Section 1</h3>
-        <p className="text-sm text-[var(--bg-muted-foreground)]">
-          Content for the first section
-        </p>
+        <p className="text-sm text-[var(--bg-muted-foreground)]">Content for the first section</p>
       </div>
       <Separator />
       <div>
         <h3 className="text-lg font-semibold">Section 2</h3>
-        <p className="text-sm text-[var(--bg-muted-foreground)]">
-          Content for the second section
-        </p>
+        <p className="text-sm text-[var(--bg-muted-foreground)]">Content for the second section</p>
       </div>
       <Separator />
       <div>
         <h3 className="text-lg font-semibold">Section 3</h3>
-        <p className="text-sm text-[var(--bg-muted-foreground)]">
-          Content for the third section
-        </p>
+        <p className="text-sm text-[var(--bg-muted-foreground)]">Content for the third section</p>
       </div>
     </div>
   ),

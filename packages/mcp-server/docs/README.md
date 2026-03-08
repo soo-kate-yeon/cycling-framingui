@@ -1,47 +1,31 @@
-# Framingui MCP Server Documentation
+# FramingUI MCP Server Docs
 
-Documentation for `@framingui/mcp-server` — an stdio-based MCP server for AI-driven UI generation.
+Documentation for `@framingui/mcp-server`.
 
-## Documents
+## Recommended Reading Order
 
-| #   | Document                                       | Description                             |
-| --- | ---------------------------------------------- | --------------------------------------- |
-| 01  | [Quick Start](./01-quickstart.md)              | Installation, authentication, first use |
-| 02  | [User Guide](./02-user-guide.md)               | All 17 tools, themes, workflows         |
-| 03  | [API Reference](./03-api-reference.md)         | Tool schemas, error codes               |
-| 04  | [Architecture](./04-architecture.md)           | System design, auth flow, modules       |
-| 05  | [Developer Guide](./05-developer-guide.md)     | Contributing, testing, release          |
-| 06  | [Integration Guide](./06-integration-guide.md) | MCP client setup, project init          |
+1. [Quick Start](./01-quickstart.md)
+2. [User Guide](./02-user-guide.md)
+3. [API Reference](./03-api-reference.md)
+4. [Architecture](./04-architecture.md)
+5. [Developer Guide](./05-developer-guide.md)
+6. [Integration Guide](./06-integration-guide.md)
 
-## Key Concepts
+## Current Product Position
 
-- **17 MCP Tools**: Authentication, themes, components, templates, screen generation
-- **6 Premium Themes**: All require authentication
-- **stdio Protocol**: JSON-RPC 2.0 over stdin/stdout (no HTTP)
-- **OAuth Login**: `framingui-mcp login` for browser-based authentication
-- **whoami**: Optional session inspection tool
+FramingUI MCP Server is a stdio MCP server that helps agents build production UI with:
 
-## Quick Reference
+- a component catalog
+- themes and design recipes
+- screen-definition validation
+- project environment checks
+- slash-command workflow guidance
 
-```bash
-# Install & setup
-npx -y @framingui/mcp-server@latest init
+## Core Workflow
 
-# Authenticate
-npx @framingui/mcp-server login
-
-# Check status
-npx @framingui/mcp-server status
-```
-
-## Version History
-
-| Date       | Version | Changes                                                        |
-| ---------- | ------- | -------------------------------------------------------------- |
-| 2026-03-07 | 0.6.5   | Workflow contract and install/update guidance synced           |
-| 2026-02-16 | 0.4.5   | Documentation updated: 17 tools, OAuth auth, 6 themes, English |
-| 2026-01-25 | 0.1.0   | Initial documentation                                          |
-
----
-
-**Package**: [@framingui/mcp-server](../../README.md) | **Consumer Guide**: [Install And Update Guide](../../docs/packages/install-update.md)
+1. choose a style contract
+2. inspect theme, components, and icons when needed
+3. gather screen context
+4. validate the screen definition
+5. write code from the validated contract
+6. run environment and source-file checks before handoff

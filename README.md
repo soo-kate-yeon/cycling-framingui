@@ -1,68 +1,122 @@
 # FramingUI
 
-> Agent-First Design System. 0% hallucination by design.
+Production UI through an MCP-installed design system.
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/soo-kate-yeon/framingui)
-[![Coverage](https://img.shields.io/badge/coverage-73.23%25-yellow)](https://github.com/soo-kate-yeon/framingui)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
+FramingUI is a design system for AI-assisted product teams. Instead of asking an agent to invent UI from scratch, you install FramingUI as an MCP server and give the agent a real component catalog, theme system, layout tokens, and validated screen workflow.
 
-## What is FramingUI?
+The goal is simple: use MCP to build production UI with stronger contracts, fewer hallucinated components, and clearer integration steps.
 
-FramingUI는 AI 에이전트가 절대 헛소리(hallucination)를 하지 못하도록 설계된 디자인 시스템입니다. 완전한 타입 안전성과 구조화된 컴포넌트 지식 시스템을 통해 Claude, Cursor 같은 AI 도구가 항상 일관되고 정확한 UI를 생성하도록 보장합니다.
+## What FramingUI Includes
 
-AI가 디자인 토큰을 준수하도록 강제하는 3-Layer 검증 시스템으로 하드코딩된 값(#fff, 16px)을 원천 차단하고, OKLCH 색상 공간 기반의 지각적으로 균일한 색상 시스템과 WCAG AA/AAA 자동 검증으로 접근성을 보장합니다.
+- `@framingui/mcp-server`: MCP server for discovery, screen workflows, validation, and project setup
+- `@framingui/ui`: React UI components and styles
+- `@framingui/core`: theme, token, and screen-generation utilities
+- `@framingui/tokens`: token types and references
+- `@framingui/styled`: token-aware styled-components helpers
+- `@framingui/esbuild-plugin`: build-time token compliance checks
 
-## Installation
+## Recommended Start
+
+Install the MCP server in your project and let it wire up the design system:
 
 ```bash
-npm install @framingui/core @framingui/ui
+npx -y @framingui/mcp-server@latest init
 ```
 
-## Quick Start
+Then authenticate:
 
-```typescript
-import { loadTheme } from '@framingui/core';
-import { Button, Card } from '@framingui/ui';
+```bash
+npx @framingui/mcp-server@latest login
+```
 
-// 1. Load theme tokens
-const theme = loadTheme('calm-wellness');
+This setup flow can:
 
-// 2. Use theme in your components
-function App() {
+- install `@framingui/ui`
+- configure Tailwind content paths and `tailwindcss-animate`
+- add `@import '@framingui/ui/styles';` when using the FramingUI-native style contract
+- register the MCP server in `.mcp.json`
+- generate project guidance for `FRAMINGUI-GUIDE.md`, `CLAUDE.md`, and `AGENTS.md`
+
+## MCP Workflow
+
+The production screen workflow is component-first and validation-first:
+
+1. `preview-theme` when theme recipes or defaults matter
+2. `get-screen-generation-context`
+3. `preview-component` for any ambiguous component contract
+4. `list-icon-libraries` before introducing icons
+5. `validate-screen-definition`
+6. write React code directly from the validated definition
+7. `validate-environment` for dependency, style-contract, and code-audit checks
+
+FramingUI also provides slash-command guidance for common actions such as:
+
+- `/screen`
+- `/draft`
+- `/section`
+- `/responsive`
+- `/a11y`
+- `/theme-swap`
+- `/doctor`
+- `/install-check`
+- `/export`
+- `/update`
+
+## Example MCP Config
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@framingui/mcp-server@latest"]
+    }
+  }
+}
+```
+
+## Package Usage
+
+Install packages directly when you need them without the guided MCP setup:
+
+```bash
+pnpm add @framingui/ui @framingui/core
+```
+
+```tsx
+import '@framingui/ui/styles';
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+
+export function ExampleCard() {
   return (
     <Card>
-      <Button variant="primary">Click me</Button>
+      <CardHeader>
+        <CardTitle>Ship product UI</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Button>Open workflow</Button>
+      </CardContent>
     </Card>
   );
 }
 ```
 
-## Key Features
-
-- **AI-Friendly Component Knowledge**: MCP 통합으로 Claude/Cursor가 컴포넌트 구조를 정확히 이해
-- **OKLCH Color System**: 지각적으로 균일한 색상 생성과 WCAG 자동 준수
-- **Token-Enforced Styling**: 컴파일 타임 + 런타임 + 빌드 타임 3-Layer 검증으로 100% 토큰 준수 보장
-- **Type-Safe**: TypeScript 기반 완전한 타입 지원
-- **Production Ready**: 73%+ 테스트 커버리지, 엄격한 품질 기준
-
 ## Documentation
 
-전체 문서는 공식 사이트에서 확인하세요:
+- GitHub package docs: `packages/*/README.md`
+- MCP server docs: `packages/mcp-server/docs`
+- Product docs: [framingui.com/docs](https://framingui.com/docs)
 
-**[https://framingui.com/docs](https://framingui.com/docs)**
+## Status
 
-주요 가이드:
+FramingUI is actively evolving around:
 
-- [Getting Started](https://framingui.com/docs/guides/getting-started)
-- [MCP Setup for Claude/Cursor](https://framingui.com/docs/guides/mcp-setup)
-- [Component Reference](https://framingui.com/docs/components)
-- [Theming Guide](https://framingui.com/docs/guides/theming)
+- MCP-native UI generation
+- guarded direct-write workflows
+- theme-aware component discovery
+- production integration checks
 
 ## License
 
-MIT © 2026
-
----
-
-**Built with** [MoAI-ADK](https://github.com/asleep/moai-adk) - AI-Driven Development Kit
+MIT

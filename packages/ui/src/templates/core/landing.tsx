@@ -72,9 +72,7 @@ export function LandingTemplateComponent({
             )}
 
             {/* Suggestions */}
-            {slots.suggestions && (
-              <div className="mt-[var(--spacing-6)]">{slots.suggestions}</div>
-            )}
+            {slots.suggestions && <div className="mt-[var(--spacing-6)]">{slots.suggestions}</div>}
           </div>
         </div>
       </main>

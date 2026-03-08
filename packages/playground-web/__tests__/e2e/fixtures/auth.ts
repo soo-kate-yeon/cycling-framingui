@@ -10,6 +10,10 @@ import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
+export function hasSupabaseTestEnv() {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
 /**
  * Supabase 테스트 클라이언트
  * 환경변수에서 URL과 Service Role Key를 가져옴

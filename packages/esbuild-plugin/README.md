@@ -1,40 +1,27 @@
 # @framingui/esbuild-plugin
 
-> esbuild plugin for build-time token compliance validation
+esbuild plugin for FramingUI token compliance checks.
 
-[![npm](https://img.shields.io/npm/v/@framingui/esbuild-plugin)](https://www.npmjs.com/package/@framingui/esbuild-plugin)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
+Use this package when you want build-time enforcement against styling that escapes your token rules.
 
-## Installation
+## Install
 
 ```bash
-npm install -D @framingui/esbuild-plugin
+pnpm add -D @framingui/esbuild-plugin
 ```
 
-## Usage
+## Example
 
-```javascript
+```ts
 import { build } from 'esbuild';
 import { framinguiPlugin } from '@framingui/esbuild-plugin';
 
 await build({
   entryPoints: ['src/index.ts'],
   bundle: true,
-  plugins: [
-    framinguiPlugin({
-      strict: true, // Fail build on violations
-      threshold: 100, // Required compliance percentage
-    }),
-  ],
+  plugins: [framinguiPlugin()],
 });
 ```
-
-## Features
-
-- **AST Analysis**: Babel-based styled-components template scanning
-- **Pattern Detection**: Identifies hardcoded colors and spacing
-- **Build Enforcement**: Fails build when compliance < threshold
-- **Detailed Reports**: File location, line number, and suggestions
 
 ## License
 

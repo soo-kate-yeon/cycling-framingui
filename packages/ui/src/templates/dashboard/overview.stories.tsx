@@ -75,9 +75,7 @@ export const WithMetrics: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">$45,231</div>
-              <p className="text-xs text-[var(--bg-muted-foreground)]">
-                +20.1% from last month
-              </p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">+20.1% from last month</p>
             </CardContent>
           </Card>
           <Card>
@@ -87,9 +85,7 @@ export const WithMetrics: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+2,350</div>
-              <p className="text-xs text-[var(--bg-muted-foreground)]">
-                +180.1% from last month
-              </p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">+180.1% from last month</p>
             </CardContent>
           </Card>
           <Card>
@@ -99,9 +95,7 @@ export const WithMetrics: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-[var(--bg-muted-foreground)]">
-                +19% from last month
-              </p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">+19% from last month</p>
             </CardContent>
           </Card>
           <Card>
@@ -111,9 +105,7 @@ export const WithMetrics: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-[var(--bg-muted-foreground)]">
-                +201 since last hour
-              </p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">+201 since last hour</p>
             </CardContent>
           </Card>
         </>
@@ -170,9 +162,7 @@ export const Complete: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">$45,231</div>
-              <p className="text-xs text-[var(--bg-muted-foreground)]">
-                +20.1% from last month
-              </p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">+20.1% from last month</p>
             </CardContent>
           </Card>
           <Card>
@@ -182,9 +172,7 @@ export const Complete: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+2,350</div>
-              <p className="text-xs text-[var(--bg-muted-foreground)]">
-                +180.1% from last month
-              </p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">+180.1% from last month</p>
             </CardContent>
           </Card>
           <Card>
@@ -194,9 +182,7 @@ export const Complete: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-[var(--bg-muted-foreground)]">
-                +19% from last month
-              </p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">+19% from last month</p>
             </CardContent>
           </Card>
           <Card>
@@ -206,9 +192,7 @@ export const Complete: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-[var(--bg-muted-foreground)]">
-                +201 since last hour
-              </p>
+              <p className="text-xs text-[var(--bg-muted-foreground)]">+201 since last hour</p>
             </CardContent>
           </Card>
         </>

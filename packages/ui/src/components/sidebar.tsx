@@ -95,12 +95,9 @@ const sidebarSectionTitleVariants = cva(
   }
 );
 
-const sidebarFooterVariants = cva(
-  'border-t border-[var(--border-default)] p-[var(--spacing-4)]',
-  {
-    variants: {},
-  }
-);
+const sidebarFooterVariants = cva('border-t border-[var(--border-default)] p-[var(--spacing-4)]', {
+  variants: {},
+});
 
 export interface SidebarProps
   extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof sidebarVariants> {

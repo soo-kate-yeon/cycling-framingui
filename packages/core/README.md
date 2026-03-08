@@ -1,62 +1,39 @@
 # @framingui/core
 
-> Core design system pipeline: Theme → Blueprint → Screen generation
+Core theme, token, and screen-generation utilities for FramingUI.
 
-[![npm](https://img.shields.io/npm/v/@framingui/core)](https://www.npmjs.com/package/@framingui/core)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
+Use this package when you need the lower-level building blocks behind the MCP workflow or want to integrate FramingUI data structures into custom tooling.
 
-## Installation
+## Install
 
 ```bash
-npm install @framingui/core
+pnpm add @framingui/core
 ```
 
-## Quick Start
+## Example
 
-```typescript
-import { loadTheme, createBlueprint, render } from '@framingui/core';
+```ts
+import { loadTheme } from '@framingui/core';
 
-// 1. Load theme
-const theme = loadTheme('calm-wellness');
-
-// 2. Create blueprint
-const blueprint = createBlueprint({
-  name: 'Dashboard',
-  themeId: theme.id,
-  layout: 'dashboard',
-  components: [
-    { type: 'Heading', props: { level: 1 }, children: ['Welcome'] },
-    {
-      type: 'Card',
-      children: [
-        { type: 'Text', children: ['Your stats here'] },
-        { type: 'Button', props: { variant: 'primary' }, children: ['View More'] },
-      ],
-    },
-  ],
-});
-
-// 3. Render to JSX
-const result = render(blueprint);
-console.log(result.code);
+const theme = loadTheme('minimal-workspace');
+console.log(theme.id);
 ```
 
-## Key Features
+## Use Cases
 
-- **3-Layer Token System**: Atomic → Semantic → Component architecture
-- **Type-Safe**: Full TypeScript support with Zod validation
-- **OKLCH Color System**: Perceptually uniform colors with WCAG validation
-- **Dark Mode**: Built-in dark mode support
-- **Zero Dependencies**: Only Zod for runtime validation
+- loading FramingUI themes and tokens
+- resolving screen definitions
+- building internal tools on top of FramingUI contracts
+- sharing the same theme and layout primitives used by `@framingui/mcp-server`
 
-## Documentation
+## Recommended Path
 
-See the [official documentation](https://framingui.com/docs) for:
+If your goal is to build production UI with an AI agent, start with `@framingui/mcp-server` rather than using `@framingui/core` directly.
 
-- [Token System Guide](https://framingui.com/docs/guides/tokens)
-- [Theme Configuration](https://framingui.com/docs/guides/theming)
-- [Blueprint API](https://framingui.com/docs/api/blueprint)
-- [Screen Generation](https://framingui.com/docs/guides/screen-generation)
+## Docs
+
+- [framingui.com/docs/api/core](https://framingui.com/docs/api/core)
+- [framingui.com/docs/layout](https://framingui.com/docs/layout)
 
 ## License
 

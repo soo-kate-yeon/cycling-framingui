@@ -1,63 +1,62 @@
 # @framingui/ui
 
-> Production-ready React components with CSS Variables theming
+React components for FramingUI.
 
-[![npm](https://img.shields.io/npm/v/@framingui/ui)](https://www.npmjs.com/package/@framingui/ui)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
+Use this package when you want FramingUI components directly in an app, whether you install them manually or through `@framingui/mcp-server init`.
 
-## Installation
+## Install
 
 ```bash
-npm install @framingui/ui
+pnpm add @framingui/ui
 ```
 
-## Quick Start
+Import the shared styles when your app uses the FramingUI-native style contract:
 
 ```tsx
-import { Button, Input, Card } from '@framingui/ui';
 import '@framingui/ui/styles';
+```
 
-export default function App() {
+## Basic Usage
+
+```tsx
+import '@framingui/ui/styles';
+import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@framingui/ui';
+
+export function SignupCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Welcome to FramingUI</CardTitle>
-        <CardDescription>Build accessible UIs faster</CardDescription>
+        <CardTitle>Create account</CardTitle>
       </CardHeader>
       <CardContent>
-        <Input placeholder="Enter your email..." />
+        <Input type="email" placeholder="Email" />
+        <Button>Create account</Button>
       </CardContent>
-      <CardFooter>
-        <Button variant="primary">Get Started</Button>
-      </CardFooter>
     </Card>
   );
 }
 ```
 
-## Components
+## What You Get
 
-### Primitives (14)
+- core components such as `Button`, `Input`, `Card`, `Badge`, `Avatar`, and `Select`
+- complex components such as `Dialog`, `Tabs`, `Table`, and `Popover`
+- advanced components such as `Sidebar`, `NavigationMenu`, and `Calendar`
+- styles designed to work with FramingUI themes and MCP workflows
 
-Button, Input, Checkbox, Radio, Switch, Slider, Text, Heading, Badge, Avatar, Progress, Link, Image, List
+## MCP Guidance
 
-### Composed (6)
+If you are using FramingUI through MCP, do not guess component APIs.
+Use:
 
-Card, Form, Modal, Dropdown, Tabs, Table
+- `list-components`
+- `preview-component`
+- `validate-environment`
 
-## Key Features
+## Docs
 
-- **WCAG 2.1 AA Compliant**: Fully accessible
-- **CSS Variables**: 3-layer token system (Atomic → Semantic → Component)
-- **Type-Safe**: Full TypeScript support
-- **Zero Config**: Works out of the box
-- **98%+ Test Coverage**: Production-ready quality
-
-## Documentation
-
-- [Component Reference](https://framingui.com/docs/components)
-- [Theming Guide](https://framingui.com/docs/guides/theming)
-- [CSS Variables Reference](https://framingui.com/docs/guides/css-variables)
+- [framingui.com/docs/components](https://framingui.com/docs/components)
+- [framingui.com/docs/themes](https://framingui.com/docs/themes)
 
 ## License
 

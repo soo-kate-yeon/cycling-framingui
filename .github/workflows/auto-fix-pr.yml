@@ -47,29 +47,50 @@ jobs:
           FAILED_META="$(cat failed_jobs.txt 2>/dev/null; cat failed_logs.txt 2>/dev/null)"
           ROOT_CAUSE="manual investigation required"
           NEXT_ACTION="Review the failing run and repair it on a dedicated fix branch."
+          SAFE_CATEGORY="report-only"
+          AUTO_FIX_POLICY="report-only"
 
           if echo "$FAILED_META" | grep -q 'ERR_PNPM_OUTDATED_LOCKFILE'; then
             ROOT_CAUSE="pnpm lockfile drift"
-            NEXT_ACTION="Run pnpm install --lockfile-only, commit pnpm-lock.yaml, and rerun CI."
-          elif echo "$FAILED_META" | grep -Eqi 'lint|eslint|prettier|format'; then
-            ROOT_CAUSE="lint or formatting regression"
-            NEXT_ACTION="Run the lint/format commands locally, commit the fixes, and rerun CI."
+            SAFE_CATEGORY="lockfile"
+            AUTO_FIX_POLICY="autofix"
+            NEXT_ACTION="Codex automation may update pnpm-lock.yaml, commit it, and rerun CI."
+          elif echo "$FAILED_META" | grep -Eqi 'prettier|format'; then
+            ROOT_CAUSE="formatting regression"
+            SAFE_CATEGORY="format"
+            AUTO_FIX_POLICY="autofix"
+            NEXT_ACTION="Codex automation may run the formatter, commit the changes, and rerun CI."
+          elif echo "$FAILED_META" | grep -Eqi 'lint|eslint'; then
+            ROOT_CAUSE="lint regression"
+            SAFE_CATEGORY="lint"
+            AUTO_FIX_POLICY="autofix"
+            NEXT_ACTION="Codex automation may run safe lint autofixes, commit the changes, and rerun CI."
           elif echo "$FAILED_META" | grep -Eqi 'typescript|type check|tsc|TS[0-9]{4}'; then
             ROOT_CAUSE="TypeScript or type-level regression"
-            NEXT_ACTION="Reproduce the type failure locally before pushing a fix branch."
+            SAFE_CATEGORY="report-only"
+            AUTO_FIX_POLICY="report-only"
+            NEXT_ACTION="Codex automation should investigate and report findings only. Do not auto-edit code for type failures."
           elif echo "$FAILED_META" | grep -Eqi 'test|vitest|jest|playwright|e2e'; then
             ROOT_CAUSE="test regression"
-            NEXT_ACTION="Reproduce the failing tests locally, fix the regression, and push a follow-up branch."
+            SAFE_CATEGORY="report-only"
+            AUTO_FIX_POLICY="report-only"
+            NEXT_ACTION="Codex automation should reproduce the failing tests and report findings only. Do not auto-edit code."
           elif echo "$FAILED_META" | grep -Eqi 'security|audit|vulnerab'; then
             ROOT_CAUSE="security scan failure"
-            NEXT_ACTION="Check whether the failure is a true vulnerability or a setup/install error before changing dependencies."
+            SAFE_CATEGORY="report-only"
+            AUTO_FIX_POLICY="report-only"
+            NEXT_ACTION="Codex automation should inspect the scan and report whether it is actionable. Do not auto-edit dependencies."
           elif echo "$FAILED_META" | grep -Eqi 'deploy|vercel|production|preview'; then
             ROOT_CAUSE="deployment failure"
-            NEXT_ACTION="Inspect the deployment job and verify credentials, build output, and target environment."
+            SAFE_CATEGORY="report-only"
+            AUTO_FIX_POLICY="report-only"
+            NEXT_ACTION="Codex automation should inspect the deployment failure and report findings only."
           fi
 
           echo "root_cause=$ROOT_CAUSE" >> "$GITHUB_OUTPUT"
           echo "next_action=$NEXT_ACTION" >> "$GITHUB_OUTPUT"
+          echo "safe_category=$SAFE_CATEGORY" >> "$GITHUB_OUTPUT"
+          echo "auto_fix_policy=$AUTO_FIX_POLICY" >> "$GITHUB_OUTPUT"
 
           {
             echo "failed_jobs<<EOF"
@@ -81,36 +102,83 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Comment on PR (if exists)
+      - name: Upsert PR comment (if exists)
         continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PR_NUMBER=$(gh pr list --head "${{ github.event.workflow_run.head_branch }}" --json number --jq '.[0].number' 2>/dev/null || true)
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const workflowRun = context.payload.workflow_run;
+            const marker = `<!-- ci-failure-intake:run-id=${workflowRun.id} -->`;
+            const branchName = workflowRun.head_branch;
+            let prNumber = workflowRun.pull_requests?.[0]?.number;
 
-          if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
-            COMMENT_BODY="$(cat <<'COMMENT_EOF'
-            ## CI Failure Intake
+            if (!prNumber && branchName) {
+              const { data: pulls } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                head: `${context.repo.owner}:${branchName}`,
+                per_page: 1,
+              });
+              prNumber = pulls[0]?.number;
+            }
 
-            Workflow: `${{ steps.collect.outputs.workflow_name }}`
-            Run: ${{ steps.collect.outputs.workflow_url }}
-            Likely root cause: `${{ steps.collect.outputs.root_cause }}`
+            if (!prNumber) {
+              core.info(`No open PR found for branch ${branchName}.`);
+              return;
+            }
 
-            Failed jobs:
-            ```text
-            ${{ steps.collect.outputs.failed_jobs }}
-            ```
+            const body = [
+              marker,
+              `<!-- safe_category=${{ steps.collect.outputs.safe_category }} -->`,
+              '## CI Failure Intake',
+              '',
+              `Workflow: \`${{ steps.collect.outputs.workflow_name }}\``,
+              `Run: ${{ steps.collect.outputs.workflow_url }}`,
+              `Likely root cause: \`${{ steps.collect.outputs.root_cause }}\``,
+              `Safe category: \`${{ steps.collect.outputs.safe_category }}\``,
+              `Codex automation policy: \`${{ steps.collect.outputs.auto_fix_policy }}\``,
+              '',
+              'Failed jobs:',
+              '```text',
+              `${{ steps.collect.outputs.failed_jobs }}`,
+              '```',
+              '',
+              'Recommended next step:',
+              `${{ steps.collect.outputs.next_action }}`,
+              '',
+              'Codex automation may auto-fix only `lockfile`, `lint`, or `format` categories.',
+              'All other categories must be investigated and reported without code changes.',
+            ].join('\n');
 
-            Recommended next step:
-            ${{ steps.collect.outputs.next_action }}
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              per_page: 100,
+            });
 
-            This workflow only summarizes failures. Branch creation, fixes, and pushes are delegated to Codex automation.
-            COMMENT_EOF
-            )"
-            gh pr comment "$PR_NUMBER" --body "$COMMENT_BODY"
-          else
-            echo "No open PR found for branch ${{ github.event.workflow_run.head_branch }}."
-          fi
+            const existing = comments.find((comment) => comment.body?.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+              core.info(`Updated CI failure intake comment on PR #${prNumber}.`);
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body,
+            });
+            core.info(`Created CI failure intake comment on PR #${prNumber}.`);
 
       - name: Summary
         run: |
@@ -120,6 +188,8 @@ jobs:
           echo "- Run: ${{ steps.collect.outputs.workflow_url }}" >> "$GITHUB_STEP_SUMMARY"
           echo "- Branch: ${{ github.event.workflow_run.head_branch }}" >> "$GITHUB_STEP_SUMMARY"
           echo "- Likely root cause: ${{ steps.collect.outputs.root_cause }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Safe category: ${{ steps.collect.outputs.safe_category }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Codex automation policy: ${{ steps.collect.outputs.auto_fix_policy }}" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "### Failed Jobs" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"

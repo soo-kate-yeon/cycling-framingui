@@ -85,9 +85,7 @@ export function SignupTemplateComponent({
 
           {/* Terms Checkbox */}
           {slots.termsCheckbox && (
-            <div className="flex items-start space-x-[var(--spacing-2)]">
-              {slots.termsCheckbox}
-            </div>
+            <div className="flex items-start space-x-[var(--spacing-2)]">{slots.termsCheckbox}</div>
           )}
 
           {/* Sign Up Button */}
@@ -106,9 +104,7 @@ export function SignupTemplateComponent({
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-[var(--spacing-4)]">
-                {slots.socialSignup}
-              </div>
+              <div className="grid grid-cols-2 gap-[var(--spacing-4)]">{slots.socialSignup}</div>
             </>
           )}
         </CardContent>

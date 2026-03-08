@@ -699,10 +699,7 @@ describe('onAuthStateChange listener', () => {
   it('should handle auth state change errors', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockRejectedValue(new Error('License fetch failed'))
-    );
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('License fetch failed')));
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,

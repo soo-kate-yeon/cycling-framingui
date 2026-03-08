@@ -19,12 +19,15 @@ import {
   createTestApiKey,
   deleteTestApiKey,
   getSupabaseTestClient,
+  hasSupabaseTestEnv,
 } from '../fixtures/auth';
 import { FREE_THEMES } from '../fixtures/test-data';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
 test.describe('MCP Verify Endpoint E2E', () => {
+  test.skip(!hasSupabaseTestEnv(), 'Supabase test environment is not configured');
+
   let userId: string;
   let userEmail: string;
   const baseUrl = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3001';

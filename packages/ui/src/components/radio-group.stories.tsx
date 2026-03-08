@@ -73,9 +73,7 @@ export const WithDescriptions: Story = {
           <Label htmlFor="r2" className="cursor-pointer">
             Comfortable
           </Label>
-          <p className="text-sm text-[var(--bg-muted-foreground)]">
-            More space between elements.
-          </p>
+          <p className="text-sm text-[var(--bg-muted-foreground)]">More space between elements.</p>
         </div>
       </div>
       <div className="flex items-start space-x-2">
@@ -167,9 +165,7 @@ export const PaymentMethod: Story = {
           <Label htmlFor="card" className="cursor-pointer font-medium">
             Credit Card
           </Label>
-          <p className="text-sm text-[var(--bg-muted-foreground)]">
-            Pay with credit or debit card
-          </p>
+          <p className="text-sm text-[var(--bg-muted-foreground)]">Pay with credit or debit card</p>
         </div>
       </div>
       <div className="flex items-start space-x-2 rounded-lg border p-4">
@@ -178,9 +174,7 @@ export const PaymentMethod: Story = {
           <Label htmlFor="paypal" className="cursor-pointer font-medium">
             PayPal
           </Label>
-          <p className="text-sm text-[var(--bg-muted-foreground)]">
-            Pay with your PayPal account
-          </p>
+          <p className="text-sm text-[var(--bg-muted-foreground)]">Pay with your PayPal account</p>
         </div>
       </div>
       <div className="flex items-start space-x-2 rounded-lg border p-4">

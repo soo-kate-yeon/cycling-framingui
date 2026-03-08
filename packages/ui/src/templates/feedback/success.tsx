@@ -87,9 +87,7 @@ export function SuccessTemplateComponent({
 
         {/* Additional Actions */}
         {slots.additionalActions && (
-          <div className="flex flex-col gap-[var(--spacing-3)]">
-            {slots.additionalActions}
-          </div>
+          <div className="flex flex-col gap-[var(--spacing-3)]">{slots.additionalActions}</div>
         )}
       </div>
       {children}

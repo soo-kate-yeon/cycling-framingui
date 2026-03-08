@@ -1,36 +1,28 @@
 # @framingui/tokens
 
-> TypeScript token type definitions with compile-time enforcement
+Token types and token references for FramingUI.
 
-[![npm](https://img.shields.io/npm/v/@framingui/tokens)](https://www.npmjs.com/package/@framingui/tokens)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
+This package is for codebases and tools that want typed access to FramingUI token concepts without pulling in the full UI layer.
 
-## Installation
+## Install
 
 ```bash
-npm install @framingui/tokens
+pnpm add @framingui/tokens
 ```
 
-## Usage
+## Example
 
-```typescript
-import type { FramingUITokens, TokenReference } from '@framingui/tokens';
+```ts
+import type { TokenReference } from '@framingui/tokens';
 
-// TokenReference ensures only CSS variables are allowed
 const background: TokenReference = 'var(--framingui-bg-surface-default)';
-
-// TypeScript error: Type '"#ffffff"' is not assignable to type 'TokenReference'
-// const invalid: TokenReference = '#ffffff';
 ```
 
-## Token Categories
+## Use Cases
 
-- **BgTokens**: Background colors
-- **FgTokens**: Foreground/text colors
-- **SpacingTokens**: Spacing scale
-- **RadiusTokens**: Border radius
-- **TypographyTokens**: Font properties
-- **ShadowTokens**: Box shadows
+- token-aware utility libraries
+- typed design-token references
+- custom validation and build tooling
 
 ## License
 

@@ -138,9 +138,7 @@ export const PrivacySettings: Story = {
     <div className="w-full max-w-sm space-y-4 rounded-lg border p-4">
       <div>
         <h3 className="text-lg font-semibold">Privacy Settings</h3>
-        <p className="text-sm text-[var(--bg-muted-foreground)]">
-          Manage your privacy preferences
-        </p>
+        <p className="text-sm text-[var(--bg-muted-foreground)]">Manage your privacy preferences</p>
       </div>
       <div className="space-y-3">
         <div className="flex items-center justify-between">

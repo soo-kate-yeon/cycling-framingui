@@ -16,10 +16,13 @@ import {
   setAuthSession,
   createTestApiKey,
   deleteTestApiKey,
+  hasSupabaseTestEnv,
 } from '../fixtures/auth';
 import { API_KEY_PREFIX_PATTERN, TIMEOUTS } from '../fixtures/test-data';
 
 test.describe('API Key List E2E', () => {
+  test.skip(!hasSupabaseTestEnv(), 'Supabase test environment is not configured');
+
   let userId: string;
   let userEmail: string;
   let userPassword: string;

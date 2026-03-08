@@ -1,199 +1,98 @@
-/**
- * FRAMINGUI-GUIDE.md 콘텐츠 템플릿
- * 프레임워크별 맞춤 가이드 생성
- */
-
 export type Framework = 'nextjs' | 'vite';
 
-/**
- * FRAMINGUI-GUIDE.md 콘텐츠 생성
- */
 export function generateGuide(framework: Framework): string {
-  const importExample =
-    framework === 'nextjs'
-      ? `// app/page.tsx
-import { Button, Card, CardHeader, CardTitle, CardContent } from '@framingui/ui';
-
-export default function HomePage() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Welcome</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Button variant="default" size="lg">Get Started</Button>
-      </CardContent>
-    </Card>
-  );
-}`
-      : `// src/App.tsx
-import { Button, Card, CardHeader, CardTitle, CardContent } from '@framingui/ui';
-
-function App() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Welcome</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Button variant="default" size="lg">Get Started</Button>
-      </CardContent>
-    </Card>
-  );
-}
-
-export default App;`;
+  const appFile = framework === 'nextjs' ? 'app/page.tsx' : 'src/App.tsx';
 
   return `# FramingUI Guide
 
-> AI-powered design system for building production-ready UIs.
-
----
+FramingUI is installed in this project as an MCP-assisted design system for production UI work.
 
 ## Authentication
 
-Before generating screens, authenticate with your Framingui account:
+Authenticate before using licensed themes:
 
 \`\`\`bash
 framingui-mcp login
 \`\`\`
 
-This opens your browser for OAuth authentication. Your credentials are stored in \`~/.framingui/credentials.json\`.
-
-**Why authentication is required:**
-- All 6 themes require valid licenses
-- No free themes are available
-- Authentication verifies your license status
-
-**Check your authentication status:**
+Check the current state with:
 
 \`\`\`bash
 framingui-mcp status
 \`\`\`
 
----
+## Recommended Workflow
 
-## Screen Generation Workflow
+1. Decide the style contract for this project:
+   - \`host-utility\`
+   - \`framingui-native\`
+   - \`migrate\`
+2. Inspect theme and component contracts before drafting:
+   - \`preview-theme\`
+   - \`preview-component\`
+   - \`list-icon-libraries\` when icons are needed
+3. Call \`get-screen-generation-context\`
+4. Validate the generated definition with \`validate-screen-definition\`
+5. Write React code from the validated definition
+6. Run \`validate-environment\` with \`sourceFiles\` before handoff
 
-Framingui provides a **3-step workflow** for production-ready screen generation:
+## Style Contract Rules
 
-### Step 1/3: Get Context
+### host-utility
 
-Claude Code calls \`get-screen-generation-context\` with your screen description:
+Keep utility classes explicit. Do not rely on FramingUI default variants unless you intentionally migrate.
 
+### framingui-native
+
+Your global stylesheet should import:
+
+\`\`\`css
+@import '@framingui/ui/styles';
 \`\`\`
-"Create a user dashboard with profile card and recent activity"
-\`\`\`
 
-Returns: Template matches, component suggestions with inline props/variants, Screen Definition schema
+Only use FramingUI default variants after that import is in place.
 
-### Step 2/3: Validate Definition
+## Slash Commands
 
-Claude Code generates a Screen Definition JSON and calls \`validate-screen-definition\`:
+FramingUI guidance is available for:
 
-Returns: Validation results, errors with auto-fix patches (if any), improvement suggestions
+- \`/screen\`
+- \`/draft\`
+- \`/section\`
+- \`/responsive\`
+- \`/a11y\`
+- \`/theme-swap\`
+- \`/doctor\`
+- \`/install-check\`
+- \`/export\`
+- \`/update\`
 
-### After Validation: Write Code
-
-Claude Code writes React code directly using the components and props from Step 1 context.
-
-### Step 3/3: Validate Environment (Optional)
-
-Claude Code calls \`validate-environment\` to check your project:
-
-Returns: Missing packages, install commands, Tailwind CSS config validation
-
-**Important:** Always check the dependencies and Tailwind configuration before running generated code.
-
----
-
-## Quick Start
-
-### Using Components
+## Example Component Usage
 
 \`\`\`tsx
-${importExample}
+// ${appFile}
+import '@framingui/ui/styles';
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+
+export default function Page() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>FramingUI is ready</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Button>Continue</Button>
+      </CardContent>
+    </Card>
+  );
+}
 \`\`\`
 
-### AI Screen Generation
+## Guardrails
 
-Claude Code에서 MCP 서버가 연결되어 있으면, 자연어로 화면을 생성할 수 있습니다:
-
-\`\`\`
-"로그인 화면 만들어줘"
-"대시보드 페이지를 카드 레이아웃으로 만들어줘"
-"사용자 프로필 페이지를 만들어줘"
-\`\`\`
-
----
-
-## Components (30+)
-
-### Core
-Button, Input, Label, Card, Badge, Avatar, Separator, Checkbox, RadioGroup, Switch, Textarea, Skeleton, ScrollArea, Select, Progress
-
-### Complex
-Dialog, DropdownMenu, Table, Tabs, Toast, Tooltip, Popover, Sheet, AlertDialog, NavigationMenu
-
-### Advanced
-Sidebar, Breadcrumb, Command, Calendar, Form
-
-### Usage
-
-\`\`\`tsx
-import { Button, Dialog, DialogTrigger, DialogContent } from '@framingui/ui';
-\`\`\`
-
----
-
-## Screen Templates (13)
-
-프로덕션에서 바로 사용할 수 있는 완성된 화면 템플릿:
-
-| Category | Templates |
-|----------|-----------|
-| Auth | Login, Signup, ForgotPassword, Verification |
-| Core | Landing, Preferences, Profile |
-| Feedback | Loading, Error, Empty, Confirmation, Success |
-| Dashboard | Dashboard |
-
----
-
-## Themes (6)
-
-| Theme ID | Description |
-|----------|-------------|
-| \`classic-magazine\` | Classic magazine style |
-| \`dark-boldness\` | Fitness & wellness |
-| \`minimal-workspace\` | Minimal workspace |
-| \`neutral-workspace\` | Neutral humanism |
-| \`pebble\` | Round minimal |
-| \`square-minimalism\` | Square minimalism |
-
-### Applying a Theme
-
-\`\`\`tsx
-import { themeToCSS, injectThemeCSS } from '@framingui/ui';
-
-// Inject theme CSS at runtime
-injectThemeCSS(themeData);
-\`\`\`
-
----
-
-## Utility: cn()
-
-\`\`\`tsx
-import { cn } from '@framingui/ui';
-
-<div className={cn('p-4 bg-white', isActive && 'bg-blue-500', className)} />
-\`\`\`
-
----
-
-## Links
-
-- [npm: @framingui/ui](https://www.npmjs.com/package/@framingui/ui)
-- [npm: @framingui/mcp-server](https://www.npmjs.com/package/@framingui/mcp-server)
+- Do not claim that a component is unavailable without checking the catalog.
+- Treat templates as hints, not the final structure.
+- Treat the validated screen definition as the production contract.
+- Keep semantic wrappers as HTML only when there is no FramingUI primitive to replace them.
 `;
 }

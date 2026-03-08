@@ -39,20 +39,16 @@ jobs:
         working-directory: packages/playground-web
 
       - name: Build Next.js app
-        run: pnpm --filter @tekton/playground-web build
+        run: |
+          pnpm --filter @framingui/tokens build
+          pnpm --filter @framingui/core build
+          pnpm --filter @framingui/ui build
+          pnpm --filter @framingui/playground-web build
 
       - name: Run E2E tests
-        run: pnpm --filter @tekton/playground-web test:e2e --project=chromium
+        run: pnpm --filter @framingui/playground-web test:e2e:smoke
         env:
-          # Supabase 테스트 환경변수 (모킹)
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://test.supabase.co' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'test-anon-key' }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key' }}
-          # Feature flags (테스트 모드)
-          NEXT_PUBLIC_ENABLE_AUTH: false
-          NEXT_PUBLIC_ENABLE_PAYMENTS: false
-          NEXT_PUBLIC_ENABLE_MCP_EXPORT: true
-          # Playwright 설정
+          CI: true
           PLAYWRIGHT_HEADLESS: true
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:3001
 

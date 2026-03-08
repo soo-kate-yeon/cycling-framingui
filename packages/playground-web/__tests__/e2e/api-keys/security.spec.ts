@@ -17,10 +17,13 @@ import {
   setAuthSession,
   createTestApiKey,
   deleteTestApiKey,
+  hasSupabaseTestEnv,
 } from '../fixtures/auth';
 import { RATE_LIMITS } from '../fixtures/test-data';
 
 test.describe('Security Tests E2E', () => {
+  test.skip(!hasSupabaseTestEnv(), 'Supabase test environment is not configured');
+
   let userId: string;
   let userEmail: string;
   let userPassword: string;

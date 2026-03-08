@@ -1,6 +1,9 @@
-# E2E 테스트 가이드
+# E2E Testing Guide
 
-SPEC-DEPLOY-001 Phase 2.5: 인증 플로우 E2E 테스트
+This suite is split into two layers:
+
+- `pnpm test:e2e:smoke`: CI-safe browser smoke tests with no Supabase dependency
+- `pnpm test:e2e`: full local suite including integration and auth-adjacent coverage
 
 ## 📋 테스트 개요
 
@@ -83,13 +86,19 @@ PLAYWRIGHT_HEADLESS=true  # false로 설정하면 브라우저 UI 표시
 
 ### 2. 테스트 실행 명령어
 
-#### 전체 E2E 테스트 실행
+#### CI-safe smoke tests
+
+```bash
+pnpm test:e2e:smoke
+```
+
+#### Full local E2E suite
 
 ```bash
 pnpm test:e2e
 ```
 
-#### 특정 테스트 파일 실행
+#### Specific test files
 
 ```bash
 # API Key 생성 테스트만 실행
@@ -182,13 +191,13 @@ pnpm playwright show-report
 
 ## 🛠️ 트러블슈팅
 
-### 1. Supabase 연결 오류
+### 1. Supabase connection error
 
 ```
 Error: Missing Supabase environment variables for E2E tests
 ```
 
-**해결**: `.env.local`에 Supabase 환경변수 설정
+**Resolution**: set the required Supabase variables in `.env.local`
 
 ### 2. Rate Limiting 테스트 실패
 

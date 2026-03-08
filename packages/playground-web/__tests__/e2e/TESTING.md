@@ -1,6 +1,7 @@
-# 빠른 시작 가이드 (Quick Start)
+# E2E Quick Start
 
-SPEC-DEPLOY-001 Phase 2.5 E2E 테스트를 빠르게 실행하기 위한 가이드입니다.
+Use `pnpm test:e2e:smoke` for CI-safe smoke coverage.
+Use `pnpm test:e2e` for the full local suite when Supabase test credentials are available.
 
 ---
 
@@ -35,7 +36,10 @@ pnpm dev
 새 터미널에서:
 
 ```bash
-# 전체 E2E 테스트 실행
+# CI-safe smoke tests
+pnpm test:e2e:smoke
+
+# Full local E2E suite
 pnpm test:e2e
 
 # 또는 특정 테스트만 실행
@@ -174,10 +178,10 @@ jobs:
       - uses: actions/setup-node@v4
 
       - run: pnpm install
-      - run: pnpm --filter @tekton/playground-web build
+      - run: pnpm --filter @framingui/playground-web build
 
       - name: Run E2E Tests
-        run: pnpm test:e2e
+        run: pnpm --filter @framingui/playground-web test:e2e:smoke
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}

@@ -87,9 +87,7 @@ export function ProfileTemplateComponent({
             </div>
 
             {/* Bio/Description */}
-            {slots.bioField && (
-              <div className="space-y-[var(--spacing-2)]">{slots.bioField}</div>
-            )}
+            {slots.bioField && <div className="space-y-[var(--spacing-2)]">{slots.bioField}</div>}
 
             {/* Additional Fields */}
             {slots.additionalFields && slots.additionalFields}

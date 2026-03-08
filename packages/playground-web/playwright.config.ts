@@ -6,16 +6,21 @@
 
 import { defineConfig, devices } from '@playwright/test';
 
+const baseURL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3001';
+
 export default defineConfig({
   testDir: './__tests__/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [['html', { outputFolder: 'playwright-report' }], ['list']],
+  outputDir: 'test-results',
   use: {
-    baseURL: 'http://localhost:3001',
+    baseURL,
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
 
   projects: [
@@ -50,8 +55,8 @@ export default defineConfig({
 
   /* Run local dev server before starting tests */
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3001',
+    command: process.env.CI ? 'pnpm start' : 'pnpm dev',
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
