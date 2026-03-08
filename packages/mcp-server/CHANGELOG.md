@@ -2,6 +2,12 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.18] - 2026-03-08
+
+### Fixed
+
+- Moved `zod` into runtime dependencies so installed consumers resolve the same validator package that the MCP server uses at runtime, preventing schema crashes such as `Cannot read properties of undefined (reading '_zod')` during tool validation.
+
 ## [0.6.17] - 2026-03-08
 
 ### Changed
