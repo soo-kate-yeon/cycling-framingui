@@ -1,77 +1,62 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Button } from '@framingui/ui';
-import { trackFunnelPrimaryCtaClick } from '../../lib/analytics';
+import type { LandingContent } from '../../data/i18n/landing';
 
 interface HeroSectionProps {
+  content: LandingContent;
   onCtaClick?: () => void;
 }
 
-export function HeroSection({ onCtaClick }: HeroSectionProps) {
-  const handleCtaClick = () => {
-    trackFunnelPrimaryCtaClick({
-      cta_id: 'home_hero_try_free',
-      cta_label: 'Try Free',
-      location: 'home_hero',
-      destination: '/explore',
-      cta_variant: 'primary',
-    });
-    onCtaClick?.();
-  };
+export function HeroSection({ content, onCtaClick }: HeroSectionProps) {
+  const { hero } = content;
 
   return (
-    <section className="container mx-auto px-6 md:px-8 pt-40 pb-24 md:pt-[240px] md:pb-40 text-center max-w-6xl">
-      {/* Title */}
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="text-5xl sm:text-7xl md:text-[90px] font-bold mb-8 md:mb-12 leading-[1.05] tracking-tighter text-neutral-950"
-      >
-        UI Kit for Agents
-      </motion.h1>
-
-      {/* Subtitle */}
-      <motion.p
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="text-xl md:text-[28px] text-neutral-600 mb-12 md:mb-16 max-w-4xl mx-auto leading-relaxed tracking-tight"
-      >
-        Beautiful themes your AI can actually use. No hallucinations.
-      </motion.p>
-
-      {/* Demo GIF Placeholder */}
+    <section className="container mx-auto px-6 md:px-8 pt-28 pb-12 md:pt-36 md:pb-16 max-w-7xl">
+      {/* Title + CTA */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        className="text-center mb-10 md:mb-12"
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="mb-12 md:mb-16 max-w-5xl mx-auto"
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="aspect-video bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-2xl shadow-2xl flex items-center justify-center border border-neutral-300">
-          <div className="text-neutral-400 font-medium text-lg">
-            Demo GIF Placeholder
-          </div>
-        </div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-[1.1] tracking-tighter text-neutral-950">
+          {hero.title.part1}{' '}
+          <span className="text-neutral-500">{hero.title.part2}</span>
+        </h1>
+        <p className="text-base md:text-lg text-neutral-500 leading-relaxed tracking-tight mb-7 max-w-xl mx-auto">
+          {hero.description}
+        </p>
+        <button
+          onClick={onCtaClick}
+          className="inline-flex items-center gap-2 h-11 px-6 rounded-full text-sm font-semibold bg-neutral-950 text-white hover:bg-neutral-800 transition-colors shadow-sm"
+        >
+          {hero.buttons.browseThemes}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 3L8 13M8 13L4 9M8 13L12 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
       </motion.div>
 
-      {/* CTA Button */}
+      {/* Demo GIF — desktop: 16:9, mobile: 2:3 */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-col items-center gap-4"
+        transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
       >
-        <Button
-          onClick={handleCtaClick}
-          className="h-14 md:h-16 px-8 md:px-12 rounded-full text-lg md:text-xl font-medium bg-neutral-900 text-white hover:bg-neutral-800 hover:scale-105 transition-all shadow-xl"
-        >
-          Try Free
-        </Button>
-        <p className="text-sm md:text-base text-neutral-500 font-medium">
-          No credit card required
-        </p>
+        {/* 데스크탑 (md+): 16:9 */}
+        <div className="hidden md:flex aspect-video w-full bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-2xl shadow-2xl border border-neutral-200 overflow-hidden items-center justify-center">
+          <div className="text-neutral-400 font-medium text-lg">
+            {content.mainImage.placeholder}
+          </div>
+        </div>
+
+        {/* 모바일 (< md): 2:3 세로형 */}
+        <div className="flex md:hidden w-full bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-2xl shadow-xl border border-neutral-200 overflow-hidden items-center justify-center" style={{ aspectRatio: '2/3' }}>
+          <div className="text-neutral-400 font-medium text-base">
+            {content.mainImage.placeholder}
+          </div>
+        </div>
       </motion.div>
     </section>
   );

@@ -156,7 +156,7 @@ export function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-900 selection:text-white pt-12">
+    <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-900 selection:text-white">
       <FreeTrialBanner />
 
       {/* 네비게이션 */}
@@ -308,7 +308,7 @@ export function PricingPage() {
 
           <FadeIn delay={0.1}>
             <div className="overflow-x-auto rounded-xl border border-neutral-200">
-              <table className="w-full text-sm min-w-[480px]">
+              <table className="w-full text-sm min-w-[480px] [&_tr>*:last-child]:pr-6 [&_tr>*:first-child]:pl-6">
                 <thead>
                   <tr className="border-b border-neutral-200">
                     <th className="text-left py-4 pr-4 font-medium text-neutral-500 w-[35%]">
@@ -322,7 +322,7 @@ export function PricingPage() {
                         {content.comparison.tableHeaders.double}
                       </span>
                     </th>
-                    <th className="text-center py-4 pl-4 font-bold text-neutral-900">
+                    <th className="text-center py-4 px-4 font-bold text-neutral-900">
                       {content.comparison.tableHeaders.creator}
                     </th>
                   </tr>

@@ -137,11 +137,11 @@ export function TemplateGallery({
       )}
 
       {/* Header - selection mode에 따라 반응 */}
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 pt-12 pb-12 md:pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-12 md:pb-16">
         {/* Template Grid */}
-        <div className="mt-12 flex flex-col">
+        <div className="mt-6 flex flex-col">
           <div
-            className={`template-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-0 ${className}`}
+            className={`template-gallery grid grid-cols-1 sm:grid-cols-2 gap-6 p-0 ${className}`}
           >
             {templates.map((template) => {
               const isSelected = selectedIds.includes(template.id);

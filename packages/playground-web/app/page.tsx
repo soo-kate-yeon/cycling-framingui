@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { LandingPageWrapper } from '../components/landing/LandingPageWrapper';
+import { getAllTemplates } from '../data/templates';
 
 export const metadata: Metadata = {
   title: 'framingui - Agent-first Design System',
@@ -43,5 +44,17 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <LandingPageWrapper />;
+  const templates = getAllTemplates();
+  const galleryItems = templates.map((t) => ({
+    id: t.id,
+    name: t.name,
+    description: t.description,
+    descriptionKo: t.descriptionKo,
+    descriptionJa: t.descriptionJa,
+    category: 'Design System',
+    thumbnail: `/screenshots/${t.id}/thumbnail.webp`,
+    price: t.price,
+  }));
+
+  return <LandingPageWrapper templates={galleryItems} />;
 }

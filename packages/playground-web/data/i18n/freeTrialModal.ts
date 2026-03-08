@@ -65,12 +65,12 @@ const freeTrialModalContent: Record<GlobalLocale, FreeTrialModalContent> = {
   },
   ko: {
     title: {
-      part1: '3일 무료체험으로',
-      part2: '시작하세요',
+      part1: '로그인하면',
+      part2: '3일간 무료체험이 가능해요',
     },
     subtitle: {
       line1:
-        '무료체험을 시작하면 3일간 선택한 디자인 시스템을 MCP로 불러와 모든 기능을 무료로 사용해볼 수 있어요.',
+        '무료체험을 시작하면 3일간 선택한 디자인 템플릿을 MCP로 불러와 모든 기능을 무료로 사용해볼 수 있어요.',
       line2: '카드 등록 없이 바로 시작해보세요.',
     },
     noCreditCard: '카드 등록 없이 시작',
@@ -93,12 +93,12 @@ const freeTrialModalContent: Record<GlobalLocale, FreeTrialModalContent> = {
   },
   ja: {
     title: {
-      part1: '3日間の無料トライアルで',
-      part2: '始めましょう',
+      part1: 'ログインすると',
+      part2: '3日間無料で試せます',
     },
     subtitle: {
       line1:
-        '無料トライアルを開始すると、選択したデザインシステムをMCPで読み込み、3日間すべての機能を無料で使えます。',
+        '無料体験を開始すると、選択したデザインテンプレートを MCP で読み込み、3日間すべての機能を無料で使えます。',
       line2: 'クレジットカード登録なしですぐに始められます。',
     },
     noCreditCard: 'クレジットカード不要',

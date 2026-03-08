@@ -204,10 +204,10 @@ export function FreeTrialModal({
   }
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] pointer-events-auto">
+    <div className="fixed bottom-0 left-0 right-0 z-[100] flex justify-center p-4 md:left-auto md:right-6 md:bottom-6 md:p-0 pointer-events-none">
       {/* Card */}
       <div
-        className={`w-[calc(100vw-2rem)] max-w-[24rem] bg-white rounded-none shadow-xl border border-neutral-200 transition-all duration-300 ${
+        className={`w-full max-w-[24rem] bg-white rounded-none shadow-xl border border-neutral-200 transition-all duration-300 pointer-events-auto ${
           isClosing ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100 animate-slide-up'
         }`}
       >

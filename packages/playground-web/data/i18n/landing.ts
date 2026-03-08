@@ -24,6 +24,7 @@ export interface LandingContent {
     buttons: {
       tryStudio: string;
       getStarted: string;
+      browseThemes: string;
     };
     noCreditCard: string;
   };
@@ -65,14 +66,15 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
     hero: {
       brandName: 'framingui',
       title: {
-        part1: 'Agent-first',
-        part2: 'Design System',
+        part1: 'Design Templates',
+        part2: 'for AI Agents',
       },
       description:
-        'framingui is the first design system AI agents can actually understand. Structured tokens and layout logic let agents generate professional, production-ready UI—directly in your codebase. No Figma. No guesswork.',
+        'Tired of AI-generated UIs that look like every other AI app? Install framingui\'s design system and ship clean, consistent UI—without a designer. The Canva for agentic coding.',
       buttons: {
         tryStudio: 'Try Explore Free',
         getStarted: 'Start Free Trial',
+        browseThemes: 'Browse Templates',
       },
       noCreditCard: 'No credit card required',
     },
@@ -152,14 +154,15 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
     hero: {
       brandName: 'framingui',
       title: {
-        part1: 'AI가 이해하는',
-        part2: '디자인 시스템',
+        part1: 'AI 에이전트를 위한',
+        part2: '디자인 템플릿',
       },
       description:
-        'framingui는 AI가 실제로 이해하는 디자인 시스템입니다. 구조화된 토큰과 레이아웃 규칙을 기반으로 에이전트가 추측 없이 코드베이스에서 프로덕션급 UI를 생성합니다.',
+        'AI로 개발할 때, 어디선가 본 듯한 AI스러운 디자인 때문에 고민한 적 있으신가요? 이제 그럴 필요 없어요. framingui의 디자인 시스템을 설치하기만 하면 디자이너 없이도 간결함과 일관성이 유지되는 UI를 만들 수 있습니다.',
       buttons: {
         tryStudio: '무료로 Explore 시작',
         getStarted: '가입하기',
+        browseThemes: '템플릿 둘러보기',
       },
       noCreditCard: '카드 등록 없이 시작',
     },
@@ -239,14 +242,15 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
     hero: {
       brandName: 'framingui',
       title: {
-        part1: 'AIが理解する',
-        part2: 'デザインシステム',
+        part1: 'AI エージェント向け',
+        part2: 'デザインテンプレート',
       },
       description:
-        'framingui は AI が実際に理解できるデザインシステムです。構造化トークンとレイアウト規則をもとに、エージェントが推測なしでコードベースに本番品質の UI を生成します。',
+        'AI で開発するとき、どこかで見たような AI っぽいデザインに悩んだことはありませんか？framingui のデザインシステムを導入するだけで、デザイナーなしでもシンプルで一貫した UI を作れます。',
       buttons: {
         tryStudio: 'Exploreを無料で試す',
         getStarted: '始める',
+        browseThemes: 'テンプレートを見る',
       },
       noCreditCard: 'クレジットカード不要',
     },

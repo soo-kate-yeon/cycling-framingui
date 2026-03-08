@@ -248,18 +248,18 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
       getStarted: '시작하기',
     },
     hero: {
-      title: '요금제를 선택하세요',
+      title: '플랜을 선택하세요',
       description:
-        'AI 기반 디자인 시스템이 포함된 프리미엄 React 템플릿입니다. 오늘 바로 프로덕션 UI를 구축할 수 있습니다.',
+        'mcp installation을 지원하며 에이전틱 코딩에 특화된 디자인 시스템이 포함됩니다. 디자인 토큰과 레이아웃, 30개 이상의 사전 제작 컴포넌트로 일관된 프로덕션 UI를 바로 만들어보세요.',
     },
     betaBanner: {
-      mobile: '🎉 단일 템플릿 무료!',
-      desktop: '🎉 베타 런칭: 베타 기간에는 단일 템플릿이 무료입니다!',
+      mobile: '템플릿 1개를 3일간 무제한 사용할 수 있어요',
+      desktop: '템플릿 1개를 3일간 무제한 사용할 수 있어요',
     },
     plans: {
       single: {
-        name: '단일 템플릿',
-        description: '프로젝트에 맞는 템플릿 1개로 시작하세요.',
+        name: '템플릿 개별 구매',
+        description: '프로젝트에 적용할 템플릿 1개를 선택해 무제한으로 이용하세요.',
         priceLabel: '$59',
         priceSub: '1회 결제',
         cta: '템플릿 둘러보기',
@@ -271,8 +271,8 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
         ],
       },
       double: {
-        name: '더블 패키지',
-        description: '여러 템플릿이 필요한 경우 가장 합리적인 구성입니다.',
+        name: '1+1 혜택가',
+        description: '2개 이상 프로젝트를 진행하시는 분들을 위해 개별 구매보다 합리적인 가격으로 준비했어요.',
         priceLabel: '$99',
         priceSub: '1회 결제',
         cta: '템플릿 선택하기',
@@ -282,12 +282,12 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
           '1년간 업데이트',
           '상업적 사용 가능',
           '이메일 지원 (72시간)',
-          '개별 구매 대비 비용 절감',
+          '개별 구매 대비 16% 할인',
         ],
       },
       creator: {
         name: '크리에이터 패스',
-        description: '지속적으로 제작하는 팀을 위한 무제한 플랜입니다.',
+        description: '여러개 프로젝트를 동시에 진행하거나, 다양한 템플릿을 동시에 이용해보고 싶으시다면 추천드려요.',
         priceLabel: '$149',
         priceSub: '/년',
         cta: '구독하기',
@@ -345,7 +345,7 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
         {
           title: '템플릿은 어떻게 사용하나요?',
           content:
-            '템플릿을 구매한 후(베타 기간에는 1개 무료) 프로젝트 루트에서 "npx @framingui/mcp-server init" 명령을 실행하세요. MCP 서버 설치, 디자인 토큰 설정, Tailwind CSS 구성, AI 코딩 도구 연결이 한 번에 완료됩니다. 이후에는 선택한 테마로 화면 생성을 요청하면 됩니다.',
+            '템플릿을 구매한 후 프로젝트 루트에서 "npx @framingui/mcp-server init" 명령을 실행하세요. MCP 서버 설치 및 사용하시는 AI 코딩 도구 (Claude Code, Codex 등)에 맞춰서 자동으로 실행 준비가 완료됩니다. 이후 브라우저 인증 진행 후, 보유한 템플릿으로 화면 생성을 요청하면 됩니다.',
         },
         {
           title: '업데이트 기간이 끝나면 어떻게 되나요?',
@@ -390,16 +390,16 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
     hero: {
       title: 'プランを選択',
       description:
-        'AI ベースのデザインシステムを備えたプレミアム React テンプレートです。今日から本番向けインターフェースを作れます。',
+        'MCP インストールに対応し、エージェントコーディングに特化したデザインシステムが含まれます。デザイントークン、レイアウト、30 以上の既製コンポーネントで、一貫した本番 UI をすぐ作れます。',
     },
     betaBanner: {
-      mobile: '🎉 単一テンプレート無料！',
-      desktop: '🎉 ベータローンチ: ベータ期間中は単一テンプレート無料！',
+      mobile: 'テンプレート1つを3日間、無制限で使えます',
+      desktop: 'テンプレート1つを3日間、無制限で使えます',
     },
     plans: {
       single: {
-        name: 'Single Template',
-        description: 'プロジェクトに合うテンプレート1つから始めましょう。',
+        name: 'テンプレート単品',
+        description: 'プロジェクトに適用するテンプレートを1つ選んで、無制限で使えます。',
         priceLabel: '$59',
         priceSub: '買い切り',
         cta: 'テンプレートを見る',
@@ -411,8 +411,8 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
         ],
       },
       double: {
-        name: 'Double Package',
-        description: '複数テンプレートが必要な開発に最適です。',
+        name: '1+1 お得プラン',
+        description: '2つ以上のプロジェクトを進める方に向けて、個別購入より手頃な価格でご用意しました。',
         priceLabel: '$99',
         priceSub: '買い切り',
         cta: 'テンプレートを選ぶ',
@@ -422,12 +422,12 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
           '1年間のアップデート',
           '商用利用可',
           'メールサポート（72時間）',
-          '個別購入よりお得',
+          '個別購入より16% 割引',
         ],
       },
       creator: {
         name: 'Creator Pass',
-        description: '継続的に作るチーム向けの無制限アクセスです。',
+        description: '複数プロジェクトを同時進行したい方や、いろいろなテンプレートを試したい方におすすめです。',
         priceLabel: '$149',
         priceSub: '/年',
         cta: '購読する',
@@ -485,7 +485,7 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
         {
           title: 'テンプレートはどう使いますか？',
           content:
-            'テンプレート購入後（ベータ期間は 1 つ無料）、プロジェクトで「npx @framingui/mcp-server init」を実行してください。MCP サーバー設定、デザイントークン設定、Tailwind 設定、AI ツール接続まで 1 回で完了します。',
+            'テンプレート購入後、プロジェクトルートで「npx @framingui/mcp-server init」を実行してください。MCP サーバーのセットアップと、Claude Code や Codex など使用中の AI コーディングツールへの接続が自動で完了します。その後ブラウザ認証を済ませれば、保有テンプレートで画面生成を依頼できます。',
         },
         {
           title: 'アップデート期間終了後はどうなりますか？',

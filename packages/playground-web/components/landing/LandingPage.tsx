@@ -1,17 +1,106 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useScroll, useMotionValueEvent } from 'framer-motion';
 import { Button } from '@framingui/ui';
+import { User, Settings, LogOut } from 'lucide-react';
 import { Footer } from '../shared/Footer';
+import { useAuth } from '../../contexts/AuthContext';
 import { useGlobalLanguage } from '../../contexts/GlobalLanguageContext';
 import { getLandingContent } from '../../data/i18n/landing';
 import { HeroSection } from './HeroSection';
-import { ThemeGallery } from './ThemeGallery';
+import { TemplateGallery } from '../explore/TemplateGallery';
+import { ExplorePageClient } from '../explore/ExplorePageClient';
+import { ExploreLanguageProvider } from '../../contexts/ExploreLanguageContext';
 import { trackFunnelPrimaryCtaClick } from '../../lib/analytics';
 
-export function LandingPage() {
+interface Template {
+  id: string;
+  name: string;
+  description: string;
+  descriptionKo?: string;
+  descriptionJa?: string;
+  category: string;
+  thumbnail?: string;
+  price?: number;
+}
+
+interface LandingPageProps {
+  templates: Template[];
+}
+
+function AvatarDropdown() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  if (!user) {
+    return (
+      <Button
+        onClick={() => router.push('/auth/login')}
+        className="h-9 px-4 rounded-full text-sm font-medium bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
+      >
+        Sign Up
+      </Button>
+    );
+  }
+
+  const initials = (user.email?.[0] || 'U').toUpperCase();
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-9 h-9 rounded-full bg-neutral-900 text-white flex items-center justify-center text-sm font-medium hover:bg-neutral-700 transition-colors"
+      >
+        {initials}
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 top-12 w-48 bg-white rounded-xl shadow-lg border border-neutral-200 py-1 z-50">
+          <div className="px-4 py-2 border-b border-neutral-100">
+            <p className="text-sm font-medium text-neutral-900 truncate">{user.email}</p>
+          </div>
+          <button
+            onClick={() => { setIsOpen(false); router.push('/explore/account'); }}
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+          >
+            <User size={16} />
+            Account
+          </button>
+          <button
+            onClick={() => { setIsOpen(false); router.push('/settings'); }}
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+          >
+            <Settings size={16} />
+            Settings
+          </button>
+          <button
+            onClick={() => { setIsOpen(false); logout(); }}
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <LogOut size={16} />
+            Sign Out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function LandingPage({ templates }: LandingPageProps) {
   const router = useRouter();
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,10 +126,6 @@ export function LandingPage() {
       cta_variant: ctaVariant,
     });
     router.push(destination);
-  };
-
-  const handleHeroCtaClick = () => {
-    router.push('/explore');
   };
 
   return (
@@ -89,29 +174,36 @@ export function LandingPage() {
             >
               {content.nav.docs}
             </Button>
-            <Button
-              onClick={() =>
-                handleNavigateWithTracking(
-                  '/explore',
-                  'home_nav_explore',
-                  content.hero.buttons.tryStudio,
-                  'home_top_nav',
-                  'primary'
-                )
-              }
-              className="h-9 px-4 rounded-full text-sm font-medium bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
-            >
-              {content.hero.buttons.tryStudio}
-            </Button>
+            <AvatarDropdown />
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <HeroSection onCtaClick={handleHeroCtaClick} />
+      <HeroSection
+        content={content}
+        onCtaClick={() => {
+          document.getElementById('theme-gallery')?.scrollIntoView({ behavior: 'smooth' });
+        }}
+      />
 
-      {/* Theme Gallery */}
-      <ThemeGallery />
+      {/* Theme Gallery - explore TemplateGallery */}
+      <div id="theme-gallery" />
+      <ExploreLanguageProvider>
+        <ExplorePageClient>
+          {templates.length > 0 ? (
+            <TemplateGallery templates={templates} />
+          ) : (
+            <div className="max-w-6xl mx-auto px-6 sm:px-8 py-12 md:py-16">
+              <div className="text-center py-24">
+                <p className="text-lg font-medium text-neutral-600 mb-4">
+                  No themes found
+                </p>
+              </div>
+            </div>
+          )}
+        </ExplorePageClient>
+      </ExploreLanguageProvider>
 
       {/* Footer */}
       <Footer />
