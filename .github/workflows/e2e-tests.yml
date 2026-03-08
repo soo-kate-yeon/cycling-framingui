@@ -43,6 +43,7 @@ jobs:
           pnpm --filter @framingui/tokens build
           pnpm --filter @framingui/core build
           pnpm --filter @framingui/ui build
+          pnpm --filter @framingui/mcp-server build
           pnpm --filter @framingui/playground-web build
 
       - name: Run E2E tests
