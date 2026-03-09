@@ -9,8 +9,8 @@
 
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { TemplateCard } from './TemplateCard';
 import { SelectionTopBar } from './SelectionTopBar';
 import { TemplateModal } from './TemplateModal';
@@ -53,6 +53,7 @@ export function TemplateGallery({
   selectionMode,
 }: TemplateGalleryProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { locale } = useExploreLanguage();
   const i18n = getExploreContent(locale);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -62,6 +63,14 @@ export function TemplateGallery({
 
   // Modal State
   const [activeModalId, setActiveModalId] = useState<string | null>(null);
+
+  // URL에서 template 파라미터 읽어서 모달 열기
+  useEffect(() => {
+    const templateParam = searchParams.get('template');
+    if (templateParam && templates.some((t) => t.id === templateParam)) {
+      setActiveModalId(templateParam);
+    }
+  }, [searchParams, templates]);
 
   const maxSelection = internalSelectionMode === 'double' ? 2 : 0;
   const isSelectionMode = !!internalSelectionMode;
@@ -81,19 +90,31 @@ export function TemplateGallery({
     router.replace('/explore', { scroll: false }); // URL 정리
   };
 
+  // 모달 열기 (URL 업데이트 포함)
+  const openModal = (templateId: string) => {
+    const template = templates.find((t) => t.id === templateId);
+    if (template) {
+      trackTemplateView({
+        template_id: templateId,
+        template_name: template.name,
+        location: 'explore',
+      });
+    }
+    setActiveModalId(templateId);
+    // URL 업데이트 (shallow routing)
+    router.replace(`/?template=${templateId}`, { scroll: false });
+  };
+
+  // 모달 닫기 (URL 복구)
+  const closeModal = () => {
+    setActiveModalId(null);
+    router.replace('/', { scroll: false });
+  };
+
   // 선택 모드: 카드 클릭 = 선택/해제 토글
   const handleCardClick = (templateId: string) => {
     if (!isSelectionMode) {
-      // route 대신 모달 띄우기
-      const template = templates.find((t) => t.id === templateId);
-      if (template) {
-        trackTemplateView({
-          template_id: templateId,
-          template_name: template.name,
-          location: 'explore',
-        });
-      }
-      setActiveModalId(templateId);
+      openModal(templateId);
       return;
     }
 
@@ -183,7 +204,7 @@ export function TemplateGallery({
         <TemplateModal
           template={activeTemplateData}
           isOpen={!!activeModalId}
-          onClose={() => setActiveModalId(null)}
+          onClose={closeModal}
           onSelectDouble={handleEnterSelectionMode}
         />
       )}
