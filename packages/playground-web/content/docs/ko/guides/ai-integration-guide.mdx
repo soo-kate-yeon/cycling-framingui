@@ -1,0 +1,430 @@
+---
+title: "Integrating FramingUI with AI Coding Tools"
+description: "Connect FramingUI to Claude Code, Cursor, Windsurf, and other AI tools using MCP for context-aware code generation"
+order: 8
+---
+
+# Integrating FramingUI with AI Coding Tools
+
+FramingUI is designed for **AI-assisted development**. This guide shows you how to connect FramingUI to Claude Code, Cursor, Windsurf, and other AI coding tools using the **Model Context Protocol (MCP)**.
+
+## Why AI Integration Matters
+
+Without context, AI tools generate inconsistent code:
+
+❌ **Generic AI output:**
+```tsx
+<button className="bg-blue-600 text-white px-4 py-2 rounded">
+  Submit
+</button>
+```
+
+✅ **Context-aware with FramingUI:**
+```tsx
+<Button>Submit</Button>
+```
+
+The second version uses your design system, maintains consistency, and updates automatically when you change themes.
+
+## What is MCP?
+
+**Model Context Protocol (MCP)** is an open standard that allows AI tools to access project-specific context:
+
+- 🎨 **Design tokens** — Your color, typography, spacing values
+- 📦 **Components** — Available components and their props
+- 🎯 **Patterns** — Your team's coding conventions
+- 📚 **Documentation** — Component usage examples
+
+**Result:** AI generates code that matches your design system automatically.
+
+## Quick Start: FramingUI MCP Server
+
+FramingUI provides an MCP server that exposes your design system to AI tools.
+
+### 1. Install the MCP Server
+
+```bash
+# In your FramingUI project
+npm install @framingui/mcp-server --save-dev
+```
+
+Or use the global CLI:
+
+```bash
+npx @framingui/mcp-server
+```
+
+### 2. Configure Your AI Tool
+
+Choose your tool:
+
+- [Claude Code (Desktop)](#claude-code-desktop)
+- [Cursor](#cursor)
+- [Windsurf](#windsurf)
+- [VS Code + Continue](#vs-code-continue)
+
+## Claude Code (Desktop)
+
+### Setup
+
+1. Open Claude Code settings
+2. Navigate to **Developer** → **Model Context Protocol**
+3. Click **Add Server**
+4. Add FramingUI MCP server:
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "command": "npx",
+      "args": [
+        "@framingui/mcp-server",
+        "--project-root",
+        "/path/to/your/project"
+      ]
+    }
+  }
+}
+```
+
+### Verify Connection
+
+Restart Claude Code, then ask:
+
+> "What design tokens are available in this project?"
+
+Claude will list your color, typography, spacing tokens.
+
+### Example Prompts
+
+**Generate a card component:**
+
+> "Create a pricing card with a title, price, feature list, and CTA button using FramingUI components and tokens"
+
+**Build a form:**
+
+> "Create a contact form with name, email, message fields using FramingUI Input and Button components"
+
+**Create a layout:**
+
+> "Build a responsive 3-column feature grid using FramingUI Card components with proper spacing tokens"
+
+## Cursor
+
+### Setup
+
+1. Open Cursor settings (`Cmd/Ctrl + ,`)
+2. Search for "MCP"
+3. Enable **Model Context Protocol**
+4. Add FramingUI server in `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "command": "npx",
+      "args": [
+        "@framingui/mcp-server",
+        "--project-root",
+        "."
+      ]
+    }
+  }
+}
+```
+
+### Using with Cursor Composer
+
+Open Composer (`Cmd/Ctrl + K`), then:
+
+> "Using FramingUI tokens, create a hero section with a title, subtitle, and two CTA buttons"
+
+Cursor will generate code using your design tokens.
+
+### Cursor Rules (.cursorrules)
+
+Create `.cursorrules` in your project root to guide Cursor:
+
+```
+# FramingUI Project Rules
+
+## Design System
+- Always use FramingUI components from `@framingui/ui`
+- Use design tokens (e.g., `--bg-primary`, `--spacing-6`) instead of hardcoded values
+- Prefer semantic color tokens (`--bg-primary`) over primitive tokens (`--color-blue-500`)
+
+## Component Patterns
+- Import components: `import { Button, Card, Input } from '@framingui/ui';`
+- Use Tailwind utilities that map to tokens: `className="bg-card p-6 rounded-lg"`
+- Always include proper TypeScript types
+
+## Spacing
+- Use `--spacing-*` tokens for margins, padding, gaps
+- Follow the 8px grid system
+- Common spacing: `p-6` (24px), `gap-4` (16px), `space-y-4`
+
+## Colors
+- Use semantic tokens: `--bg-background`, `--bg-primary`, `--text-foreground`
+- Support dark mode automatically (no extra code needed)
+- Never hardcode hex colors
+
+## Typography
+- Use `--text-*` tokens for font sizes
+- Font weights: `--font-normal` (400), `--font-semibold` (600), `--font-bold` (700)
+- Line heights: `--leading-normal` (1.5), `--leading-tight` (1.25)
+```
+
+## Windsurf
+
+### Setup
+
+1. Open Windsurf settings
+2. Navigate to **Extensions** → **MCP Servers**
+3. Add FramingUI server:
+
+```json
+{
+  "mcp.servers": {
+    "framingui": {
+      "command": "npx",
+      "args": ["@framingui/mcp-server"]
+    }
+  }
+}
+```
+
+### Cascade Mode
+
+Use Windsurf's Cascade feature with FramingUI context:
+
+> "Build a dashboard layout with sidebar navigation, header, and main content area using FramingUI components"
+
+Cascade will generate multi-file layouts with consistent token usage.
+
+## VS Code + Continue
+
+### Setup
+
+Install [Continue](https://continue.dev/) extension, then configure:
+
+```json
+// .continue/config.json
+{
+  "mcp": {
+    "servers": [
+      {
+        "name": "framingui",
+        "command": "npx",
+        "args": ["@framingui/mcp-server"]
+      }
+    ]
+  }
+}
+```
+
+### Using Continue
+
+Open Continue sidebar (`Cmd/Ctrl + L`):
+
+> "Create a blog post card with image, title, excerpt, and read more link using FramingUI"
+
+## Advanced: Custom MCP Configuration
+
+### Expose Custom Components
+
+Tell the MCP server about your custom components:
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "command": "npx",
+      "args": [
+        "@framingui/mcp-server",
+        "--components-dir",
+        "./src/components",
+        "--tokens-file",
+        "./app/globals.css"
+      ]
+    }
+  }
+}
+```
+
+### Include Team Conventions
+
+Create a `docs/ai-context.md` file:
+
+```markdown
+# AI Context: Team Conventions
+
+## Component Structure
+- Place components in `src/components/[name]/`
+- Each component folder contains: `index.tsx`, `[Name].tsx`, `types.ts`
+
+## Naming
+- Components: PascalCase (e.g., `PricingCard`)
+- Files: PascalCase for components, kebab-case for utilities
+- Props: camelCase
+
+## Patterns
+- Use server components by default
+- Add `'use client'` only when needed (state, effects, events)
+- Prefer composition over configuration
+```
+
+Reference it in MCP config:
+
+```json
+{
+  "mcpServers": {
+    "framingui": {
+      "command": "npx",
+      "args": [
+        "@framingui/mcp-server",
+        "--context-file",
+        "./docs/ai-context.md"
+      ]
+    }
+  }
+}
+```
+
+## Effective Prompts
+
+### Specific Token Usage
+
+> "Create a card with `--spacing-6` padding, `--radius-lg` corners, and `--shadow-md` elevation"
+
+### Semantic Intent
+
+> "Build a destructive action button for deleting user accounts"
+
+(AI will use `--bg-destructive`, `--bg-destructive-foreground` tokens)
+
+### Component Composition
+
+> "Create a dashboard card component that wraps FramingUI Card and adds a header with title and action button"
+
+### Responsive Design
+
+> "Build a pricing grid that's 1 column on mobile, 2 on tablet, 3 on desktop, using FramingUI spacing tokens"
+
+### Dark Mode
+
+> "Create a hero section that looks good in both light and dark modes using FramingUI semantic tokens"
+
+## Prompt Templates
+
+### New Component
+
+```
+Create a [ComponentName] component with:
+- FramingUI [components list]
+- Props: [prop types]
+- Layout: [description]
+- Spacing: use --spacing-* tokens
+- Colors: use semantic tokens (--bg-*, --text-*)
+- Responsive: [breakpoint behavior]
+```
+
+### Page Layout
+
+```
+Build a [PageName] page with:
+- Sections: [list sections]
+- Components: use FramingUI components
+- Spacing: follow the 8px grid
+- Dark mode support: automatic via tokens
+- Mobile-first responsive design
+```
+
+### Theme Customization
+
+```
+Customize the [component] to:
+- Override tokens: [list tokens to change]
+- Add variant: [variant name and description]
+- Maintain accessibility: WCAG AA
+```
+
+## Troubleshooting
+
+### MCP Server Not Found
+
+```bash
+# Install globally
+npm install -g @framingui/mcp-server
+
+# Or use npx (no install needed)
+npx @framingui/mcp-server --help
+```
+
+### Tokens Not Available
+
+Verify your `globals.css` imports FramingUI theme:
+
+```css
+/* app/globals.css */
+@import '@framingui/tokens/themes/minimal-workspace.css';
+@import '@framingui/ui/styles';
+```
+
+### AI Not Using Tokens
+
+Add explicit instructions in your prompt:
+
+> "Use FramingUI design tokens like `--bg-primary`, `--spacing-6`, `--text-lg` — do not hardcode colors or spacing values"
+
+### Context Not Loading
+
+Check MCP server logs:
+
+```bash
+npx @framingui/mcp-server --verbose
+```
+
+## Best Practices
+
+1. **Be specific** — Mention token names in prompts
+2. **Reference components** — List which FramingUI components to use
+3. **Describe intent** — "primary action button" vs "blue button"
+4. **Request responsiveness** — Always specify mobile/tablet/desktop behavior
+5. **Ask for accessibility** — Request WCAG compliance explicitly
+6. **Iterate** — Start simple, refine with follow-up prompts
+
+## Example Workflow
+
+### 1. Initial Prompt
+
+> "Create a pricing page with three tiers (Free, Pro, Enterprise) using FramingUI Card and Button components. Use semantic color tokens and the spacing system."
+
+### 2. Refine
+
+> "Make the middle card (Pro) highlighted with a border using `--border-primary` and elevated shadow"
+
+### 3. Add Features
+
+> "Add a toggle to switch between monthly and annual pricing"
+
+### 4. Responsive
+
+> "Make the cards stack on mobile and display as 3 columns on desktop"
+
+### 5. Dark Mode
+
+> "Verify the pricing page looks good in dark mode"
+
+## Resources
+
+- [MCP Specification](https://modelcontextprotocol.io/)
+- [FramingUI MCP Server Docs](https://github.com/tektonui/framingui/tree/main/packages/mcp-server)
+- [Design Tokens Guide](/docs/en/guides/design-tokens)
+- [Component Docs](/docs/en/components/button)
+
+## Next Steps
+
+- [Component Customization](/docs/en/guides/component-customization) — Customize with tokens
+- [Color Tokens](/docs/en/guides/color-tokens) — Color system deep dive
+- [Typography Scale](/docs/en/guides/typography-scale) — Font tokens
+- [Spacing System](/docs/en/guides/spacing-system) — Layout tokens

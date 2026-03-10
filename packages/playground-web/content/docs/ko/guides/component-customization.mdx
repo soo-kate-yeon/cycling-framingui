@@ -1,0 +1,494 @@
+---
+title: "Customizing Components with Tokens"
+description: "Learn how to customize FramingUI components using design tokens, theme overrides, and CSS variables"
+order: 7
+---
+
+# Customizing Components with Tokens
+
+FramingUI components are built on design tokens, making them easy to customize without modifying source code. This guide shows you how to override styles, create variants, and build custom components.
+
+## Why Token-Based Customization?
+
+Traditional component libraries force you to override CSS classes or fork components. FramingUI uses **design tokens** as the customization layer:
+
+✅ **Global changes** — Update one token, all components adapt  
+✅ **Scoped overrides** — Customize specific sections without affecting others  
+✅ **Theme-aware** — Automatically respects light/dark mode  
+✅ **AI-friendly** — AI tools understand semantic token names  
+
+## Token Override Layers
+
+FramingUI uses a **three-layer token system**:
+
+```
+1. Component Defaults (base styles)
+   ↓
+2. Theme Tokens (global theme)
+   ↓
+3. Custom Overrides (your CSS)
+```
+
+Changes cascade down — your overrides always win.
+
+## Global Component Customization
+
+### Change All Buttons
+
+Override button tokens globally:
+
+```css
+/* app/globals.css */
+:root {
+  --button-border-radius: var(--radius-full);  /* Pill-shaped buttons */
+  --button-font-weight: var(--font-semibold);  /* Bolder text */
+  --button-padding-x: var(--spacing-8);        /* More horizontal padding */
+  --button-padding-y: var(--spacing-4);        /* More vertical padding */
+}
+```
+
+Now all `<Button>` components use these values.
+
+### Change All Cards
+
+```css
+:root {
+  --card-border-radius: var(--radius-xl);      /* Rounder corners */
+  --card-padding: var(--spacing-8);            /* More padding */
+  --card-border-width: 2px;                    /* Thicker border */
+  --card-shadow: var(--shadow-lg);             /* Stronger shadow */
+}
+```
+
+### Change All Inputs
+
+```css
+:root {
+  --input-border-radius: var(--radius-md);     /* Rounded inputs */
+  --input-border-width: 2px;                   /* Thicker border */
+  --input-padding-x: var(--spacing-4);         /* Horizontal padding */
+  --input-padding-y: var(--spacing-3);         /* Vertical padding */
+}
+```
+
+## Scoped Component Customization
+
+Apply token overrides to specific sections:
+
+```css
+/* Only pricing page cards */
+.pricing-section {
+  --card-border-radius: var(--radius-2xl);
+  --card-padding: var(--spacing-10);
+  --bg-card: oklch(0.99 0.01 250);
+  --border-default: oklch(0.85 0.03 250);
+}
+```
+
+```tsx
+<section className="pricing-section">
+  <Card>
+    {/* This card uses custom tokens */}
+    <h2>Pro Plan</h2>
+    <Button>Subscribe</Button>
+  </Card>
+</section>
+
+<section>
+  <Card>
+    {/* This card uses default tokens */}
+    <h2>Features</h2>
+  </Card>
+</section>
+```
+
+## Creating Custom Variants
+
+### Custom Button Variant
+
+Define a new variant using tokens:
+
+```css
+/* app/globals.css */
+.btn-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary),
+    var(--bg-accent)
+  );
+  color: var(--bg-primary-foreground);
+  border: none;
+  font-weight: var(--font-semibold);
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--radius-lg);
+  transition: transform 0.2s;
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+```
+
+Use it with FramingUI Button:
+
+```tsx
+import { Button } from '@framingui/ui';
+
+<Button className="btn-gradient">
+  Get Started
+</Button>
+```
+
+### Custom Card Variant
+
+```css
+.card-highlight {
+  background: var(--bg-accent);
+  color: var(--bg-accent-foreground);
+  border: 2px solid var(--bg-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-8);
+  box-shadow: 0 8px 24px oklch(0.56 0.18 257 / 0.15);
+}
+```
+
+```tsx
+import { Card } from '@framingui/ui';
+
+<Card className="card-highlight">
+  <h3>Featured Plan</h3>
+  <p>Most popular choice</p>
+</Card>
+```
+
+## Component-Specific Token Overrides
+
+### Override Button Colors
+
+```css
+:root {
+  /* Primary button */
+  --button-primary-bg: oklch(0.60 0.22 25);              /* Orange */
+  --button-primary-fg: oklch(0.98 0 0);                  /* White */
+  --button-primary-hover-bg: oklch(0.55 0.22 25);        /* Darker on hover */
+  
+  /* Destructive button */
+  --button-destructive-bg: oklch(0.55 0.22 10);          /* Red */
+  --button-destructive-fg: oklch(0.98 0 0);
+  
+  /* Outline button */
+  --button-outline-border: var(--border-default);
+  --button-outline-hover-bg: var(--bg-muted);
+}
+```
+
+### Override Input States
+
+```css
+:root {
+  --input-default-border: var(--border-input);
+  --input-focus-border: var(--bg-primary);
+  --input-focus-ring: oklch(0.56 0.18 257 / 0.15);      /* Focus glow */
+  --input-error-border: var(--bg-destructive);
+  --input-disabled-bg: var(--bg-muted);
+  --input-disabled-opacity: 0.5;
+}
+```
+
+## Dark Mode Customization
+
+Override component tokens specifically for dark mode:
+
+```css
+/* Light mode (default) */
+:root {
+  --bg-card: oklch(0.99 0 0);
+  --card-shadow: var(--shadow-sm);
+}
+
+/* Dark mode */
+.dark {
+  --bg-card: oklch(0.20 0.01 260);
+  --card-shadow: 0 4px 12px oklch(0 0 0 / 0.3);  /* Stronger shadow */
+}
+```
+
+Components automatically adapt when `.dark` is applied to `<html>` or `<body>`.
+
+## Using CSS Variables Directly
+
+Access any token in inline styles or className:
+
+```tsx
+<div
+  style={{
+    background: 'var(--bg-card)',
+    padding: 'var(--spacing-6)',
+    borderRadius: 'var(--radius-lg)',
+    boxShadow: 'var(--shadow-md)',
+  }}
+>
+  Custom container
+</div>
+```
+
+With Tailwind's arbitrary values:
+
+```tsx
+<div className="bg-[var(--bg-card)] p-[var(--spacing-6)] rounded-[var(--radius-lg)]">
+  Custom container
+</div>
+```
+
+## Advanced Customization Patterns
+
+### Branded Section
+
+Override multiple tokens for a cohesive branded section:
+
+```css
+.hero-section {
+  /* Colors */
+  --bg-background: oklch(0.16 0.03 257);         /* Dark purple bg */
+  --bg-foreground: oklch(0.98 0.01 257);         /* Light text */
+  --bg-primary: oklch(0.75 0.20 257);            /* Bright purple CTA */
+  --bg-primary-foreground: oklch(0.16 0.03 257); /* Dark text on CTA */
+  
+  /* Spacing */
+  --spacing-section: var(--spacing-20);
+  
+  /* Typography */
+  --text-hero: clamp(2.5rem, 5vw, 4rem);
+  
+  /* Border radius */
+  --radius-card: var(--radius-2xl);
+}
+```
+
+```tsx
+<section className="hero-section py-20">
+  <div className="max-w-6xl mx-auto text-center">
+    <h1 className="text-[var(--text-hero)] font-bold mb-8">
+      Welcome to FramingUI
+    </h1>
+    <Button size="lg">Get Started</Button>
+  </div>
+</section>
+```
+
+### Per-Component Theme
+
+Wrap components in a custom theme container:
+
+```css
+.theme-ocean {
+  --bg-primary: oklch(0.55 0.18 230);            /* Ocean blue */
+  --bg-secondary: oklch(0.70 0.15 180);          /* Teal */
+  --bg-accent: oklch(0.65 0.20 200);             /* Aqua */
+  --bg-background: oklch(0.96 0.01 230);         /* Light blue-gray */
+  --bg-card: oklch(1 0 0);                       /* White cards */
+  --border-default: oklch(0.85 0.02 230);        /* Subtle border */
+}
+
+.dark .theme-ocean {
+  --bg-primary: oklch(0.60 0.18 230);
+  --bg-background: oklch(0.16 0.02 230);
+  --bg-card: oklch(0.20 0.02 230);
+  --border-default: oklch(0.32 0.02 230);
+}
+```
+
+```tsx
+<div className="theme-ocean p-8">
+  <Card>
+    <h3>Ocean Theme</h3>
+    <p>This card uses the custom ocean theme tokens.</p>
+    <Button>Action</Button>
+  </Card>
+</div>
+```
+
+### Component Composition
+
+Build custom components from primitives + tokens:
+
+```tsx
+import { Card, Button } from '@framingui/ui';
+
+export function PricingCard({ 
+  title, 
+  price, 
+  features, 
+  highlighted = false 
+}) {
+  return (
+    <Card
+      className={`
+        p-8 space-y-6 
+        ${highlighted ? 'border-2 border-primary shadow-lg' : ''}
+      `}
+      style={{
+        ...(highlighted && {
+          '--bg-card': 'var(--bg-accent)',
+          '--bg-card-foreground': 'var(--bg-accent-foreground)',
+        }),
+      }}
+    >
+      <div>
+        <h3 className="text-2xl font-bold">{title}</h3>
+        <p className="text-4xl font-bold text-primary mt-2">{price}</p>
+      </div>
+      
+      <ul className="space-y-2">
+        {features.map((f, i) => (
+          <li key={i} className="flex gap-2">
+            <span>✓</span>
+            <span>{f}</span>
+          </li>
+        ))}
+      </ul>
+      
+      <Button 
+        className="w-full" 
+        variant={highlighted ? 'default' : 'outline'}
+      >
+        Subscribe
+      </Button>
+    </Card>
+  );
+}
+```
+
+## Token Discovery
+
+### List All Available Tokens
+
+Inspect your theme in DevTools:
+
+```js
+// Run in browser console
+Array.from(document.styleSheets)
+  .flatMap(sheet => Array.from(sheet.cssRules || []))
+  .filter(rule => rule.selectorText === ':root')
+  .flatMap(rule => Array.from(rule.style))
+  .filter(prop => prop.startsWith('--'))
+  .sort();
+```
+
+### Document Your Custom Tokens
+
+Keep a reference in your repo:
+
+```css
+/* styles/tokens.css */
+
+/**
+ * Custom Component Tokens
+ * 
+ * Button
+ * --button-border-radius
+ * --button-font-weight
+ * --button-padding-x
+ * --button-padding-y
+ * 
+ * Card
+ * --card-border-radius
+ * --card-padding
+ * --card-border-width
+ * --card-shadow
+ */
+```
+
+## Best Practices
+
+1. **Override tokens, not classes** — Use CSS variables for customization
+2. **Scope overrides** — Apply only where needed, not globally
+3. **Maintain semantic naming** — Custom tokens should be descriptive
+4. **Test in both modes** — Verify light and dark mode
+5. **Document custom tokens** — Add comments for team clarity
+6. **Use component composition** — Build complex components from primitives
+
+## Debugging Token Overrides
+
+### Check Applied Tokens
+
+```tsx
+'use client';
+import { useEffect } from 'react';
+
+export function TokenDebugger() {
+  useEffect(() => {
+    const root = getComputedStyle(document.documentElement);
+    console.log('--bg-primary:', root.getPropertyValue('--bg-primary'));
+    console.log('--spacing-4:', root.getPropertyValue('--spacing-4'));
+    console.log('--radius-lg:', root.getPropertyValue('--radius-lg'));
+  }, []);
+
+  return null;
+}
+```
+
+### Visualize Token Values
+
+```tsx
+export function TokenPreview() {
+  return (
+    <div className="grid grid-cols-2 gap-4 p-6">
+      <div>
+        <p className="font-mono text-sm">--bg-primary</p>
+        <div className="w-20 h-20 rounded-lg" style={{ background: 'var(--bg-primary)' }} />
+      </div>
+      
+      <div>
+        <p className="font-mono text-sm">--spacing-6</p>
+        <div className="bg-primary" style={{ width: 'var(--spacing-6)', height: 'var(--spacing-6)' }} />
+      </div>
+    </div>
+  );
+}
+```
+
+## Migration from Hardcoded Styles
+
+### Before (Hardcoded)
+
+```tsx
+<button
+  style={{
+    background: '#3B82F6',
+    color: '#FFFFFF',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    fontWeight: 600,
+  }}
+>
+  Submit
+</button>
+```
+
+### After (Token-Based)
+
+```tsx
+<Button>
+  Submit
+</Button>
+```
+
+Or with custom tokens:
+
+```tsx
+<button
+  className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold"
+>
+  Submit
+</button>
+```
+
+## Next Steps
+
+- [Color Tokens](/docs/en/guides/color-tokens) — Deep dive into color system
+- [Typography Scale](/docs/en/guides/typography-scale) — Font customization
+- [Spacing System](/docs/en/guides/spacing-system) — Layout tokens
+- [Theming](/docs/en/guides/theming) — Full theme customization
+- [AI Integration](/docs/en/guides/ai-integration-guide) — Let AI help with customization

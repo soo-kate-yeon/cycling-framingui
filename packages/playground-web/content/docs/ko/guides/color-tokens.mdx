@@ -1,0 +1,301 @@
+---
+title: "Understanding Color Tokens in FramingUI"
+description: "Learn how FramingUI uses OKLCH color system, semantic vs primitive tokens, and automatic dark mode support"
+order: 4
+---
+
+# Understanding Color Tokens in FramingUI
+
+FramingUI uses a modern, semantic color system built on OKLCH — providing perceptually uniform colors that adapt automatically to light and dark modes.
+
+## Why OKLCH?
+
+Most design systems use RGB or HSL. FramingUI uses **OKLCH** (Oklab Lightness Chroma Hue) because:
+
+- ✅ **Perceptually uniform** — Equal numeric changes = equal visual changes
+- ✅ **Better gradients** — No muddy colors in the middle
+- ✅ **Wider gamut** — Access to vivid colors not possible in RGB
+- ✅ **Easier manipulation** — Adjust lightness, chroma, hue independently
+
+```css
+/* RGB - hard to predict results */
+rgb(59, 130, 246)
+
+/* HSL - better but still uneven */
+hsl(217, 91%, 60%)
+
+/* OKLCH - predictable and perceptual ✅ */
+oklch(0.63 0.20 257)
+```
+
+**Translation:**
+- `0.63` = Lightness (0-1)
+- `0.20` = Chroma (saturation, 0-0.4 typical)
+- `257` = Hue (0-360 degrees)
+
+## Semantic vs Primitive Tokens
+
+FramingUI uses a **two-tier token system**:
+
+### Primitive Tokens (Color Palette)
+
+Raw color values that define your brand palette:
+
+```css
+:root {
+  --color-primary: oklch(0.56 0.18 257);      /* Brand purple */
+  --color-secondary: oklch(0.72 0.14 200);    /* Accent blue */
+  --color-success: oklch(0.65 0.16 145);      /* Green */
+  --color-warning: oklch(0.75 0.15 85);       /* Yellow */
+  --color-danger: oklch(0.58 0.22 25);        /* Red */
+  
+  --color-gray-50: oklch(0.98 0 0);
+  --color-gray-100: oklch(0.96 0 0);
+  --color-gray-900: oklch(0.20 0 0);
+}
+```
+
+### Semantic Tokens (Usage-Based)
+
+Tokens that describe *where* and *how* colors are used:
+
+```css
+:root {
+  --bg-background: var(--color-gray-50);      /* Page background */
+  --bg-foreground: var(--color-gray-900);     /* Text color */
+  --bg-primary: var(--color-primary);         /* Primary actions */
+  --bg-primary-foreground: oklch(0.98 0 0);   /* Text on primary */
+  --bg-destructive: var(--color-danger);      /* Delete buttons */
+  --bg-muted: var(--color-gray-100);          /* Subtle backgrounds */
+  
+  --border-default: var(--color-gray-200);    /* Default borders */
+  --border-input: var(--color-gray-300);      /* Form borders */
+}
+```
+
+**Why this matters:**
+
+When you change brand colors, you only update primitive tokens. All semantic tokens automatically reflect the change.
+
+```css
+/* Update your brand purple */
+:root {
+  --color-primary: oklch(0.60 0.20 280);  /* Shift to deeper purple */
+}
+
+/* These automatically update everywhere */
+--bg-primary: var(--color-primary);
+--border-primary: var(--color-primary);
+```
+
+## Core Semantic Tokens
+
+### Background Tokens
+
+| Token | Usage | Example |
+| --- | --- | --- |
+| `--bg-background` | Page background | Body, main container |
+| `--bg-foreground` | Primary text color | Headings, body text |
+| `--bg-card` | Card backgrounds | Panels, modals |
+| `--bg-card-foreground` | Text on cards | Card content |
+| `--bg-popover` | Floating UI backgrounds | Dropdowns, tooltips |
+| `--bg-popover-foreground` | Text in popovers | Menu items |
+| `--bg-primary` | Brand primary color | Primary buttons, links |
+| `--bg-primary-foreground` | Text on primary | Button labels |
+| `--bg-secondary` | Secondary actions | Secondary buttons |
+| `--bg-destructive` | Danger/delete actions | Delete buttons |
+| `--bg-muted` | Subtle backgrounds | Disabled states, code blocks |
+| `--bg-muted-foreground` | Subtle text | Placeholders, captions |
+| `--bg-accent` | Accent highlights | Badges, notifications |
+| `--bg-accent-foreground` | Text on accent | Badge text |
+
+### Border Tokens
+
+| Token | Usage | Example |
+| --- | --- | --- |
+| `--border-default` | Standard borders | Dividers, card outlines |
+| `--border-input` | Form field borders | Input, select, textarea |
+| `--border-focus` | Focused state borders | Active input |
+| `--border-destructive` | Error state borders | Invalid form fields |
+
+### Using Tokens
+
+**In raw CSS:**
+
+```css
+.card {
+  background: var(--bg-card);
+  color: var(--bg-card-foreground);
+  border: 1px solid var(--border-default);
+}
+
+.button-primary {
+  background: var(--bg-primary);
+  color: var(--bg-primary-foreground);
+}
+
+.input {
+  border: 1px solid var(--border-input);
+}
+
+.input:focus {
+  border-color: var(--border-focus);
+}
+```
+
+**In FramingUI components:**
+
+```tsx
+import { Button, Card, Input } from '@framingui/ui';
+
+export function Example() {
+  return (
+    <Card>
+      <h2 className="text-foreground">Title</h2>
+      <p className="text-muted-foreground">Description</p>
+      <Input placeholder="Enter email" />
+      <Button>Submit</Button>
+      <Button variant="destructive">Delete</Button>
+    </Card>
+  );
+}
+```
+
+## Automatic Dark Mode Support
+
+FramingUI themes automatically adapt to dark mode using the `.dark` class:
+
+```css
+/* Light mode (default) */
+:root {
+  --bg-background: oklch(1 0 0);              /* White */
+  --bg-foreground: oklch(0.2 0 0);            /* Near-black */
+  --bg-card: oklch(0.99 0 0);                 /* Off-white */
+  --border-default: oklch(0.89 0 0);          /* Light gray */
+}
+
+/* Dark mode - automatically inverts */
+.dark {
+  --bg-background: oklch(0.16 0.01 260);      /* Dark blue-gray */
+  --bg-foreground: oklch(0.96 0.01 260);      /* Off-white */
+  --bg-card: oklch(0.20 0.01 260);            /* Slightly lighter */
+  --border-default: oklch(0.32 0.01 260);     /* Subtle border */
+}
+```
+
+**No code changes needed.** Your components automatically adapt:
+
+```tsx
+<Card>
+  <h2 className="text-foreground">Title</h2>
+  <p className="text-muted-foreground">Subtitle</p>
+</Card>
+```
+
+This renders correctly in both light and dark modes.
+
+## Customizing Colors
+
+### Override Primitive Tokens
+
+Change your brand colors:
+
+```css
+/* app/globals.css */
+:root {
+  --color-primary: oklch(0.56 0.22 25);       /* Change to orange-red */
+  --color-secondary: oklch(0.70 0.18 180);    /* Cyan accent */
+}
+```
+
+All components using `--bg-primary` update automatically.
+
+### Add Custom Semantic Tokens
+
+Create new semantic tokens for specific use cases:
+
+```css
+:root {
+  --bg-success-subtle: oklch(0.95 0.02 145);  /* Light green bg */
+  --bg-warning-subtle: oklch(0.96 0.03 85);   /* Light yellow bg */
+  --bg-info: oklch(0.60 0.18 230);            /* Info blue */
+  --bg-info-foreground: oklch(0.98 0 0);      /* White text */
+}
+
+.dark {
+  --bg-success-subtle: oklch(0.22 0.04 145);
+  --bg-warning-subtle: oklch(0.24 0.04 85);
+  --bg-info: oklch(0.55 0.15 230);
+}
+```
+
+Use them in your components:
+
+```tsx
+<div className="bg-[var(--bg-success-subtle)] text-foreground p-4 rounded-lg">
+  ✅ Action completed successfully
+</div>
+```
+
+## Working with OKLCH
+
+### Adjust Lightness
+
+Make a color lighter or darker by changing the first value:
+
+```css
+--color-primary: oklch(0.56 0.18 257);       /* Base */
+--color-primary-light: oklch(0.70 0.18 257); /* +0.14 lightness */
+--color-primary-dark: oklch(0.42 0.18 257);  /* -0.14 lightness */
+```
+
+### Adjust Saturation (Chroma)
+
+Make a color more vivid or muted:
+
+```css
+--color-primary: oklch(0.56 0.18 257);       /* Base */
+--color-primary-vivid: oklch(0.56 0.28 257); /* +0.10 chroma */
+--color-primary-muted: oklch(0.56 0.08 257); /* -0.10 chroma */
+```
+
+### Shift Hue
+
+Rotate the color wheel:
+
+```css
+--color-primary: oklch(0.56 0.18 257);       /* Blue-purple */
+--color-complement: oklch(0.56 0.18 77);     /* Opposite hue (+180°) */
+--color-analogous: oklch(0.56 0.18 230);     /* Adjacent hue (-27°) */
+```
+
+## Best Practices
+
+1. **Use semantic tokens in components** — `--bg-primary` not `--color-primary`
+2. **Override primitive tokens for brand changes** — Keep semantic mappings intact
+3. **Test in dark mode** — Verify contrast and readability
+4. **Respect WCAG contrast ratios** — Ensure accessibility
+5. **Use OKLCH for custom colors** — Maintain perceptual uniformity
+
+## Accessibility
+
+FramingUI semantic tokens are designed for WCAG AA compliance:
+
+- `--bg-foreground` on `--bg-background` → 7:1 (AAA)
+- `--bg-primary-foreground` on `--bg-primary` → 4.5:1 (AA)
+- `--border-default` → Subtle but visible (3:1 minimum)
+
+When creating custom tokens, verify contrast:
+
+```bash
+# Use online tools
+https://contrast-ratio.com/
+https://webaim.org/resources/contrastchecker/
+```
+
+## Next Steps
+
+- [Typography Scale](/docs/en/guides/typography-scale) — Font tokens and scale
+- [Spacing System](/docs/en/guides/spacing-system) — Layout tokens
+- [Theming](/docs/en/guides/theming) — Customize your theme
+- [Component Customization](/docs/en/guides/component-customization) — Override component styles

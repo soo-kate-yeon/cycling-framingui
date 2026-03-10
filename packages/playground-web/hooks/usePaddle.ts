@@ -11,6 +11,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { initializePaddle, type Paddle, type PaddleEventData } from '@paddle/paddle-js';
 import { PADDLE_CONFIG, isPaymentsEnabled } from '@/lib/paddle/config';
+import { getPaddleCheckoutErrorMessage } from '@/lib/paddle/errors';
 
 export interface OpenCheckoutParams {
   priceId: string;
@@ -55,10 +56,21 @@ export function usePaddle() {
     initializePaddle({
       environment: PADDLE_CONFIG.environment,
       token: PADDLE_CONFIG.clientToken,
+      checkout: {
+        settings: {
+          successUrl: `${window.location.origin}/settings/billing?checkout=success`,
+        },
+      },
       // checkout-service 400 등 Paddle 내부 오류 관측을 위해 이벤트를 남긴다.
       eventCallback: (event: PaddleEventData) => {
         if (event?.name === 'checkout.error') {
           console.error('[Paddle] checkout.error event:', event);
+
+          const message = getPaddleCheckoutErrorMessage(event);
+          if (message) {
+            setNotReadyReason(message);
+            window.alert(message);
+          }
         }
       },
     })

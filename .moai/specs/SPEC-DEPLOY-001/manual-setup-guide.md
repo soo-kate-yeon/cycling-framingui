@@ -407,6 +407,11 @@ NEXT_PUBLIC_ENABLE_PAYMENTS=false
 # NEXT_PUBLIC_PADDLE_ENVIRONMENT=production
 ```
 
+**Paddle Production 필수 추가 설정**:
+- Paddle Dashboard에서 **default payment link / default checkout URL** 을 설정해야 합니다.
+- 이 값이 비어 있으면 프로덕션 체크아웃 생성 시 `transaction_default_checkout_url_not_set` 400 오류가 발생합니다.
+- `https://framingui.com/pricing` 또는 실제 결제 진입 페이지를 기본 URL로 설정한 뒤 재시도합니다.
+
 **중요**: 각 환경변수는 Supabase Dashboard에서 확인:
 - Dashboard > Project Settings > API
 
