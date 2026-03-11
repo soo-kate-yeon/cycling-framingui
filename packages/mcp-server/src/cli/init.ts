@@ -72,6 +72,11 @@ export const SCREEN_GENERATION_PACKAGES = [
   ...Object.keys(TAILWIND_V3_TOOLCHAIN_PACKAGES),
 ] as const;
 
+function usesTailwindV4(versionSpec?: string): boolean {
+  const major = getInstalledMajor(versionSpec);
+  return major !== undefined && major >= 4;
+}
+
 type PackageManager = 'pnpm' | 'yarn' | 'bun' | 'npm';
 
 type InitVerification = {
@@ -328,22 +333,13 @@ function installPackages(
 
   const runtimeMissing = SCREEN_GENERATION_RUNTIME_PACKAGES.filter(pkg => !installed[pkg]);
   const tailwindVersion = installed.tailwindcss;
-  const tailwindMajor = getInstalledMajor(tailwindVersion);
+  const tailwindV4 = usesTailwindV4(tailwindVersion);
 
-  if (tailwindMajor && tailwindMajor >= 4) {
-    return {
-      ok: false,
-      command: '',
-      reason:
-        `Detected tailwindcss@${tailwindVersion}. FramingUI init currently targets Tailwind CSS v3. ` +
-        `Remove Tailwind v4 and install tailwindcss@${FRAMINGUI_TAILWIND_VERSION}, ` +
-        `postcss@${FRAMINGUI_POSTCSS_VERSION}, autoprefixer@${FRAMINGUI_AUTOPREFIXER_VERSION}.`,
-    };
-  }
-
-  const toolchainMissing = Object.entries(TAILWIND_V3_TOOLCHAIN_PACKAGES)
-    .filter(([pkg]) => !installed[pkg])
-    .map(([pkg, version]) => `${pkg}@${version}`);
+  const toolchainMissing = tailwindV4
+    ? []
+    : Object.entries(TAILWIND_V3_TOOLCHAIN_PACKAGES)
+        .filter(([pkg]) => !installed[pkg])
+        .map(([pkg, version]) => `${pkg}@${version}`);
 
   const commands: string[] = [];
   if (runtimeMissing.length > 0) {
@@ -354,7 +350,11 @@ function installPackages(
   }
 
   if (commands.length === 0) {
-    logDetail('All FramingUI runtime and Tailwind v3 toolchain packages are already installed');
+    logDetail(
+      tailwindV4
+        ? 'All FramingUI runtime packages are already installed for the detected Tailwind v4 project'
+        : 'All FramingUI runtime and Tailwind v3 toolchain packages are already installed'
+    );
     return { ok: true, command: '' };
   }
 
@@ -673,12 +673,13 @@ export function verifyInitSetup(cwd: string): InitVerification {
   const packageJson = readProjectPackageJson(cwd);
   const installed = getInstalledPackageNames(packageJson);
   const installedVersions = getInstalledPackageMap(packageJson);
-  const missingPackages = SCREEN_GENERATION_PACKAGES.filter(pkg => !installed.has(pkg));
   const detectedTailwindVersion = installedVersions.tailwindcss;
-  const tailwindVersionOk = (() => {
-    const major = getInstalledMajor(detectedTailwindVersion);
-    return major === undefined || major < 4;
-  })();
+  const tailwindV4 = usesTailwindV4(detectedTailwindVersion);
+  const requiredPackages = tailwindV4
+    ? SCREEN_GENERATION_RUNTIME_PACKAGES
+    : SCREEN_GENERATION_PACKAGES;
+  const missingPackages = requiredPackages.filter(pkg => !installed.has(pkg));
+  const tailwindVersionOk = true;
 
   const stylesheets = walkFiles(cwd).filter(filePath => /\.(css|scss)$/.test(filePath));
   const stylesheetWithImport = stylesheets.find(filePath =>
@@ -726,9 +727,9 @@ export function verifyInitSetup(cwd: string): InitVerification {
       warnings.push('Tailwind config is missing the tailwindcss-animate plugin');
     }
   }
-  if (!tailwindVersionOk) {
+  if (tailwindV4) {
     warnings.push(
-      `Detected tailwindcss@${detectedTailwindVersion}. FramingUI init currently supports Tailwind CSS v3 only`
+      `Detected tailwindcss@${detectedTailwindVersion}. FramingUI init will skip Tailwind v3-only toolchain setup and rely on your existing Tailwind v4 CSS-first configuration`
     );
   }
 
@@ -784,9 +785,13 @@ function printResult(pm: PackageManager, verification: InitVerification): void {
   Recovery:
   - Re-run package install:
     ${pm} add ${SCREEN_GENERATION_RUNTIME_PACKAGES.join(' ')}
-    ${pm} add -D ${Object.entries(TAILWIND_V3_TOOLCHAIN_PACKAGES)
-      .map(([pkg, version]) => `${pkg}@${version}`)
-      .join(' ')}
+    ${
+      verification.detectedTailwindVersion && usesTailwindV4(verification.detectedTailwindVersion)
+        ? '(Tailwind v4 detected: keeping your existing Tailwind toolchain)'
+        : `${pm} add -D ${Object.entries(TAILWIND_V3_TOOLCHAIN_PACKAGES)
+            .map(([pkg, version]) => `${pkg}@${version}`)
+            .join(' ')}`
+    }
   - Ensure a global stylesheet imports:
     ${FRAMINGUI_STYLE_IMPORT}
   - Ensure your root entry wraps the app with:

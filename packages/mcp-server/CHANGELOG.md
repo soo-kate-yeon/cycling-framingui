@@ -2,6 +2,14 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.25] - 2026-03-12
+
+### Fixed
+
+- Relaxed `framingui-mcp init` so Tailwind CSS v4 projects are no longer treated as hard failures during bootstrap.
+- Kept the runtime package installation path active for Tailwind v4 apps while skipping the legacy Tailwind v3-only toolchain enforcement.
+- Updated environment validation and init verification messaging so consumer apps using Tailwind v4 get provider/bootstrap guidance instead of a false incompatibility error.
+
 ## [0.6.24] - 2026-03-12
 
 ### Added

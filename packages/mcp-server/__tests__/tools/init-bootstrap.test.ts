@@ -123,7 +123,7 @@ describe('init bootstrap helpers', () => {
     expect(result.warnings.length).toBeGreaterThan(0);
   });
 
-  it('reports Tailwind v4 as incompatible with the current init bootstrap', () => {
+  it('allows Tailwind v4 projects without marking the bootstrap as incompatible', () => {
     const dir = makeTempProject();
 
     fs.mkdirSync(path.join(dir, 'app'), { recursive: true });
@@ -153,8 +153,10 @@ describe('init bootstrap helpers', () => {
 
     const result = verifyInitSetup(dir);
 
-    expect(result.tailwindVersionOk).toBe(false);
+    expect(result.tailwindVersionOk).toBe(true);
     expect(result.detectedTailwindVersion).toBe('^4.0.0');
-    expect(result.warnings.some(warning => warning.includes('Tailwind CSS v3 only'))).toBe(true);
+    expect(
+      result.warnings.some(warning => warning.includes('Tailwind v4 CSS-first configuration'))
+    ).toBe(true);
   });
 });

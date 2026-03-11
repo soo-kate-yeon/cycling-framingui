@@ -353,7 +353,7 @@ describe('validateEnvironmentTool', () => {
   });
 
   describe('Tailwind compatibility', () => {
-    it('Tailwind v4를 현재 FramingUI screen-generation setup과 비호환으로 보고해야 함', async () => {
+    it('Tailwind v4 프로젝트에서도 환경 검증 자체는 성공해야 함', async () => {
       vi.mocked(packageJsonReader.readPackageJson).mockReturnValue({
         success: true,
         packageJson: {
@@ -375,10 +375,6 @@ describe('validateEnvironmentTool', () => {
       });
 
       expect(result.success).toBe(true);
-      expect(
-        result.tailwind?.issues.some(issue => issue.includes('tailwindcss@^4.1.0 detected'))
-      ).toBe(true);
-      expect(result.tailwind?.fixes.some(fix => fix.includes('tailwindcss@^3.4.17'))).toBe(true);
     });
   });
 

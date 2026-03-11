@@ -27,6 +27,11 @@ function getInstalledMajor(versionSpec?: string): number | undefined {
   return Number.parseInt(match[1]!, 10);
 }
 
+function usesTailwindV4(versionSpec?: string): boolean {
+  const major = getInstalledMajor(versionSpec);
+  return major !== undefined && major >= 4;
+}
+
 function findBootstrapEntry(projectPath: string): string | undefined {
   const candidates = [
     'app/layout.tsx',
@@ -116,28 +121,18 @@ export async function validateEnvironmentTool(
     if (checkTailwind !== false) {
       const tailwindResult = readTailwindConfig(projectPath);
       const installedTailwindVersion = installedPackages.tailwindcss;
-      const installedTailwindMajor = getInstalledMajor(installedTailwindVersion);
-
       const issues: string[] = [];
       const fixes: string[] = [];
 
-      if (installedTailwindMajor && installedTailwindMajor >= 4) {
-        issues.push(
-          `tailwindcss@${installedTailwindVersion} detected — current FramingUI screen-generation setup expects Tailwind CSS v3`
-        );
-        fixes.push(
-          'Downgrade to Tailwind CSS v3 and install the matching toolchain: ' +
-            'npm install -D tailwindcss@^3.4.17 postcss@^8.4.38 autoprefixer@^10.4.19 tailwindcss-animate@^1.0.7'
-        );
-      }
+      const tailwindV4 = usesTailwindV4(installedTailwindVersion);
 
-      if (!tailwindResult.found) {
+      if (!tailwindResult.found && !tailwindV4) {
         issues.push('tailwind.config.{ts,js,mjs,cjs} not found in project root');
         fixes.push(
           'Create a tailwind.config.ts file in your project root. ' +
             'See https://tailwindcss.com/docs/configuration for setup guide.'
         );
-      } else {
+      } else if (tailwindResult.found) {
         if (!tailwindResult.hasUiContentPath) {
           issues.push(
             'tailwind.config content paths do not include @framingui/ui — ' +
@@ -160,6 +155,10 @@ export async function validateEnvironmentTool(
               "import animate from 'tailwindcss-animate'; plugins: [animate]"
           );
         }
+      } else if (tailwindV4) {
+        fixes.push(
+          'Tailwind v4 detected. Keep your existing CSS-first setup and ensure your global stylesheet imports FramingUI styles.'
+        );
       }
 
       const bootstrapEntry = findBootstrapEntry(projectPath);

@@ -225,7 +225,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     expect(envResult.tailwind?.issues.length).toBeGreaterThan(0);
   });
 
-  it('flags Tailwind v4 projects as incompatible with the current FramingUI init flow', async () => {
+  it('allows Tailwind v4 projects without reporting an incompatible init flow', async () => {
     const dir = makeTempProject();
 
     fs.mkdirSync(path.join(dir, 'app'), { recursive: true });
@@ -244,10 +244,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     fs.writeFileSync(path.join(dir, 'app/globals.css'), "@import '@framingui/ui/styles';\n");
 
     const verifyResult = verifyInitSetup(dir);
-    expect(verifyResult.tailwindVersionOk).toBe(false);
-    expect(verifyResult.warnings.some(warning => warning.includes('Tailwind CSS v3 only'))).toBe(
-      true
-    );
+    expect(verifyResult.tailwindVersionOk).toBe(true);
+    expect(
+      verifyResult.warnings.some(warning => warning.includes('Tailwind v4 CSS-first configuration'))
+    ).toBe(true);
 
     const envResult = await validateEnvironmentTool({
       projectPath: dir,
@@ -256,7 +256,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     });
     expect(envResult.success).toBe(true);
     expect(
-      envResult.tailwind?.issues.some(issue => issue.includes('tailwindcss@^4.1.0 detected'))
-    ).toBe(true);
+      envResult.tailwind?.issues.some(issue => issue.includes('expects Tailwind CSS v3'))
+    ).toBe(false);
   });
 });
