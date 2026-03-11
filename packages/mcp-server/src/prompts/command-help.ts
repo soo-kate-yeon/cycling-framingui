@@ -49,7 +49,9 @@ Use the \`slash-commands\` prompt to inspect the full catalog, then call \`comma
   const optionLines =
     command.options.length > 0
       ? command.options
-          .map(option => `- \`${option.name}\` - ${option.description}${formatValues(option.values)}`)
+          .map(
+            option => `- \`${option.name}\` - ${option.description}${formatValues(option.values)}`
+          )
           .join('\n')
       : '- None';
 

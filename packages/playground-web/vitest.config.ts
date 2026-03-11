@@ -36,9 +36,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, './'),
       '@/lib': path.resolve(__dirname, './lib'),
       '@/components': path.resolve(__dirname, './components'),
-      '@framingui/ui/theme-loader': path.resolve(__dirname, '../ui/dist/theme-loader.mjs'),
-      '@framingui/ui': path.resolve(__dirname, '../ui/dist/index.mjs'),
-      '@framingui/core': path.resolve(__dirname, '../core/dist/index.js'),
+      // Use workspace sources in tests so CI does not depend on a prior package build.
+      '@framingui/ui/theme-loader': path.resolve(__dirname, '../ui/src/theme-loader.ts'),
+      '@framingui/ui': path.resolve(__dirname, '../ui/src/index.ts'),
+      '@framingui/core': path.resolve(__dirname, '../core/src/index.ts'),
     },
   },
 });

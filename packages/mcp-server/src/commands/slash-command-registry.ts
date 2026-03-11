@@ -61,7 +61,8 @@ export const slashCommandRegistry: SlashCommandDefinition[] = [
       },
       {
         name: '--template-hint',
-        description: 'Optional inspiration template id. Use it as a hint, not a structural requirement.',
+        description:
+          'Optional inspiration template id. Use it as a hint, not a structural requirement.',
       },
       {
         name: '--output',
@@ -70,7 +71,8 @@ export const slashCommandRegistry: SlashCommandDefinition[] = [
       },
       {
         name: '--style-contract',
-        description: 'Preserve host utility styling, target FramingUI-native variables, or request a migration.',
+        description:
+          'Preserve host utility styling, target FramingUI-native variables, or request a migration.',
         values: ['host-utility', 'framingui-native', 'migrate'],
       },
     ],
@@ -119,7 +121,8 @@ export const slashCommandRegistry: SlashCommandDefinition[] = [
       { name: '--replace', description: 'Existing section id to replace.' },
       {
         name: '--style-contract',
-        description: 'Preserve host utility styling, target FramingUI-native variables, or request a migration.',
+        description:
+          'Preserve host utility styling, target FramingUI-native variables, or request a migration.',
         values: ['host-utility', 'framingui-native', 'migrate'],
       },
     ],
@@ -127,7 +130,12 @@ export const slashCommandRegistry: SlashCommandDefinition[] = [
       '/section "stats summary with 4 KPI cards" --slot main --into dashboard.json',
       '/section "pricing comparison table" --replace hero-pricing',
     ],
-    workflow: ['list-components', 'preview-component', 'validate-screen-definition', 'validate-environment'],
+    workflow: [
+      'list-components',
+      'preview-component',
+      'validate-screen-definition',
+      'validate-environment',
+    ],
     preflight: {
       required: true,
       when: 'When target screen file or project path is known.',
@@ -142,7 +150,8 @@ export const slashCommandRegistry: SlashCommandDefinition[] = [
   {
     name: '/draft',
     summary: 'Create a component-first structural draft before code generation.',
-    usage: '/draft <description> [--theme <themeId>] [--platform web|mobile] [--template-hint <id>] [--variants <n>]',
+    usage:
+      '/draft <description> [--theme <themeId>] [--platform web|mobile] [--template-hint <id>] [--variants <n>]',
     args: [
       {
         name: 'description',
@@ -272,7 +281,10 @@ export const slashCommandRegistry: SlashCommandDefinition[] = [
     ],
     options: [
       { name: '--auth', description: 'Inspect authentication and session status.' },
-      { name: '--tailwind', description: 'Inspect Tailwind configuration for FramingUI compatibility.' },
+      {
+        name: '--tailwind',
+        description: 'Inspect Tailwind configuration for FramingUI compatibility.',
+      },
       { name: '--themes', description: 'Inspect theme access and previewability.' },
       { name: '--fix-hints', description: 'Return prioritized next actions and install hints.' },
     ],
