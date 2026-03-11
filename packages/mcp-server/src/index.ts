@@ -32,8 +32,7 @@ import { validateScreenDefinitionTool } from './tools/validate-screen-definition
 import { validateEnvironmentTool } from './tools/validate-environment.js';
 import { whoamiTool } from './tools/whoami.js';
 import { readPackageJson } from './utils/package-json-reader.js';
-import { getGettingStartedPrompt } from './prompts/getting-started.js';
-import { getScreenWorkflowPrompt } from './prompts/screen-workflow.js';
+import { getPromptDefinition, listPromptDefinitions } from './prompts/prompt-catalog.js';
 import {
   WhoamiInputSchema,
   GenerateBlueprintInputSchema,
@@ -82,20 +81,7 @@ server.setRequestHandler(ListPromptsRequestSchema, async () => {
   info('ListPrompts request received');
 
   return {
-    prompts: [
-      {
-        name: 'getting-started',
-        description:
-          'Complete getting started guide for FramingUI including authentication, theme exploration, and screen generation workflow',
-        arguments: [],
-      },
-      {
-        name: 'screen-workflow',
-        description:
-          'Guarded direct-write workflow: get-screen-generation-context → validate-screen-definition → write code directly → validate-environment',
-        arguments: [],
-      },
-    ],
+    prompts: listPromptDefinitions(),
   };
 });
 
@@ -104,20 +90,17 @@ server.setRequestHandler(ListPromptsRequestSchema, async () => {
 // ============================================================================
 
 server.setRequestHandler(GetPromptRequestSchema, async request => {
-  const { name } = request.params;
+  const { name, arguments: args } = request.params;
 
   info(`GetPrompt request: ${name}`);
 
-  switch (name) {
-    case 'getting-started':
-      return getGettingStartedPrompt();
+  const promptDefinition = getPromptDefinition(name);
 
-    case 'screen-workflow':
-      return getScreenWorkflowPrompt();
-
-    default:
-      throw new Error(`Unknown prompt: ${name}`);
+  if (!promptDefinition) {
+    throw new Error(`Unknown prompt: ${name}`);
   }
+
+  return promptDefinition.getPrompt(args);
 });
 
 // ============================================================================
