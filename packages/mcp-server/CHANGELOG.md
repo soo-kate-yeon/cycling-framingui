@@ -2,20 +2,6 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
-## [0.6.23] - 2026-03-11
-
-### Fixed
-
-- Hardened `framingui-mcp init` bootstrap validation across pristine and existing-CSS project fixtures so missing Tailwind, CSS, dependency, and `.mcp.json` setup is caught before users hit runtime failures.
-
-### Changed
-
-- Added a lightweight MCP pipeline release gate split so package contract regressions run on PRs and browser smoke stays on nightly/manual lanes.
-
-### Testing
-
-- Added fixture-based init smoke coverage and MCP pipeline smoke coverage for the hosted playground workflow.
-
 ## [0.6.8] - 2026-03-07
 
 ### Fixed

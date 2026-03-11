@@ -5,17 +5,6 @@ All notable changes to @tekton/core will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.9] - 2026-03-11
-
-### Fixed
-
-- Normalized leaked legacy `--tekton-*` recipe variables during theme loading so installed consumers no longer receive undefined CSS variable references.
-- Kept generated and hosted theme CSS output on the same `themeToCSS` contract, restoring missing semantic variables such as brand backgrounds and primary text tokens.
-
-### Testing
-
-- Added regression coverage for legacy recipe variable normalization and hosted theme CSS output parity.
-
 ## [0.4.3] - 2026-03-06
 
 ### Fixed
