@@ -108,6 +108,13 @@ export function ExampleCard() {
 - MCP server docs: `packages/mcp-server/docs`
 - Product docs: [framingui.com/docs](https://framingui.com/docs)
 
+## Quality Gates
+
+MCP pipeline checks are split into two lanes:
+
+- `pnpm ci:mcp:pr`: required pull-request gate for theme authority, screen contract, generation quality, and CSS variable regressions
+- `pnpm ci:mcp:nightly`: heavier browser smoke lane intended for scheduled or manual execution
+
 ## Status
 
 FramingUI is actively evolving around:

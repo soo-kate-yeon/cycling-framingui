@@ -9,6 +9,10 @@
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.mts"
     },
+    "./theme-loader": {
+      "import": "./dist/theme-loader.mjs",
+      "types": "./dist/theme-loader.d.mts"
+    },
     "./templates": {
       "import": "./dist/templates/index.mjs",
       "types": "./dist/templates/index.d.mts"

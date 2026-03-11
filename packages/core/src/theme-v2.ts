@@ -263,6 +263,48 @@ function cloneTheme(theme: ThemeV2): ThemeV2 {
   return JSON.parse(JSON.stringify(theme)) as ThemeV2;
 }
 
+function normalizeLegacyRecipeVariablesInValue(value: unknown): unknown {
+  if (typeof value === 'string') {
+    return value.replaceAll('--tekton-', '--');
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(item => normalizeLegacyRecipeVariablesInValue(item));
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, nestedValue]) => [
+        key,
+        normalizeLegacyRecipeVariablesInValue(nestedValue),
+      ])
+    );
+  }
+
+  return value;
+}
+
+function normalizeTheme(theme: ThemeV2): ThemeV2 {
+  const normalized = cloneTheme(theme) as ThemeV2 & {
+    tokens: ThemeV2['tokens'] & { recipes?: Record<string, unknown> };
+  };
+
+  if (normalized.recipes) {
+    normalized.recipes = normalizeLegacyRecipeVariablesInValue(normalized.recipes) as Record<
+      string,
+      unknown
+    >;
+  }
+
+  if (normalized.tokens && 'recipes' in normalized.tokens && normalized.tokens.recipes) {
+    normalized.tokens.recipes = normalizeLegacyRecipeVariablesInValue(
+      normalized.tokens.recipes
+    ) as Record<string, unknown>;
+  }
+
+  return normalized;
+}
+
 // ============================================================================
 // Theme Loading Functions
 // ============================================================================
@@ -293,7 +335,7 @@ export function loadThemeV2(themeId: string): ThemeV2 | null {
           return null;
         }
 
-        return theme;
+        return normalizeTheme(theme);
       } catch (error) {
         console.error(`Failed to load theme ${themeId}:`, error);
         return null;
@@ -302,7 +344,7 @@ export function loadThemeV2(themeId: string): ThemeV2 | null {
   }
 
   const bundledTheme = BUNDLED_THEMES[themeId];
-  return bundledTheme ? cloneTheme(bundledTheme) : null;
+  return bundledTheme ? normalizeTheme(bundledTheme) : null;
 }
 
 /**

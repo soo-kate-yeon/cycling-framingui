@@ -176,7 +176,7 @@ const TAILWIND_CONFIG_CANDIDATES = [
   'tailwind.config.cjs',
 ];
 
-function setupTailwind(cwd: string): string | undefined {
+export function setupTailwind(cwd: string): string | undefined {
   const configName = findFile(cwd, TAILWIND_CONFIG_CANDIDATES);
 
   if (configName) {
@@ -266,7 +266,7 @@ export function findBestStylesheet(cwd: string, framework: Framework): string | 
   return files[0];
 }
 
-function setupCSS(cwd: string, framework: Framework): string | undefined {
+export function setupCSS(cwd: string, framework: Framework): string | undefined {
   const cssFile = findBestStylesheet(cwd, framework);
 
   if (!cssFile) {
@@ -287,7 +287,7 @@ function setupCSS(cwd: string, framework: Framework): string | undefined {
   return cssPath;
 }
 
-function setupMCP(cwd: string): void {
+export function setupMCP(cwd: string): void {
   const mcpPath = path.join(cwd, '.mcp.json');
 
   if (fileExists(mcpPath)) {

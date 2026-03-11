@@ -14,6 +14,8 @@
     "test:a11y:debug": "playwright test --debug",
     "test:a11y:report": "playwright show-report playwright-report",
     "ci:test": "pnpm --filter \"./packages/core\" --filter \"./packages/ui\" test",
+    "ci:mcp:pr": "pnpm --filter @framingui/core exec vitest run __tests__/pipeline.test.ts && pnpm --filter @framingui/mcp-server exec vitest run __tests__/tools/theme-authority-consistency.test.ts __tests__/tools/screen-contract-parity.test.ts __tests__/tools/generate-screen-quality.test.ts __tests__/tools/validate-environment.test.ts __tests__/cli/init-fixtures.test.ts && pnpm --filter @framingui/playground-web exec vitest run __tests__/api/mcp/themes-css.test.ts __tests__/api/mcp-verify-canonicalization.test.ts",
+    "ci:mcp:nightly": "pnpm --filter @framingui/tokens build && pnpm --filter @framingui/core build && pnpm --filter @framingui/ui build && pnpm --filter @framingui/mcp-server build && pnpm --filter @framingui/playground-web build && pnpm --filter @framingui/playground-web test:e2e:mcp",
     "build": "tsc",
     "build:all": "pnpm --filter \"./packages/*\" build",
     "typecheck": "tsc --build",

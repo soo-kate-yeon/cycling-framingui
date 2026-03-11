@@ -68,6 +68,19 @@ describe('Theme Module', () => {
       const theme = loadTheme('classic-magazine');
       expect(theme).not.toBeNull();
     });
+
+    it('should normalize legacy recipe CSS variable prefixes', () => {
+      const theme = loadTheme('neutral-workspace');
+      expect(theme).not.toBeNull();
+
+      const recipes = (theme?.recipes ?? (theme?.tokens as any)?.recipes) as
+        | Record<string, unknown>
+        | undefined;
+      const serializedRecipes = JSON.stringify(recipes);
+
+      expect(serializedRecipes).toContain('--bg-surface');
+      expect(serializedRecipes).not.toContain('--tekton-');
+    });
   });
 
   describe('listThemes', () => {

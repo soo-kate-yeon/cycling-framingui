@@ -36,6 +36,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './'),
       '@/lib': path.resolve(__dirname, './lib'),
       '@/components': path.resolve(__dirname, './components'),
+      '@framingui/ui/theme-loader': path.resolve(__dirname, '../ui/dist/theme-loader.mjs'),
       '@framingui/ui': path.resolve(__dirname, '../ui/dist/index.mjs'),
       '@framingui/core': path.resolve(__dirname, '../core/dist/index.js'),
     },
