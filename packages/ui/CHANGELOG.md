@@ -5,6 +5,14 @@ All notable changes to @framingui/ui will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.9] - 2026-03-11
+
+### Fixed
+
+- Removed the unnecessary `@hookform/resolvers` peer requirement from the published runtime package because it is only used in Storybook examples.
+- Widened the `lucide-react` peer range to support current `0.x` releases used by consumer apps.
+- Widened the `tailwind-merge` peer range to support both v2 and v3 consumers.
+
 ## [0.6.8] - 2026-03-11
 
 ### Fixed
