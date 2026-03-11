@@ -1,6 +1,6 @@
 {
   "name": "@framingui/ui",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "FramingUI Reference Component Library",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",

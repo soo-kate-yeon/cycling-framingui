@@ -202,42 +202,42 @@
     },
     "recipes": {
       "card": {
-        "article": "bg-white border-b border-neutral-200 pb-6 mb-6 hover:opacity-80 transition-opacity cursor-pointer",
-        "feature": "bg-neutral-50 p-8 border border-neutral-900",
-        "compact": "flex gap-4 items-start border-b border-neutral-100 pb-4 mb-4"
+        "article": "bg-white border-b border-[var(--border-default)] pb-6 mb-6 hover:opacity-80 transition-opacity cursor-pointer",
+        "feature": "bg-[var(--bg-canvas)] p-8 border border-[var(--text-primary)]",
+        "compact": "flex gap-4 items-start border-b border-[var(--border-default)] pb-4 mb-4"
       },
       "button": {
-        "primary": "bg-black text-white h-12 px-8 text-xs font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors rounded-none",
-        "secondary": "bg-white text-black border border-black h-12 px-8 text-xs font-bold uppercase tracking-widest hover:bg-neutral-50 transition-colors rounded-none",
-        "ghost": "text-neutral-900 hover:text-black font-bold uppercase tracking-widest text-[10px]"
+        "primary": "bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)] h-12 px-8 text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity rounded-none",
+        "secondary": "bg-white text-[var(--text-primary)] border border-[var(--text-primary)] h-12 px-8 text-xs font-bold uppercase tracking-widest hover:bg-[var(--bg-canvas)] transition-colors rounded-none",
+        "ghost": "text-[var(--text-primary)] hover:opacity-80 font-bold uppercase tracking-widest text-[10px]"
       },
       "input": {
-        "default": "w-full border-b border-neutral-300 py-3 text-lg font-serif placeholder:font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black transition-colors bg-transparent rounded-none"
+        "default": "w-full border-b border-[var(--border-emphasis)] py-3 text-lg font-serif placeholder:font-sans placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-primary)] transition-colors bg-transparent rounded-none"
       },
       "badge": {
-        "default": "inline-flex items-center rounded-none border border-neutral-900 bg-black text-white px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider",
-        "secondary": "inline-flex items-center rounded-none border border-neutral-200 bg-neutral-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-neutral-600",
-        "outline": "inline-flex items-center rounded-none border border-neutral-300 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-neutral-900"
+        "default": "inline-flex items-center rounded-none border border-[var(--text-primary)] bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider",
+        "secondary": "inline-flex items-center rounded-none border border-[var(--border-default)] bg-[var(--bg-canvas)] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]",
+        "outline": "inline-flex items-center rounded-none border border-[var(--border-emphasis)] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-primary)]"
       },
       "table": {
         "wrapper": "relative w-full overflow-auto",
         "root": "w-full caption-bottom text-sm",
-        "header": "border-b-2 border-neutral-900",
-        "row": "border-b border-neutral-200 transition-colors hover:bg-neutral-50",
-        "head": "h-12 px-4 text-left align-middle text-[10px] font-bold uppercase tracking-widest text-neutral-500",
-        "cell": "p-4 align-middle text-sm text-neutral-700"
+        "header": "border-b-2 border-[var(--text-primary)]",
+        "row": "border-b border-[var(--border-default)] transition-colors hover:bg-[var(--bg-canvas)]",
+        "head": "h-12 px-4 text-left align-middle text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)]",
+        "cell": "p-4 align-middle text-sm text-[var(--text-secondary)]"
       },
       "typography": {
-        "h1": "font-serif text-5xl md:text-7xl font-bold leading-tight tracking-tight text-neutral-900",
-        "h2": "font-serif text-3xl md:text-4xl font-bold leading-tight text-neutral-900",
-        "h3": "font-sans text-xs font-bold uppercase tracking-widest text-neutral-900 mb-2",
-        "h4": "font-sans text-sm font-bold uppercase tracking-wider text-neutral-700",
-        "body": "font-serif text-lg leading-relaxed text-neutral-700",
-        "caption": "font-sans text-xs text-neutral-500 uppercase tracking-wider"
+        "h1": "font-serif text-5xl md:text-7xl font-bold leading-tight tracking-tight text-[var(--text-primary)]",
+        "h2": "font-serif text-3xl md:text-4xl font-bold leading-tight text-[var(--text-primary)]",
+        "h3": "font-sans text-xs font-bold uppercase tracking-widest text-[var(--text-primary)] mb-2",
+        "h4": "font-sans text-sm font-bold uppercase tracking-wider text-[var(--text-secondary)]",
+        "body": "font-serif text-lg leading-relaxed text-[var(--text-secondary)]",
+        "caption": "font-sans text-xs text-[var(--text-secondary)] uppercase tracking-wider"
       },
       "layout": {
         "container": "max-w-6xl mx-auto px-6",
-        "section": "py-16 md:py-24 border-b border-neutral-900",
+        "section": "py-16 md:py-24 border-b border-[var(--text-primary)]",
         "grid": "grid grid-cols-1 md:grid-cols-12 gap-x-8 gap-y-12"
       }
     }

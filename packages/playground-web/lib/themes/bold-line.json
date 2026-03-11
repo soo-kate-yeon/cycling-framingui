@@ -1,254 +1,248 @@
 {
-    "id": "bold-line",
-    "name": "Bold Line",
-    "schemaVersion": "2.1",
-    "brandTone": "bold",
-    "designDNA": {
-        "moodKeywords": [
-            "monotone",
-            "high-contrast",
-            "linear",
-            "spacious",
-            "functional"
-        ],
-        "targetEmotion": "clarity",
-        "visualAtmosphere": "modern utility app",
-        "principles": [
-            "Strict monotone palette (Black & White) with one vibrant accent",
-            "Line-oriented forms (borders instead of filled surfaces)",
-            "Large, highly legible typography",
-            "Ample whitespace for cognitive clarity"
-        ]
-    },
-    "tokens": {
-        "atomic": {
-            "color": {
-                "brand": {
-                    "50": {
-                        "l": 0.98,
-                        "c": 0.05,
-                        "h": 120
-                    },
-                    "100": {
-                        "l": 0.96,
-                        "c": 0.1,
-                        "h": 120
-                    },
-                    "200": {
-                        "l": 0.94,
-                        "c": 0.15,
-                        "h": 120
-                    },
-                    "300": {
-                        "l": 0.92,
-                        "c": 0.18,
-                        "h": 120
-                    },
-                    "400": {
-                        "l": 0.94,
-                        "c": 0.22,
-                        "h": 120
-                    },
-                    "500": {
-                        "l": 0.94,
-                        "c": 0.22,
-                        "h": 120
-                    },
-                    "600": {
-                        "l": 0.85,
-                        "c": 0.2,
-                        "h": 120
-                    },
-                    "700": {
-                        "l": 0.75,
-                        "c": 0.18,
-                        "h": 120
-                    },
-                    "800": {
-                        "l": 0.65,
-                        "c": 0.15,
-                        "h": 120
-                    },
-                    "900": {
-                        "l": 0.55,
-                        "c": 0.1,
-                        "h": 120
-                    },
-                    "950": {
-                        "l": 0.45,
-                        "c": 0.08,
-                        "h": 120
-                    }
-                },
-                "neutral": {
-                    "white": {
-                        "l": 1.0,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "black": {
-                        "l": 0.0,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "50": {
-                        "l": 0.98,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "100": {
-                        "l": 0.95,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "200": {
-                        "l": 0.9,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "300": {
-                        "l": 0.8,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "400": {
-                        "l": 0.7,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "500": {
-                        "l": 0.6,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "600": {
-                        "l": 0.4,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "700": {
-                        "l": 0.3,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "800": {
-                        "l": 0.2,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "900": {
-                        "l": 0.1,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "950": {
-                        "l": 0.05,
-                        "c": 0.0,
-                        "h": 0
-                    },
-                    "neon": {
-                        "l": 0.9,
-                        "c": 0.25,
-                        "h": 85
-                    }
-                }
-            },
-            "radius": {
-                "none": "0px",
-                "sm": "0px",
-                "md": "0px",
-                "lg": "0px",
-                "xl": "0px",
-                "full": "0px",
-                "circle": "50%"
-            },
-            "spacing": {
-                "2": "0.5rem",
-                "4": "1rem",
-                "6": "1.5rem",
-                "8": "2rem",
-                "12": "3rem",
-                "16": "4rem",
-                "24": "6rem"
-            }
+  "id": "bold-line",
+  "name": "Bold Line",
+  "schemaVersion": "2.1",
+  "brandTone": "bold",
+  "designDNA": {
+    "moodKeywords": ["monotone", "high-contrast", "linear", "spacious", "functional"],
+    "targetEmotion": "clarity",
+    "visualAtmosphere": "modern utility app",
+    "principles": [
+      "Strict monotone palette (Black & White) with one vibrant accent",
+      "Line-oriented forms (borders instead of filled surfaces)",
+      "Large, highly legible typography",
+      "Ample whitespace for cognitive clarity"
+    ]
+  },
+  "tokens": {
+    "atomic": {
+      "color": {
+        "brand": {
+          "50": {
+            "l": 0.98,
+            "c": 0.05,
+            "h": 120
+          },
+          "100": {
+            "l": 0.96,
+            "c": 0.1,
+            "h": 120
+          },
+          "200": {
+            "l": 0.94,
+            "c": 0.15,
+            "h": 120
+          },
+          "300": {
+            "l": 0.92,
+            "c": 0.18,
+            "h": 120
+          },
+          "400": {
+            "l": 0.94,
+            "c": 0.22,
+            "h": 120
+          },
+          "500": {
+            "l": 0.94,
+            "c": 0.22,
+            "h": 120
+          },
+          "600": {
+            "l": 0.85,
+            "c": 0.2,
+            "h": 120
+          },
+          "700": {
+            "l": 0.75,
+            "c": 0.18,
+            "h": 120
+          },
+          "800": {
+            "l": 0.65,
+            "c": 0.15,
+            "h": 120
+          },
+          "900": {
+            "l": 0.55,
+            "c": 0.1,
+            "h": 120
+          },
+          "950": {
+            "l": 0.45,
+            "c": 0.08,
+            "h": 120
+          }
         },
-        "semantic": {
-            "background": {
-                "canvas": "atomic.color.neutral.white",
-                "surface": {
-                    "default": "atomic.color.neutral.white",
-                    "subtle": "atomic.color.neutral.50",
-                    "emphasis": "atomic.color.neutral.100"
-                },
-                "brand": {
-                    "default": "atomic.color.neutral.neon",
-                    "subtle": "atomic.color.brand.100"
-                }
-            },
-            "text": {
-                "primary": "atomic.color.neutral.black",
-                "secondary": "atomic.color.neutral.700",
-                "muted": "atomic.color.neutral.500",
-                "inverted": "atomic.color.neutral.white"
-            },
-            "border": {
-                "default": {
-                    "subtle": "atomic.color.neutral.200",
-                    "default": "atomic.color.neutral.black",
-                    "emphasis": "atomic.color.neutral.black"
-                },
-                "focus": "atomic.color.brand.500"
-            }
-        },
-        "recipes": {
-            "card": {
-                "default": "bg-white border-2 border-black p-6",
-                "outlined": "bg-transparent border-2 border-black p-6",
-                "flat": "bg-white p-6"
-            },
-            "button": {
-                "primary": "bg-black text-white hover:bg-neutral-800 transition-colors h-14 px-8 text-lg font-bold border-2 border-black rounded-none",
-                "secondary": "bg-white text-black hover:bg-neutral-100 transition-colors h-14 px-8 text-lg font-bold border-2 border-black rounded-none",
-                "ghost": "bg-transparent text-black hover:bg-neutral-100 transition-colors h-14 px-8 text-lg font-bold border-2 border-transparent hover:border-black rounded-none",
-                "icon": "h-14 w-14 flex items-center justify-center border-2 border-transparent hover:border-black hover:bg-neutral-100 transition-colors rounded-none"
-            },
-            "input": {
-                "default": "w-full bg-transparent border-0 border-b-2 border-black py-4 px-2 text-lg text-black placeholder:text-neutral-400 focus:outline-none focus:border-b-2 focus:bg-[var(--bg-brand-default)]/5 transition-all rounded-none",
-                "search": "w-full bg-transparent border-0 border-b-2 border-black py-4 px-12 text-lg text-black placeholder:text-neutral-400 focus:outline-none focus:border-b-2 focus:bg-[var(--bg-brand-default)]/5 transition-all rounded-none"
-            },
-            "badge": {
-                "default": "inline-flex items-center bg-black text-white px-3 py-1 text-sm font-bold rounded-none",
-                "secondary": "inline-flex items-center bg-white border-2 border-black px-3 py-1 text-sm font-bold text-black rounded-none",
-                "brand": "inline-flex items-center bg-[var(--bg-brand-default)] text-black px-3 py-1 text-sm font-bold border-2 border-black rounded-none"
-            },
-            "table": {
-                "wrapper": "relative w-full overflow-auto mt-8 mb-8",
-                "root": "w-full text-left border-collapse",
-                "header": "border-b-2 border-black",
-                "row": "border-b-[1px] border-neutral-200 hover:bg-[var(--bg-brand-default)]/20 transition-colors",
-                "head": "py-4 px-4 text-sm font-black text-black uppercase tracking-wider",
-                "cell": "py-5 px-4 text-base text-black font-medium"
-            },
-            "typography": {
-                "hero": "text-4xl md:text-6xl font-black text-black leading-tight tracking-tighter",
-                "h1": "text-3xl md:text-4xl font-black text-black leading-tight tracking-tight",
-                "h2": "text-2xl md:text-3xl font-bold text-black leading-tight",
-                "h3": "text-xl md:text-2xl font-bold text-black",
-                "body": "text-base text-neutral-800 leading-relaxed",
-                "caption": "text-[10px] font-black text-neutral-500 uppercase tracking-[0.2em]"
-            },
-            "layout": {
-                "container": "max-w-7xl mx-auto px-6 md:px-12",
-                "section": "py-24",
-                "grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
-            }
+        "neutral": {
+          "white": {
+            "l": 1.0,
+            "c": 0.0,
+            "h": 0
+          },
+          "black": {
+            "l": 0.0,
+            "c": 0.0,
+            "h": 0
+          },
+          "50": {
+            "l": 0.98,
+            "c": 0.0,
+            "h": 0
+          },
+          "100": {
+            "l": 0.95,
+            "c": 0.0,
+            "h": 0
+          },
+          "200": {
+            "l": 0.9,
+            "c": 0.0,
+            "h": 0
+          },
+          "300": {
+            "l": 0.8,
+            "c": 0.0,
+            "h": 0
+          },
+          "400": {
+            "l": 0.7,
+            "c": 0.0,
+            "h": 0
+          },
+          "500": {
+            "l": 0.6,
+            "c": 0.0,
+            "h": 0
+          },
+          "600": {
+            "l": 0.4,
+            "c": 0.0,
+            "h": 0
+          },
+          "700": {
+            "l": 0.3,
+            "c": 0.0,
+            "h": 0
+          },
+          "800": {
+            "l": 0.2,
+            "c": 0.0,
+            "h": 0
+          },
+          "900": {
+            "l": 0.1,
+            "c": 0.0,
+            "h": 0
+          },
+          "950": {
+            "l": 0.05,
+            "c": 0.0,
+            "h": 0
+          },
+          "neon": {
+            "l": 0.9,
+            "c": 0.25,
+            "h": 85
+          }
         }
+      },
+      "radius": {
+        "none": "0px",
+        "sm": "0px",
+        "md": "0px",
+        "lg": "0px",
+        "xl": "0px",
+        "full": "0px",
+        "circle": "50%"
+      },
+      "spacing": {
+        "2": "0.5rem",
+        "4": "1rem",
+        "6": "1.5rem",
+        "8": "2rem",
+        "12": "3rem",
+        "16": "4rem",
+        "24": "6rem"
+      }
     },
-    "typography": {
-        "fontFamily": {
-            "sans": "Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "serif": "Inter, sans-serif",
-            "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    "semantic": {
+      "background": {
+        "canvas": "atomic.color.neutral.white",
+        "surface": {
+          "default": "atomic.color.neutral.white",
+          "subtle": "atomic.color.neutral.50",
+          "emphasis": "atomic.color.neutral.100"
+        },
+        "brand": {
+          "default": "atomic.color.neutral.neon",
+          "subtle": "atomic.color.brand.100"
         }
+      },
+      "text": {
+        "primary": "atomic.color.neutral.black",
+        "secondary": "atomic.color.neutral.700",
+        "muted": "atomic.color.neutral.500",
+        "inverted": "atomic.color.neutral.white"
+      },
+      "border": {
+        "default": {
+          "subtle": "atomic.color.neutral.200",
+          "default": "atomic.color.neutral.black",
+          "emphasis": "atomic.color.neutral.black"
+        },
+        "focus": "atomic.color.brand.500"
+      }
+    },
+    "recipes": {
+      "card": {
+        "default": "bg-white border-2 border-black p-6",
+        "outlined": "bg-transparent border-2 border-black p-6",
+        "flat": "bg-white p-6"
+      },
+      "button": {
+        "primary": "bg-black text-white hover:opacity-90 transition-opacity h-14 px-8 text-lg font-bold border-2 border-black rounded-none",
+        "secondary": "bg-white text-black hover:bg-[var(--bg-canvas)] transition-colors h-14 px-8 text-lg font-bold border-2 border-black rounded-none",
+        "ghost": "bg-transparent text-black hover:bg-[var(--bg-canvas)] transition-colors h-14 px-8 text-lg font-bold border-2 border-transparent hover:border-black rounded-none",
+        "icon": "h-14 w-14 flex items-center justify-center border-2 border-transparent hover:border-black hover:bg-[var(--bg-canvas)] transition-colors rounded-none"
+      },
+      "input": {
+        "default": "w-full bg-transparent border-0 border-b-2 border-black py-4 px-2 text-lg text-black placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-b-2 focus:bg-[var(--bg-primary)]/5 transition-all rounded-none",
+        "search": "w-full bg-transparent border-0 border-b-2 border-black py-4 px-12 text-lg text-black placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-b-2 focus:bg-[var(--bg-primary)]/5 transition-all rounded-none"
+      },
+      "badge": {
+        "default": "inline-flex items-center bg-black text-white px-3 py-1 text-sm font-bold rounded-none",
+        "secondary": "inline-flex items-center bg-white border-2 border-black px-3 py-1 text-sm font-bold text-black rounded-none",
+        "brand": "inline-flex items-center bg-[var(--bg-primary)] text-black px-3 py-1 text-sm font-bold border-2 border-black rounded-none"
+      },
+      "table": {
+        "wrapper": "relative w-full overflow-auto mt-8 mb-8",
+        "root": "w-full text-left border-collapse",
+        "header": "border-b-2 border-black",
+        "row": "border-b-[1px] border-[var(--border-default)] hover:bg-[var(--bg-primary)]/20 transition-colors",
+        "head": "py-4 px-4 text-sm font-black text-black uppercase tracking-wider",
+        "cell": "py-5 px-4 text-base text-black font-medium"
+      },
+      "typography": {
+        "hero": "text-4xl md:text-6xl font-black text-black leading-tight tracking-tighter",
+        "h1": "text-3xl md:text-4xl font-black text-black leading-tight tracking-tight",
+        "h2": "text-2xl md:text-3xl font-bold text-black leading-tight",
+        "h3": "text-xl md:text-2xl font-bold text-black",
+        "body": "text-base text-[var(--text-secondary)] leading-relaxed",
+        "caption": "text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em]"
+      },
+      "layout": {
+        "container": "max-w-7xl mx-auto px-6 md:px-12",
+        "section": "py-24",
+        "grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
+      }
     }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      "serif": "Inter, sans-serif",
+      "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    }
+  }
 }

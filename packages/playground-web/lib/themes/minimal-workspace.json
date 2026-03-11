@@ -181,41 +181,41 @@
     },
     "recipes": {
       "card": {
-        "default": "rounded-xl border border-neutral-200 bg-white text-neutral-950 shadow-sm",
+        "default": "rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm",
         "header": "flex flex-col space-y-1.5 p-6",
         "title": "text-2xl font-semibold leading-none tracking-tight",
-        "description": "text-sm text-neutral-500",
+        "description": "text-sm text-[var(--text-secondary)]",
         "content": "p-6 pt-0"
       },
       "button": {
-        "primary": "inline-flex items-center justify-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-50 shadow hover:bg-neutral-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 transition-colors",
-        "secondary": "inline-flex items-center justify-center rounded-md bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-900 shadow-sm hover:bg-neutral-100/80 transition-colors",
-        "outline": "inline-flex items-center justify-center rounded-md border border-neutral-200 bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-neutral-100 hover:text-neutral-900 transition-colors",
-        "ghost": "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium hover:bg-neutral-100 hover:text-neutral-900 transition-colors"
+        "primary": "inline-flex items-center justify-center rounded-md bg-[var(--bg-primary)] px-4 py-2 text-sm font-medium text-[var(--bg-primary-foreground)] shadow hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--border-ring)] disabled:pointer-events-none disabled:opacity-50 transition-opacity",
+        "secondary": "inline-flex items-center justify-center rounded-md bg-[var(--bg-secondary)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] shadow-sm hover:opacity-90 transition-opacity",
+        "outline": "inline-flex items-center justify-center rounded-md border border-[var(--border-default)] bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] transition-colors",
+        "ghost": "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] transition-colors"
       },
       "input": {
-        "default": "flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        "default": "flex h-10 w-full rounded-md border border-[var(--border-default)] bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[var(--text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       },
       "badge": {
-        "default": "inline-flex items-center rounded-full border border-transparent bg-neutral-900 px-2.5 py-0.5 text-xs font-semibold text-neutral-50 shadow hover:bg-neutral-900/80 transition-colors",
-        "secondary": "inline-flex items-center rounded-full border border-transparent bg-neutral-100 px-2.5 py-0.5 text-xs font-semibold text-neutral-900 hover:bg-neutral-100/80 transition-colors",
-        "outline": "inline-flex items-center rounded-full border border-neutral-200 px-2.5 py-0.5 text-xs font-semibold text-neutral-950 transition-colors"
+        "default": "inline-flex items-center rounded-full border border-transparent bg-[var(--bg-primary)] px-2.5 py-0.5 text-xs font-semibold text-[var(--bg-primary-foreground)] shadow hover:opacity-90 transition-opacity",
+        "secondary": "inline-flex items-center rounded-full border border-transparent bg-[var(--bg-secondary)] px-2.5 py-0.5 text-xs font-semibold text-[var(--text-primary)] hover:opacity-90 transition-opacity",
+        "outline": "inline-flex items-center rounded-full border border-[var(--border-default)] px-2.5 py-0.5 text-xs font-semibold text-[var(--text-primary)] transition-colors"
       },
       "table": {
         "wrapper": "relative w-full overflow-auto",
         "root": "w-full caption-bottom text-sm",
         "header": "[&_tr]:border-b",
-        "row": "border-b border-neutral-200 transition-colors hover:bg-neutral-100/50 data-[state=selected]:bg-neutral-100",
-        "head": "h-12 px-4 text-left align-middle font-medium text-neutral-500 [&:has([role=checkbox])]:pr-0",
+        "row": "border-b border-[var(--border-default)] transition-colors hover:bg-[var(--bg-secondary)]/50 data-[state=selected]:bg-[var(--bg-secondary)]",
+        "head": "h-12 px-4 text-left align-middle font-medium text-[var(--text-secondary)] [&:has([role=checkbox])]:pr-0",
         "cell": "p-4 align-middle [&:has([role=checkbox])]:pr-0"
       },
       "typography": {
         "h1": "scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl",
-        "h2": "scroll-m-20 border-b border-neutral-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0",
+        "h2": "scroll-m-20 border-b border-[var(--border-default)] pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0",
         "h3": "scroll-m-20 text-2xl font-semibold tracking-tight",
         "h4": "scroll-m-20 text-xl font-semibold tracking-tight",
         "p": "leading-7 [&:not(:first-child)]:mt-6",
-        "blockquote": "mt-6 border-l-2 border-neutral-200 pl-6 italic",
+        "blockquote": "mt-6 border-l-2 border-[var(--border-default)] pl-6 italic",
         "list": "my-6 ml-6 list-disc [&>li]:mt-2"
       },
       "layout": {

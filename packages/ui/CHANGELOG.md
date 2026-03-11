@@ -5,6 +5,17 @@ All notable changes to @framingui/ui will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.10] - 2026-03-11
+
+### Fixed
+
+- Migrated all shipped theme recipes to v4-safe semantic variable utilities so consumer apps no longer depend on Tailwind palette registration for `brand-*` or `neutral-*` recipe classes.
+- Removed unsupported runtime variable references from theme recipes, including stale `--bg-brand-default`, `--bg-brand-subtle`, and `--bg-canvas-950` usages.
+
+### Testing
+
+- Added regression coverage to ensure every published theme recipe stays free of legacy palette utilities and unsupported runtime variable references.
+
 ## [0.6.9] - 2026-03-11
 
 ### Fixed
