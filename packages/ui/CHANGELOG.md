@@ -5,6 +5,18 @@ All notable changes to @framingui/ui will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.7] - 2026-03-11
+
+### Fixed
+
+- Restored `Heading` and `Text` exports from the `@framingui/ui` package root so consumer apps can import typography primitives without runtime `undefined` component crashes.
+- Removed stale compiled `src/index.js` artifacts from the source tree so local source consumers and tests resolve the current TypeScript entrypoint consistently.
+
+### Testing
+
+- Added a package-root export regression test covering `Heading` and `Text`.
+- Verified the package with `pnpm --filter @framingui/ui exec vitest run __tests__/index.test.ts` and `pnpm --filter @framingui/ui build`.
+
 ## [0.6.5] - 2026-03-07
 
 ### Fixed
