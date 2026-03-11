@@ -52,6 +52,20 @@ describe('get-screen-generation-context Tool', () => {
       expect(result.schema?.screenDefinition).toBeDefined();
       expect(result.schema?.description).toContain('Screen Definition');
     });
+
+    it('should return a compact response when compact is true', async () => {
+      const result = await getScreenGenerationContextTool({
+        description: 'A simple profile page',
+        includeExamples: true,
+        compact: true,
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.definitionStarter).toBeDefined();
+      expect(result.schema).toBeUndefined();
+      expect(result.examples).toBeUndefined();
+      expect(result.workflow).toBeUndefined();
+    });
   });
 
   describe('Component Information', () => {
@@ -272,6 +286,20 @@ describe('get-screen-generation-context Tool', () => {
       expect(result.workflow?.notes).toBeDefined();
       expect(Array.isArray(result.workflow?.notes)).toBe(true);
       expect(result.workflow?.notes?.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Definition Starter', () => {
+    it('should include a starter definition for direct-write workflows', async () => {
+      const result = await getScreenGenerationContextTool({
+        description: 'Blog main page with featured articles',
+        includeExamples: false,
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.definitionStarter).toBeDefined();
+      expect(result.definitionStarter?.id).toMatch(/^[a-z0-9-]+$/);
+      expect(result.definitionStarter?.sections[0]?.pattern).toBe('section.container');
     });
   });
 

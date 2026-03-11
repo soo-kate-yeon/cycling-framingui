@@ -19,6 +19,7 @@ import type {
   ThemeRecipeInfo,
   ScreenExample,
   WorkflowGuide,
+  DefinitionStarter,
 } from '../schemas/mcp-schemas.js';
 import { matchTemplates } from '../data/template-matcher.js';
 import { getAllRecipes } from '../data/recipe-resolver.js';
@@ -308,6 +309,63 @@ async function getThemeRecipeInfo(themeId: string): Promise<ThemeRecipeInfo[]> {
   return recipes;
 }
 
+function inferShell(category?: string): string {
+  switch (category) {
+    case 'auth':
+      return 'shell.web.auth';
+    case 'dashboard':
+      return 'shell.web.dashboard';
+    default:
+      return 'shell.web.marketing';
+  }
+}
+
+function inferPage(category?: string): string {
+  switch (category) {
+    case 'auth':
+      return 'page.auth';
+    case 'dashboard':
+      return 'page.dashboard';
+    case 'form':
+      return 'page.form';
+    default:
+      return 'page.marketing';
+  }
+}
+
+function buildDefinitionStarter(options: {
+  description: string;
+  themeId?: string;
+  bestMatch?: ContextTemplateMatch;
+  componentTypes: string[];
+}): DefinitionStarter {
+  const id =
+    options.description
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .split(/\s+/)
+      .slice(0, 4)
+      .join('-') || 'generated-screen';
+
+  return {
+    id,
+    shell: inferShell(options.bestMatch?.category),
+    page: inferPage(options.bestMatch?.category),
+    themeId: options.themeId,
+    sections: [
+      {
+        id: 'main',
+        pattern: 'section.container',
+        components: options.componentTypes.slice(0, 3).map(type => ({
+          type,
+          props: {},
+        })),
+      },
+    ],
+  };
+}
+
 /**
  * Get Screen Generation Context tool implementation
  * Provides complete context for coding agents to generate screen definitions
@@ -347,7 +405,7 @@ export async function getScreenGenerationContextTool(
 
     // 2. Get examples if requested
     let examples: ScreenExample[] | undefined;
-    if (input.includeExamples !== false) {
+    if (input.includeExamples !== false && input.compact !== true) {
       // API를 통해 스크린 예제 조회 [SPEC-MCP-007:E-007]
       const examplesResult = await fetchScreenExamples();
       const allExamples = examplesResult.ok ? examplesResult.data : [];
@@ -393,6 +451,12 @@ export async function getScreenGenerationContextTool(
         ? Array.from(new Set([...recommendedComponentTypes, ...componentTypes]))
         : recommendedComponentTypes;
     const components = await getComponentInfo(componentTypes);
+    const definitionStarter = buildDefinitionStarter({
+      description: input.description,
+      themeId: input.themeId,
+      bestMatch,
+      componentTypes,
+    });
 
     // 5. Generate contextual hints
     const hints = generateHints(input.description, input.themeId);
@@ -464,15 +528,19 @@ export async function getScreenGenerationContextTool(
       success: true,
       templateMatch: bestMatch,
       components: components.length > 0 ? components : undefined,
-      schema: {
-        screenDefinition: SCREEN_DEFINITION_SCHEMA,
-        description:
-          'JSON Schema for Screen Definition - use this structure to create valid screen definitions',
-      },
+      definitionStarter,
+      schema:
+        input.compact === true
+          ? undefined
+          : {
+              screenDefinition: SCREEN_DEFINITION_SCHEMA,
+              description:
+                'JSON Schema for Screen Definition - use this structure to create valid screen definitions',
+            },
       examples: examples && examples.length > 0 ? examples : undefined,
       themeRecipes: themeRecipes && themeRecipes.length > 0 ? themeRecipes : undefined,
       hints: hints.length > 0 ? hints : undefined,
-      workflow,
+      workflow: input.compact === true ? undefined : workflow,
     };
   } catch (error) {
     return {

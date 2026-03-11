@@ -83,7 +83,8 @@ Before creating screen definitions:
 Follow the 3-step workflow:
 
 **Step 1/3:** Call \`get-screen-generation-context\` with your screen description
-- Returns: Template matches, component suggestions with inline props, schema
+- Returns: Template hints, component suggestions with inline props, schema
+- Use \`includeExamples: false\` when you want a smaller response and do not need sample screen definitions
 
 **Step 2/3:** Create Screen Definition JSON, then call \`validate-screen-definition\`
 - Returns: Validation results, errors with auto-fix patches, suggestions
@@ -101,6 +102,8 @@ Follow the 3-step workflow:
 4. ❌ Skipping validate-screen-definition - Always validate before writing code
 5. ❌ Ignoring dependencies warnings - Check required packages before running code
 6. ❌ Using unlicensed themes - Only use themes from whoami licensedThemes list
+7. ❌ Parsing MCP transcript text with shell/python/json tools - Use tool output directly instead
+8. ❌ Treating templateMatch as the source of truth - components and preview tools are the contract
 
 ## Need Help?
 

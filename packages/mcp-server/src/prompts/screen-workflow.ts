@@ -1,11 +1,8 @@
 /**
  * MCP Prompts: Screen Generation Workflow
- * Step-by-step guide for the 4-step screen generation process
+ * Current production workflow for guarded direct-write screen generation
  */
 
-/**
- * Screen Workflow prompt with detailed 4-step process
- */
 export function getScreenWorkflowPrompt() {
   return {
     messages: [
@@ -13,69 +10,86 @@ export function getScreenWorkflowPrompt() {
         role: 'user',
         content: {
           type: 'text',
-          text: `# Framingui Screen Generation Workflow
+          text: `# FramingUI Screen Generation Workflow
 
-This is the **recommended production workflow** for generating screens with Framingui.
+This is the current production workflow for building screens with FramingUI.
 
 Prerequisite: authenticate with \`framingui-mcp login\` or provide \`FRAMINGUI_API_KEY\`.
-Optional: call \`whoami\` if you want to inspect the current session and licensed themes before starting.
+Optional: call \`whoami\` to inspect licensed themes before starting.
 
 ## Overview
 
-The 4-step workflow ensures:
-- ✅ Correct component usage with inline props/variants
-- ✅ Validated screen structure with auto-fix patches
-- ✅ Theme recipes applied via the theme engine (generate_screen)
-- ✅ All dependencies installed
-- ✅ Tailwind CSS properly configured
+The production workflow is **guarded direct write**:
+- ✅ Gather component contracts, theme context, layout hints, and starter structure
+- ✅ Validate the Screen Definition before writing code
+- ✅ Write React code directly using FramingUI components and props from context
+- ✅ Verify dependencies, Tailwind setup, and raw HTML/style escapes before delivery
 
-## Step 1/4: Get Screen Generation Context
+This is **not** the old \`generate_screen\`-first workflow.
+\`generate_screen\` may still be used as an optional helper, but the default production path is:
 
-**Tool:** \`get-screen-generation-context\`
+\`preview-theme\` → \`get-screen-generation-context\` → \`preview-component\` / \`list-icon-libraries\` when needed → \`validate-screen-definition\` → write code directly → \`validate-environment\`
 
-**Purpose:** Gather all context needed to create a Screen Definition
+## Step 1/4: Gather Context
 
-**Input:**
+**Primary tool:** \`get-screen-generation-context\`
+
+Use this at the start of every screen task.
+
+**Recommended input:**
 \`\`\`json
 {
-  "description": "User dashboard with profile card and recent activity",
-  "themeId": "minimal-workspace",
-  "includeExamples": true
+  "description": "Blog main page with square-minimalism theme, mobile optimized",
+  "themeId": "square-minimalism",
+  "includeExamples": false
 }
 \`\`\`
 
-**Output:**
-- Matching screen templates
-- Available components with **inline props and variants**
-- Screen Definition JSON schema
-- Example definitions
-- Theme recipes
+Set \`includeExamples: false\` when you want a smaller response and do not need example screen definitions.
 
-**When to use:**
-- Beginning of every screen generation
-- When you need component suggestions
-- When exploring available templates
+**What to review from the response:**
+- \`templateMatch\` as a layout hint only
+- \`components\` as the source of truth for imports, props, and variants
+- \`schema.screenDefinition\`
+- \`themeRecipes\`
+- \`hints\`
+- \`workflow\`
 
----
+**Escalate to discovery tools when needed:**
+- Call \`preview-theme\` if theme application is still unclear
+- Call \`preview-component\` when a component contract is ambiguous
+- Call \`list-icon-libraries\` if the screen needs icons and the icon set is still undecided
 
-## Step 2/4: Validate Screen Definition
+## Critical Handling Rule
+
+Treat MCP tool responses as structured tool output, not as shell text.
+
+- Do **not** copy MCP transcript text into a file and run \`python\`, \`node\`, \`jq\`, or \`json.loads(...)\` against it
+- Do **not** parse rendered transcript blocks such as \`⎿ { ... }\`, truncation markers, or console summaries
+- Do **not** treat UI-expanded output or chat transcript text as canonical JSON
+- Use the tool result directly in the agent context
+
+If you must persist data, write **only the raw JSON object** from the tool result, with no surrounding transcript text.
+
+## Step 2/4: Create and Validate a Screen Definition
 
 **Tool:** \`validate-screen-definition\`
 
-**Purpose:** Ensure your Screen Definition JSON is correct before generating code
+Create a Screen Definition JSON object using the schema and starter guidance from Step 1, then validate it before writing React code.
 
-**Input:**
+**Validation input:**
 \`\`\`json
 {
   "definition": {
-    "id": "user-dashboard",
-    "shell": "shell.web.dashboard",
-    "page": "page.dashboard",
+    "id": "blog-home",
+    "shell": "shell.web.marketing",
+    "page": "page.blog",
+    "themeId": "square-minimalism",
     "sections": [
       {
-        "id": "header",
+        "id": "hero",
         "pattern": "section.container",
-        "components": [...]
+        "components": []
       }
     ]
   },
@@ -83,165 +97,59 @@ The 4-step workflow ensures:
 }
 \`\`\`
 
-**Output:**
-- \`valid\`: true/false
-- \`errors\`: Array of validation errors with suggestions and **autoFix patches**
-- \`warnings\`: Potential issues
-- \`suggestions\`: Improvement recommendations with **autoFix patches**
-- \`autoFixPatches\`: Aggregated JSON Patch operations to fix all issues
+**Expect from validation:**
+- \`valid\`
+- \`errors\`
+- \`warnings\`
+- \`suggestions\`
+- \`autoFixPatches\`
 
-**When to use:**
-- Always before generating code (Step 3)
-- When fixing validation errors (apply autoFixPatches)
-- When exploring screen structure improvements
+Always apply validation fixes before writing code.
 
----
+## Step 3/4: Write React Code Directly
 
-## Step 3/4: Generate Screen Code (Theme Engine)
+Write production React code directly after validation passes.
 
-**Tool:** \`generate_screen\`
+**Required rules:**
+- Prefer FramingUI components from \`@framingui/ui\`
+- Use the exact import statements, props, and variants provided in the Step 1 context
+- Use semantic HTML wrappers like \`header\`, \`main\`, \`section\`, and \`footer\` only for document structure
+- Do not replace available FramingUI interactive or form primitives with raw HTML
+- Do not claim a component is unavailable unless the catalog or preview tools confirmed that
 
-**Purpose:** Generate production-ready React code with theme styling applied
+**Styling rules:**
+- Respect the detected style contract
+- If the project is using FramingUI native styles, ensure \`@import '@framingui/ui/styles';\` is present in global CSS
+- If the project is preserving host utilities, still prefer token-backed utilities and theme recipes over arbitrary raw values
+- Avoid hardcoded design values when FramingUI tokens, variants, or recipes already exist
 
-**CRITICAL:** This tool is the **theme application engine**. It:
-- Applies theme recipes to components (minimal-workspace, classic-magazine, etc.)
-- Converts Screen Definition → Production-ready code with correct Tailwind classes
-- Without this tool, theme styling will NOT be applied!
-
-**Input:**
-\`\`\`json
-{
-  "screenDefinition": { /* validated Screen Definition from Step 2 */ },
-  "outputFormat": "tailwind",
-  "options": {
-    "typescript": true,
-    "prettier": false
-  }
-}
-\`\`\`
-
-**Output:**
-- \`success\`: true/false
-- \`code\`: Generated production-ready React code with theme applied
-- \`cssVariables\`: CSS variable definitions (if applicable)
-- \`dependencies\`: Required packages and install commands
-
-**Output Formats:**
-- \`tailwind\`: React + Tailwind CSS classes (recommended)
-- \`css-in-js\`: React + styled-components or emotion
-- \`react\`: Plain React component
-
-**AFTER RECEIVING RESPONSE:**
-- ALWAYS check the \`dependencies\` field
-- If \`dependencies.external\` is non-empty → proceed to Step 4
-- Display required packages to user before delivering code
-
-**When to use:**
-- Always after successful validation (Step 2)
-- This is the core code generation step - do NOT skip it
-
----
-
-## Step 4/4: Validate Environment (Optional but Recommended)
+## Step 4/4: Validate the Target Environment and Output
 
 **Tool:** \`validate-environment\`
 
-**Purpose:** Verify project has required packages and Tailwind is configured correctly
+Run this after writing code when the target package path is known.
 
-**Input:**
-\`\`\`json
-{
-  "projectPath": "/path/to/package.json",
-  "requiredPackages": ["@radix-ui/react-slot", "@radix-ui/react-avatar"],
-  "checkTailwind": true
-}
-\`\`\`
+Use it to verify:
+- missing dependencies
+- install commands
+- Tailwind setup
+- raw HTML primitives or styling escapes in generated source files
 
-**Output:**
-- \`installed\`: Packages already in package.json
-- \`missing\`: Packages that need installation
-- \`installCommands\`: Commands for npm/yarn/pnpm/bun
-- \`tailwind\`: Tailwind config validation results
-  - \`issues\`: Problems found
-  - \`fixes\`: How to fix each issue
-
-**Tailwind Validation Checks:**
-- ✅ tailwind.config.{ts,js,mjs,cjs} exists
-- ✅ @framingui/ui content paths included
-- ✅ tailwindcss-animate plugin configured
-
-**When to use:**
-- After generating code (Step 3), when user's package.json path is known
-- Before delivering code to user
-- When user reports missing styles or animations
-
----
-
-## Complete Example
-
-\`\`\`
-User: "Create a login page with email/password fields"
-
-1. Call get-screen-generation-context({ description: "login page..." })
-   → Receive template matches, components with inline props, schema
-
-2. Generate Screen Definition JSON based on context
-   → Call validate-screen-definition({ definition: {...} })
-   → Apply autoFixPatches if any, re-validate if needed
-
-3. Call generate_screen({ screenDefinition: {...}, outputFormat: "tailwind" })
-   → Receive production-ready code WITH theme styling applied
-   → Check dependencies field for required packages
-
-4. Call validate-environment({ projectPath: "...", requiredPackages: [...] })
-   → Show user missing packages and install commands
-   → Warn about Tailwind config issues if any
-
-5. Deliver code to user with complete setup instructions
-\`\`\`
-
-## Troubleshooting
-
-**Validation fails in Step 2:**
-- Read error messages carefully - they include suggestions and autoFix patches
-- Apply autoFixPatches to auto-correct common issues
-- Check token names match SPEC-LAYOUT-001
-- Verify component IDs exist (use list-components)
-
-**Code generation fails in Step 3:**
-- Ensure Screen Definition passed validation in Step 2
-- Check that the outputFormat is one of: tailwind, css-in-js, react
-- Verify @framingui/core is properly installed
-
-**Missing dependencies:**
-- Always run Step 4 to verify environment
-- Show install commands to user
-- Check Tailwind config includes @framingui/ui paths
-
-**Components render without styles:**
-- Verify Tailwind content paths include @framingui/ui
-- Check tailwindcss-animate plugin is configured
-- Run validate-environment to diagnose
-
----
+If the tool reports missing setup or raw primitive drift, fix the code before delivery.
 
 ## Best Practices
 
-1. ✅ Always follow all 4 steps in order
-2. ✅ Validate before generating code (Step 2)
-3. ✅ Use generate_screen for theme application (Step 3) - do NOT write code manually
-4. ✅ Check environment before delivering code (Step 4)
-5. ✅ Use strict validation mode for production
-6. ✅ Include theme recipes for visual consistency
-7. ✅ Use inline props from context instead of guessing
+1. Start with \`get-screen-generation-context\`
+2. Use \`includeExamples: false\` unless examples are actually needed
+3. Treat \`templateMatch\` as a hint, not a hard constraint
+4. Treat \`components\` as the source of truth
+5. Validate the definition before writing JSX
+6. Never parse MCP transcript text with shell or Python JSON tooling
+7. Run \`validate-environment\` before handoff
 
-## Alternative Workflows
+## Optional Helper Path
 
-**Quick Prototyping (not production):**
-- \`generate-blueprint\` → \`export-screen\` (skips validation and theme engine)
-
-**Production (recommended):**
-- Follow complete 4-step workflow above`,
+\`generate_screen\` remains available as an optional helper for reference code generation, but it is not the default production workflow and should not replace validation plus direct writing.`,
         },
       },
     ],

@@ -927,6 +927,7 @@ export const GetScreenGenerationContextInputSchema = z.object({
     .max(1000, 'Description must not exceed 1000 characters'),
   themeId: ThemeIdSchema.optional(),
   includeExamples: z.boolean().optional().default(true),
+  compact: z.boolean().optional().default(false),
 });
 
 export type GetScreenGenerationContextInput = z.infer<typeof GetScreenGenerationContextInputSchema>;
@@ -1062,6 +1063,27 @@ export const WorkflowGuideSchema = z.object({
 
 export type WorkflowGuide = z.infer<typeof WorkflowGuideSchema>;
 
+export const DefinitionStarterSchema = z.object({
+  id: z.string(),
+  shell: z.string(),
+  page: z.string(),
+  themeId: z.string().optional(),
+  sections: z.array(
+    z.object({
+      id: z.string(),
+      pattern: z.string(),
+      components: z.array(
+        z.object({
+          type: z.string(),
+          props: z.record(z.unknown()).optional(),
+        })
+      ),
+    })
+  ),
+});
+
+export type DefinitionStarter = z.infer<typeof DefinitionStarterSchema>;
+
 /**
  * Get Screen Generation Context Output Schema
  */
@@ -1069,6 +1091,7 @@ export const GetScreenGenerationContextOutputSchema = z.object({
   success: z.boolean(),
   templateMatch: ContextTemplateMatchSchema.optional(),
   components: z.array(ContextComponentInfoSchema).optional(),
+  definitionStarter: DefinitionStarterSchema.optional(),
   schema: z
     .object({
       screenDefinition: z.unknown(), // JSON Schema representation

@@ -92,7 +92,7 @@ server.setRequestHandler(ListPromptsRequestSchema, async () => {
       {
         name: 'screen-workflow',
         description:
-          'Detailed 4-step screen generation workflow: get-screen-generation-context → validate-screen-definition → generate_screen → validate-environment',
+          'Guarded direct-write workflow: get-screen-generation-context → validate-screen-definition → write code directly → validate-environment',
         arguments: [],
       },
     ],
