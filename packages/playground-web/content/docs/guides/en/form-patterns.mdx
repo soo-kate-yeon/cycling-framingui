@@ -1,0 +1,599 @@
+---
+title: "Form Design Patterns with FramingUI"
+description: "Build accessible, user-friendly forms using Input, Select, Checkbox, and validation patterns"
+order: 12
+---
+
+# Form Design Patterns with FramingUI
+
+Forms are the primary way users input data. FramingUI provides accessible, composable form components with built-in validation support and responsive design.
+
+## Basic Form Structure
+
+A well-structured form includes labels, inputs, help text, and actions:
+
+```tsx
+import { Button, Input, Label } from '@framingui/ui';
+
+<form className="space-y-4">
+  <div className="space-y-2">
+    <Label htmlFor="email">Email</Label>
+    <Input 
+      id="email" 
+      type="email" 
+      placeholder="you@example.com" 
+    />
+  </div>
+  
+  <div className="space-y-2">
+    <Label htmlFor="password">Password</Label>
+    <Input 
+      id="password" 
+      type="password" 
+      placeholder="••••••••" 
+    />
+  </div>
+  
+  <div className="flex gap-3 justify-end">
+    <Button variant="secondary">Cancel</Button>
+    <Button type="submit">Sign In</Button>
+  </div>
+</form>
+```
+
+**Key elements:**
+- `Label` — Always paired with `htmlFor` matching input `id`
+- `Input` — Form field with proper `type` attribute
+- Spacing — `space-y-4` for form, `space-y-2` for field groups
+- Actions — Buttons in footer with clear hierarchy
+
+## Input Types
+
+Use semantic input types for better UX and mobile keyboards:
+
+```tsx
+{/* Text input */}
+<Input type="text" placeholder="Full name" />
+
+{/* Email - shows @ on mobile keyboard */}
+<Input type="email" placeholder="you@example.com" />
+
+{/* Password - hides input */}
+<Input type="password" placeholder="••••••••" />
+
+{/* Number - shows numeric keyboard on mobile */}
+<Input type="number" placeholder="Age" min="0" max="120" />
+
+{/* URL - shows .com on mobile keyboard */}
+<Input type="url" placeholder="https://example.com" />
+
+{/* Tel - shows phone keyboard */}
+<Input type="tel" placeholder="+1 (555) 000-0000" />
+
+{/* Date picker */}
+<Input type="date" />
+
+{/* File upload */}
+<Input type="file" accept="image/*" />
+```
+
+## Form Field Patterns
+
+### Required Fields
+
+Mark required fields clearly:
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="name">
+    Name <span className="text-destructive">*</span>
+  </Label>
+  <Input 
+    id="name" 
+    required 
+    placeholder="Enter your name" 
+  />
+  <p className="text-sm text-muted-foreground">
+    This field is required
+  </p>
+</div>
+```
+
+### Optional Fields
+
+Mark optional fields when most fields are required:
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="company">
+    Company <span className="text-muted-foreground">(optional)</span>
+  </Label>
+  <Input 
+    id="company" 
+    placeholder="Your company name" 
+  />
+</div>
+```
+
+### Help Text
+
+Provide context or instructions:
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="username">Username</Label>
+  <Input 
+    id="username" 
+    placeholder="johndoe" 
+  />
+  <p className="text-sm text-muted-foreground">
+    Choose a unique username. Letters, numbers, and underscores only.
+  </p>
+</div>
+```
+
+### Error States
+
+Display validation errors:
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="email">Email</Label>
+  <Input 
+    id="email" 
+    type="email"
+    className="border-destructive"
+    aria-invalid="true"
+    aria-describedby="email-error"
+  />
+  <p id="email-error" className="text-sm text-destructive">
+    Please enter a valid email address
+  </p>
+</div>
+```
+
+### Success States
+
+Confirm valid input:
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="username">Username</Label>
+  <div className="relative">
+    <Input 
+      id="username" 
+      className="border-success pr-10"
+      defaultValue="johndoe"
+    />
+    <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-success" />
+  </div>
+  <p className="text-sm text-success">
+    Username is available
+  </p>
+</div>
+```
+
+## Select Dropdowns
+
+Use Select for predefined options:
+
+```tsx
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@framingui/ui';
+
+<div className="space-y-2">
+  <Label htmlFor="country">Country</Label>
+  <Select>
+    <SelectTrigger id="country">
+      <SelectValue placeholder="Select a country" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="us">United States</SelectItem>
+      <SelectItem value="ca">Canada</SelectItem>
+      <SelectItem value="uk">United Kingdom</SelectItem>
+      <SelectItem value="au">Australia</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+```
+
+**Select with groups:**
+
+```tsx
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Select timezone" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>North America</SelectLabel>
+      <SelectItem value="est">Eastern Time</SelectItem>
+      <SelectItem value="cst">Central Time</SelectItem>
+      <SelectItem value="pst">Pacific Time</SelectItem>
+    </SelectGroup>
+    <SelectGroup>
+      <SelectLabel>Europe</SelectLabel>
+      <SelectItem value="gmt">GMT</SelectItem>
+      <SelectItem value="cet">Central European Time</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+```
+
+## Checkboxes and Radio Buttons
+
+### Single Checkbox
+
+Agreement or toggle:
+
+```tsx
+import { Checkbox } from '@framingui/ui';
+
+<div className="flex items-center space-x-2">
+  <Checkbox id="terms" />
+  <Label htmlFor="terms" className="font-normal cursor-pointer">
+    I agree to the terms and conditions
+  </Label>
+</div>
+```
+
+### Checkbox Group
+
+Multiple selections:
+
+```tsx
+<div className="space-y-3">
+  <Label>Interests</Label>
+  <div className="space-y-2">
+    <div className="flex items-center space-x-2">
+      <Checkbox id="design" />
+      <Label htmlFor="design" className="font-normal cursor-pointer">
+        Design
+      </Label>
+    </div>
+    <div className="flex items-center space-x-2">
+      <Checkbox id="development" />
+      <Label htmlFor="development" className="font-normal cursor-pointer">
+        Development
+      </Label>
+    </div>
+    <div className="flex items-center space-x-2">
+      <Checkbox id="marketing" />
+      <Label htmlFor="marketing" className="font-normal cursor-pointer">
+        Marketing
+      </Label>
+    </div>
+  </div>
+</div>
+```
+
+### Radio Group
+
+Single selection from multiple options:
+
+```tsx
+import { RadioGroup, RadioGroupItem } from '@framingui/ui';
+
+<div className="space-y-3">
+  <Label>Plan</Label>
+  <RadioGroup defaultValue="pro">
+    <div className="flex items-center space-x-2">
+      <RadioGroupItem value="free" id="free" />
+      <Label htmlFor="free" className="font-normal cursor-pointer">
+        Free
+      </Label>
+    </div>
+    <div className="flex items-center space-x-2">
+      <RadioGroupItem value="pro" id="pro" />
+      <Label htmlFor="pro" className="font-normal cursor-pointer">
+        Pro ($29/month)
+      </Label>
+    </div>
+    <div className="flex items-center space-x-2">
+      <RadioGroupItem value="enterprise" id="enterprise" />
+      <Label htmlFor="enterprise" className="font-normal cursor-pointer">
+        Enterprise (Contact us)
+      </Label>
+    </div>
+  </RadioGroup>
+</div>
+```
+
+## Validation Patterns
+
+### Client-Side Validation (HTML5)
+
+```tsx
+<form>
+  {/* Required field */}
+  <Input required placeholder="Required field" />
+  
+  {/* Email validation */}
+  <Input type="email" required placeholder="Email" />
+  
+  {/* Pattern matching */}
+  <Input 
+    pattern="[A-Za-z0-9]+" 
+    placeholder="Alphanumeric only"
+    title="Letters and numbers only"
+  />
+  
+  {/* Min/max length */}
+  <Input 
+    minLength={8} 
+    maxLength={20}
+    placeholder="Password (8-20 characters)"
+  />
+  
+  {/* Number range */}
+  <Input 
+    type="number" 
+    min={0} 
+    max={100}
+    placeholder="Age (0-100)"
+  />
+</form>
+```
+
+### React Hook Form Integration
+
+For complex forms, use react-hook-form:
+
+```tsx
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  age: z.number().min(18, 'Must be 18 or older'),
+});
+
+type FormData = z.infer<typeof schema>;
+
+export function SignUpForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input 
+          id="email"
+          type="email"
+          {...register('email')}
+          className={errors.email ? 'border-destructive' : ''}
+        />
+        {errors.email && (
+          <p className="text-sm text-destructive">{errors.email.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input 
+          id="password"
+          type="password"
+          {...register('password')}
+          className={errors.password ? 'border-destructive' : ''}
+        />
+        {errors.password && (
+          <p className="text-sm text-destructive">{errors.password.message}</p>
+        )}
+      </div>
+
+      <Button type="submit">Sign Up</Button>
+    </form>
+  );
+}
+```
+
+## Common Form Layouts
+
+### Two-Column Layout
+
+```tsx
+<form className="space-y-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-2">
+      <Label htmlFor="firstName">First Name</Label>
+      <Input id="firstName" />
+    </div>
+    <div className="space-y-2">
+      <Label htmlFor="lastName">Last Name</Label>
+      <Input id="lastName" />
+    </div>
+  </div>
+  
+  <div className="space-y-2">
+    <Label htmlFor="email">Email</Label>
+    <Input id="email" type="email" />
+  </div>
+  
+  <Button type="submit">Submit</Button>
+</form>
+```
+
+### Inline Fields
+
+```tsx
+<div className="flex items-end gap-3">
+  <div className="flex-1 space-y-2">
+    <Label htmlFor="search">Search</Label>
+    <Input id="search" placeholder="Search projects..." />
+  </div>
+  <Button>Search</Button>
+</div>
+```
+
+### Multi-Step Form
+
+```tsx
+const [step, setStep] = useState(1);
+
+return (
+  <Card>
+    <CardHeader>
+      <CardTitle>Sign Up - Step {step} of 3</CardTitle>
+    </CardHeader>
+    <CardContent>
+      {step === 1 && (
+        <div className="space-y-4">
+          <Input placeholder="Email" />
+          <Input type="password" placeholder="Password" />
+        </div>
+      )}
+      {step === 2 && (
+        <div className="space-y-4">
+          <Input placeholder="First Name" />
+          <Input placeholder="Last Name" />
+        </div>
+      )}
+      {step === 3 && (
+        <div className="space-y-4">
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Country" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="us">United States</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+    </CardContent>
+    <CardFooter className="flex justify-between">
+      <Button 
+        variant="secondary" 
+        onClick={() => setStep(step - 1)}
+        disabled={step === 1}
+      >
+        Back
+      </Button>
+      <Button 
+        onClick={() => setStep(step + 1)}
+        disabled={step === 3}
+      >
+        {step === 3 ? 'Finish' : 'Next'}
+      </Button>
+    </CardFooter>
+  </Card>
+);
+```
+
+## Accessibility Best Practices
+
+### Proper Labeling
+
+```tsx
+{/* ✅ Good - Label linked to input */}
+<div>
+  <Label htmlFor="name">Name</Label>
+  <Input id="name" />
+</div>
+
+{/* ❌ Bad - No association */}
+<div>
+  <Label>Name</Label>
+  <Input />
+</div>
+```
+
+### Error Announcements
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="email">Email</Label>
+  <Input 
+    id="email"
+    aria-invalid={!!errors.email}
+    aria-describedby={errors.email ? 'email-error' : undefined}
+  />
+  {errors.email && (
+    <p id="email-error" role="alert" className="text-sm text-destructive">
+      {errors.email.message}
+    </p>
+  )}
+</div>
+```
+
+### Required Field Indicators
+
+```tsx
+<Label htmlFor="name">
+  Name <span aria-label="required">*</span>
+</Label>
+<Input id="name" required aria-required="true" />
+```
+
+### Keyboard Navigation
+
+All FramingUI form components support:
+- ✅ Tab navigation
+- ✅ Enter to submit
+- ✅ Escape to close dropdowns
+- ✅ Arrow keys for select/radio
+- ✅ Space to toggle checkbox
+
+## Loading States
+
+Show progress during submission:
+
+```tsx
+const [isLoading, setIsLoading] = useState(false);
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  await submitForm();
+  setIsLoading(false);
+};
+
+return (
+  <form onSubmit={handleSubmit}>
+    {/* Form fields */}
+    <Button type="submit" disabled={isLoading}>
+      {isLoading ? (
+        <>
+          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          Saving...
+        </>
+      ) : (
+        'Save Changes'
+      )}
+    </Button>
+  </form>
+);
+```
+
+## Best Practices
+
+✅ **Do:**
+- Always pair Label with Input using `htmlFor` and `id`
+- Provide clear error messages
+- Use appropriate input types for mobile keyboards
+- Test keyboard navigation
+- Indicate required vs optional fields
+- Group related fields logically
+- Disable submit during processing
+
+❌ **Don't:**
+- Use placeholder as label replacement
+- Validate on every keystroke (use onBlur)
+- Show errors before user interaction
+- Nest forms
+- Forget mobile responsiveness
+- Use generic error messages ("Invalid input")
+
+## Next Steps
+
+- [Button Variants](/docs/en/guides/button-variants) — Style form actions
+- [Card Layouts](/docs/en/guides/card-layouts) — Wrap forms in cards
+- [Icon Integration](/docs/en/guides/icon-integration) — Add icons to inputs
+- [Component Customization](/docs/en/guides/component-customization) — Customize form styles

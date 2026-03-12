@@ -10,21 +10,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // /explore 및 하위 경로를 랜딩으로 리다이렉트 (레거시 URL 지원)
-  async redirects() {
-    return [
-      {
-        source: '/explore',
-        destination: '/',
-        permanent: true,
-      },
-      {
-        source: '/explore/:path*',
-        destination: '/',
-        permanent: true,
-      },
-    ];
-  },
   // Workspace 패키지 transpile
   transpilePackages: ['@framingui/core', '@framingui/ui'],
   images: {

@@ -1,0 +1,330 @@
+---
+title: "Button Variants and Usage Patterns"
+description: "Learn when to use primary, secondary, ghost, and destructive button variants in FramingUI"
+order: 10
+---
+
+# Button Variants and Usage Patterns
+
+FramingUI provides four core button variants designed for clear visual hierarchy and semantic actions. Choose the right variant to guide users through your interface.
+
+## Button Variants Overview
+
+| Variant | Purpose | Visual Weight | Common Use Cases |
+| --- | --- | --- | --- |
+| `default` (primary) | Primary actions | Highest | Submit forms, create, save |
+| `secondary` | Secondary actions | Medium | Cancel, go back, alternative options |
+| `ghost` | Tertiary actions | Low | Navigation, subtle actions |
+| `destructive` | Dangerous actions | High (red) | Delete, remove, reset |
+
+## Primary Button (Default)
+
+The most prominent action on the screen. Use sparingly — typically one per page or section.
+
+```tsx
+import { Button } from '@framingui/ui';
+
+<Button>Create Project</Button>
+<Button>Save Changes</Button>
+<Button>Sign Up</Button>
+```
+
+**When to use:**
+- The main action users should take
+- Form submissions
+- Creating new resources
+- Confirming important decisions
+
+**Visual style:**
+- Filled background (`--bg-primary`)
+- High contrast text
+- Most visually prominent
+
+**Guidelines:**
+- Limit to one primary button per view
+- Place it in the expected location (bottom-right for forms, top-right for headers)
+- Use action-oriented labels ("Create", "Save", "Continue" not "OK", "Submit")
+
+## Secondary Button
+
+Supporting actions that are important but not primary.
+
+```tsx
+<Button variant="secondary">Cancel</Button>
+<Button variant="secondary">Go Back</Button>
+<Button variant="secondary">Learn More</Button>
+```
+
+**When to use:**
+- Alternatives to the primary action
+- Cancel/back navigation
+- Less prominent but still important actions
+- Multiple equal-weight actions
+
+**Visual style:**
+- Border with transparent background
+- Medium contrast
+- Clearly visible but less prominent than primary
+
+**Guidelines:**
+- Pair with primary buttons for choice scenarios
+- Use for reversible actions (cancel, close)
+- Maintain consistency in button order (destructive left, secondary middle, primary right)
+
+## Ghost Button
+
+Minimal visual weight for tertiary actions or navigation.
+
+```tsx
+<Button variant="ghost">Skip</Button>
+<Button variant="ghost">View Details</Button>
+<Button variant="ghost">Settings</Button>
+```
+
+**When to use:**
+- Navigation within the app
+- Repeated actions in lists or tables
+- Low-priority actions
+- Icon-only buttons
+
+**Visual style:**
+- Transparent background
+- Minimal border (or none)
+- Subtle hover state
+- Lowest visual weight
+
+**Guidelines:**
+- Use for actions that don't need emphasis
+- Ideal for icon buttons in toolbars
+- Works well in dense interfaces (tables, lists)
+- Don't use for critical actions
+
+## Destructive Button
+
+High-visibility warning for dangerous or irreversible actions.
+
+```tsx
+<Button variant="destructive">Delete Account</Button>
+<Button variant="destructive">Remove Project</Button>
+<Button variant="destructive">Reset All Data</Button>
+```
+
+**When to use:**
+- Deleting data
+- Removing resources
+- Irreversible actions
+- Actions with significant consequences
+
+**Visual style:**
+- Red/danger color (`--bg-destructive`)
+- High contrast
+- Visually distinct from primary
+
+**Guidelines:**
+- Always confirm destructive actions with a dialog
+- Use clear, specific labels ("Delete Project" not "Delete")
+- Consider pairing with a secondary "Cancel" button
+- Don't overuse — reserve for truly dangerous actions
+
+## Size Variants
+
+All button variants support three sizes:
+
+```tsx
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+```
+
+**Size guidelines:**
+- `sm` — Dense interfaces, secondary actions, icon buttons
+- `default` — Standard UI, most use cases
+- `lg` — Hero sections, call-to-action, mobile-first designs
+
+## Icon Buttons
+
+Combine variants with icons for richer UI:
+
+```tsx
+import { Button } from '@framingui/ui';
+import { Plus, Trash2, Settings } from 'lucide-react';
+
+{/* Primary with icon */}
+<Button>
+  <Plus className="w-4 h-4 mr-2" />
+  Create New
+</Button>
+
+{/* Ghost icon-only */}
+<Button variant="ghost" size="sm">
+  <Settings className="w-4 h-4" />
+</Button>
+
+{/* Destructive with icon */}
+<Button variant="destructive">
+  <Trash2 className="w-4 h-4 mr-2" />
+  Delete
+</Button>
+```
+
+**Icon placement:**
+- Leading icon (left) — Most actions
+- Trailing icon (right) — "Next", "Forward", "External link"
+- Icon-only — Settings, close, compact toolbars
+
+## Common Patterns
+
+### Form Actions
+
+Standard submit/cancel pattern:
+
+```tsx
+<form>
+  {/* Form fields */}
+  <div className="flex gap-3 justify-end mt-6">
+    <Button variant="secondary">Cancel</Button>
+    <Button type="submit">Save Changes</Button>
+  </div>
+</form>
+```
+
+### Confirmation Dialog
+
+Destructive action with confirmation:
+
+```tsx
+<Dialog>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Delete Project?</DialogTitle>
+      <DialogDescription>
+        This action cannot be undone. All data will be permanently removed.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <Button variant="secondary">Cancel</Button>
+      <Button variant="destructive">Delete Project</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+### Multi-Action Card
+
+Card with primary and secondary actions:
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Upgrade to Pro</CardTitle>
+    <CardDescription>Unlock advanced features and unlimited projects</CardDescription>
+  </CardHeader>
+  <CardContent>
+    {/* Features list */}
+  </CardContent>
+  <CardFooter className="flex gap-3">
+    <Button variant="ghost">Learn More</Button>
+    <Button>Upgrade Now</Button>
+  </CardFooter>
+</Card>
+```
+
+### Loading States
+
+```tsx
+<Button disabled>
+  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+  Saving...
+</Button>
+```
+
+## Button Hierarchy Rules
+
+Follow these rules to maintain clear visual hierarchy:
+
+1. **One primary per context** — Only one primary button per page/modal/card
+2. **Secondary for alternatives** — Pair primary with secondary for choice scenarios
+3. **Ghost for low priority** — Use ghost for actions that don't need emphasis
+4. **Destructive for danger** — Reserve red for truly dangerous actions
+5. **Consistent placement** — Primary on the right (LTR), secondary on the left
+
+**Example hierarchy:**
+
+```tsx
+{/* ❌ Bad - Two primary buttons */}
+<div className="flex gap-3">
+  <Button>Save Draft</Button>
+  <Button>Publish</Button>
+</div>
+
+{/* ✅ Good - Clear hierarchy */}
+<div className="flex gap-3">
+  <Button variant="secondary">Save Draft</Button>
+  <Button>Publish</Button>
+</div>
+```
+
+## Accessibility
+
+FramingUI buttons include built-in accessibility features:
+
+- **Keyboard navigation** — Tab/Enter support
+- **Focus indicators** — Visible focus rings
+- **ARIA attributes** — Proper roles and labels
+- **Contrast ratios** — WCAG AA compliant
+
+**Enhance accessibility:**
+
+```tsx
+{/* Icon-only buttons need labels */}
+<Button variant="ghost" aria-label="Settings">
+  <Settings className="w-4 h-4" />
+</Button>
+
+{/* Loading states */}
+<Button disabled aria-busy="true">
+  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+  Saving...
+</Button>
+
+{/* Destructive actions */}
+<Button variant="destructive" aria-label="Delete project permanently">
+  Delete
+</Button>
+```
+
+## Mobile Considerations
+
+- Use `size="lg"` for touch targets (minimum 44×44px)
+- Stack buttons vertically on small screens
+- Primary button should be full-width or right-aligned
+- Consider using icon-only buttons to save space
+
+```tsx
+<div className="flex flex-col sm:flex-row gap-3">
+  <Button variant="secondary" className="w-full sm:w-auto">Cancel</Button>
+  <Button className="w-full sm:w-auto">Confirm</Button>
+</div>
+```
+
+## Best Practices
+
+✅ **Do:**
+- Use action-oriented labels ("Create", "Save", "Delete")
+- Maintain consistent button order across the app
+- Test in both light and dark modes
+- Provide loading states for async actions
+- Use icons to reinforce meaning
+
+❌ **Don't:**
+- Use multiple primary buttons in the same context
+- Use destructive variant for non-dangerous actions
+- Create custom variants — use the provided four
+- Mix button styles inconsistently
+- Use vague labels ("OK", "Submit", "Click Here")
+
+## Next Steps
+
+- [Icon Integration Guide](/docs/en/guides/icon-integration) — Add icons to buttons
+- [Form Patterns](/docs/en/guides/form-patterns) — Design forms with FramingUI
+- [Component Customization](/docs/en/guides/component-customization) — Customize button styles

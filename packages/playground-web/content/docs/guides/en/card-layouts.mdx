@@ -1,0 +1,485 @@
+---
+title: "Card Component Layouts"
+description: "Explore Card, CardHeader, CardContent, and CardFooter patterns for building structured layouts in FramingUI"
+order: 11
+---
+
+# Card Component Layouts
+
+Cards are versatile containers that group related information. FramingUI provides four composable card components that work together to create structured, accessible layouts.
+
+## Card Anatomy
+
+A FramingUI card consists of four parts:
+
+```tsx
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@framingui/ui';
+
+<Card>
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+    <CardDescription>Description</CardDescription>
+  </CardHeader>
+  <CardContent>
+    {/* Main content */}
+  </CardContent>
+  <CardFooter>
+    {/* Actions or metadata */}
+  </CardFooter>
+</Card>
+```
+
+**Component roles:**
+- `Card` — Container with background, border, shadow
+- `CardHeader` — Title and description area
+- `CardContent` — Main content body
+- `CardFooter` — Actions, buttons, or metadata
+
+All parts are optional. Mix and match based on your needs.
+
+## Basic Card
+
+Minimal card with just content:
+
+```tsx
+<Card>
+  <CardContent>
+    <p>Simple card content without header or footer.</p>
+  </CardContent>
+</Card>
+```
+
+## Card with Header
+
+Add a header for structure:
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Project Settings</CardTitle>
+    <CardDescription>Manage your project configuration and preferences</CardDescription>
+  </CardHeader>
+  <CardContent>
+    {/* Settings form */}
+  </CardContent>
+</Card>
+```
+
+**Header guidelines:**
+- `CardTitle` — Brief, descriptive (2-5 words)
+- `CardDescription` — Explain purpose or context (one sentence)
+- Keep titles scannable — users should understand at a glance
+
+## Card with Footer
+
+Add actions or metadata at the bottom:
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Confirm Action</CardTitle>
+    <CardDescription>Are you sure you want to proceed?</CardDescription>
+  </CardHeader>
+  <CardFooter className="flex justify-end gap-3">
+    <Button variant="secondary">Cancel</Button>
+    <Button>Confirm</Button>
+  </CardFooter>
+</Card>
+```
+
+**Footer patterns:**
+- Buttons (actions)
+- Timestamps or metadata
+- Navigation links
+- Status indicators
+
+## Common Layout Patterns
+
+### 1. Feature Card
+
+Highlight features or benefits:
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2">
+      <Zap className="w-5 h-5 text-primary" />
+      Fast Performance
+    </CardTitle>
+    <CardDescription>
+      Lightning-fast builds with optimized bundling and caching
+    </CardDescription>
+  </CardHeader>
+  <CardContent>
+    <ul className="space-y-2 text-sm">
+      <li>⚡️ Hot module replacement</li>
+      <li>📦 Tree-shaking optimization</li>
+      <li>🚀 Edge-ready deployment</li>
+    </ul>
+  </CardContent>
+</Card>
+```
+
+### 2. User Profile Card
+
+Display user information with actions:
+
+```tsx
+<Card>
+  <CardHeader className="flex flex-row items-center gap-4">
+    <Avatar>
+      <AvatarImage src="/avatar.jpg" alt="User" />
+      <AvatarFallback>JD</AvatarFallback>
+    </Avatar>
+    <div>
+      <CardTitle>Jane Doe</CardTitle>
+      <CardDescription>Product Designer</CardDescription>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <div className="grid gap-1 text-sm">
+      <div className="flex justify-between">
+        <span className="text-muted-foreground">Email</span>
+        <span>jane@example.com</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-muted-foreground">Location</span>
+        <span>San Francisco, CA</span>
+      </div>
+    </div>
+  </CardContent>
+  <CardFooter>
+    <Button variant="secondary" className="w-full">Edit Profile</Button>
+  </CardFooter>
+</Card>
+```
+
+### 3. Pricing Card
+
+Highlight pricing tiers:
+
+```tsx
+<Card className="relative">
+  {isPopular && (
+    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium">
+      Most Popular
+    </div>
+  )}
+  <CardHeader className="text-center">
+    <CardTitle className="text-2xl">Pro</CardTitle>
+    <CardDescription>For growing teams</CardDescription>
+    <div className="mt-4">
+      <span className="text-4xl font-bold">$29</span>
+      <span className="text-muted-foreground">/month</span>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <ul className="space-y-3">
+      <li className="flex items-center gap-2">
+        <Check className="w-4 h-4 text-primary" />
+        Unlimited projects
+      </li>
+      <li className="flex items-center gap-2">
+        <Check className="w-4 h-4 text-primary" />
+        Advanced analytics
+      </li>
+      <li className="flex items-center gap-2">
+        <Check className="w-4 h-4 text-primary" />
+        Priority support
+      </li>
+    </ul>
+  </CardContent>
+  <CardFooter>
+    <Button className="w-full">Get Started</Button>
+  </CardFooter>
+</Card>
+```
+
+### 4. Notification Card
+
+Display alerts or updates:
+
+```tsx
+<Card className="border-l-4 border-l-primary">
+  <CardHeader className="flex flex-row items-start gap-3">
+    <Bell className="w-5 h-5 text-primary mt-0.5" />
+    <div>
+      <CardTitle className="text-base">New Update Available</CardTitle>
+      <CardDescription>Version 2.1.0 is ready to install</CardDescription>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <p className="text-sm">
+      This update includes performance improvements and bug fixes.
+    </p>
+  </CardContent>
+  <CardFooter className="flex gap-3">
+    <Button variant="ghost" size="sm">Dismiss</Button>
+    <Button size="sm">Update Now</Button>
+  </CardFooter>
+</Card>
+```
+
+### 5. Stats Card
+
+Display metrics or data:
+
+```tsx
+<Card>
+  <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+    <DollarSign className="w-4 h-4 text-muted-foreground" />
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold">$45,231.89</div>
+    <p className="text-xs text-muted-foreground mt-1">
+      +20.1% from last month
+    </p>
+  </CardContent>
+</Card>
+```
+
+### 6. Form Card
+
+Wrap forms for structure:
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Create Account</CardTitle>
+    <CardDescription>Fill in your details to get started</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <form className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" placeholder="Enter your name" />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" type="email" placeholder="you@example.com" />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input id="password" type="password" placeholder="••••••••" />
+      </div>
+    </form>
+  </CardContent>
+  <CardFooter className="flex justify-end gap-3">
+    <Button variant="secondary">Cancel</Button>
+    <Button>Create Account</Button>
+  </CardFooter>
+</Card>
+```
+
+## Grid Layouts
+
+Display multiple cards in responsive grids:
+
+```tsx
+<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+  <Card>
+    <CardHeader>
+      <CardTitle>Card 1</CardTitle>
+    </CardHeader>
+    <CardContent>
+      Content...
+    </CardContent>
+  </Card>
+  
+  <Card>
+    <CardHeader>
+      <CardTitle>Card 2</CardTitle>
+    </CardHeader>
+    <CardContent>
+      Content...
+    </CardContent>
+  </Card>
+  
+  <Card>
+    <CardHeader>
+      <CardTitle>Card 3</CardTitle>
+    </CardHeader>
+    <CardContent>
+      Content...
+    </CardContent>
+  </Card>
+</div>
+```
+
+**Grid patterns:**
+- `grid-cols-1` — Mobile-first, stack vertically
+- `md:grid-cols-2` — Two columns on tablets
+- `lg:grid-cols-3` — Three columns on desktop
+- `gap-4` — Consistent spacing between cards
+
+## Interactive Cards
+
+### Clickable Card
+
+Make entire card clickable:
+
+```tsx
+<Card className="cursor-pointer hover:shadow-lg transition-shadow">
+  <a href="/project/123" className="block">
+    <CardHeader>
+      <CardTitle>Project Name</CardTitle>
+      <CardDescription>Click to view details</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <p>Project summary...</p>
+    </CardContent>
+  </a>
+</Card>
+```
+
+### Card with Dropdown Menu
+
+Add contextual actions:
+
+```tsx
+<Card>
+  <CardHeader className="flex flex-row items-start justify-between">
+    <div>
+      <CardTitle>Task Name</CardTitle>
+      <CardDescription>Due tomorrow</CardDescription>
+    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="sm">
+          <MoreVertical className="w-4 h-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem>Share</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </CardHeader>
+  <CardContent>
+    Task content...
+  </CardContent>
+</Card>
+```
+
+## Nested Cards
+
+Cards can contain other cards for complex layouts:
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Dashboard</CardTitle>
+  </CardHeader>
+  <CardContent className="space-y-4">
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm">Quick Stats</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {/* Stats content */}
+      </CardContent>
+    </Card>
+    
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm">Recent Activity</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {/* Activity list */}
+      </CardContent>
+    </Card>
+  </CardContent>
+</Card>
+```
+
+## Card Customization
+
+### Custom Background
+
+```tsx
+<Card className="bg-gradient-to-br from-purple-500 to-pink-500 text-white border-0">
+  <CardHeader>
+    <CardTitle>Premium Feature</CardTitle>
+    <CardDescription className="text-purple-100">
+      Unlock advanced capabilities
+    </CardDescription>
+  </CardHeader>
+</Card>
+```
+
+### No Border/Shadow
+
+```tsx
+<Card className="border-0 shadow-none">
+  <CardContent>
+    Minimal card styling
+  </CardContent>
+</Card>
+```
+
+### Custom Padding
+
+```tsx
+<Card>
+  <CardContent className="p-0">
+    <img src="/cover.jpg" alt="Cover" className="w-full h-48 object-cover rounded-t-lg" />
+    <div className="p-6">
+      Content with custom padding
+    </div>
+  </CardContent>
+</Card>
+```
+
+## Accessibility
+
+Cards include semantic HTML and ARIA attributes:
+
+```tsx
+{/* Clickable card with proper semantics */}
+<Card 
+  role="article"
+  tabIndex={0}
+  onClick={handleClick}
+  onKeyDown={(e) => e.key === 'Enter' && handleClick()}
+>
+  <CardHeader>
+    <CardTitle>Accessible Card</CardTitle>
+  </CardHeader>
+</Card>
+
+{/* Card with action buttons */}
+<Card>
+  <CardHeader>
+    <CardTitle id="card-title">Settings</CardTitle>
+  </CardHeader>
+  <CardFooter aria-labelledby="card-title">
+    <Button>Save</Button>
+  </CardFooter>
+</Card>
+```
+
+## Best Practices
+
+✅ **Do:**
+- Use cards to group related content
+- Maintain consistent card sizing in grids
+- Provide clear titles and descriptions
+- Use appropriate spacing (padding, gap)
+- Test responsive behavior on mobile
+
+❌ **Don't:**
+- Nest cards too deeply (2 levels max)
+- Overload cards with too much content
+- Mix card styles inconsistently
+- Forget hover/focus states for interactive cards
+- Use cards for single lines of text (use list items instead)
+
+## Next Steps
+
+- [Button Variants](/docs/en/guides/button-variants) — Add actions to card footers
+- [Form Patterns](/docs/en/guides/form-patterns) — Build forms inside cards
+- [Icon Integration](/docs/en/guides/icon-integration) — Enhance cards with icons
+- [Dark Mode](/docs/en/guides/dark-mode-tokens) — Style cards for dark mode

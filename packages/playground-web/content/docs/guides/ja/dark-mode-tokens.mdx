@@ -1,0 +1,503 @@
+---
+title: "Dark Mode with Design Tokens"
+description: "Implement automatic dark mode support using FramingUI's token-based color system"
+order: 13
+---
+
+# Dark Mode with Design Tokens
+
+FramingUI provides automatic dark mode support through semantic design tokens. Your components adapt to light and dark themes without code changes.
+
+## How It Works
+
+FramingUI uses CSS custom properties (design tokens) that change based on the `.dark` class:
+
+```css
+/* Light mode (default) */
+:root {
+  --bg-background: oklch(1 0 0);           /* White */
+  --bg-foreground: oklch(0.2 0 0);         /* Near-black */
+}
+
+/* Dark mode - same tokens, different values */
+.dark {
+  --bg-background: oklch(0.16 0.01 260);   /* Dark blue-gray */
+  --bg-foreground: oklch(0.96 0.01 260);   /* Off-white */
+}
+```
+
+**The key benefit:** Use the same token (`--bg-background`) in your components. It automatically switches values based on the theme.
+
+## Enabling Dark Mode
+
+### Next.js with next-themes
+
+FramingUI works seamlessly with `next-themes`:
+
+```bash
+npm install next-themes
+```
+
+**1. Create a theme provider:**
+
+```tsx
+// components/theme-provider.tsx
+"use client"
+
+import * as React from "react"
+import { ThemeProvider as NextThemesProvider } from "next-themes"
+import { type ThemeProviderProps } from "next-themes/dist/types"
+
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
+```
+
+**2. Wrap your app:**
+
+```tsx
+// app/layout.tsx
+import { ThemeProvider } from '@/components/theme-provider';
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+**3. Add a theme toggle:**
+
+```tsx
+// components/theme-toggle.tsx
+"use client"
+
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+import { Button } from "@framingui/ui"
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+    >
+      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">Toggle theme</span>
+    </Button>
+  )
+}
+```
+
+Done! Your app now supports:
+- ✅ Light mode
+- ✅ Dark mode
+- ✅ System preference detection
+- ✅ Manual toggle
+
+## Semantic Token System
+
+FramingUI uses semantic tokens that describe *purpose*, not color:
+
+### Background Tokens
+
+| Token | Light | Dark | Usage |
+| --- | --- | --- | --- |
+| `--bg-background` | White | Dark gray | Page background |
+| `--bg-foreground` | Black | White | Primary text |
+| `--bg-card` | Off-white | Lighter gray | Card backgrounds |
+| `--bg-muted` | Light gray | Subtle gray | Disabled, subtle areas |
+| `--bg-primary` | Brand color | Adjusted brand | Primary actions |
+| `--bg-destructive` | Red | Adjusted red | Danger actions |
+
+### Border Tokens
+
+| Token | Light | Dark | Usage |
+| --- | --- | --- | --- |
+| `--border-default` | Light gray | Dark gray | Standard borders |
+| `--border-input` | Medium gray | Lighter gray | Form field borders |
+
+**Example:**
+
+```tsx
+// This card works in both modes automatically
+<Card>
+  <CardHeader>
+    <CardTitle className="text-foreground">Title</CardTitle>
+    <CardDescription className="text-muted-foreground">
+      Description text
+    </CardDescription>
+  </CardHeader>
+</Card>
+```
+
+## Token Values in Light vs Dark
+
+### Light Mode (Default)
+
+```css
+:root {
+  /* Backgrounds */
+  --bg-background: oklch(1 0 0);              /* Pure white */
+  --bg-foreground: oklch(0.20 0.01 260);      /* Near-black */
+  --bg-card: oklch(0.99 0 0);                 /* Off-white */
+  --bg-card-foreground: oklch(0.20 0.01 260); /* Near-black */
+  --bg-muted: oklch(0.96 0.01 260);           /* Light gray */
+  --bg-muted-foreground: oklch(0.46 0.02 260);/* Medium gray */
+  --bg-primary: oklch(0.56 0.18 257);         /* Brand purple */
+  --bg-primary-foreground: oklch(0.98 0 0);   /* White */
+  
+  /* Borders */
+  --border-default: oklch(0.89 0.01 260);     /* Light gray */
+  --border-input: oklch(0.82 0.01 260);       /* Medium gray */
+}
+```
+
+### Dark Mode
+
+```css
+.dark {
+  /* Backgrounds - inverted */
+  --bg-background: oklch(0.16 0.01 260);      /* Dark blue-gray */
+  --bg-foreground: oklch(0.96 0.01 260);      /* Off-white */
+  --bg-card: oklch(0.20 0.01 260);            /* Slightly lighter */
+  --bg-card-foreground: oklch(0.96 0.01 260); /* Off-white */
+  --bg-muted: oklch(0.24 0.01 260);           /* Subtle gray */
+  --bg-muted-foreground: oklch(0.60 0.02 260);/* Medium gray */
+  --bg-primary: oklch(0.60 0.18 257);         /* Lighter purple */
+  --bg-primary-foreground: oklch(0.98 0 0);   /* White */
+  
+  /* Borders - subtle in dark */
+  --border-default: oklch(0.32 0.01 260);     /* Dark gray */
+  --border-input: oklch(0.38 0.01 260);       /* Slightly lighter */
+}
+```
+
+**Key differences:**
+- Background lightness inverts (1.0 → 0.16)
+- Foreground inverts (0.20 → 0.96)
+- Borders become subtler (lower contrast)
+- Primary colors adjust slightly for readability
+
+## Using Tokens in Components
+
+### CSS Classes (Recommended)
+
+FramingUI provides Tailwind classes that map to tokens:
+
+```tsx
+<div className="bg-background text-foreground">
+  <div className="bg-card text-card-foreground border border-default p-4">
+    <h2 className="text-foreground">Title</h2>
+    <p className="text-muted-foreground">Description</p>
+  </div>
+</div>
+```
+
+**Common classes:**
+- `bg-background` → `--bg-background`
+- `text-foreground` → `--bg-foreground`
+- `bg-card` → `--bg-card`
+- `text-muted-foreground` → `--bg-muted-foreground`
+- `border-default` → `--border-default`
+
+### Direct CSS Variables
+
+Use tokens directly in custom CSS:
+
+```css
+.custom-component {
+  background: var(--bg-card);
+  color: var(--bg-card-foreground);
+  border: 1px solid var(--border-default);
+}
+
+.custom-component:hover {
+  background: var(--bg-muted);
+}
+```
+
+### Inline Styles
+
+```tsx
+<div style={{ 
+  background: 'var(--bg-card)', 
+  color: 'var(--bg-card-foreground)' 
+}}>
+  Content
+</div>
+```
+
+## Customizing Dark Mode Colors
+
+### Override Token Values
+
+Customize dark mode colors in your `globals.css`:
+
+```css
+/* Light mode */
+:root {
+  --color-primary: oklch(0.56 0.18 257);  /* Purple */
+}
+
+/* Dark mode - make it lighter/more vivid */
+.dark {
+  --color-primary: oklch(0.65 0.22 257);  /* Lighter, more saturated purple */
+}
+```
+
+**Common adjustments for dark mode:**
+- Increase lightness (+0.05 to +0.15)
+- Increase chroma/saturation (+0.02 to +0.05)
+- Ensure sufficient contrast with dark backgrounds
+
+### Add Custom Dark Tokens
+
+Create your own semantic tokens:
+
+```css
+:root {
+  --bg-info: oklch(0.60 0.18 230);          /* Blue */
+  --bg-info-foreground: oklch(0.98 0 0);    /* White */
+  --bg-success-subtle: oklch(0.95 0.02 145);/* Light green */
+}
+
+.dark {
+  --bg-info: oklch(0.55 0.15 230);          /* Slightly darker blue */
+  --bg-info-foreground: oklch(0.98 0 0);    /* White */
+  --bg-success-subtle: oklch(0.22 0.04 145);/* Dark green */
+}
+```
+
+Use them in components:
+
+```tsx
+<div className="bg-[var(--bg-info)] text-[var(--bg-info-foreground)] p-4 rounded">
+  ℹ️ Information message
+</div>
+```
+
+## Testing Dark Mode
+
+### Manual Toggle
+
+Add a toggle button to test both modes:
+
+```tsx
+import { ThemeToggle } from '@/components/theme-toggle';
+
+<nav>
+  <ThemeToggle />
+</nav>
+```
+
+### System Preference
+
+Set your OS to dark mode and test:
+- macOS: System Preferences → Appearance → Dark
+- Windows: Settings → Personalization → Colors → Dark
+- Linux: Varies by desktop environment
+
+### Browser DevTools
+
+Force dark mode in Chrome/Edge DevTools:
+1. Open DevTools (F12)
+2. Cmd/Ctrl + Shift + P
+3. Type "dark mode"
+4. Select "Emulate CSS prefers-color-scheme: dark"
+
+## Dark Mode Best Practices
+
+### Contrast Ratios
+
+Ensure text remains readable:
+
+```css
+/* ✅ Good - sufficient contrast */
+.dark {
+  --bg-background: oklch(0.16 0.01 260);   /* Dark */
+  --bg-foreground: oklch(0.96 0.01 260);   /* Light */
+  /* Contrast ratio: ~14:1 (AAA) */
+}
+
+/* ❌ Bad - poor contrast */
+.dark {
+  --bg-background: oklch(0.30 0.01 260);   /* Too light */
+  --bg-foreground: oklch(0.60 0.01 260);   /* Too dark */
+  /* Contrast ratio: ~2:1 (Fail) */
+}
+```
+
+**Minimum ratios (WCAG AA):**
+- Body text: 4.5:1
+- Large text (18pt+): 3:1
+- UI components: 3:1
+
+### Avoid Pure Black
+
+Pure black (`#000000`) can be harsh. Use dark grays:
+
+```css
+.dark {
+  /* ❌ Too harsh */
+  --bg-background: oklch(0 0 0);
+
+  /* ✅ Easier on eyes */
+  --bg-background: oklch(0.16 0.01 260);
+}
+```
+
+### Test with Real Content
+
+Don't just test empty components:
+- Fill cards with text
+- Test images and icons
+- Check form inputs
+- Verify button states (hover, active, disabled)
+
+### Adjust Images
+
+Images may need adjustments in dark mode:
+
+```tsx
+<img 
+  src="/logo.png" 
+  alt="Logo"
+  className="dark:brightness-90 dark:contrast-110"
+/>
+```
+
+### Smooth Transitions
+
+Avoid jarring theme switches:
+
+```css
+* {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+```
+
+Or disable transitions during theme change:
+
+```tsx
+<ThemeProvider
+  attribute="class"
+  defaultTheme="system"
+  disableTransitionOnChange  // ← Prevents flash
+>
+  {children}
+</ThemeProvider>
+```
+
+## Common Patterns
+
+### Hero Section
+
+```tsx
+<section className="bg-background text-foreground py-20">
+  <div className="container">
+    <h1 className="text-5xl font-bold">Welcome</h1>
+    <p className="text-muted-foreground mt-4">
+      Build beautiful interfaces
+    </p>
+  </div>
+</section>
+```
+
+### Card Grid
+
+```tsx
+<div className="grid gap-4 md:grid-cols-3">
+  <Card>
+    <CardHeader>
+      <CardTitle>Feature 1</CardTitle>
+      <CardDescription>Description</CardDescription>
+    </CardHeader>
+  </Card>
+  {/* More cards */}
+</div>
+```
+
+### Navigation
+
+```tsx
+<nav className="border-b border-default bg-card">
+  <div className="container flex items-center justify-between py-4">
+    <Logo />
+    <div className="flex items-center gap-4">
+      <Button variant="ghost">Features</Button>
+      <Button variant="ghost">Pricing</Button>
+      <ThemeToggle />
+      <Button>Sign Up</Button>
+    </div>
+  </div>
+</nav>
+```
+
+## Troubleshooting
+
+### Tokens Not Updating
+
+Check your HTML has the `dark` class:
+
+```tsx
+// ✅ Correct
+<html lang="en" className="dark">
+
+// ❌ Missing class
+<html lang="en">
+```
+
+### Flash of Unstyled Content
+
+Add `suppressHydrationWarning` to HTML:
+
+```tsx
+<html lang="en" suppressHydrationWarning>
+```
+
+And use `next-themes`'s default theme:
+
+```tsx
+<ThemeProvider defaultTheme="system" enableSystem>
+```
+
+### Custom Components Not Adapting
+
+Use semantic tokens, not hard-coded colors:
+
+```css
+/* ❌ Won't adapt */
+.my-component {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* ✅ Adapts automatically */
+.my-component {
+  background: var(--bg-card);
+  color: var(--bg-card-foreground);
+}
+```
+
+## Next Steps
+
+- [Color Tokens](/docs/en/guides/color-tokens) — Deep dive into token system
+- [Component Customization](/docs/en/guides/component-customization) — Override component styles
+- [Button Variants](/docs/en/guides/button-variants) — Style buttons for dark mode
+- [Card Layouts](/docs/en/guides/card-layouts) — Build dark mode-ready cards
