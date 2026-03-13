@@ -13,6 +13,7 @@
 
 import { fetchComponent, fetchComponentList } from '../api/data-client.js';
 import { formatToolError } from '../api/api-result.js';
+import { getImportStatementForPlatform, getPlatformSupportInfo } from '../platform-support.js';
 import type { PreviewComponentInput, PreviewComponentOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -46,6 +47,20 @@ export async function previewComponentTool(
     }
 
     const component = componentResult.data;
+    const platformSupport = getPlatformSupportInfo(component.name, input.platform);
+    const importStatement =
+      input.platform === 'react-native'
+        ? getImportStatementForPlatform(component.name, 'react-native')
+        : component.importStatement;
+    const dependencies =
+      includeDependencies === true
+        ? input.platform === 'react-native'
+          ? {
+              internal: [],
+              external: platformSupport.recommendedPackages,
+            }
+          : component.dependencies
+        : undefined;
 
     // Build component preview (API 응답에서 직접 필드 사용)
     const result = {
@@ -57,10 +72,19 @@ export async function previewComponentTool(
       props: component.props ?? [],
       variants: includeExamples ? component.variants : undefined,
       subComponents: component.subComponents,
-      importStatement: component.importStatement,
-      dependencies: includeDependencies ? component.dependencies : undefined,
+      importStatement,
+      dependencies,
       examples: includeExamples ? component.examples : undefined,
       accessibility: component.accessibility,
+      platformSupport: {
+        target: input.platform,
+        supported: platformSupport.supported,
+        recommended: platformSupport.recommended,
+        status: platformSupport.status,
+        notes: platformSupport.notes,
+        recommendedImports: platformSupport.recommendedImports,
+        recommendedPackages: platformSupport.recommendedPackages,
+      },
     };
 
     return {

@@ -9,6 +9,7 @@
 
 import { fetchComponentList } from '../api/data-client.js';
 import { formatToolError } from '../api/api-result.js';
+import { getPlatformSupportInfo } from '../platform-support.js';
 import type { ListComponentsInput, ListComponentsOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -45,6 +46,34 @@ export async function listComponentsTool(
       );
     }
 
+    const platformAwareComponents = components
+      .map((component: any) => {
+        const reactNativeSupport = getPlatformSupportInfo(component.name, 'react-native');
+        const platforms = ['web'];
+        if (reactNativeSupport.supported) {
+          platforms.push('react-native');
+        }
+
+        return {
+          ...component,
+          platforms,
+          platformSupport: {
+            reactNative: {
+              supported: reactNativeSupport.supported,
+              recommended: reactNativeSupport.recommended,
+              status: reactNativeSupport.status,
+            },
+          },
+        };
+      })
+      .filter(component => {
+        if (input.platform !== 'react-native') {
+          return true;
+        }
+
+        return component.platformSupport.reactNative.supported;
+      });
+
     // 카테고리 카운트 계산
     const categories = {
       core: allComponents.filter((c: any) => c.category === 'core').length,
@@ -54,8 +83,8 @@ export async function listComponentsTool(
 
     return {
       success: true,
-      components: components as any,
-      count: components.length,
+      components: platformAwareComponents as any,
+      count: platformAwareComponents.length,
       categories,
     };
   } catch (error) {

@@ -42,6 +42,25 @@ const REACT_NATIVE_AVOID_COMPONENTS = new Set(['Modal', 'Tabs', 'Table', 'Dropdo
 
 const REACT_NATIVE_RECOMMENDED_PACKAGES = ['react-native', 'react-native-safe-area-context'];
 
+const REACT_NATIVE_IMPORT_STATEMENTS: Record<string, string> = {
+  Avatar: "import { Image, View } from 'react-native';",
+  Badge: "import { Text, View } from 'react-native';",
+  Button: "import { Pressable, Text } from 'react-native';",
+  Card: "import { View } from 'react-native';",
+  Checkbox: "import { Pressable, View } from 'react-native';",
+  Form: "import { View } from 'react-native';",
+  Heading: "import { Text } from 'react-native';",
+  Image: "import { Image } from 'react-native';",
+  Input: "import { TextInput } from 'react-native';",
+  Link: "import { Pressable, Text } from 'react-native';",
+  List: "import { FlatList, View } from 'react-native';",
+  Progress: "import { View } from 'react-native';",
+  Radio: "import { Pressable, View } from 'react-native';",
+  Slider: "import { View } from 'react-native';",
+  Switch: "import { Switch } from 'react-native';",
+  Text: "import { Text } from 'react-native';",
+};
+
 const REACT_NATIVE_AUDIT_RULES: DirectWriteAuditRule[] = [
   {
     id: 'rn-hardcoded-color',
@@ -141,4 +160,15 @@ export function getPlatformSupportInfo(
 
 export function getReactNativeAuditRules(): DirectWriteAuditRule[] {
   return [...REACT_NATIVE_AUDIT_RULES];
+}
+
+export function getImportStatementForPlatform(
+  componentName: string,
+  platform: PlatformTarget = 'web'
+): string {
+  if (platform === 'web') {
+    return `import { ${componentName} } from '@framingui/ui';`;
+  }
+
+  return REACT_NATIVE_IMPORT_STATEMENTS[componentName] || "import { View } from 'react-native';";
 }
