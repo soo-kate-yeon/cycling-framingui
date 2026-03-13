@@ -4,11 +4,11 @@ const { mockApplyRecipeToNode } = vi.hoisted(() => ({
   mockApplyRecipeToNode: vi.fn(async (node: any) => node),
 }));
 
-vi.mock('../../src/data/recipe-resolver.ts', () => ({
+vi.mock('../../src/data/recipe-resolver.js', () => ({
   applyRecipeToNode: mockApplyRecipeToNode,
 }));
 
-import { generateScreenTool } from '../../src/tools/generate-screen.ts';
+import { generateScreenTool } from '../../src/tools/generate-screen.js';
 
 describe('Phase 4: generate_screen quality', () => {
   it('does not emit synthetic Tailwind classes derived from typography token paths', async () => {

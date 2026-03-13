@@ -1,8 +1,6 @@
 name: E2E Tests
 
 on:
-  push:
-    branches: [master, main]
   schedule:
     - cron: '0 18 * * *'
   workflow_dispatch:
@@ -48,7 +46,7 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
         working-directory: packages/playground-web
 
-      - name: Run nightly smoke E2E
+      - name: Run scheduled browser smoke E2E
         if: github.event_name != 'workflow_dispatch' || github.event.inputs.suite == 'smoke'
         run: pnpm ci:mcp:nightly
         env:

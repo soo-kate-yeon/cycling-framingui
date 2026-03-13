@@ -5,15 +5,15 @@ const { mockFetchThemeList, mockFetchTheme } = vi.hoisted(() => ({
   mockFetchTheme: vi.fn(),
 }));
 
-vi.mock('../../src/api/data-client.ts', () => ({
+vi.mock('../../src/api/data-client.js', () => ({
   fetchThemeList: mockFetchThemeList,
   fetchTheme: mockFetchTheme,
 }));
 
-import { clearAuthData, setAuthData } from '../../src/auth/state.ts';
-import { listThemesTool } from '../../src/tools/list-themes.ts';
-import { previewThemeTool } from '../../src/tools/preview-theme.ts';
-import { whoamiTool } from '../../src/tools/whoami.ts';
+import { clearAuthData, setAuthData, setRawApiKey } from '../../src/auth/state.js';
+import { listThemesTool } from '../../src/tools/list-themes.js';
+import { previewThemeTool } from '../../src/tools/preview-theme.js';
+import { whoamiTool } from '../../src/tools/whoami.js';
 
 const AUTH_FIXTURE = {
   valid: true,
@@ -41,6 +41,7 @@ describe('Phase 2: theme authority consistency', () => {
     vi.clearAllMocks();
     clearAuthData();
     setAuthData(AUTH_FIXTURE);
+    setRawApiKey('test-api-key');
   });
 
   afterEach(() => {

@@ -56,10 +56,10 @@ npx @framingui/mcp-server init
 ## Links
 
 - Website: https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=home
-- Explore: https://framingui.com/explore?utm_source=ai&utm_medium=llms&utm_content=explore
-- Free Trial: https://framingui.com/explore?utm_source=ai&utm_medium=llms&utm_content=trial
+- Templates: https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=templates#theme-gallery
+- Free Trial: https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=trial
 
 ## Try It Now
 
 Start your 3-day free trial - no credit card required.
-https://framingui.com/explore?utm_source=ai&utm_medium=llms&utm_content=cta
+https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=cta

@@ -3,6 +3,14 @@
 Use `pnpm test:e2e` for CI-safe smoke coverage.
 Use `pnpm test:e2e:full` for the full local suite when Supabase test credentials are available.
 
+The smoke lane is intended to catch user-facing breakage early:
+
+- route returns 200 instead of 404/500
+- primary content is visible
+- global CSS is loaded
+- Next.js runtime error overlays are absent
+- critical entry points still render without relying on brittle copy/count assertions
+
 ---
 
 ## ⚡ 5분 안에 테스트 실행하기
@@ -161,13 +169,16 @@ pnpm playwright test --debug api-keys/create-api-key.spec.ts
 
 ## 📈 CI/CD 통합
 
-GitHub Actions에서 자동 실행:
+GitHub Actions lane split:
 
 ```yaml
 # .github/workflows/e2e-tests.yml
 name: E2E Tests
 
-on: [pull_request]
+on:
+  schedule:
+    - cron: '0 18 * * *'
+  workflow_dispatch:
 
 jobs:
   e2e:
@@ -180,13 +191,12 @@ jobs:
       - run: pnpm install
       - run: pnpm --filter @framingui/playground-web build
 
-      - name: Run E2E Tests
-        run: pnpm --filter @framingui/playground-web test:e2e:smoke
+      - name: Run browser smoke E2E
+        run: pnpm ci:mcp:nightly
         env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           PLAYWRIGHT_HEADLESS: true
+
+Pull requests use `pnpm ci:mcp:pr` in `quality-gate.yml` instead of full browser E2E.
 
       - uses: actions/upload-artifact@v4
         if: failure()

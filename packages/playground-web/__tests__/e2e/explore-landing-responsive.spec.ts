@@ -1,12 +1,14 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndAssertBrowserHealth } from './helpers/browser-health';
 
 const TEMPLATE_ROUTE = '/explore/template/bold-line';
 
 test.describe('Template Landing Responsive Smoke', () => {
   test('@smoke should render the template landing page on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto(TEMPLATE_ROUTE);
+    await gotoAndAssertBrowserHealth(page, { path: TEMPLATE_ROUTE });
 
+    await expect(page).toHaveURL(/\/explore\/template\/bold-line(?:\?.*)?$/);
     await expect(page.getByRole('heading', { level: 1, name: /Bold Line/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /Preview/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /Documentation|Guide/i })).toBeVisible();
@@ -17,8 +19,9 @@ test.describe('Template Landing Responsive Smoke', () => {
 
   test('@smoke should render the template landing page on desktop', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto(TEMPLATE_ROUTE);
+    await gotoAndAssertBrowserHealth(page, { path: TEMPLATE_ROUTE });
 
+    await expect(page).toHaveURL(/\/explore\/template\/bold-line(?:\?.*)?$/);
     await expect(page.getByRole('heading', { level: 1, name: /Bold Line/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /Preview/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /Documentation|Guide/i })).toBeVisible();
@@ -28,10 +31,11 @@ test.describe('Template Landing Responsive Smoke', () => {
   });
 
   test('@smoke should render the explore gallery', async ({ page }) => {
-    await page.goto('/explore');
+    await gotoAndAssertBrowserHealth(page, { path: '/explore' });
 
-    const templateCards = page.locator('article');
+    await expect(page).toHaveURL(/\/explore(?:\?.*)?$/);
+    const templateCards = page.locator('.template-gallery article');
     await expect(templateCards.first()).toBeVisible();
-    await expect(templateCards).toHaveCount(8);
+    expect(await templateCards.count()).toBeGreaterThan(0);
   });
 });
