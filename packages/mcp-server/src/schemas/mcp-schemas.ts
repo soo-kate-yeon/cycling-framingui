@@ -614,6 +614,10 @@ export const ComponentCategorySchema = z.enum(['core', 'complex', 'advanced']);
 
 export type ComponentCategory = z.infer<typeof ComponentCategorySchema>;
 
+export const PlatformTargetSchema = z.enum(['web', 'react-native']);
+
+export type PlatformTarget = z.infer<typeof PlatformTargetSchema>;
+
 /**
  * List Components Input Schema
  * SPEC-MCP-003: [TAG-MCP003-006]
@@ -621,6 +625,7 @@ export type ComponentCategory = z.infer<typeof ComponentCategorySchema>;
 export const ListComponentsInputSchema = z.object({
   category: z.enum(['core', 'complex', 'advanced', 'all']).optional().default('all'),
   search: z.string().optional(),
+  platform: PlatformTargetSchema.optional().default('web'),
 });
 
 export type ListComponentsInput = z.infer<typeof ListComponentsInputSchema>;
@@ -636,6 +641,18 @@ export const ComponentMetaSchema = z.object({
   variantsCount: z.number(),
   hasSubComponents: z.boolean(),
   tier: z.number(),
+  platforms: z.array(PlatformTargetSchema).optional(),
+  platformSupport: z
+    .object({
+      reactNative: z
+        .object({
+          supported: z.boolean(),
+          recommended: z.boolean(),
+          status: z.enum(['full', 'partial', 'avoid']),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 export type ComponentMeta = z.infer<typeof ComponentMetaSchema>;
@@ -667,6 +684,7 @@ export const PreviewComponentInputSchema = z.object({
   componentId: z.string().regex(/^[a-z-]+$/, 'Component ID must be lowercase with hyphens'),
   includeExamples: z.boolean().optional(),
   includeDependencies: z.boolean().optional(),
+  platform: PlatformTargetSchema.optional().default('web'),
 });
 
 export type PreviewComponentInput = z.infer<typeof PreviewComponentInputSchema>;
@@ -730,6 +748,17 @@ export const PreviewComponentOutputSchema = z.object({
         .optional(),
       examples: z.array(UsageExampleSchema).optional(),
       accessibility: z.string().optional(),
+      platformSupport: z
+        .object({
+          target: PlatformTargetSchema,
+          supported: z.boolean(),
+          recommended: z.boolean(),
+          status: z.enum(['full', 'partial', 'avoid']),
+          notes: z.array(z.string()),
+          recommendedImports: z.array(z.string()),
+          recommendedPackages: z.array(z.string()),
+        })
+        .optional(),
     })
     .optional(),
   error: z.string().optional(),
@@ -928,6 +957,7 @@ export const GetScreenGenerationContextInputSchema = z.object({
   themeId: ThemeIdSchema.optional(),
   includeExamples: z.boolean().optional().default(true),
   compact: z.boolean().optional().default(false),
+  platform: PlatformTargetSchema.optional().default('web'),
 });
 
 export type GetScreenGenerationContextInput = z.infer<typeof GetScreenGenerationContextInputSchema>;
@@ -958,6 +988,17 @@ export const ContextComponentInfoSchema = z.object({
   importStatement: z.string(),
   props: z.array(PropDefinitionSchema),
   variants: z.array(VariantSchema).optional(),
+  platformSupport: z
+    .object({
+      target: PlatformTargetSchema,
+      supported: z.boolean(),
+      recommended: z.boolean(),
+      status: z.enum(['full', 'partial', 'avoid']),
+      notes: z.array(z.string()),
+      recommendedImports: z.array(z.string()),
+      recommendedPackages: z.array(z.string()),
+    })
+    .optional(),
 });
 
 export type ContextComponentInfo = z.infer<typeof ContextComponentInfoSchema>;
@@ -1089,6 +1130,7 @@ export type DefinitionStarter = z.infer<typeof DefinitionStarterSchema>;
  */
 export const GetScreenGenerationContextOutputSchema = z.object({
   success: z.boolean(),
+  targetPlatform: PlatformTargetSchema.optional(),
   templateMatch: ContextTemplateMatchSchema.optional(),
   components: z.array(ContextComponentInfoSchema).optional(),
   definitionStarter: DefinitionStarterSchema.optional(),
@@ -1102,6 +1144,14 @@ export const GetScreenGenerationContextOutputSchema = z.object({
   themeRecipes: z.array(ThemeRecipeInfoSchema).optional(),
   hints: z.array(GenerationHintSchema).optional(),
   workflow: WorkflowGuideSchema.optional(),
+  directWrite: z
+    .object({
+      runtime: z.string(),
+      entryStrategy: z.string(),
+      stylingStrategy: z.string(),
+      validationStrategy: z.string(),
+    })
+    .optional(),
   error: z.string().optional(),
 });
 
@@ -1246,11 +1296,16 @@ export type ValidateScreenDefinitionOutput = z.infer<typeof ValidateScreenDefini
 export const ValidateEnvironmentInputSchema = z.object({
   projectPath: z.string().describe('Path to package.json or project root'),
   requiredPackages: z.array(z.string()).describe('Packages required by the screen components'),
+  platform: PlatformTargetSchema.optional().default('web'),
   checkTailwind: z
     .boolean()
     .optional()
     .default(true)
     .describe('Also validate Tailwind CSS configuration for @framingui/ui compatibility'),
+  sourceFiles: z
+    .array(z.string())
+    .optional()
+    .describe('Optional source files to audit for raw style escapes or platform drift'),
 });
 
 export type ValidateEnvironmentInput = z.infer<typeof ValidateEnvironmentInputSchema>;
@@ -1262,6 +1317,14 @@ export const ValidateEnvironmentOutputSchema = z.object({
   success: z.boolean(),
   installed: z.record(z.string()).optional().describe('Packages already installed with versions'),
   missing: z.array(z.string()).optional().describe('Packages that need to be installed'),
+  platform: PlatformTargetSchema.optional(),
+  environment: z
+    .object({
+      runtime: z.enum(['web', 'expo', 'react-native']),
+      projectType: z.enum(['web', 'expo', 'react-native']),
+      packageManager: z.enum(['npm', 'pnpm', 'yarn', 'bun', 'unknown']).optional(),
+    })
+    .optional(),
   installCommands: z
     .object({
       npm: z.string(),
@@ -1282,6 +1345,20 @@ export const ValidateEnvironmentOutputSchema = z.object({
     })
     .optional()
     .describe('Tailwind CSS configuration validation for @framingui/ui compatibility'),
+  sourceAudit: z
+    .object({
+      filesScanned: z.number(),
+      findings: z.array(
+        z.object({
+          filePath: z.string(),
+          ruleId: z.string(),
+          severity: z.enum(['warning', 'error']),
+          message: z.string(),
+          guidance: z.string(),
+        })
+      ),
+    })
+    .optional(),
   error: z.string().optional(),
 });
 
