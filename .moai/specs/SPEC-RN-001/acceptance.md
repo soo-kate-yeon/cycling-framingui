@@ -37,3 +37,6 @@
 - TASK-001 validation passed:
   - `pnpm --filter @framingui/react-native build`
   - `pnpm --filter @framingui/react-native test`
+- TASK-002 validation passed:
+  - `pnpm --filter @framingui/react-native build`
+  - `pnpm --filter @framingui/react-native test`
