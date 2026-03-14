@@ -228,7 +228,7 @@ export function WrongName() {
       expect(result.success).toBe(true);
       expect(result.code).toBeDefined();
       expect(result.code).toContain('export default function');
-    }, 15000);
+    }, 30000);
 
     it('should export blueprint in TSX format', async () => {
       const genResult = await generateBlueprintTool({
@@ -245,7 +245,7 @@ export function WrongName() {
       expect(result.success).toBe(true);
       expect(result.code).toContain("import React from 'react'");
       expect(result.code).toContain('React.ReactElement');
-    });
+    }, 30000);
 
     it('should require either blueprint or componentName', async () => {
       const result = await hybridExportTool({

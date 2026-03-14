@@ -2,6 +2,18 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.27] - 2026-03-15
+
+### Added
+
+- Added `detect-project-context`-driven React Native and Expo workflow defaults so project context can carry the platform target through discovery and validation tools.
+- Added runtime-aware React Native component catalog metadata so MCP discovery can recommend `@framingui/react-native` primitives before falling back to host framework guidance.
+
+### Changed
+
+- Updated `list-components`, `preview-component`, and `get-screen-generation-context` to resolve React Native targets from the detected project context and return runtime-specific guidance.
+- Expanded `validate-environment` to report platform-aware environment metadata and React Native source-audit findings for web-only imports and styling patterns.
+
 ## [0.6.25] - 2026-03-12
 
 ### Fixed

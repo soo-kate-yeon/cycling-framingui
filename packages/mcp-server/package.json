@@ -1,6 +1,6 @@
 {
   "name": "@framingui/mcp-server",
-  "version": "0.6.25",
+  "version": "0.6.27",
   "description": "Framingui MCP Server with Claude Code integration and timestamp-based preview system",
   "type": "module",
   "main": "./dist/index.js",

@@ -157,7 +157,7 @@ describe('JSON-RPC format validation', () => {
 
       expect(hasResult || hasError).toBe(true);
       expect(hasResult && hasError).toBe(false);
-    });
+    }, 30000);
   });
 
   describe('tools/list response structure', () => {

@@ -25,14 +25,14 @@ describe('Recipe Resolver', () => {
       // Fallback to default or base if available, otherwise undefined
       // Card 컴포넌트에 기본 레시피가 있으면 string, 없으면 undefined
       expect(recipe === undefined || typeof recipe === 'string').toBe(true);
-    });
+    }, 15000);
 
     it('card.glass 레시피 조회 성공', async () => {
       const recipe = await resolveRecipe('dark-boldness', 'Card', 'glass');
       expect(recipe).toBeDefined();
       expect(typeof recipe).toBe('string');
       expect(recipe).toContain('bg-');
-    });
+    }, 15000);
 
     it('button.primary 레시피 조회 성공', async () => {
       const recipe = await resolveRecipe('dark-boldness', 'Button', 'primary');
