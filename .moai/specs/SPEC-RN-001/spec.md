@@ -267,3 +267,4 @@ FramingUI should package the RN runtime path, but it should do so as a deliberat
 
 - TASK-001 completed with a scaffolded `packages/react-native` package, exports map, README stub, and independent build/test wiring
 - TASK-002 completed with typed runtime token values, RN helpers, and a FramingUI token-contract mapping layer
+- TASK-003 completed with generic `Button`, `TextField`, `InlineMessage`, `Screen`, and `Stack` primitives plus package-level tests
