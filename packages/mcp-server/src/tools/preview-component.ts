@@ -14,6 +14,7 @@
 import { fetchComponent, fetchComponentList } from '../api/data-client.js';
 import { formatToolError } from '../api/api-result.js';
 import { getImportStatementForPlatform, getPlatformSupportInfo } from '../platform-support.js';
+import { resolvePlatformTarget } from '../project-context-resolution.js';
 import type { PreviewComponentInput, PreviewComponentOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -25,6 +26,8 @@ export async function previewComponentTool(
   input: PreviewComponentInput
 ): Promise<PreviewComponentOutput> {
   try {
+    const { platform: targetPlatform } = resolvePlatformTarget(input.platform);
+
     // Set default values for optional parameters
     const includeExamples = input.includeExamples ?? true;
     const includeDependencies = input.includeDependencies ?? true;
@@ -47,14 +50,14 @@ export async function previewComponentTool(
     }
 
     const component = componentResult.data;
-    const platformSupport = getPlatformSupportInfo(component.name, input.platform);
+    const platformSupport = getPlatformSupportInfo(component.name, targetPlatform);
     const importStatement =
-      input.platform === 'react-native'
+      targetPlatform === 'react-native'
         ? getImportStatementForPlatform(component.name, 'react-native')
         : component.importStatement;
     const dependencies =
       includeDependencies === true
-        ? input.platform === 'react-native'
+        ? targetPlatform === 'react-native'
           ? {
               internal: [],
               external: platformSupport.recommendedPackages,
@@ -77,7 +80,7 @@ export async function previewComponentTool(
       examples: includeExamples ? component.examples : undefined,
       accessibility: component.accessibility,
       platformSupport: {
-        target: input.platform,
+        target: targetPlatform,
         supported: platformSupport.supported,
         recommended: platformSupport.recommended,
         status: platformSupport.status,

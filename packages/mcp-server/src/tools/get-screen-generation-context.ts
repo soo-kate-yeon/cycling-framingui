@@ -25,6 +25,7 @@ import { matchTemplates } from '../data/template-matcher.js';
 import { getAllRecipes } from '../data/recipe-resolver.js';
 import { generateHints } from '../data/hint-generator.js';
 import { getImportStatementForPlatform, getPlatformSupportInfo } from '../platform-support.js';
+import { resolvePlatformTarget } from '../project-context-resolution.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
 const TEMPLATE_CONFIDENCE_THRESHOLD = 20;
@@ -411,7 +412,7 @@ export async function getScreenGenerationContextTool(
   input: GetScreenGenerationContextInput
 ): Promise<GetScreenGenerationContextOutput> {
   try {
-    const targetPlatform = input.platform ?? 'web';
+    const { platform: targetPlatform } = resolvePlatformTarget(input.platform);
     // 1. Match templates based on description
     const templateMatches = matchTemplates(input.description, 3);
     let bestMatch: ContextTemplateMatch | undefined;

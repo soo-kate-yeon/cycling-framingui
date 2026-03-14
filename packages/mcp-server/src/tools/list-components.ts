@@ -10,6 +10,7 @@
 import { fetchComponentList } from '../api/data-client.js';
 import { formatToolError } from '../api/api-result.js';
 import { getPlatformSupportInfo } from '../platform-support.js';
+import { resolvePlatformTarget } from '../project-context-resolution.js';
 import type { ListComponentsInput, ListComponentsOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -22,6 +23,8 @@ export async function listComponentsTool(
   input: ListComponentsInput
 ): Promise<ListComponentsOutput> {
   try {
+    const { platform: targetPlatform } = resolvePlatformTarget(input.platform);
+
     // API에서 전체 컴포넌트 목록 조회
     const result = await fetchComponentList();
     if (!result.ok) {
@@ -67,7 +70,7 @@ export async function listComponentsTool(
         };
       })
       .filter(component => {
-        if (input.platform !== 'react-native') {
+        if (targetPlatform !== 'react-native') {
           return true;
         }
 
