@@ -106,6 +106,7 @@ Follow the 3-step workflow:
 
 For Expo / React Native targets:
 - use the direct-write guidance from \`get-screen-generation-context\`
+- prefer \`@framingui/react-native\` exports where that runtime surface exists
 - do **not** import \`@framingui/ui\`
 - run \`validate-environment\` with \`sourceFiles\` before handoff
 

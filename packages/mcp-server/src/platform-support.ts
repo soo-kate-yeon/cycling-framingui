@@ -42,6 +42,11 @@ const REACT_NATIVE_AVOID_COMPONENTS = new Set(['Modal', 'Tabs', 'Table', 'Dropdo
 
 const REACT_NATIVE_RECOMMENDED_PACKAGES = ['react-native', 'react-native-safe-area-context'];
 
+const REACT_NATIVE_RUNTIME_IMPORT_STATEMENTS: Partial<Record<string, string>> = {
+  Button: "import { Button } from '@framingui/react-native';",
+  Input: "import { TextField } from '@framingui/react-native';",
+};
+
 const REACT_NATIVE_IMPORT_STATEMENTS: Record<string, string> = {
   Avatar: "import { Image, View } from 'react-native';",
   Badge: "import { Text, View } from 'react-native';",
@@ -107,16 +112,23 @@ export function getPlatformSupportInfo(
   }
 
   if (REACT_NATIVE_SUPPORTED_COMPONENTS.has(componentName)) {
+    const hasRuntimeExport = componentName in REACT_NATIVE_RUNTIME_IMPORT_STATEMENTS;
     return {
       supported: true,
       recommended: true,
       status: 'full',
       notes: [
-        'Write this component directly using React Native primitives or existing app abstractions.',
-        'Keep FramingUI as the contract and QC layer rather than importing @framingui/ui.',
+        hasRuntimeExport
+          ? 'Prefer the matching export from @framingui/react-native, then compose with host primitives as needed.'
+          : 'Write this component directly using React Native primitives or existing app abstractions.',
+        'Keep FramingUI as the contract and validation layer for native direct-write.',
       ],
-      recommendedImports: ['react-native'],
-      recommendedPackages: REACT_NATIVE_RECOMMENDED_PACKAGES,
+      recommendedImports: hasRuntimeExport
+        ? ['@framingui/react-native', 'react-native']
+        : ['react-native'],
+      recommendedPackages: hasRuntimeExport
+        ? ['@framingui/react-native', ...REACT_NATIVE_RECOMMENDED_PACKAGES]
+        : REACT_NATIVE_RECOMMENDED_PACKAGES,
     };
   }
 
@@ -168,6 +180,11 @@ export function getImportStatementForPlatform(
 ): string {
   if (platform === 'web') {
     return `import { ${componentName} } from '@framingui/ui';`;
+  }
+
+  const runtimeImport = REACT_NATIVE_RUNTIME_IMPORT_STATEMENTS[componentName];
+  if (runtimeImport) {
+    return runtimeImport;
   }
 
   return REACT_NATIVE_IMPORT_STATEMENTS[componentName] || "import { View } from 'react-native';";

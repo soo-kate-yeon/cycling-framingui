@@ -63,8 +63,10 @@ describe('getScreenGenerationContextTool react-native platform', () => {
     expect(result.schema).toBeUndefined();
     expect(result.definitionStarter).toBeUndefined();
     expect(result.directWrite?.runtime).toBe('react-native');
-    expect(result.components?.some(component => component.name === 'Button')).toBe(true);
+    expect(result.components?.find(component => component.name === 'Button')?.importStatement).toBe(
+      "import { Button } from '@framingui/react-native';"
+    );
     expect(result.components?.some(component => component.name === 'Table')).toBe(false);
-    expect(result.hints?.[0]?.message).toContain('React Native code directly');
+    expect(result.hints?.[0]?.message).toContain('@framingui/react-native');
   });
 });

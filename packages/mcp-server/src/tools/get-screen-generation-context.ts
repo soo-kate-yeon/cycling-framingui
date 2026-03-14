@@ -509,13 +509,13 @@ export async function getScreenGenerationContextTool(
               category: 'best-practice' as const,
               priority: 'high' as const,
               message:
-                'Write React Native code directly using host app primitives or local abstractions instead of importing @framingui/ui.',
+                'Write React Native code directly using @framingui/react-native where that runtime surface exists, then host app primitives or local abstractions for the rest.',
             },
             {
               category: 'styling' as const,
               priority: 'high' as const,
               message:
-                'Use StyleSheet or host app style helpers with token-backed values. Avoid raw hex, spacing, and radius literals.',
+                'Use StyleSheet plus @framingui/react-native helpers or host app style helpers with token-backed values. Avoid raw hex, spacing, and radius literals.',
             },
             {
               category: 'layout' as const,
@@ -545,13 +545,13 @@ export async function getScreenGenerationContextTool(
                 step: 2,
                 action: 'Compose Native Screen',
                 description:
-                  'Write Expo or React Native code directly using host primitives or your app abstractions. Do not import @framingui/ui.',
+                  'Write Expo or React Native code directly using @framingui/react-native where available, then host primitives or your app abstractions. Do not import @framingui/ui.',
               },
               {
                 step: 3,
                 action: 'Apply Token Constraints',
                 description:
-                  'Map colors, spacing, radius, and typography through host app token helpers or theme constants instead of raw literals.',
+                  'Map colors, spacing, radius, and typography through @framingui/react-native helpers, host app token helpers, or theme constants instead of raw literals.',
               },
               {
                 step: 4,
@@ -570,8 +570,9 @@ export async function getScreenGenerationContextTool(
               },
             ],
             notes: [
-              'Use FramingUI as the contract and validation layer, not as a React Native runtime import.',
+              'Use @framingui/react-native as the minimal runtime surface where available, and keep FramingUI MCP as the contract and validation layer.',
               'Prefer StyleSheet and existing app design primitives over introducing a new styling framework.',
+              '@framingui/react-native is intentionally minimal and does not provide full @framingui/ui parity or native code generation.',
               'Plan for SafeArea, keyboard overlap, and touch targets during direct writing.',
             ],
           }
@@ -661,8 +662,9 @@ export async function getScreenGenerationContextTool(
           ? {
               runtime: 'react-native',
               entryStrategy:
-                'Write the screen directly in Expo Router routes or host app screen modules.',
-              stylingStrategy: 'Use StyleSheet plus token-backed helpers from the host app.',
+                'Write the screen directly in Expo Router routes or host app screen modules, using @framingui/react-native where the runtime surface exists.',
+              stylingStrategy:
+                'Use StyleSheet plus @framingui/react-native helpers or host app token-backed helpers.',
               validationStrategy:
                 'Run validate-environment with platform=react-native and sourceFiles before handoff.',
             }

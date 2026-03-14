@@ -37,7 +37,7 @@ framingui-mcp status
 6. Write React or React Native code from the returned contract
 7. Run \`validate-environment\` with \`sourceFiles\` before handoff
 
-If the detected project is Expo or React Native, keep using the direct-write path and do not repeat \`platform: "react-native"\` on every tool call unless you need an explicit override.
+If the detected project is Expo or React Native, keep using the direct-write path and do not repeat \`platform: "react-native"\` on every tool call unless you need an explicit override. Prefer \`@framingui/react-native\` where the runtime surface exists, then fall back to host primitives.
 
 ## Style Contract Rules
 
@@ -97,6 +97,6 @@ export default function Page() {
 - Treat templates as hints, not the final structure.
 - Treat the validated screen definition as the production contract.
 - Keep semantic wrappers as HTML only when there is no FramingUI primitive to replace them.
-- For Expo / React Native targets, use \`detect-project-context\` once and avoid \`@framingui/ui\` imports.
+- For Expo / React Native targets, use \`detect-project-context\` once, prefer \`@framingui/react-native\` where possible, and avoid \`@framingui/ui\` imports.
 `;
 }

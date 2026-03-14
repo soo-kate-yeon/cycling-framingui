@@ -43,3 +43,12 @@
 - TASK-003 validation passed:
   - `pnpm --filter @framingui/react-native build`
   - `pnpm --filter @framingui/react-native test`
+- TASK-004 validation passed:
+  - `pnpm --filter @framingui/mcp-server test`
+  - `pnpm --filter @framingui/mcp-server typecheck`
+  - `pnpm --filter @framingui/react-native build`
+- Final acceptance validation passed:
+  - `pnpm --filter @framingui/react-native test`
+  - `pnpm --filter @framingui/react-native build`
+  - `pnpm --filter @framingui/mcp-server test`
+  - `pnpm --filter @framingui/mcp-server typecheck`

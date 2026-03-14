@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   getPlatformSupportInfo,
+  getImportStatementForPlatform,
   getReactNativeAuditRules,
   getSupportedPlatforms,
 } from '../platform-support.js';
@@ -22,7 +23,17 @@ describe('React Native direct-write contract', () => {
     expect(info.supported).toBe(true);
     expect(info.recommended).toBe(true);
     expect(info.status).toBe('full');
-    expect(info.recommendedImports).toContain('react-native');
+    expect(info.recommendedImports).toContain('@framingui/react-native');
+    expect(info.recommendedPackages).toContain('@framingui/react-native');
+  });
+
+  it('returns runtime package imports for primitives with extracted native exports', () => {
+    expect(getImportStatementForPlatform('Button', 'react-native')).toBe(
+      "import { Button } from '@framingui/react-native';"
+    );
+    expect(getImportStatementForPlatform('Input', 'react-native')).toBe(
+      "import { TextField } from '@framingui/react-native';"
+    );
   });
 
   it('marks web-centric components as avoid for react-native direct write', () => {

@@ -28,7 +28,7 @@ The production workflow is **guarded direct write**:
 React Native is also supported through a **direct-write contract path**:
 - ✅ Prefer \`detect-project-context\` once when the project path is known
 - ✅ Gather platform-aware component guidance without repeating platform flags
-- ✅ Write Expo / React Native code directly using host primitives or app abstractions
+- ✅ Write Expo / React Native code directly using \`@framingui/react-native\` where available, then host primitives or app abstractions for the rest
 - ✅ Use \`validate-environment\` with \`sourceFiles\` for package checks and QC
 - 🚫 Do not import \`@framingui/ui\` into React Native projects
 
@@ -165,7 +165,7 @@ Use this instead of the web screen-definition path when the target app is Expo o
 2. Call \`get-screen-generation-context\` and let the stored session default pick React Native automatically
 3. If the project path is not available, call \`get-screen-generation-context\` with \`platform: "react-native"\`
 4. Review React Native compatible components and hints
-5. Write the screen directly using \`react-native\` primitives or local app abstractions
+5. Write the screen directly using \`@framingui/react-native\` exports where available, then \`react-native\` primitives or local app abstractions
 6. Run \`validate-environment\` with:
    - \`platform: "react-native"\`
    - \`projectPath\`
@@ -176,7 +176,8 @@ Use this instead of the web screen-definition path when the target app is Expo o
 React Native rules:
 - Do **not** import \`@framingui/ui\`
 - Do **not** require Tailwind or CSS imports
-- Prefer \`StyleSheet\` or host app token helpers over raw style literals
+- Prefer \`StyleSheet\` plus \`@framingui/react-native\` helpers or host app token helpers over raw style literals
+- Treat \`@framingui/react-native\` as a minimal runtime, not as full \`@framingui/ui\` parity or code generation
 
 ## Best Practices
 

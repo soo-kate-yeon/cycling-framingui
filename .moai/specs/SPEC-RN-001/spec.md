@@ -1,7 +1,7 @@
 ---
 id: SPEC-RN-001
 version: "1.0.0"
-status: "proposed"
+status: "complete"
 created: "2026-03-14"
 updated: "2026-03-14"
 author: "Codex + soo-kate-yeon"
@@ -268,3 +268,4 @@ FramingUI should package the RN runtime path, but it should do so as a deliberat
 - TASK-001 completed with a scaffolded `packages/react-native` package, exports map, README stub, and independent build/test wiring
 - TASK-002 completed with typed runtime token values, RN helpers, and a FramingUI token-contract mapping layer
 - TASK-003 completed with generic `Button`, `TextField`, `InlineMessage`, `Screen`, and `Stack` primitives plus package-level tests
+- TASK-004 completed with root/package README updates, MCP prompt/template updates, and React Native discovery guidance that now points to `@framingui/react-native` where the runtime surface exists

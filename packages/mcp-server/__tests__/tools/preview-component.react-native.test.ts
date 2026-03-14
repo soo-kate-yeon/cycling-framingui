@@ -32,9 +32,15 @@ describe('previewComponentTool react-native platform', () => {
     });
 
     expect(result.success).toBe(true);
-    expect(result.component?.importStatement).toContain("from 'react-native'");
+    expect(result.component?.importStatement).toBe(
+      "import { Button } from '@framingui/react-native';"
+    );
     expect(result.component?.platformSupport?.target).toBe('react-native');
     expect(result.component?.platformSupport?.recommended).toBe(true);
+    expect(result.component?.platformSupport?.recommendedImports).toContain(
+      '@framingui/react-native'
+    );
+    expect(result.component?.dependencies?.external).toContain('@framingui/react-native');
     expect(result.component?.dependencies?.external).toContain('react-native');
   });
 });

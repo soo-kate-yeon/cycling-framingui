@@ -41,7 +41,7 @@ For Expo or React Native targets:
 1. Call \`detect-project-context\` with the project path when available
 2. Call \`get-screen-generation-context\` without repeating \`platform\` unless you need an explicit override
 3. Review only React Native compatible components and guidance
-4. Write the screen directly with \`react-native\` primitives or local app abstractions
+4. Write the screen directly with \`@framingui/react-native\` exports where available, then \`react-native\` primitives or local app abstractions
 5. Run \`validate-environment\` with:
    - \`platform: "react-native"\`
    - \`projectPath\`
@@ -71,6 +71,7 @@ For Expo or React Native targets:
 
 Do not claim a FramingUI component is unavailable without checking \`list-components\` or \`preview-component\`.
 Do not recommend \`@framingui/ui\` imports for React Native targets.
+Prefer \`@framingui/react-native\` when the runtime surface exists for the requested primitive.
 
 ### Example
 
@@ -122,7 +123,7 @@ If the target project is Expo or React Native:
 
 - call \`detect-project-context\` when the project path is available
 - rely on the stored session default instead of repeating \`platform: "react-native"\` on every discovery call
-- write the screen directly using host app primitives or local abstractions
+- write the screen directly using \`@framingui/react-native\` where available, then host app primitives or local abstractions
 - do **not** import \`@framingui/ui\`
 - run \`validate-environment\` with \`platform: "react-native"\` and \`sourceFiles\`
 - fix hardcoded colors, spacing, radius values, and web-only patterns such as \`className\`
@@ -137,7 +138,7 @@ If the target project is Expo or React Native:
 
 Semantic wrappers such as \`header\`, \`nav\`, \`section\`, and \`footer\` may remain HTML.
 Interactive and form primitives should use FramingUI components when they exist.
-For React Native targets, use host app/native primitives instead of HTML or \`@framingui/ui\`.
+For React Native targets, use \`@framingui/react-native\` where available, then host app/native primitives instead of HTML or \`@framingui/ui\`.
 
 ### Example
 
