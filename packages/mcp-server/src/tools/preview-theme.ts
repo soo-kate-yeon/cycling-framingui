@@ -8,7 +8,8 @@ import type { ThemeV2 } from '@framingui/core';
 import { themeToCSS, type ThemeDefinition } from '@framingui/ui';
 import type { PreviewThemeInput, PreviewThemeOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
-import { getAuthData } from '../auth/state.js';
+import { getAuthData, isAuthStateExplicitlySet } from '../auth/state.js';
+import { PREMIUM_THEMES } from '../auth/theme-access.js';
 import { fetchTheme } from '../api/data-client.js';
 import { formatToolError } from '../api/api-result.js';
 import {
@@ -131,6 +132,7 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
   try {
     const authData = getAuthData();
     const themeId = input.themeId;
+    const licensedThemeIds = getLicensedThemeIds();
 
     // 인증 + 라이선스 확인
     if (!authData || !authData.valid) {
@@ -138,6 +140,24 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
         success: false,
         error: `🔐 Authentication required to preview themes.\n\n🎁 Start your FREE 3-day trial (no credit card):\n   → https://framingui.com/auth/signup?utm_source=mcp&utm_medium=cli&utm_campaign=theme_preview\n\nAlready have an account? Run \`framingui-mcp login\``,
       };
+    }
+
+    // Explicit auth state includes resolved entitlements, so honor them before any API/cache lookup.
+    // Credential-file fallback does not know the user's licensed themes yet, so it must continue to API.
+    if (isAuthStateExplicitlySet()) {
+      if (!PREMIUM_THEMES.includes(themeId)) {
+        return {
+          success: false,
+          error: `Theme not found: ${themeId}. Available themes: ${PREMIUM_THEMES.join(', ')}`,
+        };
+      }
+
+      if (!licensedThemeIds.includes(themeId)) {
+        return {
+          success: false,
+          error: `Theme "${themeId}" is not included in your license.`,
+        };
+      }
     }
 
     // API를 통해 테마 로드 (라이선스 확인은 API가 수행)
@@ -148,7 +168,7 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
         return {
           success: false,
           error: formatThemeAuthorityInconsistencyError({
-            licensedThemeIds: getLicensedThemeIds(),
+            licensedThemeIds,
             requestedThemeId: themeId,
           }),
         };

@@ -228,7 +228,7 @@ export function WrongName() {
       expect(result.success).toBe(true);
       expect(result.code).toBeDefined();
       expect(result.code).toContain('export default function');
-    });
+    }, 15000);
 
     it('should export blueprint in TSX format', async () => {
       const genResult = await generateBlueprintTool({

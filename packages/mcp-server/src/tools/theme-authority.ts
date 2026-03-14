@@ -45,5 +45,5 @@ export function shouldRewriteThemePreviewError(themeId: string, error: ApiError)
     return false;
   }
 
-  return error.code === 'NOT_FOUND' || error.code === 'FORBIDDEN';
+  return error.code === 'FORBIDDEN';
 }

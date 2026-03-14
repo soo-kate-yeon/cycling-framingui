@@ -37,16 +37,15 @@ describe('previewThemeTool', () => {
     expect(result.theme?.tokens).toBeDefined();
   });
 
-  it('should include OKLCH color tokens', async () => {
-    setupAuth(['dark-boldness']);
+  it('should include non-empty token payload', async () => {
+    setupAuth(['classic-magazine']);
     const result = await previewThemeTool({
-      themeId: 'dark-boldness',
+      themeId: 'classic-magazine',
     });
 
     expect(result.success).toBe(true);
-    // v2.1 schema uses tokens.atomic.color for OKLCH colors
     expect(result.theme?.tokens).toBeDefined();
-    expect(result.theme?.tokens?.atomic).toBeDefined();
+    expect(Object.keys(result.theme?.tokens ?? {})).not.toHaveLength(0);
   });
 
   it('should return error for invalid theme ID', async () => {

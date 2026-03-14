@@ -1,7 +1,7 @@
 ---
 id: SPEC-RN-002
 version: "1.0.0"
-status: planned
+status: complete
 created: "2026-03-14"
 updated: "2026-03-14"
 author: Codex

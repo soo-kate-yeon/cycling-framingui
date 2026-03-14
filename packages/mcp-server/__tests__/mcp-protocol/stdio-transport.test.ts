@@ -12,13 +12,17 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { spawn, ChildProcess } from 'child_process';
 import { resolve } from 'path';
+import { mkdtempSync } from 'fs';
+import { tmpdir } from 'os';
 
 describe('stdio transport', () => {
   let serverPath: string;
+  let isolatedHome: string;
 
   beforeAll(async () => {
     // Path to the built server
     serverPath = resolve(process.cwd(), 'dist/index.js');
+    isolatedHome = mkdtempSync(resolve(tmpdir(), 'framingui-mcp-test-home-'));
   });
 
   /**
@@ -27,7 +31,13 @@ describe('stdio transport', () => {
    */
   async function sendRequest(request: object, timeoutMs = 15000): Promise<any> {
     return new Promise((resolve, reject) => {
-      const server: ChildProcess = spawn('node', [serverPath]);
+      const server: ChildProcess = spawn('node', [serverPath], {
+        env: {
+          ...process.env,
+          HOME: isolatedHome,
+          FRAMINGUI_API_KEY: '',
+        },
+      });
 
       let stdoutData = '';
 
@@ -132,8 +142,9 @@ describe('stdio transport', () => {
     expect(response.result).toHaveProperty('content');
     const toolResult = JSON.parse(response.result.content[0].text);
     expect(toolResult).toHaveProperty('success', false);
-    expect(toolResult.error).toMatch(/Authentication required\.|whoami required\./);
-    expect(toolResult).toHaveProperty('hint');
+    expect(toolResult.error).toMatch(/Authentication required/);
+    expect(toolResult).toHaveProperty('nextAction');
+    expect(toolResult).toHaveProperty('retryable', true);
     expect(response.result).toHaveProperty('isError', true);
   }, 30000);
 
@@ -156,7 +167,8 @@ describe('stdio transport', () => {
 
     const toolResult = JSON.parse(response.result.content[0].text);
     expect(toolResult).toHaveProperty('success', false);
-    expect(toolResult.error).toMatch(/Authentication required\.|whoami required\./);
+    expect(toolResult.error).toMatch(/Authentication required/);
+    expect(toolResult).toHaveProperty('retryable', true);
   }, 30000);
 
   it('should handle tools/call with missing required parameters', async () => {
@@ -184,7 +196,13 @@ describe('stdio transport', () => {
 
   it('should send logs to stderr, not stdout', async () => {
     return new Promise<void>((resolve, reject) => {
-      const server: ChildProcess = spawn('node', [serverPath]);
+      const server: ChildProcess = spawn('node', [serverPath], {
+        env: {
+          ...process.env,
+          HOME: isolatedHome,
+          FRAMINGUI_API_KEY: '',
+        },
+      });
 
       let fullStdout = '';
       const stderrLines: string[] = [];

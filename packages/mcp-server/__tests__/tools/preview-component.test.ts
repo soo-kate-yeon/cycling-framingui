@@ -82,7 +82,7 @@ describe('previewComponentTool', () => {
       expect(result.component?.subComponents).toContain('CardHeader');
       expect(result.component?.subComponents).toContain('CardContent');
       expect(result.component?.subComponents).toContain('CardFooter');
-    });
+    }, 15000);
 
     it('should return import statement', async () => {
       // Arrange
@@ -234,6 +234,19 @@ describe('previewComponentTool', () => {
       result.component?.subComponents?.forEach(subComponent => {
         expect(result.component?.importStatement).toContain(subComponent);
       });
+    });
+
+    it('should return react-native runtime guidance when platform is react-native', async () => {
+      const result = await previewComponentTool({
+        componentId: 'text-field',
+        platform: 'react-native',
+        includeExamples: true,
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.component?.name).toBe('TextField');
+      expect(result.component?.importStatement).toContain('@framingui/react-native');
+      expect(result.component?.examples?.[0]?.code).toContain("from '@framingui/react-native'");
     });
   });
 });

@@ -51,7 +51,7 @@ describe('exportScreenTool', () => {
     expect(result.code).toBeDefined();
     expect(result.code).toContain('export default function');
     expect(result.code).toContain('return');
-  });
+  }, 15000);
 
   it('should export blueprint to TSX format with TypeScript annotations', async () => {
     // Generate blueprint

@@ -4,6 +4,8 @@
  * SPEC-MCP-005: Tailwind CSS 설정 검증 확장
  */
 
+import fs from 'node:fs';
+import path from 'node:path';
 import type {
   ValidateEnvironmentInput,
   ValidateEnvironmentOutput,
@@ -11,6 +13,122 @@ import type {
 import { readPackageJson } from '../utils/package-json-reader.js';
 import { readTailwindConfig } from '../utils/tailwind-config-reader.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
+
+type ResolvedPlatform = 'web' | 'react-native';
+type ResolvedRuntime = 'web' | 'react-native' | 'expo';
+type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun' | 'unknown';
+
+function detectPackageManager(projectPath: string, packageManagerField?: unknown): PackageManager {
+  if (typeof packageManagerField === 'string') {
+    if (packageManagerField.startsWith('pnpm')) {
+      return 'pnpm';
+    }
+    if (packageManagerField.startsWith('yarn')) {
+      return 'yarn';
+    }
+    if (packageManagerField.startsWith('bun')) {
+      return 'bun';
+    }
+    if (packageManagerField.startsWith('npm')) {
+      return 'npm';
+    }
+  }
+
+  const root = projectPath.endsWith('package.json') ? path.dirname(projectPath) : projectPath;
+  if (fs.existsSync(path.join(root, 'pnpm-lock.yaml'))) {
+    return 'pnpm';
+  }
+  if (fs.existsSync(path.join(root, 'yarn.lock'))) {
+    return 'yarn';
+  }
+  if (fs.existsSync(path.join(root, 'bun.lockb')) || fs.existsSync(path.join(root, 'bun.lock'))) {
+    return 'bun';
+  }
+  if (fs.existsSync(path.join(root, 'package-lock.json'))) {
+    return 'npm';
+  }
+  return 'unknown';
+}
+
+function resolvePlatform(options: {
+  requestedPlatform?: ValidateEnvironmentInput['platform'];
+  installedPackages: Record<string, string>;
+}): { platform: ResolvedPlatform; runtime: ResolvedRuntime } {
+  if (options.requestedPlatform === 'react-native') {
+    return {
+      platform: 'react-native',
+      runtime: options.installedPackages.expo
+        ? 'expo'
+        : options.installedPackages['react-native']
+          ? 'react-native'
+          : 'react-native',
+    };
+  }
+
+  if (options.installedPackages.expo) {
+    return { platform: 'react-native', runtime: 'expo' };
+  }
+
+  if (options.installedPackages['react-native']) {
+    return { platform: 'react-native', runtime: 'react-native' };
+  }
+
+  return { platform: 'web', runtime: 'web' };
+}
+
+function auditSourceFiles(sourceFiles: string[] | undefined, platform: ResolvedPlatform) {
+  if (!sourceFiles || sourceFiles.length === 0) {
+    return undefined;
+  }
+
+  const issues: string[] = [];
+  const fixes: string[] = [];
+  const rawColorPattern = /#(?:[0-9a-fA-F]{3,8})\b|rgba?\(/;
+  const rawSpacingPattern =
+    /(padding|paddingHorizontal|paddingVertical|paddingTop|paddingBottom|margin|marginTop|marginBottom|gap|borderRadius)\s*:\s*(1[3-9]|[2-9]\d+)/;
+
+  for (const sourceFile of sourceFiles) {
+    if (!fs.existsSync(sourceFile)) {
+      continue;
+    }
+
+    const source = fs.readFileSync(sourceFile, 'utf8');
+
+    if (platform === 'react-native') {
+      if (source.includes('@framingui/ui')) {
+        issues.push(
+          `${sourceFile}: found web-only @framingui/ui import in a React Native source file`
+        );
+        fixes.push(
+          `Replace @framingui/ui imports with @framingui/react-native exports in ${sourceFile}`
+        );
+      }
+
+      if (/className\s*=/.test(source)) {
+        issues.push(`${sourceFile}: found className usage in a React Native source file`);
+        fixes.push(`Move utility-class styling into StyleSheet.create in ${sourceFile}`);
+      }
+
+      if (rawColorPattern.test(source)) {
+        issues.push(`${sourceFile}: found raw color values instead of token-backed theme usage`);
+        fixes.push(
+          `Replace raw color literals with @framingui/react-native theme tokens in ${sourceFile}`
+        );
+      }
+
+      if (rawSpacingPattern.test(source)) {
+        issues.push(`${sourceFile}: found raw spacing or radius values instead of layout tokens`);
+        fixes.push(`Use Screen, Stack, Section, or token-backed spacing helpers in ${sourceFile}`);
+      }
+    }
+  }
+
+  return {
+    checkedFiles: sourceFiles.length,
+    issues,
+    fixes,
+  };
+}
 
 /**
  * Validate user's environment for required dependencies
@@ -58,6 +176,14 @@ export async function validateEnvironmentTool(
     }
 
     const installedPackages = readResult.installedPackages;
+    const environment = resolvePlatform({
+      requestedPlatform: input.platform,
+      installedPackages,
+    });
+    const packageManager = detectPackageManager(
+      projectPath,
+      readResult.packageJson?.packageManager
+    );
 
     // Step 2: Compare required packages with installed packages
     const installed: Record<string, string> = {};
@@ -83,7 +209,7 @@ export async function validateEnvironmentTool(
     // Step 5: Tailwind CSS 설정 검증
     let tailwind: ValidateEnvironmentOutput['tailwind'];
 
-    if (checkTailwind !== false) {
+    if (environment.platform === 'web' && checkTailwind !== false) {
       const tailwindResult = readTailwindConfig(projectPath);
 
       const issues: string[] = [];
@@ -130,12 +256,20 @@ export async function validateEnvironmentTool(
       };
     }
 
+    const sourceAudit = auditSourceFiles(input.sourceFiles, environment.platform);
+
     return {
       success: true,
       installed,
       missing,
       installCommands,
       warnings: warnings.length > 0 ? warnings : undefined,
+      environment: {
+        platform: environment.platform,
+        runtime: environment.runtime,
+        packageManager,
+      },
+      sourceAudit,
       tailwind,
     };
   } catch (error) {

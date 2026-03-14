@@ -14,6 +14,7 @@ import type {
 } from '../schemas/mcp-schemas.js';
 import { ScreenDefinitionSchema } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
+import { getFallbackWebComponent } from '../data/component-fallback-catalog.js';
 import {
   getScreenComponentTypes,
   isSupportedScreenComponentType,
@@ -22,6 +23,28 @@ import {
 const _componentPropsCache: Map<string, any> = new Map();
 
 async function getPropsData(componentId: string): Promise<any | null> {
+  const fallback = getFallbackWebComponent(componentId.toLowerCase());
+  const mergeProps = (primary: any[] = [], secondary: any[] = []) => {
+    const merged = new Map<string, any>();
+    for (const prop of secondary) {
+      merged.set(prop.name, prop);
+    }
+    for (const prop of primary) {
+      merged.set(prop.name, { ...merged.get(prop.name), ...prop });
+    }
+    return Array.from(merged.values());
+  };
+  const mergeVariants = (primary: any[] = [], secondary: any[] = []) => {
+    const merged = new Map<string, any>();
+    for (const variant of secondary) {
+      merged.set(`${variant.name}:${variant.value}`, variant);
+    }
+    for (const variant of primary) {
+      merged.set(`${variant.name}:${variant.value}`, variant);
+    }
+    return Array.from(merged.values());
+  };
+
   if (_componentPropsCache.has(componentId)) {
     return _componentPropsCache.get(componentId);
   }
@@ -29,12 +52,24 @@ async function getPropsData(componentId: string): Promise<any | null> {
   if (result.ok) {
     const detail = result.data;
     const propsData = {
-      props: detail.props ?? [],
-      variants: detail.variants,
-      subComponents: detail.subComponents,
-      dependencies: detail.dependencies,
-      examples: detail.examples,
-      accessibility: detail.accessibility,
+      props: mergeProps(detail.props ?? [], fallback?.props ?? []),
+      variants: mergeVariants(detail.variants ?? [], fallback?.variants ?? []),
+      subComponents: detail.subComponents?.length ? detail.subComponents : fallback?.subComponents,
+      dependencies: detail.dependencies ?? fallback?.dependencies,
+      examples: detail.examples?.length ? detail.examples : fallback?.examples,
+      accessibility: detail.accessibility ?? fallback?.accessibility,
+    };
+    _componentPropsCache.set(componentId, propsData);
+    return propsData;
+  }
+  if (fallback) {
+    const propsData = {
+      props: fallback.props ?? [],
+      variants: fallback.variants,
+      subComponents: fallback.subComponents,
+      dependencies: fallback.dependencies,
+      examples: fallback.examples,
+      accessibility: fallback.accessibility,
     };
     _componentPropsCache.set(componentId, propsData);
     return propsData;
@@ -300,7 +335,7 @@ async function validateComponentType(
         suggestion:
           similar.length > 0
             ? `Did you mean: ${similar.join(', ')}?`
-            : 'Use the shared screen-generation component contract',
+            : 'Use list-components to inspect the shared screen-generation component contract',
       });
     } else {
       warnings.push({

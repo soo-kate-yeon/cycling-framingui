@@ -7,6 +7,7 @@ import type { VerifyResponse } from './verify.js';
 import { MemoryCache } from './cache.js';
 import { info } from '../utils/logger.js';
 import { isMasterAccount } from './theme-access.js';
+import { loadCredentials } from '../cli/credentials.js';
 
 // Cache TTL: 5 minutes (300,000 milliseconds)
 const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -16,6 +17,7 @@ const authCache = new MemoryCache<VerifyResponse>();
 
 // Current authentication state
 let currentAuthData: VerifyResponse | null = null;
+let authStateExplicitlySet = false;
 
 // Raw API key (API 데이터 클라이언트에서 Bearer 헤더로 사용)
 let rawApiKey: string | null = null;
@@ -26,6 +28,7 @@ let rawApiKey: string | null = null;
  */
 export function setAuthData(authData: VerifyResponse | null): void {
   currentAuthData = authData;
+  authStateExplicitlySet = true;
 
   if (authData && authData.valid) {
     authCache.set('auth', authData, CACHE_TTL_MS);
@@ -46,8 +49,33 @@ export function getAuthData(): VerifyResponse | null {
     return cachedAuth;
   }
 
+  if (!authStateExplicitlySet) {
+    const credentials = loadCredentials();
+    if (credentials?.api_key) {
+      rawApiKey = rawApiKey ?? credentials.api_key;
+      currentAuthData = {
+        valid: true,
+        user: {
+          id: 'credentials-user',
+          email: credentials.user_email,
+          plan: 'pro',
+        },
+        themes: { licensed: [] },
+      };
+      return currentAuthData;
+    }
+  }
+
   // Return current state
   return currentAuthData;
+}
+
+/**
+ * Whether auth state was explicitly injected via login/verify/test helpers.
+ * When false, the server is operating on credential-file fallback only.
+ */
+export function isAuthStateExplicitlySet(): boolean {
+  return authStateExplicitlySet;
 }
 
 /**
@@ -61,6 +89,12 @@ export function setRawApiKey(apiKey: string | null): void {
  * Get raw API key for data-client API calls
  */
 export function getRawApiKey(): string | null {
+  if (!rawApiKey) {
+    const credentials = loadCredentials();
+    if (credentials?.api_key) {
+      rawApiKey = credentials.api_key;
+    }
+  }
   return rawApiKey;
 }
 
@@ -70,6 +104,7 @@ export function getRawApiKey(): string | null {
 export function clearAuthData(): void {
   currentAuthData = null;
   rawApiKey = null;
+  authStateExplicitlySet = false;
   authCache.clear();
   info('Authentication data cleared');
 }

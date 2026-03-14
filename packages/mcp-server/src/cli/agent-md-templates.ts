@@ -98,6 +98,13 @@ FramingUI is available in this project through MCP.
 8. Write React code directly from the validated definition.
 9. Run \`validate-environment\` with \`sourceFiles\` before final handoff.
 
+### React Native / Expo
+
+- Use \`get-screen-generation-context\` with \`platform: "react-native"\` for native direct-write work.
+- Prefer \`@framingui/react-native\` exports before inventing app-local shells.
+- Keep custom native layout inside \`StyleSheet.create\`.
+- Run \`validate-environment\` with \`platform: "react-native"\` and \`sourceFiles\` to catch web-only drift.
+
 ### Style Contract
 
 - \`host-utility\`: keep explicit utility styling

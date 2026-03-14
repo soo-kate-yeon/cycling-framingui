@@ -30,6 +30,14 @@ This is **not** the old \`generate_screen\`-first workflow.
 
 \`preview-theme\` → \`get-screen-generation-context\` → \`preview-component\` / \`list-icon-libraries\` when needed → \`validate-screen-definition\` → write code directly → \`validate-environment\`
 
+## React Native Note
+
+For Expo or React Native projects:
+- pass \`"platform": "react-native"\` to \`get-screen-generation-context\`
+- prefer \`@framingui/react-native\` exports over app-local wrappers for common UI
+- write code directly with \`StyleSheet.create\`
+- run \`validate-environment\` with \`sourceFiles\` to catch web-only imports, \`className\`, and raw token drift
+
 ## Step 1/4: Gather Context
 
 **Primary tool:** \`get-screen-generation-context\`

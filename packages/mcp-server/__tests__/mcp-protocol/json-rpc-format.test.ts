@@ -9,25 +9,50 @@
  * - Ensure no response has both result and error
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { spawn, ChildProcess } from 'child_process';
 import { resolve } from 'path';
+import { mkdtempSync } from 'fs';
+import { tmpdir } from 'os';
 
 describe('JSON-RPC format validation', () => {
   const serverPath = resolve(process.cwd(), 'dist/index.js');
+  let isolatedHome: string;
+
+  beforeAll(() => {
+    isolatedHome = mkdtempSync(resolve(tmpdir(), 'framingui-mcp-jsonrpc-home-'));
+  });
+
+  async function killAndWait(server: ChildProcess): Promise<void> {
+    if (server.killed || server.exitCode !== null) {
+      return;
+    }
+
+    await new Promise<void>(resolve => {
+      server.once('close', () => resolve());
+      server.kill();
+    });
+  }
 
   /**
    * Helper function to send JSON-RPC request and get response
    */
   async function sendJsonRpcRequest(request: object): Promise<any> {
     return new Promise((resolve, reject) => {
-      const server: ChildProcess = spawn('node', [serverPath]);
+      const server: ChildProcess = spawn('node', [serverPath], {
+        env: {
+          ...process.env,
+          HOME: isolatedHome,
+          FRAMINGUI_API_KEY: '',
+        },
+      });
 
       let stdoutData = '';
 
       const timeout = setTimeout(() => {
-        server.kill();
-        reject(new Error('Request timeout'));
+        killAndWait(server)
+          .catch(() => undefined)
+          .finally(() => reject(new Error('Request timeout')));
       }, 15000);
 
       server.stdout?.on('data', data => {
@@ -43,8 +68,9 @@ describe('JSON-RPC format validation', () => {
             const response = JSON.parse(line);
             if (response.jsonrpc) {
               clearTimeout(timeout);
-              server.kill();
-              resolve(response);
+              killAndWait(server)
+                .catch(reject)
+                .then(() => resolve(response));
               return;
             }
           } catch (_e) {
@@ -60,6 +86,10 @@ describe('JSON-RPC format validation', () => {
       server.on('error', error => {
         clearTimeout(timeout);
         reject(error);
+      });
+
+      server.on('close', () => {
+        clearTimeout(timeout);
       });
 
       server.stdin?.write(JSON.stringify(request) + '\n');
@@ -307,15 +337,24 @@ describe('JSON-RPC format validation', () => {
   describe('malformed requests', () => {
     it('should handle request with invalid JSON gracefully', async () => {
       return new Promise<void>(resolve => {
-        const server: ChildProcess = spawn('node', [serverPath]);
+        const server: ChildProcess = spawn('node', [serverPath], {
+          env: {
+            ...process.env,
+            HOME: isolatedHome,
+            FRAMINGUI_API_KEY: '',
+          },
+        });
 
         let responded = false;
 
         setTimeout(() => {
-          server.kill();
-          // Server should not crash on invalid JSON
-          expect(responded).toBe(false);
-          resolve();
+          killAndWait(server)
+            .catch(() => undefined)
+            .finally(() => {
+              // Server should not crash on invalid JSON
+              expect(responded).toBe(false);
+              resolve();
+            });
         }, 2000);
 
         server.stdout?.on('data', () => {

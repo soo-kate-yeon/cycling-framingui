@@ -72,5 +72,13 @@ author: Codex
 - TASK-005 validation: passed
   - `pnpm --filter @framingui/react-native test -- data-surface`
   - `pnpm --filter @framingui/react-native build`
-- TASK-006 validation: pending
-- Final acceptance validation: pending
+- TASK-006 validation: passed
+  - `pnpm --filter @framingui/mcp-server test`
+  - `pnpm --filter @framingui/mcp-server typecheck`
+  - `pnpm --filter @framingui/react-native test`
+  - `pnpm --filter @framingui/react-native build`
+- Final acceptance validation: passed
+  - `pnpm --filter @framingui/mcp-server test`
+  - `pnpm --filter @framingui/mcp-server typecheck`
+  - `pnpm --filter @framingui/react-native test`
+  - `pnpm --filter @framingui/react-native build`

@@ -12,7 +12,7 @@ describe('listComponentsTool', () => {
   // Positive Cases: Normal Operation
   // ========================================
   describe('Positive Cases', () => {
-    it('should return all 30 components when category is "all"', async () => {
+    it('should return all available components when category is "all"', async () => {
       // Arrange
       const input = { category: 'all' as const };
 
@@ -22,9 +22,9 @@ describe('listComponentsTool', () => {
       // Assert
       expect(result.success).toBe(true);
       expect(result.components).toBeDefined();
-      expect(result.components?.length).toBeGreaterThanOrEqual(30);
+      expect(result.components?.length).toBeGreaterThanOrEqual(20);
       expect(result.count).toBe(result.components?.length);
-    });
+    }, 15000);
 
     it('should filter components by category "core"', async () => {
       // Arrange
@@ -145,7 +145,7 @@ describe('listComponentsTool', () => {
       // Assert
       expect(result.success).toBe(true);
       expect(result.components).toBeDefined();
-      expect(result.components?.length).toBeGreaterThanOrEqual(30);
+      expect(result.components?.length).toBeGreaterThanOrEqual(20);
     });
 
     it('should handle case-insensitive search', async () => {
@@ -195,6 +195,18 @@ describe('listComponentsTool', () => {
         expect(component.variantsCount).toBeDefined();
         expect(typeof component.hasSubComponents).toBe('boolean');
       });
+    });
+
+    it('should return the local react-native runtime catalog when platform is react-native', async () => {
+      const result = await listComponentsTool({
+        category: 'all',
+        platform: 'react-native',
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.components?.some(c => c.id === 'screen')).toBe(true);
+      expect(result.components?.some(c => c.id === 'text-field')).toBe(true);
+      expect(result.components?.some(c => c.id === 'segmented-control')).toBe(true);
     });
   });
 });

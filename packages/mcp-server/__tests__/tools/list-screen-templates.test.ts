@@ -135,7 +135,7 @@ describe('listScreenTemplatesTool', () => {
 
     expect(result).toEqual({
       success: false,
-      error: 'Authentication failed. Please run `whoami` first or check your API key.',
+      error: 'Authentication failed. Check your login session or API key and try again.',
     });
   });
 });

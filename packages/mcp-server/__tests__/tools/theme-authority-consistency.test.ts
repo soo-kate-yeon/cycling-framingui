@@ -65,12 +65,12 @@ describe('Phase 2: theme authority consistency', () => {
     expect(listThemes.error).toContain('pebble');
   });
 
-  it('rewrites preview-theme not-found into an entitlement inconsistency error for licensed themes', async () => {
+  it('rewrites preview-theme forbidden into an entitlement inconsistency error for licensed themes', async () => {
     mockFetchTheme.mockResolvedValueOnce({
       ok: false,
       error: {
-        code: 'NOT_FOUND',
-        message: 'Theme "pebble" not found.',
+        code: 'FORBIDDEN',
+        message: 'Theme "pebble" is not included in your license.',
       },
     });
 

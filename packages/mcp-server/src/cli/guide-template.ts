@@ -36,6 +36,13 @@ framingui-mcp status
 5. Write React code from the validated definition
 6. Run \`validate-environment\` with \`sourceFiles\` before handoff
 
+### React Native / Expo
+
+- Call \`get-screen-generation-context\` with \`platform: "react-native"\`
+- Prefer \`@framingui/react-native\` exports for common screen structure and controls
+- Keep custom screen styles inside \`StyleSheet.create\`
+- Run \`validate-environment\` with \`platform: "react-native"\` and \`sourceFiles\` before handoff
+
 ## Style Contract Rules
 
 ### host-utility

@@ -621,6 +621,7 @@ export type ComponentCategory = z.infer<typeof ComponentCategorySchema>;
 export const ListComponentsInputSchema = z.object({
   category: z.enum(['core', 'complex', 'advanced', 'all']).optional().default('all'),
   search: z.string().optional(),
+  platform: z.enum(['web', 'react-native']).optional(),
 });
 
 export type ListComponentsInput = z.infer<typeof ListComponentsInputSchema>;
@@ -667,6 +668,7 @@ export const PreviewComponentInputSchema = z.object({
   componentId: z.string().regex(/^[a-z-]+$/, 'Component ID must be lowercase with hyphens'),
   includeExamples: z.boolean().optional(),
   includeDependencies: z.boolean().optional(),
+  platform: z.enum(['web', 'react-native']).optional(),
 });
 
 export type PreviewComponentInput = z.infer<typeof PreviewComponentInputSchema>;
@@ -928,6 +930,7 @@ export const GetScreenGenerationContextInputSchema = z.object({
   themeId: ThemeIdSchema.optional(),
   includeExamples: z.boolean().optional().default(true),
   compact: z.boolean().optional().default(false),
+  platform: z.enum(['web', 'react-native']).optional(),
 });
 
 export type GetScreenGenerationContextInput = z.infer<typeof GetScreenGenerationContextInputSchema>;
@@ -1246,6 +1249,8 @@ export type ValidateScreenDefinitionOutput = z.infer<typeof ValidateScreenDefini
 export const ValidateEnvironmentInputSchema = z.object({
   projectPath: z.string().describe('Path to package.json or project root'),
   requiredPackages: z.array(z.string()).describe('Packages required by the screen components'),
+  platform: z.enum(['web', 'react-native']).optional(),
+  sourceFiles: z.array(z.string()).optional(),
   checkTailwind: z
     .boolean()
     .optional()
@@ -1271,6 +1276,20 @@ export const ValidateEnvironmentOutputSchema = z.object({
     })
     .optional(),
   warnings: z.array(z.string()).optional().describe('Version conflicts or compatibility issues'),
+  environment: z
+    .object({
+      platform: z.enum(['web', 'react-native']),
+      runtime: z.enum(['web', 'react-native', 'expo']),
+      packageManager: z.enum(['npm', 'pnpm', 'yarn', 'bun', 'unknown']),
+    })
+    .optional(),
+  sourceAudit: z
+    .object({
+      checkedFiles: z.number(),
+      issues: z.array(z.string()),
+      fixes: z.array(z.string()),
+    })
+    .optional(),
   tailwind: z
     .object({
       configFound: z.boolean(),

@@ -24,6 +24,10 @@ import type {
 import { matchTemplates } from '../data/template-matcher.js';
 import { getAllRecipes } from '../data/recipe-resolver.js';
 import { generateHints } from '../data/hint-generator.js';
+import {
+  recommendReactNativeRuntimeComponents,
+  toReactNativeContextComponent,
+} from '../data/react-native-runtime-catalog.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
 const TEMPLATE_CONFIDENCE_THRESHOLD = 20;
@@ -333,6 +337,52 @@ function inferPage(category?: string): string {
   }
 }
 
+function buildReactNativeWorkflow(): WorkflowGuide {
+  return {
+    title: 'React Native Direct-Write Workflow',
+    description:
+      'Follow these steps to write Expo or React Native screens directly with @framingui/react-native.',
+    steps: [
+      {
+        step: 1,
+        action: 'Review Runtime Components',
+        description:
+          'Review the native runtime components in this response and choose the smallest reusable surface that matches the screen.',
+      },
+      {
+        step: 2,
+        action: 'Validate Native Environment',
+        tool: 'validate-environment',
+        description:
+          'Check that the target app has react, react-native, and @framingui/react-native installed.',
+        example:
+          '{ "projectPath": "/path/to/app", "platform": "react-native", "requiredPackages": ["react", "react-native", "@framingui/react-native"] }',
+      },
+      {
+        step: 3,
+        action: 'Write React Native Code',
+        description:
+          'Write Expo or React Native code directly, compose from @framingui/react-native exports, and keep custom styles inside StyleSheet.create.',
+      },
+      {
+        step: 4,
+        action: 'Audit for Drift',
+        tool: 'validate-environment',
+        description:
+          'Run validate-environment again with sourceFiles to catch web-only imports, className usage, raw colors, and raw spacing drift.',
+        example:
+          '{ "projectPath": "/path/to/app", "platform": "react-native", "sourceFiles": ["/path/to/screen.tsx"], "requiredPackages": ["react", "react-native", "@framingui/react-native"] }',
+      },
+    ],
+    notes: [
+      'Prefer @framingui/react-native exports over app-local wrappers for common screens.',
+      'Use StyleSheet.create for screen-specific layout, not className or Tailwind.',
+      'Reach for Screen, Section, Card, FormSection, ListItem, and SegmentedControl before inventing local shells.',
+      'Use validate-environment source audits before handoff to catch web-only drift.',
+    ],
+  };
+}
+
 function buildDefinitionStarter(options: {
   description: string;
   themeId?: string;
@@ -382,30 +432,46 @@ export async function getScreenGenerationContextTool(
     if (templateMatches.length > 0) {
       const match = templateMatches[0];
       if (match && shouldIncludeTemplateMatch(match)) {
-        // API를 통해 템플릿 상세 정보 조회 [SPEC-MCP-007:E-002]
-        const templateResult = await fetchTemplate(match.templateId);
-        const templateData = templateResult.ok ? templateResult.data : null;
+        if (input.platform === 'react-native') {
+          bestMatch = {
+            templateId: match.templateId,
+            templateName: match.templateName,
+            category: match.category,
+            confidence: match.confidence,
+            matchedKeywords: match.matchedKeywords,
+            skeleton: undefined,
+            requiredComponents: undefined,
+          };
+        } else {
+          // API를 통해 템플릿 상세 정보 조회 [SPEC-MCP-007:E-002]
+          const templateResult = await fetchTemplate(match.templateId);
+          const templateData = templateResult.ok ? templateResult.data : null;
 
-        bestMatch = {
-          templateId: match.templateId,
-          templateName: match.templateName,
-          category: match.category,
-          confidence: match.confidence,
-          matchedKeywords: match.matchedKeywords,
-          skeleton: templateData?.skeleton,
-          requiredComponents: templateData?.requiredComponents,
-        };
+          bestMatch = {
+            templateId: match.templateId,
+            templateName: match.templateName,
+            category: match.category,
+            confidence: match.confidence,
+            matchedKeywords: match.matchedKeywords,
+            skeleton: templateData?.skeleton,
+            requiredComponents: templateData?.requiredComponents,
+          };
 
-        // Extract component types from template
-        if (templateData) {
-          componentTypes = extractComponentTypes(templateData);
+          // Extract component types from template
+          if (templateData) {
+            componentTypes = extractComponentTypes(templateData);
+          }
         }
       }
     }
 
     // 2. Get examples if requested
     let examples: ScreenExample[] | undefined;
-    if (input.includeExamples !== false && input.compact !== true) {
+    if (
+      input.platform !== 'react-native' &&
+      input.includeExamples !== false &&
+      input.compact !== true
+    ) {
       // API를 통해 스크린 예제 조회 [SPEC-MCP-007:E-007]
       const examplesResult = await fetchScreenExamples();
       const allExamples = examplesResult.ok ? examplesResult.data : [];
@@ -441,6 +507,29 @@ export async function getScreenGenerationContextTool(
       }
     }
 
+    // 4. Native direct-write path does not depend on web component API data
+    const hints = generateHints(input.description, input.themeId);
+
+    if (input.platform === 'react-native') {
+      const nativeComponents = recommendReactNativeRuntimeComponents(
+        input.description,
+        bestMatch?.category
+      )
+        .map(componentId => toReactNativeContextComponent(componentId))
+        .filter((component): component is ContextComponentInfo => component !== null);
+
+      return {
+        success: true,
+        templateMatch: bestMatch,
+        components: nativeComponents,
+        schema: undefined,
+        examples: undefined,
+        themeRecipes: undefined,
+        hints: hints.length > 0 ? hints : undefined,
+        workflow: input.compact === true ? undefined : buildReactNativeWorkflow(),
+      };
+    }
+
     // 4. Get component information from shared contract + template + recipes
     const recommendedComponentTypes = getRecommendedComponentTypes({
       bestMatch,
@@ -459,7 +548,6 @@ export async function getScreenGenerationContextTool(
     });
 
     // 5. Generate contextual hints
-    const hints = generateHints(input.description, input.themeId);
 
     // 6. Generate workflow guide
     const workflow: WorkflowGuide = {

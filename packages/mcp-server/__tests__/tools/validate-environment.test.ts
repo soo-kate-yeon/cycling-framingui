@@ -4,6 +4,9 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { validateEnvironmentTool } from '../../src/tools/validate-environment.js';
 import * as packageJsonReader from '../../src/utils/package-json-reader.js';
 
@@ -387,6 +390,60 @@ describe('validateEnvironmentTool', () => {
         axios: '1.6.0',
         typescript: '>=5.0.0',
       });
+    });
+  });
+
+  describe('react-native 환경', () => {
+    it('react-native 프로젝트를 감지하고 source audit에서 web-only drift를 잡아야 함', async () => {
+      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'framingui-rn-audit-'));
+      const sourceFile = path.join(tempDir, 'Signup.tsx');
+
+      fs.writeFileSync(
+        sourceFile,
+        [
+          "import { Button } from '@framingui/ui';",
+          'const styles = StyleSheet.create({',
+          "  card: { backgroundColor: '#FF00AA', padding: 24, borderRadius: 18 },",
+          '});',
+          'export function Signup() {',
+          '  return <View className="gap-4" />;',
+          '}',
+        ].join('\n')
+      );
+
+      vi.mocked(packageJsonReader.readPackageJson).mockReturnValue({
+        success: true,
+        packageJson: {
+          dependencies: {
+            expo: '^52.0.0',
+            react: '^19.0.0',
+            'react-native': '^0.76.0',
+          },
+        },
+        installedPackages: {
+          expo: '^52.0.0',
+          react: '^19.0.0',
+          'react-native': '^0.76.0',
+        },
+      });
+
+      const result = await validateEnvironmentTool({
+        projectPath: tempDir,
+        platform: 'react-native',
+        requiredPackages: ['react', 'react-native', '@framingui/react-native'],
+        sourceFiles: [sourceFile],
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.environment).toMatchObject({
+        platform: 'react-native',
+        runtime: 'expo',
+      });
+      expect(result.tailwind).toBeUndefined();
+      expect(result.sourceAudit?.issues.some(issue => issue.includes('@framingui/ui'))).toBe(true);
+      expect(result.sourceAudit?.issues.some(issue => issue.includes('className'))).toBe(true);
+      expect(result.sourceAudit?.issues.some(issue => issue.includes('raw color'))).toBe(true);
+      expect(result.sourceAudit?.issues.some(issue => issue.includes('raw spacing'))).toBe(true);
     });
   });
 });

@@ -8,7 +8,8 @@
  */
 
 import { fetchComponentList } from '../api/data-client.js';
-import { formatToolError } from '../api/api-result.js';
+import { listFallbackWebComponents } from '../data/component-fallback-catalog.js';
+import { listReactNativeRuntimeComponents } from '../data/react-native-runtime-catalog.js';
 import type { ListComponentsInput, ListComponentsOutput } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
@@ -21,12 +22,55 @@ export async function listComponentsTool(
   input: ListComponentsInput
 ): Promise<ListComponentsOutput> {
   try {
+    if (input.platform === 'react-native') {
+      const components = listReactNativeRuntimeComponents({
+        category: input.category,
+        search: input.search,
+      });
+      const allComponents = listReactNativeRuntimeComponents({ category: 'all' });
+
+      return {
+        success: true,
+        components,
+        count: components.length,
+        categories: {
+          core: allComponents.filter(component => component.category === 'core').length,
+          complex: allComponents.filter(component => component.category === 'complex').length,
+          advanced: allComponents.filter(component => component.category === 'advanced').length,
+        },
+      };
+    }
+
     // API에서 전체 컴포넌트 목록 조회
     const result = await fetchComponentList();
     if (!result.ok) {
-      return { success: false, error: formatToolError(result.error) };
+      const fallbackComponents = listFallbackWebComponents({
+        category: input.category,
+        search: input.search,
+      });
+      const allFallback = listFallbackWebComponents({ category: 'all' });
+
+      return {
+        success: true,
+        components: fallbackComponents,
+        count: fallbackComponents.length,
+        categories: {
+          core: allFallback.filter(component => component.category === 'core').length,
+          complex: allFallback.filter(component => component.category === 'complex').length,
+          advanced: allFallback.filter(component => component.category === 'advanced').length,
+        },
+      };
     }
-    const allComponents = result.data;
+    const apiComponents = result.data;
+    const fallbackById = new Map(
+      listFallbackWebComponents({ category: 'all' }).map(component => [component.id, component])
+    );
+    const allComponents = [
+      ...apiComponents,
+      ...Array.from(fallbackById.values()).filter(
+        fallback => !apiComponents.some(component => component.id === fallback.id)
+      ),
+    ];
 
     // 카테고리 필터 적용
     let components = allComponents;
