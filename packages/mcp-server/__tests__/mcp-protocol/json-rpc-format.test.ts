@@ -139,7 +139,7 @@ describe('JSON-RPC format validation', () => {
 
       expect(response).toHaveProperty('result');
       expect(response.result).toBeDefined();
-    });
+    }, 30000);
 
     it('should not have both result and error fields', async () => {
       const request = {

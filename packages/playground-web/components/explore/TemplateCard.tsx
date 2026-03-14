@@ -119,6 +119,7 @@ export function TemplateCard({
 
   return (
     <article
+      data-testid="template-card"
       className={`group relative flex flex-col gap-6 w-full bg-transparent transition-all ${className}`}
       onClick={onClick}
     >

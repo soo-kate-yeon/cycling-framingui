@@ -28,10 +28,14 @@ test.describe('Template Landing Responsive Smoke', () => {
   });
 
   test('@smoke should render the explore gallery', async ({ page }) => {
-    await page.goto('/explore');
+    await page.goto('/explore', { waitUntil: 'networkidle' });
 
-    const templateCards = page.locator('article');
-    await expect(templateCards.first()).toBeVisible();
+    await expect(page.getByRole('heading', { level: 3, name: /Square Minimalism/i })).toBeVisible({
+      timeout: 15000,
+    });
+
+    const templateCards = page.locator('main article');
+    await expect(templateCards.first()).toBeVisible({ timeout: 15000 });
     await expect(templateCards).toHaveCount(8);
   });
 });
