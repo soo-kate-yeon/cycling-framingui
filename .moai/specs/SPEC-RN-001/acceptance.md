@@ -34,4 +34,6 @@
 
 ## Validation Record
 
-- Pending
+- TASK-001 validation passed:
+  - `pnpm --filter @framingui/react-native build`
+  - `pnpm --filter @framingui/react-native test`

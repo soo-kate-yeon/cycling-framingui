@@ -262,3 +262,7 @@ Success conditions:
 ## Decision
 
 FramingUI should package the RN runtime path, but it should do so as a deliberately small, generic runtime package rather than trying to clone the entire web UI system in one step.
+
+## Completion Record
+
+- TASK-001 completed with a scaffolded `packages/react-native` package, exports map, README stub, and independent build/test wiring

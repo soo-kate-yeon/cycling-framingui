@@ -1,0 +1,67 @@
+{
+  "name": "@framingui/react-native",
+  "version": "0.1.0",
+  "description": "FramingUI React Native runtime primitives and token consumption helpers",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "linkWorkspace": false
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soo-kate-yeon/framingui",
+    "directory": "packages/react-native"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src __tests__ --ext .ts,.tsx",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "design-system",
+    "react-native",
+    "expo",
+    "design-tokens",
+    "components"
+  ],
+  "dependencies": {
+    "@framingui/tokens": "^0.3.5"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-native": ">=0.76.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/react": "~18.2.79",
+    "@types/react-native": "^0.73.0",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.18.0",
+    "react": "^18.3.1",
+    "react-native": "^0.76.3",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT"
+}
