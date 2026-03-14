@@ -1,11 +1,11 @@
 # @framingui/ui
 
-> 30+ 프로덕션 레디 React 컴포넌트 라이브러리. Radix UI + Tailwind CSS 기반입니다.
+> FramingUI용 React 컴포넌트 패키지. Tailwind 기반이지만 소비 앱에서는 FramingUI 런타임 계약만 맞추면 됩니다.
 
 ## 설치
 
 ```bash
-npm install @framingui/ui
+npm install @framingui/ui tailwindcss-animate
 ```
 
 ### Peer Dependencies
@@ -17,44 +17,64 @@ npm install @framingui/ui
 }
 ```
 
+`tailwindcss-animate`는 `Dialog`, `Popover`, `DropdownMenu`, `Tooltip` 같은 overlay 계열 motion 유틸리티에 필요합니다.
+
+---
+
+## 런타임 계약
+
+FramingUI가 의도한 shape, spacing, animation을 유지하려면 앱은 아래 3가지를 지켜야 합니다.
+
+1. 글로벌 스타일시트에서 `@framingui/ui/styles`를 정확히 한 번만 import
+2. 앱 루트에서 `FramingUIProvider`를 정확히 한 번만 mount
+3. 로컬 `framingui-theme` 또는 theme object를 provider에 전달
+
+### 왜 이 계약이 필요한가
+
+- `@framingui/ui/styles`는 Tailwind v4에서 필요한 `@source`와 `tailwindcss-animate` hook를 같이 제공합니다.
+- 그래서 소비 앱이 `@framingui/ui/dist` 경로를 수동으로 `@source` 하거나 `tailwind.config.ts`에 content 경로를 복붙할 필요가 없습니다.
+- 앱이 CSS 변수 토큰을 손으로 복사하거나 provider를 중복 mount하면 recipe와 런타임 토큰이 어긋날 수 있습니다.
+
 ---
 
 ## Next.js에서 사용하기
 
-### 1. Tailwind CSS 설정
-
-`tailwind.config.ts`에 패키지 경로를 추가합니다.
-
-```typescript
-// tailwind.config.ts
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
-  content: [
-    './app/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-    // @framingui/ui 컴포넌트 경로 추가
-    './node_modules/@framingui/ui/dist/**/*.{js,mjs}',
-  ],
-  plugins: [
-    require('tailwindcss-animate'), // Dialog, Popover 애니메이션에 필요
-  ],
-};
-
-export default config;
-```
-
-### 2. 토큰 CSS 임포트
-
-`globals.css`에 토큰 스타일을 추가합니다.
+### 1. 글로벌 스타일시트
 
 ```css
-/* globals.css */
+/* app/globals.css */
 @import '@framingui/ui/styles';
+@import 'tailwindcss';
+```
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+Tailwind v4에서는 위 import만 유지하면 됩니다. `@framingui/ui/styles`가 패키지 내부 유틸리티 스캔과 animation plugin 연결을 처리합니다.
+
+### 2. 루트 layout에서 provider 연결
+
+```tsx
+import type { Metadata } from 'next';
+import './globals.css';
+import { FramingUIProvider } from '@framingui/ui';
+import framinguiTheme from './framingui-theme';
+
+export const metadata: Metadata = {
+  title: 'FramingUI App',
+  description: 'FramingUI runtime contract example',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body>
+        <FramingUIProvider theme={framinguiTheme}>{children}</FramingUIProvider>
+      </body>
+    </html>
+  );
+}
 ```
 
 ### 3. 컴포넌트 사용
@@ -69,14 +89,38 @@ export default function HomePage() {
         <CardTitle>환영합니다</CardTitle>
       </CardHeader>
       <CardContent>
-        <Button variant="default" size="lg">
-          시작하기
-        </Button>
+        <Button size="lg">시작하기</Button>
       </CardContent>
     </Card>
   );
 }
 ```
+
+---
+
+## Tailwind v3와 v4 차이
+
+### Tailwind v4
+
+- `globals.css`에서 `@import '@framingui/ui/styles';` 유지
+- `tailwind.config.ts`에 `@framingui/ui/dist` content 경로를 수동 추가하지 않음
+- `tailwindcss-animate`는 설치만 하면 되고, shared styles가 연결을 처리
+
+### Tailwind v3
+
+- `tailwind.config.ts`에 `@framingui/ui/dist` content 경로와 `tailwindcss-animate` plugin 설정이 필요할 수 있음
+- 가능하면 `npx -y @framingui/mcp-server@latest init`로 bootstrap 하는 편이 안전함
+
+---
+
+## 자주 하는 실수
+
+- `FramingUIProvider`를 `layout.tsx`와 `page.tsx` 양쪽에 중복 mount
+- `globals.css`에 theme token block을 손으로 복사
+- Tailwind v4 앱에서 `@source "../../../node_modules/@framingui/ui/dist"`를 수동 추가
+- `body`에 강한 `background`, `color`, `font-family`를 박아 FramingUI 테마를 덮어씀
+
+이런 경우 버튼 패딩, 높이, radius, overlay animation이 어긋나 보일 수 있습니다.
 
 ---
 

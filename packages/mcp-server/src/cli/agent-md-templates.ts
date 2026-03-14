@@ -36,7 +36,7 @@ framingui-mcp login
 ### Style Contract Rules
 
 - If the project stays \`host-utility\`, keep utility classes explicit.
-- If the project uses \`framingui-native\`, ensure the global stylesheet imports \`@framingui/ui/styles\` before relying on FramingUI default variants.
+- If the project uses \`framingui-native\`, ensure the global stylesheet imports \`@framingui/ui/styles\` and the app root mounts \`FramingUIProvider\` with the generated \`framingui-theme\`.
 
 ### Slash Commands
 
@@ -59,19 +59,21 @@ Do not claim a FramingUI component is unavailable without checking \`list-compon
 
 \`\`\`tsx
 // ${importPath}
-import '@framingui/ui/styles';
-import { Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+import { FramingUIProvider, Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+import framinguiTheme from './framingui-theme';
 
 export default function Page() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Ready for MCP-assisted UI work</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Button>Continue</Button>
-      </CardContent>
-    </Card>
+    <FramingUIProvider theme={framinguiTheme}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Ready for MCP-assisted UI work</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button>Continue</Button>
+        </CardContent>
+      </Card>
+    </FramingUIProvider>
   );
 }
 \`\`\`
@@ -101,7 +103,7 @@ FramingUI is available in this project through MCP.
 ### Style Contract
 
 - \`host-utility\`: keep explicit utility styling
-- \`framingui-native\`: import \`@framingui/ui/styles\` and then rely on FramingUI variants
+- \`framingui-native\`: import \`@framingui/ui/styles\`, mount \`FramingUIProvider\`, then rely on FramingUI variants
 - \`migrate\`: stop and clarify the migration path
 
 ### Allowed HTML
@@ -113,19 +115,21 @@ Interactive and form primitives should use FramingUI components when they exist.
 
 \`\`\`tsx
 // ${importPath}
-import '@framingui/ui/styles';
-import { Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+import { FramingUIProvider, Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+import framinguiTheme from './framingui-theme';
 
 export default function Page() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>FramingUI project setup</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Button>Continue</Button>
-      </CardContent>
-    </Card>
+    <FramingUIProvider theme={framinguiTheme}>
+      <Card>
+        <CardHeader>
+          <CardTitle>FramingUI project setup</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button>Continue</Button>
+        </CardContent>
+      </Card>
+    </FramingUIProvider>
   );
 }
 \`\`\`

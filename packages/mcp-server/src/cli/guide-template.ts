@@ -50,7 +50,7 @@ Your global stylesheet should import:
 @import '@framingui/ui/styles';
 \`\`\`
 
-Only use FramingUI default variants after that import is in place.
+Your root app entry should also mount \`FramingUIProvider\` with the generated \`framingui-theme\` module.
 
 ## Slash Commands
 
@@ -71,19 +71,21 @@ FramingUI guidance is available for:
 
 \`\`\`tsx
 // ${appFile}
-import '@framingui/ui/styles';
-import { Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+import { FramingUIProvider, Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+import framinguiTheme from './framingui-theme';
 
 export default function Page() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>FramingUI is ready</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Button>Continue</Button>
-      </CardContent>
-    </Card>
+    <FramingUIProvider theme={framinguiTheme}>
+      <Card>
+        <CardHeader>
+          <CardTitle>FramingUI is ready</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button>Continue</Button>
+        </CardContent>
+      </Card>
+    </FramingUIProvider>
   );
 }
 \`\`\`

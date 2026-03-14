@@ -3,8 +3,18 @@ name: E2E Tests
 on:
   push:
     branches: [master, main]
-  pull_request:
-    branches: [master, main]
+  schedule:
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: 'Browser E2E suite to run'
+        required: false
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - full
 
 permissions:
   contents: read
@@ -38,7 +48,16 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
         working-directory: packages/playground-web
 
-      - name: Build Next.js app
+      - name: Run nightly smoke E2E
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.suite == 'smoke'
+        run: pnpm ci:mcp:nightly
+        env:
+          CI: true
+          PLAYWRIGHT_HEADLESS: true
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:3001
+
+      - name: Build app for manual full E2E
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.suite == 'full'
         run: |
           pnpm --filter @framingui/tokens build
           pnpm --filter @framingui/core build
@@ -46,8 +65,9 @@ jobs:
           pnpm --filter @framingui/mcp-server build
           pnpm --filter @framingui/playground-web build
 
-      - name: Run E2E tests
-        run: pnpm --filter @framingui/playground-web test:e2e:smoke
+      - name: Run manual full E2E
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.suite == 'full'
+        run: pnpm --filter @framingui/playground-web test:e2e:full
         env:
           CI: true
           PLAYWRIGHT_HEADLESS: true
@@ -70,28 +90,3 @@ jobs:
             packages/playground-web/test-results/
             packages/playground-web/playwright-report/
           retention-days: 30
-
-      - name: Comment PR with E2E results
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const reportPath = 'packages/playground-web/playwright-report/index.html';
-
-            let comment = '## E2E 테스트 결과 (Chromium)\n\n';
-
-            if (fs.existsSync(reportPath)) {
-              comment += '✅ E2E 테스트가 완료되었습니다.\n\n';
-              comment += '자세한 보고서는 아티팩트를 다운로드하여 확인하세요.\n';
-              comment += `- [Playwright E2E Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n`;
-            } else {
-              comment += '❌ E2E 테스트 실행 중 오류가 발생했습니다.\n';
-            }
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });

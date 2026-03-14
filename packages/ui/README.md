@@ -10,30 +10,51 @@ Use this package when you want FramingUI components directly in an app, whether 
 pnpm add @framingui/ui
 ```
 
-Import the shared styles when your app uses the FramingUI-native style contract:
+Import the shared styles once at the app root when your app uses the FramingUI-native style contract:
 
-```tsx
-import '@framingui/ui/styles';
+```css
+/* app/globals.css */
+@import '@framingui/ui/styles';
 ```
 
-## Basic Usage
+Then mount `FramingUIProvider` near your root layout. Pass a full theme object when you want FramingUI to inject the CSS variables for you.
 
 ```tsx
-import '@framingui/ui/styles';
-import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@framingui/ui';
+import {
+  FramingUIProvider,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+} from '@framingui/ui';
+import theme from './neutral-workspace.json';
 
-export function SignupCard() {
+export function App() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create account</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Input type="email" placeholder="Email" />
-        <Button>Create account</Button>
-      </CardContent>
-    </Card>
+    <FramingUIProvider theme={theme}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Create account</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Input type="email" placeholder="Email" />
+          <Button>Create account</Button>
+        </CardContent>
+      </Card>
+    </FramingUIProvider>
   );
+}
+```
+
+If your app already loads theme CSS separately, you can use the provider just to keep `data-theme` in sync:
+
+```tsx
+import { FramingUIProvider } from '@framingui/ui';
+
+export function App() {
+  return <FramingUIProvider themeId="neutral-workspace">{/* app */}</FramingUIProvider>;
 }
 ```
 

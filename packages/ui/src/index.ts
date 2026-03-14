@@ -19,6 +19,14 @@
 export { cn } from './lib/utils';
 export { tokenVars, isTokenReference, extractTokenName } from './lib/tokens';
 export type { TektonTokenVars } from './lib/tokens';
+export { FramingUIProvider } from './framingui-provider';
+export type { FramingUIProviderProps } from './framingui-provider';
+
+// Typography primitives
+export { Heading, headingVariants } from './primitives/heading';
+export type { HeadingProps } from './primitives/heading';
+export { Text, textVariants } from './primitives/text';
+export type { TextProps } from './primitives/text';
 
 export {
   themeToCSS,

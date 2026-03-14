@@ -34,6 +34,7 @@ This setup flow can:
 - install `@framingui/ui`
 - configure Tailwind content paths and `tailwindcss-animate`
 - add `@import '@framingui/ui/styles';` when using the FramingUI-native style contract
+- generate a local `framingui-theme` module and mount `FramingUIProvider` in the app root
 - register the MCP server in `.mcp.json`
 - generate project guidance for `FRAMINGUI-GUIDE.md`, `CLAUDE.md`, and `AGENTS.md`
 
@@ -86,18 +87,21 @@ pnpm add @framingui/ui @framingui/core
 
 ```tsx
 import '@framingui/ui/styles';
-import { Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+import { FramingUIProvider, Button, Card, CardContent, CardHeader, CardTitle } from '@framingui/ui';
+import framinguiTheme from './framingui-theme';
 
 export function ExampleCard() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Ship product UI</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Button>Open workflow</Button>
-      </CardContent>
-    </Card>
+    <FramingUIProvider theme={framinguiTheme}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Ship product UI</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button>Open workflow</Button>
+        </CardContent>
+      </Card>
+    </FramingUIProvider>
   );
 }
 ```

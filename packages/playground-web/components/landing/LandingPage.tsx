@@ -13,7 +13,7 @@ import { HeroSection } from './HeroSection';
 import { TemplateGallery } from '../explore/TemplateGallery';
 import { ExplorePageClient } from '../explore/ExplorePageClient';
 import { ExploreLanguageProvider } from '../../contexts/ExploreLanguageContext';
-import { trackFunnelPrimaryCtaClick } from '../../lib/analytics';
+import { trackFunnelPrimaryCtaClick, trackFunnelHomeEntered } from '../../lib/analytics';
 
 interface Template {
   id: string;
@@ -118,6 +118,11 @@ export function LandingPage({ templates }: LandingPageProps) {
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 50);
   });
+
+  // Track home page entry
+  useEffect(() => {
+    trackFunnelHomeEntered();
+  }, []);
 
   const handleNavigateWithTracking = (
     destination: string,

@@ -9,7 +9,7 @@ Install only the packages you actually use.
 ### React UI
 
 ```bash
-pnpm add @framingui/ui @framingui/core @framingui/tokens
+pnpm add @framingui/ui @framingui/core @framingui/tokens tailwindcss-animate
 ```
 
 ### MCP Server
@@ -25,6 +25,14 @@ Or install into a project:
 ```bash
 pnpm add -D @framingui/mcp-server
 ```
+
+For app bootstrap, prefer:
+
+```bash
+npx -y @framingui/mcp-server@latest init
+```
+
+`init` is the recommended path because it wires the runtime contract, not just package install.
 
 ### Styled Components
 
@@ -65,6 +73,15 @@ If the project uses TypeScript or linting:
 pnpm typecheck
 pnpm lint
 ```
+
+If the project uses the FramingUI-native contract, also verify:
+
+- the global stylesheet imports `@framingui/ui/styles` exactly once
+- the app root mounts `FramingUIProvider` exactly once
+- a local `framingui-theme` module still exists
+- `tailwindcss-animate` is installed
+
+For Tailwind v4 projects, do not add manual `@source` entries for `@framingui/ui` unless you are debugging a package-level issue. The published `@framingui/ui/styles` import already carries the runtime scanning contract.
 
 ## Common Confusions
 
@@ -121,6 +138,17 @@ Use the explicit latest tag in the server entry when debugging updates:
 This removes ambiguity when a machine has old caches or an older global install.
 
 If you rerun `framingui-mcp init` in a project that already has a `framingui` MCP entry, the current CLI now rewrites that entry to the canonical latest form above instead of leaving an older pinned version behind.
+
+### Tailwind v4 project인데 버튼 패딩이나 Dialog 애니메이션이 이상합니다
+
+먼저 설치가 아니라 런타임 계약부터 확인하세요.
+
+- `globals.css`에 `@import '@framingui/ui/styles';`가 있는지
+- 앱 루트에 `FramingUIProvider`가 정확히 한 번만 mount 되어 있는지
+- `framingui-theme` 모듈을 provider에 전달하는지
+- `tailwindcss-animate`가 설치되어 있는지
+
+이 네 가지가 맞다면, 소비 앱에서 별도로 `@source "../../../node_modules/@framingui/ui/dist"`를 추가할 필요는 없습니다.
 
 ### Why does MCP now show different `licensedThemes` than old stored licenses?
 

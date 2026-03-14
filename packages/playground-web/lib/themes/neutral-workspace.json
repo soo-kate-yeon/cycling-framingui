@@ -194,21 +194,21 @@
         "default": "bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl shadow-sm hover:shadow-md hover:border-[var(--border-emphasis)] transition-all",
         "flat": "bg-[var(--bg-canvas)] rounded-xl",
         "outlined": "bg-transparent border border-[var(--border-default)] rounded-xl",
-        "feature": "bg-[var(--bg-surface)] border border-[var(--bg-canvas)] rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+        "feature": "bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
       },
       "button": {
-        "primary": "bg-[var(--text-primary)] text-[var(--bg-surface)] hover:bg-[var(--bg-canvas-950,#0a0a0a)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
+        "primary": "bg-[var(--action-primary)] text-[var(--action-primary-text)] hover:opacity-90 rounded-lg h-10 px-4 text-sm font-medium transition-opacity",
         "secondary": "bg-[var(--bg-surface)] text-[var(--text-primary)] border border-[var(--border-default)] hover:bg-[var(--bg-canvas)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
         "ghost": "text-[var(--text-secondary)] hover:bg-[var(--bg-canvas)] hover:text-[var(--text-primary)] rounded-lg h-10 px-4 text-sm font-medium transition-colors",
         "icon": "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-canvas)] rounded-md p-2 transition-colors"
       },
       "input": {
-        "default": "w-full bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-lg h-10 px-3 text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--bg-canvas)] focus:border-[var(--text-primary)] transition-all",
-        "search": "w-full bg-[var(--bg-canvas)] border-none rounded-lg h-10 px-10 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-[var(--bg-canvas)] transition-all"
+        "default": "w-full bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-lg h-10 px-3 text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--border-ring)] focus:border-[var(--border-ring)] transition-all",
+        "search": "w-full bg-[var(--bg-canvas)] border-none rounded-lg h-10 px-10 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-[var(--border-ring)] transition-all"
       },
       "badge": {
         "default": "inline-flex items-center rounded-md bg-[var(--bg-canvas)] px-2 py-1 text-xs font-medium text-[var(--text-secondary)]",
-        "secondary": "inline-flex items-center rounded-md bg-[var(--bg-brand-subtle)] px-2 py-1 text-xs font-medium text-[var(--text-link)]",
+        "secondary": "inline-flex items-center rounded-md bg-[var(--bg-accent)] px-2 py-1 text-xs font-medium text-[var(--bg-accent-foreground)]",
         "outline": "inline-flex items-center rounded-md border border-[var(--border-default)] px-2 py-1 text-xs font-medium text-[var(--text-primary)]"
       },
       "table": {

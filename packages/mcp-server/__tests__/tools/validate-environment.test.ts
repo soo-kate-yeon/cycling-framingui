@@ -352,6 +352,32 @@ describe('validateEnvironmentTool', () => {
     });
   });
 
+  describe('Tailwind compatibility', () => {
+    it('Tailwind v4 프로젝트에서도 환경 검증 자체는 성공해야 함', async () => {
+      vi.mocked(packageJsonReader.readPackageJson).mockReturnValue({
+        success: true,
+        packageJson: {
+          dependencies: {
+            '@framingui/ui': '^0.6.5',
+            tailwindcss: '^4.1.0',
+          },
+        },
+        installedPackages: {
+          '@framingui/ui': '^0.6.5',
+          tailwindcss: '^4.1.0',
+        },
+      });
+
+      const result = await validateEnvironmentTool({
+        projectPath: '/project',
+        requiredPackages: ['@framingui/ui'],
+        checkTailwind: true,
+      });
+
+      expect(result.success).toBe(true);
+    });
+  });
+
   describe('버전 정보', () => {
     it('설치된 패키지의 버전 정보를 포함해야 함', async () => {
       // Arrange: 다양한 버전 형식의 패키지들

@@ -2,6 +2,25 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.25] - 2026-03-12
+
+### Fixed
+
+- Relaxed `framingui-mcp init` so Tailwind CSS v4 projects are no longer treated as hard failures during bootstrap.
+- Kept the runtime package installation path active for Tailwind v4 apps while skipping the legacy Tailwind v3-only toolchain enforcement.
+- Updated environment validation and init verification messaging so consumer apps using Tailwind v4 get provider/bootstrap guidance instead of a false incompatibility error.
+
+## [0.6.24] - 2026-03-12
+
+### Added
+
+- Updated `framingui-mcp init` to generate a local `framingui-theme` module and wire `FramingUIProvider` into the app root for both Next.js and Vite projects.
+
+### Changed
+
+- Expanded `validate-environment` so it now checks for `FramingUIProvider` bootstrap and the generated theme module, not just package install and stylesheet import.
+- Updated generated setup guides and package docs to use the provider-based install path as the primary FramingUI-native contract.
+
 ## [0.6.8] - 2026-03-07
 
 ### Fixed

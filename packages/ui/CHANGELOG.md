@@ -5,6 +5,53 @@ All notable changes to @framingui/ui will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.11] - 2026-03-12
+
+### Added
+
+- Added `FramingUIProvider` to centralize runtime theme CSS injection and `data-theme` synchronization for consumer apps.
+
+### Testing
+
+- Added provider regression coverage for theme CSS injection, `data-theme` syncing, and mismatch warnings.
+
+## [0.6.10] - 2026-03-11
+
+### Fixed
+
+- Migrated all shipped theme recipes to v4-safe semantic variable utilities so consumer apps no longer depend on Tailwind palette registration for `brand-*` or `neutral-*` recipe classes.
+- Removed unsupported runtime variable references from theme recipes, including stale `--bg-brand-default`, `--bg-brand-subtle`, and `--bg-canvas-950` usages.
+
+### Testing
+
+- Added regression coverage to ensure every published theme recipe stays free of legacy palette utilities and unsupported runtime variable references.
+
+## [0.6.9] - 2026-03-11
+
+### Fixed
+
+- Removed the unnecessary `@hookform/resolvers` peer requirement from the published runtime package because it is only used in Storybook examples.
+- Widened the `lucide-react` peer range to support current `0.x` releases used by consumer apps.
+- Widened the `tailwind-merge` peer range to support both v2 and v3 consumers.
+
+## [0.6.8] - 2026-03-11
+
+### Fixed
+
+- Widened the `@hookform/resolvers` peer dependency range to support both v3 and v5 consumer projects, removing install conflicts with modern React Hook Form setups.
+
+## [0.6.7] - 2026-03-11
+
+### Fixed
+
+- Restored `Heading` and `Text` exports from the `@framingui/ui` package root so consumer apps can import typography primitives without runtime `undefined` component crashes.
+- Removed stale compiled `src/index.js` artifacts from the source tree so local source consumers and tests resolve the current TypeScript entrypoint consistently.
+
+### Testing
+
+- Added a package-root export regression test covering `Heading` and `Text`.
+- Verified the package with `pnpm --filter @framingui/ui exec vitest run __tests__/index.test.ts` and `pnpm --filter @framingui/ui build`.
+
 ## [0.6.5] - 2026-03-07
 
 ### Fixed

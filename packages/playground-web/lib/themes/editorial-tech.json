@@ -195,48 +195,48 @@
     "recipes": {
       "card": {
         "default": "group flex flex-col gap-6 w-full cursor-pointer",
-        "imageWrapper": "relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-neutral-100 transition-all duration-500 group-hover:shadow-lg",
+        "imageWrapper": "relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[var(--bg-muted)] transition-all duration-500 group-hover:shadow-lg",
         "image": "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105",
         "content": "flex flex-col gap-2",
-        "title": "text-2xl font-bold tracking-tight text-neutral-950 transition-colors group-hover:text-neutral-600",
-        "description": "text-base text-neutral-500 leading-relaxed line-clamp-2"
+        "title": "text-2xl font-bold tracking-tight text-[var(--text-primary)] transition-colors group-hover:text-[var(--text-secondary)]",
+        "description": "text-base text-[var(--text-secondary)] leading-relaxed line-clamp-2"
       },
       "button": {
-        "primary": "inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm lg:text-base font-medium text-white shadow-sm hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors",
-        "secondary": "inline-flex items-center justify-center rounded-full border border-neutral-200 bg-white px-6 py-3 text-sm lg:text-base font-medium text-neutral-950 shadow-sm hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors",
-        "ghost": "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm lg:text-base font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 transition-colors",
+        "primary": "inline-flex items-center justify-center rounded-full bg-[var(--bg-primary)] px-6 py-3 text-sm lg:text-base font-medium text-[var(--bg-primary-foreground)] shadow-sm hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-opacity",
+        "secondary": "inline-flex items-center justify-center rounded-full border border-[var(--border-default)] bg-white px-6 py-3 text-sm lg:text-base font-medium text-[var(--text-primary)] shadow-sm hover:bg-[var(--bg-canvas)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors",
+        "ghost": "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm lg:text-base font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] disabled:pointer-events-none disabled:opacity-50 transition-colors",
         "_note": "All button variants use rounded-full (pill shape). This is a core editorial-tech design decision."
       },
       "tab": {
-        "list": "inline-flex items-center gap-1 rounded-full bg-neutral-100 p-1",
-        "trigger": "inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-medium text-neutral-500 transition-all hover:text-neutral-950 data-[state=active]:bg-white data-[state=active]:text-neutral-950 data-[state=active]:shadow-sm",
+        "list": "inline-flex items-center gap-1 rounded-full bg-[var(--bg-muted)] p-1",
+        "trigger": "inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-medium text-[var(--text-secondary)] transition-all hover:text-[var(--text-primary)] data-[state=active]:bg-white data-[state=active]:text-[var(--text-primary)] data-[state=active]:shadow-sm",
         "_note": "Tabs use pill container (rounded-full list) with pill triggers. Active state gets white bg with shadow."
       },
       "input": {
-        "default": "flex h-12 w-full rounded-xl border border-neutral-300 bg-white px-4 py-2 text-base ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 disabled:cursor-not-allowed disabled:opacity-50 transition-all",
+        "default": "flex h-12 w-full rounded-xl border border-[var(--border-emphasis)] bg-white px-4 py-2 text-base ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[var(--text-tertiary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-ring)] disabled:cursor-not-allowed disabled:opacity-50 transition-all",
         "_note": "Inputs use rounded-xl (moderate radius), NOT pill. Only buttons and tabs are pill."
       },
       "badge": {
-        "default": "inline-flex items-center rounded-full border border-transparent bg-neutral-950 px-3 py-1 text-xs font-medium text-white hover:bg-neutral-800 transition-colors",
-        "secondary": "inline-flex items-center rounded-full border border-transparent bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-950 hover:bg-neutral-200 transition-colors",
-        "outline": "inline-flex items-center rounded-full border border-neutral-300 px-3 py-1 text-xs font-medium text-neutral-950 transition-colors"
+        "default": "inline-flex items-center rounded-full border border-transparent bg-[var(--bg-primary)] px-3 py-1 text-xs font-medium text-[var(--bg-primary-foreground)] hover:opacity-90 transition-opacity",
+        "secondary": "inline-flex items-center rounded-full border border-transparent bg-[var(--bg-muted)] px-3 py-1 text-xs font-medium text-[var(--text-primary)] hover:opacity-90 transition-opacity",
+        "outline": "inline-flex items-center rounded-full border border-[var(--border-emphasis)] px-3 py-1 text-xs font-medium text-[var(--text-primary)] transition-colors"
       },
       "table": {
-        "wrapper": "relative w-full overflow-auto rounded-xl border border-neutral-200",
+        "wrapper": "relative w-full overflow-auto rounded-xl border border-[var(--border-default)]",
         "root": "w-full caption-bottom text-base",
-        "header": "[&_tr]:border-b bg-neutral-50/50",
-        "row": "border-b border-neutral-200 transition-colors hover:bg-neutral-50/50 data-[state=selected]:bg-neutral-50",
-        "head": "h-14 px-6 text-left align-middle font-medium text-neutral-500 [&:has([role=checkbox])]:pr-0",
+        "header": "[&_tr]:border-b bg-[var(--bg-canvas)]/50",
+        "row": "border-b border-[var(--border-default)] transition-colors hover:bg-[var(--bg-canvas)]/50 data-[state=selected]:bg-[var(--bg-canvas)]",
+        "head": "h-14 px-6 text-left align-middle font-medium text-[var(--text-secondary)] [&:has([role=checkbox])]:pr-0",
         "cell": "p-6 align-middle [&:has([role=checkbox])]:pr-0"
       },
       "typography": {
-        "h1": "scroll-m-20 text-5xl font-bold tracking-tight text-neutral-950 lg:text-6xl",
-        "h2": "scroll-m-20 border-b border-neutral-200 pb-4 mt-16 text-4xl font-semibold tracking-tight text-neutral-950 first:mt-0",
-        "h3": "scroll-m-20 mt-12 text-3xl font-semibold tracking-tight text-neutral-950",
-        "h4": "scroll-m-20 mt-8 text-2xl font-semibold tracking-tight text-neutral-950",
-        "p": "leading-relaxed text-base lg:text-lg text-neutral-600 [&:not(:first-child)]:mt-8",
-        "blockquote": "mt-8 border-l-4 border-neutral-200 pl-6 italic text-neutral-500 text-lg lg:text-xl",
-        "list": "my-8 ml-8 list-disc text-base lg:text-lg text-neutral-600 [&>li]:mt-3"
+        "h1": "scroll-m-20 text-5xl font-bold tracking-tight text-[var(--text-primary)] lg:text-6xl",
+        "h2": "scroll-m-20 border-b border-[var(--border-default)] pb-4 mt-16 text-4xl font-semibold tracking-tight text-[var(--text-primary)] first:mt-0",
+        "h3": "scroll-m-20 mt-12 text-3xl font-semibold tracking-tight text-[var(--text-primary)]",
+        "h4": "scroll-m-20 mt-8 text-2xl font-semibold tracking-tight text-[var(--text-primary)]",
+        "p": "leading-relaxed text-base lg:text-lg text-[var(--text-secondary)] [&:not(:first-child)]:mt-8",
+        "blockquote": "mt-8 border-l-4 border-[var(--border-default)] pl-6 italic text-[var(--text-secondary)] text-lg lg:text-xl",
+        "list": "my-8 ml-8 list-disc text-base lg:text-lg text-[var(--text-secondary)] [&>li]:mt-3"
       },
       "layout": {
         "container": "max-w-6xl mx-auto px-6 sm:px-8",

@@ -186,40 +186,40 @@
     "recipes": {
       "card": {
         "default": "bg-white rounded-[32px] p-6 shadow-sm border-none",
-        "floating": "bg-white rounded-[40px] p-8 shadow-xl shadow-neutral-900/5 border-none",
-        "flat": "bg-neutral-100 rounded-[24px] p-6 border-none"
+        "floating": "bg-white rounded-[40px] p-8 shadow-xl border-none",
+        "flat": "bg-[var(--bg-muted)] rounded-[24px] p-6 border-none"
       },
       "button": {
-        "primary": "bg-brand-500 text-white rounded-full h-14 px-8 text-lg font-bold shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95 transition-all",
-        "secondary": "bg-white text-neutral-900 rounded-full h-14 px-8 text-lg font-bold shadow-sm hover:bg-neutral-50 transition-colors",
-        "ghost": "bg-transparent text-neutral-600 rounded-full h-12 px-6 font-semibold hover:bg-neutral-100 transition-colors"
+        "primary": "bg-[var(--bg-primary)] text-[var(--bg-primary-foreground)] rounded-full h-14 px-8 text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-all",
+        "secondary": "bg-white text-[var(--text-primary)] rounded-full h-14 px-8 text-lg font-bold shadow-sm hover:bg-[var(--bg-muted)] transition-colors",
+        "ghost": "bg-transparent text-[var(--text-secondary)] rounded-full h-12 px-6 font-semibold hover:bg-[var(--bg-muted)] transition-colors"
       },
       "input": {
-        "default": "w-full bg-white rounded-full h-16 px-8 text-xl shadow-sm border-none placeholder:text-neutral-400 focus:ring-4 focus:ring-brand-500/10 transition-all",
+        "default": "w-full bg-white rounded-full h-16 px-8 text-xl shadow-sm border-none placeholder:text-[var(--text-tertiary)] focus:ring-4 focus:ring-[var(--border-ring)] transition-all",
         "search": "w-full bg-white rounded-full h-14 px-12 text-lg shadow-[0_2px_12px_rgba(0,0,0,0.04)] border-none"
       },
       "badge": {
-        "default": "inline-flex items-center rounded-full bg-neutral-900 text-white px-3 py-1 text-xs font-bold",
-        "secondary": "inline-flex items-center rounded-full bg-neutral-100 text-neutral-900 px-3 py-1 text-xs font-medium",
-        "outline": "inline-flex items-center rounded-full border border-neutral-200 text-neutral-700 px-3 py-1 text-xs font-medium"
+        "default": "inline-flex items-center rounded-full bg-[var(--text-primary)] text-white px-3 py-1 text-xs font-bold",
+        "secondary": "inline-flex items-center rounded-full bg-[var(--bg-muted)] text-[var(--text-primary)] px-3 py-1 text-xs font-medium",
+        "outline": "inline-flex items-center rounded-full border border-[var(--border-default)] text-[var(--text-secondary)] px-3 py-1 text-xs font-medium"
       },
       "table": {
         "wrapper": "relative w-full overflow-auto rounded-3xl bg-white shadow-sm",
         "root": "w-full caption-bottom text-base",
-        "header": "[&_tr]:border-b bg-neutral-50/50",
-        "row": "border-b border-neutral-100 transition-colors hover:bg-neutral-50/50",
-        "head": "h-14 px-6 text-left align-middle font-medium text-neutral-500",
+        "header": "[&_tr]:border-b bg-[var(--bg-canvas)]/60",
+        "row": "border-b border-[var(--border-default)] transition-colors hover:bg-[var(--bg-canvas)]/60",
+        "head": "h-14 px-6 text-left align-middle font-medium text-[var(--text-secondary)]",
         "cell": "p-6 align-middle"
       },
       "typography": {
-        "h1": "font-sans text-5xl md:text-6xl font-bold tracking-tight text-neutral-900",
-        "h2": "font-sans text-3xl font-bold tracking-tight text-neutral-900",
-        "h3": "font-sans text-xl font-semibold text-neutral-900",
-        "body": "font-sans text-lg text-neutral-600 leading-relaxed font-medium",
-        "caption": "font-sans text-sm text-neutral-500"
+        "h1": "font-sans text-5xl md:text-6xl font-bold tracking-tight text-[var(--text-primary)]",
+        "h2": "font-sans text-3xl font-bold tracking-tight text-[var(--text-primary)]",
+        "h3": "font-sans text-xl font-semibold text-[var(--text-primary)]",
+        "body": "font-sans text-lg text-[var(--text-secondary)] leading-relaxed font-medium",
+        "caption": "font-sans text-sm text-[var(--text-secondary)]"
       },
       "layout": {
-        "container": "bg-neutral-50 min-h-screen",
+        "container": "bg-[var(--bg-canvas)] min-h-screen",
         "section": "max-w-7xl mx-auto px-6 py-20",
         "grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       }

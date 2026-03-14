@@ -34,39 +34,48 @@ npx -y @framingui/mcp-server@latest init
 
 1. **프로젝트 감지** - Next.js / Vite 자동 인식
 2. **패키지 설치** - `@framingui/ui`, `tailwindcss-animate` (패키지 매니저 자동 감지)
-3. **Tailwind CSS 설정** - `tailwind.config.ts`에 content 경로 및 animate 플러그인 추가
-4. **CSS 토큰 임포트** - `globals.css`에 `@import '@framingui/ui/styles'` 추가
-5. **MCP 연결** - `.mcp.json`에 tekton 서버 등록 (프로젝트 루트)
-6. **가이드 생성** - `TEKTON-GUIDE.md` 프로젝트 루트에 생성
-7. **AI 에이전트 가이드** - `CLAUDE.md` 및 `AGENTS.md`에 Tekton 워크플로우 섹션 추가
-8. **완료 안내** - 인증 필요성 및 다음 단계 안내
+3. **Tailwind 런타임 설정** - Tailwind v4는 shared styles 경로를 사용하고, Tailwind v3만 `tailwind.config.ts`를 보정
+4. **CSS 임포트 추가** - `globals.css`에 `@import '@framingui/ui/styles'` 추가
+5. **Provider bootstrap** - `app/layout.tsx` 또는 `src/main.tsx`에 `FramingUIProvider` 추가
+6. **Theme module 생성** - 로컬 `framingui-theme` 모듈 생성
+7. **MCP 연결** - `.mcp.json`에 FramingUI 서버 등록 (프로젝트 루트)
+8. **가이드 생성** - `FRAMINGUI-GUIDE.md` 프로젝트 루트에 생성
+9. **AI 에이전트 가이드** - `CLAUDE.md` 및 `AGENTS.md`에 FramingUI 워크플로우 섹션 추가
+10. **완료 안내** - 인증 필요성 및 다음 단계 안내
 
 ```
 @framingui/mcp-server init
 
-[1/8] 프로젝트 감지 중...
+[1/10] 프로젝트 감지 중...
       Next.js 프로젝트
 
-[2/8] 패키지 설치 중...
+[2/10] 패키지 설치 중...
       pnpm add @framingui/ui tailwindcss-animate
 
-[3/8] Tailwind CSS 설정 중...
-      tailwind.config.ts 업데이트 완료
+[3/10] Tailwind 런타임 설정 중...
+      globals.css / tailwind 설정 점검 완료
 
-[4/8] CSS 토큰 임포트 추가 중...
+[4/10] CSS 임포트 추가 중...
       app/globals.css 업데이트 완료
 
-[5/8] Claude Code MCP 설정 중...
+[5/10] Bootstrapping FramingUIProvider...
+      app/layout.tsx 업데이트 완료
+      app/framingui-theme.ts 생성 완료
+
+[6/10] Claude Code MCP 설정 중...
       .mcp.json 생성 완료
 
-[6/8] 가이드 문서 생성 중...
-      TEKTON-GUIDE.md 생성 완료
+[7/10] 가이드 문서 생성 중...
+      FRAMINGUI-GUIDE.md 생성 완료
 
-[7/8] AI 에이전트 가이드 설정 중...
+[8/10] AI 에이전트 가이드 설정 중...
       CLAUDE.md 생성 완료
       AGENTS.md 생성 완료
 
-[8/8] 설정 완료
+[9/10] 환경 검증 중...
+      runtime contract 점검 완료
+
+[10/10] 설정 완료
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -76,7 +85,7 @@ npx -y @framingui/mcp-server@latest init
   1. 먼저 인증하세요: framingui-mcp login
   2. Claude Code를 재시작하세요
   3. AI에게 요청하세요: "로그인 화면 만들어줘"
-  4. TEKTON-GUIDE.md에서 전체 가이드를 확인하세요
+  4. FRAMINGUI-GUIDE.md에서 전체 가이드를 확인하세요
 
   중요: 모든 6개 테마는 인증이 필요합니다
 
@@ -84,6 +93,17 @@ npx -y @framingui/mcp-server@latest init
 ```
 
 설정 완료 후 Claude Code를 재시작하면, AI에게 자연어로 화면 생성을 요청할 수 있습니다.
+
+### init가 맞춰주는 런타임 계약
+
+`init`의 목적은 단순 설치가 아니라 아래 런타임 계약을 고정하는 것입니다.
+
+- 글로벌 스타일시트에서 `@import '@framingui/ui/styles';`를 정확히 한 번 유지
+- 앱 루트에서 `FramingUIProvider`를 정확히 한 번 mount
+- 로컬 `framingui-theme` 모듈을 생성하고 provider에 전달
+- `tailwindcss-animate`를 설치해 overlay motion 유틸리티를 보장
+
+Tailwind v4 프로젝트에서는 `@framingui/ui/styles`가 패키지 내부 유틸리티 스캔과 animation hook를 제공하므로, 소비 앱이 `@source`나 `content` 경로를 수동으로 덧붙일 필요가 없습니다.
 
 이미 `.mcp.json` 에 `framingui` entry 가 있다면, 최신 CLI의 `init` 은 그 entry 를 `npx -y @framingui/mcp-server@latest` 형태로 갱신합니다.
 
@@ -330,9 +350,13 @@ API 키 없이도 서버를 시작할 수 있지만, 도구 호출 시 인증이
 
 `checkTailwind: true` (기본값)으로 설정하면 다음을 추가로 검증합니다:
 
-- `tailwind.config.{ts,js,mjs,cjs}` 파일 존재 여부
-- `@framingui/ui` content 경로 포함 여부 (누락 시 스타일 미적용)
-- `tailwindcss-animate` 플러그인 설정 여부 (Dialog, Popover 애니메이션에 필요)
+- 글로벌 스타일시트의 `@import '@framingui/ui/styles'` 존재 여부
+- `FramingUIProvider` bootstrap 존재 여부
+- 로컬 `framingui-theme` 모듈 존재 여부
+- `tailwindcss-animate` 사용 가능 여부
+- Tailwind v3 프로젝트일 때만 `tailwind.config.{ts,js,mjs,cjs}`의 content/plugin 설정 여부
+
+즉, Tailwind v4에서는 `tailwind.config.ts`가 없어도 실패가 아니며, 실제 런타임 계약이 맞는지를 우선 검증합니다.
 
 ---
 

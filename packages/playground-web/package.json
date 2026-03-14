@@ -11,8 +11,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
-    "test:e2e:smoke": "playwright test --project=chromium --grep @smoke"
+    "test:e2e": "playwright test --project=chromium --grep @smoke",
+    "test:e2e:smoke": "playwright test --project=chromium --grep @smoke",
+    "test:e2e:mcp": "playwright test __tests__/e2e/mcp-pipeline-smoke.spec.ts --project=chromium",
+    "test:e2e:full": "playwright test"
   },
   "dependencies": {
     "@framingui/core": "workspace:*",

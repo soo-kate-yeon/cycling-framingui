@@ -8,9 +8,44 @@ import type {
   ValidateEnvironmentInput,
   ValidateEnvironmentOutput,
 } from '../schemas/mcp-schemas.js';
+import * as fs from 'fs';
+import * as path from 'path';
 import { readPackageJson } from '../utils/package-json-reader.js';
 import { readTailwindConfig } from '../utils/tailwind-config-reader.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
+
+function getInstalledMajor(versionSpec?: string): number | undefined {
+  if (!versionSpec) {
+    return undefined;
+  }
+
+  const match = versionSpec.match(/(\d+)(?:\.\d+)?(?:\.\d+)?/);
+  if (!match) {
+    return undefined;
+  }
+
+  return Number.parseInt(match[1]!, 10);
+}
+
+function usesTailwindV4(versionSpec?: string): boolean {
+  const major = getInstalledMajor(versionSpec);
+  return major !== undefined && major >= 4;
+}
+
+function findBootstrapEntry(projectPath: string): string | undefined {
+  const candidates = [
+    'app/layout.tsx',
+    'app/layout.jsx',
+    'src/app/layout.tsx',
+    'src/app/layout.jsx',
+    'src/main.tsx',
+    'src/main.jsx',
+    'src/main.ts',
+    'src/main.js',
+  ];
+
+  return candidates.find(candidate => fs.existsSync(path.join(projectPath, candidate)));
+}
 
 /**
  * Validate user's environment for required dependencies
@@ -85,17 +120,19 @@ export async function validateEnvironmentTool(
 
     if (checkTailwind !== false) {
       const tailwindResult = readTailwindConfig(projectPath);
-
+      const installedTailwindVersion = installedPackages.tailwindcss;
       const issues: string[] = [];
       const fixes: string[] = [];
 
-      if (!tailwindResult.found) {
+      const tailwindV4 = usesTailwindV4(installedTailwindVersion);
+
+      if (!tailwindResult.found && !tailwindV4) {
         issues.push('tailwind.config.{ts,js,mjs,cjs} not found in project root');
         fixes.push(
           'Create a tailwind.config.ts file in your project root. ' +
             'See https://tailwindcss.com/docs/configuration for setup guide.'
         );
-      } else {
+      } else if (tailwindResult.found) {
         if (!tailwindResult.hasUiContentPath) {
           issues.push(
             'tailwind.config content paths do not include @framingui/ui — ' +
@@ -118,6 +155,53 @@ export async function validateEnvironmentTool(
               "import animate from 'tailwindcss-animate'; plugins: [animate]"
           );
         }
+      } else if (tailwindV4) {
+        fixes.push(
+          'Tailwind v4 detected. Keep your existing CSS-first setup and ensure your global stylesheet imports FramingUI styles.'
+        );
+      }
+
+      const bootstrapEntry = findBootstrapEntry(projectPath);
+      if (!bootstrapEntry) {
+        issues.push('No app root entry found for FramingUIProvider bootstrap');
+        fixes.push(
+          'Create app/layout.tsx (Next.js) or src/main.tsx (Vite) and wrap the app with ' +
+            '<FramingUIProvider theme={framinguiTheme}>...</FramingUIProvider>'
+        );
+      } else {
+        const bootstrapContent = fs.readFileSync(path.join(projectPath, bootstrapEntry), 'utf-8');
+        if (
+          !bootstrapContent.includes('FramingUIProvider') ||
+          !bootstrapContent.includes('framinguiTheme') ||
+          !bootstrapContent.includes('theme={framinguiTheme}')
+        ) {
+          issues.push(
+            `${bootstrapEntry} does not mount FramingUIProvider with the generated framinguiTheme`
+          );
+          fixes.push(
+            `Update ${bootstrapEntry} to import { FramingUIProvider } from '@framingui/ui', ` +
+              "import framinguiTheme from './framingui-theme', and wrap the app root with " +
+              '<FramingUIProvider theme={framinguiTheme}>...</FramingUIProvider>'
+          );
+        }
+      }
+
+      const themeModuleCandidates = [
+        'app/framingui-theme.ts',
+        'app/framingui-theme.js',
+        'src/app/framingui-theme.ts',
+        'src/app/framingui-theme.js',
+        'src/framingui-theme.ts',
+        'src/framingui-theme.js',
+      ];
+      const hasThemeModule = themeModuleCandidates.some(candidate =>
+        fs.existsSync(path.join(projectPath, candidate))
+      );
+      if (!hasThemeModule) {
+        issues.push('Generated framingui-theme module not found');
+        fixes.push(
+          'Generate a local framingui-theme module that exports a theme object and pass it to FramingUIProvider'
+        );
       }
 
       tailwind = {

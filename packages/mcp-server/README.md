@@ -65,7 +65,7 @@ Use the guarded workflow for production work:
 Choose one contract before relying on FramingUI defaults:
 
 - `host-utility`: keep explicit utility styling
-- `framingui-native`: import `@framingui/ui/styles` and use FramingUI variables/variants
+- `framingui-native`: import `@framingui/ui/styles`, mount `FramingUIProvider`, and use the generated `framingui-theme`
 - `migrate`: stop and decide the migration path first
 
 ## Slash Commands
@@ -117,6 +117,8 @@ FramingUI exposes guidance for:
 - install the FramingUI screen-generation runtime and peer dependencies in one pass
 - configure Tailwind content paths and `tailwindcss-animate`
 - add `@import '@framingui/ui/styles';` to a detected global stylesheet
+- generate a local `framingui-theme` module
+- wire `FramingUIProvider` into `app/layout.tsx` or `src/main.tsx`
 - verify the package install, Tailwind config, and stylesheet import before finishing
 - create `.mcp.json`
 - generate `FRAMINGUI-GUIDE.md`

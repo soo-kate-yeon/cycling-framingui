@@ -60,25 +60,30 @@ FramingUI는 **디자인 토큰 기반의 엔드투엔드 UI 디자인 시스템
 ### 1. React 프로젝트에서 UI 컴포넌트 사용하기
 
 ```bash
-npm install @framingui/ui
+npm install @framingui/ui tailwindcss-animate
 ```
 
 ```tsx
-import { Button, Card, CardHeader, CardTitle, CardContent } from '@framingui/ui';
+import { FramingUIProvider, Button, Card, CardHeader, CardTitle, CardContent } from '@framingui/ui';
+import framinguiTheme from './framingui-theme';
 
 function App() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>환영합니다</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Button>시작하기</Button>
-      </CardContent>
-    </Card>
+    <FramingUIProvider theme={framinguiTheme}>
+      <Card>
+        <CardHeader>
+          <CardTitle>환영합니다</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button>시작하기</Button>
+        </CardContent>
+      </Card>
+    </FramingUIProvider>
   );
 }
 ```
+
+`globals.css`에는 `@import '@framingui/ui/styles';`를 정확히 한 번만 유지하는 것이 기본 계약입니다.
 
 ### 2. styled-components에서 토큰 강제하기
 
