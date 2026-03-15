@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://framingui.com/og-image.png',
-        width: 962,
-        height: 422,
+        width: 1200,
+        height: 630,
         alt: 'framingui - Agent-First Design System',
       },
     ],

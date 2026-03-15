@@ -2,6 +2,7 @@
  * Modals - Export all modal components
  */
 
+export { AlertModal } from './AlertModal';
 export {
   FreeTrialModal,
   hasSeenFreeTrialModal,

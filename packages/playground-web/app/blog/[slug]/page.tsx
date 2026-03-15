@@ -40,8 +40,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       images: [
         {
           url: ogImage,
-          width: fm.coverImage ? 1200 : 962,
-          height: fm.coverImage ? 630 : 422,
+          width: 1200,
+          height: 630,
           alt: fm.title,
         },
       ],

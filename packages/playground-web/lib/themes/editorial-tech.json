@@ -221,6 +221,14 @@
         "secondary": "inline-flex items-center rounded-full border border-transparent bg-[var(--bg-muted)] px-3 py-1 text-xs font-medium text-[var(--text-primary)] hover:opacity-90 transition-opacity",
         "outline": "inline-flex items-center rounded-full border border-[var(--border-emphasis)] px-3 py-1 text-xs font-medium text-[var(--text-primary)] transition-colors"
       },
+      "modal": {
+        "overlay": "fixed inset-0 bg-black/80 backdrop-blur-sm",
+        "content": "relative z-10 w-full overflow-hidden rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-2xl",
+        "header": "flex flex-col gap-2 p-6 sm:p-8",
+        "body": "flex flex-col gap-4 px-6 pb-6 sm:px-8 sm:pb-8",
+        "footer": "flex items-center justify-end gap-3 px-6 pb-6 sm:px-8 sm:pb-8",
+        "_note": "Editorial-tech containers stay rectilinear, but not sharp-cornered. Modals use rounded-2xl; only buttons and tabs are pill."
+      },
       "table": {
         "wrapper": "relative w-full overflow-auto rounded-xl border border-[var(--border-default)]",
         "root": "w-full caption-bottom text-base",

@@ -67,4 +67,18 @@ describe('theme recipes stay v4-safe', () => {
       });
     });
   });
+
+  it('keeps editorial-tech containers rectilinear without forcing square modal corners', () => {
+    const modalRecipe = editorialTechTheme.tokens.recipes.modal;
+    const cardRecipe = editorialTechTheme.tokens.recipes.card;
+    const inputRecipe = editorialTechTheme.tokens.recipes.input;
+
+    expect(modalRecipe.content).toContain('rounded-2xl');
+    expect(modalRecipe.content).not.toContain('rounded-none');
+
+    expect(cardRecipe.imageWrapper).toContain('rounded-2xl');
+    expect(inputRecipe.default).toContain('rounded-xl');
+    expect(editorialTechTheme.tokens.recipes.button.primary).toContain('rounded-full');
+    expect(editorialTechTheme.tokens.recipes.tab.list).toContain('rounded-full');
+  });
 });

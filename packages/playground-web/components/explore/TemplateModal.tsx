@@ -8,6 +8,7 @@ import { useExploreLanguage } from '../../contexts/ExploreLanguageContext';
 import { getExploreContent, getTemplatePriceLabel } from '../../data/i18n/explore';
 import { getLocalizedTemplateText } from '../../data/templates';
 import { PADDLE_CONFIG } from '../../lib/paddle/config';
+import { AlertModal } from '../modals/AlertModal';
 
 // ============================================================================
 // Types
@@ -42,6 +43,7 @@ export function TemplateModal({
   const [activeChipIdx, setActiveChipIdx] = useState(0);
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
   const [isClosing, setIsClosing] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const autoCheckoutFiredRef = useRef(false);
   const paymentNotReadyMessage =
     locale === 'ko'
@@ -106,14 +108,14 @@ export function TemplateModal({
 
     if (!isPaddleReady) {
       console.error('[Paddle] Payment system is not ready');
-      alert(notReadyReason ?? paymentNotReadyMessage);
+      setAlertMessage(notReadyReason ?? paymentNotReadyMessage);
       return;
     }
 
     const priceId = PADDLE_CONFIG.prices.single;
     if (!priceId) {
       console.error('[Paddle] Single price configuration missing');
-      alert(priceConfigMissingMessage);
+      setAlertMessage(priceConfigMissingMessage);
       return;
     }
 
@@ -135,14 +137,14 @@ export function TemplateModal({
 
     if (!isPaddleReady) {
       console.error('[Paddle] Payment system is not ready');
-      alert(notReadyReason ?? paymentNotReadyMessage);
+      setAlertMessage(notReadyReason ?? paymentNotReadyMessage);
       return;
     }
 
     const priceId = PADDLE_CONFIG.prices.creator;
     if (!priceId) {
       console.error('[Paddle] Creator price configuration missing');
-      alert(priceConfigMissingMessage);
+      setAlertMessage(priceConfigMissingMessage);
       return;
     }
 
@@ -518,6 +520,16 @@ export function TemplateModal({
           </section>
         </div>
       </div>
+
+      {/* Alert Modal — editorial-tech styled, replaces native alert() */}
+      <AlertModal
+        isOpen={alertMessage !== null}
+        onClose={() => setAlertMessage(null)}
+        title={locale === 'ko' ? '알림' : 'Notice'}
+        message={alertMessage ?? ''}
+        variant="warning"
+        confirmLabel={locale === 'ko' ? '확인' : 'OK'}
+      />
     </div>
   );
 }
