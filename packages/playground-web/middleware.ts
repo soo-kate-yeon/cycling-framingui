@@ -37,6 +37,20 @@ export async function middleware(request: NextRequest) {
   // 1. 세션 갱신 수행 (모든 요청)
   const response = await updateSession(request);
 
+  // 2. 최초 방문 시 국가/언어 기반 locale hint 쿠키 설정
+  //    - x-vercel-ip-country: Vercel이 자동 주입하는 ISO 국가 코드
+  //    - 사용자가 수동으로 언어를 바꾸면 localStorage가 우선하므로 여기선 hint만 제공
+  if (!request.cookies.has('locale-hint')) {
+    const country = request.headers.get('x-vercel-ip-country') ?? '';
+    const acceptLanguage = request.headers.get('accept-language') ?? '';
+    const isKorean = country === 'KR' || acceptLanguage.toLowerCase().startsWith('ko');
+    response.cookies.set('locale-hint', isKorean ? 'ko' : 'en', {
+      maxAge: 60 * 60 * 24 * 365, // 1년
+      path: '/',
+      sameSite: 'lax',
+    });
+  }
+
   // 2. 보호된 라우트 접근 제어
   const isProtectedRoute = PROTECTED_ROUTES.some((route) => pathname.startsWith(route));
 

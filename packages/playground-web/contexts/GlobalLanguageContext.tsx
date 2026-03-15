@@ -22,11 +22,21 @@ const GlobalLanguageContext = createContext<GlobalLanguageContextValue | undefin
 export function GlobalLanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<GlobalLocale>('en');
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount; fall back to geo-detected cookie
   useEffect(() => {
     const saved = localStorage.getItem('globalLocale');
     if (saved === 'en' || saved === 'ko') {
       setLocale(saved);
+      return;
+    }
+    // 사용자 설정 없음 → 미들웨어가 심어준 locale-hint 쿠키 확인
+    const hint = document.cookie
+      .split(';')
+      .map((c) => c.trim())
+      .find((c) => c.startsWith('locale-hint='))
+      ?.split('=')[1];
+    if (hint === 'ko' || hint === 'en') {
+      setLocale(hint);
     }
   }, []);
 
