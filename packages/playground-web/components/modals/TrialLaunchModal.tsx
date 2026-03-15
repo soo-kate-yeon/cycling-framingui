@@ -17,6 +17,7 @@
 import { useEffect, useState } from 'react';
 import { X, Check, AlertTriangle } from 'lucide-react';
 import { useGlobalLanguage } from '../../contexts/GlobalLanguageContext';
+import { trackFunnelFreeTrialStarted, trackFunnelPrimaryCtaClick } from '../../lib/analytics';
 
 interface Template {
   id: string;
@@ -117,6 +118,18 @@ export function TrialLaunchModal({
     try {
       const res = await fetch('/api/licenses/trial', { method: 'POST' });
       if (res.ok) {
+        // 무료체험 시작 트래킹
+        trackFunnelFreeTrialStarted({
+          entry_point: 'trial_launch_modal',
+          is_authenticated: true,
+        });
+        trackFunnelPrimaryCtaClick({
+          cta_id: 'free_trial_confirm',
+          cta_label: c.confirmBtn,
+          location: 'trial_launch_modal',
+          destination: `/explore/${selectedTemplate.id}`,
+          cta_variant: 'free-start',
+        });
         onActivated(selectedTemplate.id, selectedTemplate.name);
         handleClose();
       } else {
