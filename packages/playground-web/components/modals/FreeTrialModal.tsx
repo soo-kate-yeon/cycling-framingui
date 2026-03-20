@@ -11,7 +11,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { trackFunnelPrimaryCtaClick, trackFunnelFreeTrialStarted } from '../../lib/analytics';
+import {
+  trackFunnelPrimaryCtaClick,
+  trackFunnelTransitionAccessStarted,
+} from '../../lib/analytics';
 import { useGlobalLanguage } from '../../contexts/GlobalLanguageContext';
 import { getFreeTrialModalContent } from '../../data/i18n/freeTrialModal';
 
@@ -80,7 +83,11 @@ function toUserErrorMessage(
   error: NormalizedTrialError,
   errorMessages: { trialAlreadyExists: string; loginRequired: string; trialCreationFailed: string }
 ): string {
-  if (error.status === 409 && error.errorCode === 'trial_already_exists') {
+  if (
+    error.status === 409 &&
+    (error.errorCode === 'trial_already_exists' ||
+      error.errorCode === 'transition_access_already_exists')
+  ) {
     return errorMessages.trialAlreadyExists;
   }
 
@@ -131,7 +138,7 @@ export function FreeTrialModal({
     setErrorMessage(null);
 
     try {
-      const response = await fetch('/api/licenses/trial', {
+      const response = await fetch('/api/access/transition', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,21 +151,21 @@ export function FreeTrialModal({
       if (response.ok) {
         // 성공: localStorage에 "본 적 있음" 표시 (이건 하위 호환성을 위해 유지)
         localStorage.setItem(LOCAL_STORAGE_KEY, 'true');
-        console.log('[FreeTrialModal] Trial created successfully:', parsedBody);
-        trackFunnelFreeTrialStarted({
-          entry_point: 'free_trial_modal',
+        console.log('[FreeTrialModal] Transition access created successfully:', parsedBody);
+        trackFunnelTransitionAccessStarted({
+          entry_point: 'transition_access_modal',
           is_authenticated: true,
         });
         onStartTrial();
       } else {
         const normalizedError = normalizeTrialError(response, parsedBody, rawBody);
         setErrorMessage(toUserErrorMessage(normalizedError, content.errors));
-        console.error('[FreeTrialModal] Trial creation failed:', normalizedError);
+        console.error('[FreeTrialModal] Transition access creation failed:', normalizedError);
       }
     } catch (error) {
       const errorDetails =
         error instanceof Error ? { name: error.name, message: error.message } : { error };
-      console.error('[FreeTrialModal] Trial creation error:', errorDetails);
+      console.error('[FreeTrialModal] Transition access creation error:', errorDetails);
       setErrorMessage(content.errors.networkError);
     } finally {
       setIsCreatingTrial(false);
@@ -168,10 +175,10 @@ export function FreeTrialModal({
   const handleCTA = async () => {
     console.log('[FreeTrialModal] CTA clicked, user:', user ? 'logged in' : 'not logged in');
     trackFunnelPrimaryCtaClick({
-      cta_id: user ? 'free_trial_create_trial' : 'free_trial_start_free',
+      cta_id: user ? 'transition_access_create' : 'transition_access_start',
       cta_label: user ? content.buttons.startTrial : content.buttons.startFree,
-      location: 'free_trial_modal',
-      destination: user ? '/api/licenses/trial' : '/auth/login',
+      location: 'transition_access_modal',
+      destination: user ? '/api/access/transition' : '/auth/login',
       cta_variant: 'free-start',
     });
 

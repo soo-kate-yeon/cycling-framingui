@@ -27,8 +27,8 @@ test.describe('Template Landing Responsive Smoke', () => {
     await expect(featureHeadings.filter({ hasText: /Features/i }).first()).toBeVisible();
   });
 
-  test('@smoke should render the explore gallery', async ({ page }) => {
-    await page.goto('/explore', { waitUntil: 'domcontentloaded' });
+  test('@smoke should render the homepage theme gallery', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     const templateCards = page.locator('main article');
     await expect(page.locator('body')).toContainText('Square Minimalism', { timeout: 30000 });

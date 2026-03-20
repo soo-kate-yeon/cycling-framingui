@@ -1,7 +1,7 @@
 /**
  * Pricing Page i18n Content
  *
- * 가격 페이지의 모든 텍스트 콘텐츠를 영어/한국어/일본어로 관리
+ * 가격 페이지의 모든 텍스트 콘텐츠를 영어/한국어로 관리
  */
 
 import type { GlobalLocale } from '../../contexts/GlobalLanguageContext';
@@ -11,16 +11,24 @@ export interface PricingContent {
     brandName: string;
     getStarted: string;
   };
-  hero: {
+  capabilities: {
+    badge: string;
+    title: string;
+    description: string;
+    cards: {
+      title: string;
+      description: string;
+    }[];
+  };
+  quota: {
     title: string;
     description: string;
   };
-  betaBanner: {
-    mobile: string;
-    desktop: string;
+  hero: {
+    title: string;
   };
   plans: {
-    single: {
+    free: {
       name: string;
       description: string;
       priceLabel: string;
@@ -28,7 +36,7 @@ export interface PricingContent {
       cta: string;
       features: string[];
     };
-    double: {
+    developer: {
       name: string;
       description: string;
       priceLabel: string;
@@ -36,8 +44,9 @@ export interface PricingContent {
       cta: string;
       badge: string;
       features: string[];
+      renewalNotice: string;
     };
-    creator: {
+    team: {
       name: string;
       description: string;
       priceLabel: string;
@@ -52,35 +61,36 @@ export interface PricingContent {
     title: string;
     tableHeaders: {
       feature: string;
-      single: string;
-      double: string;
-      creator: string;
+      free: string;
+      developer: string;
     };
     features: {
-      templatesIncluded: string;
-      futureTemplates: string;
-      updateDuration: string;
-      commercialUse: string;
-      emailSupport: string;
-      priorityQueue: string;
-      communityDiscord: string;
-      documentation: string;
+      includedUnits: string;
+      discoveryTools: string;
+      workflowGuidance: string;
+      environmentChecks: string;
+      usageVisibility: string;
+      topUps: string;
+      support: string;
     };
     values: {
-      single: {
-        templatesIncluded: string;
-        updateDuration: string;
-        emailSupport: string;
+      free: {
+        includedUnits: string;
+        discoveryTools: string;
+        workflowGuidance: string;
+        environmentChecks: string;
+        usageVisibility: string;
+        topUps: string;
+        support: string;
       };
-      double: {
-        templatesIncluded: string;
-        updateDuration: string;
-        emailSupport: string;
-      };
-      creator: {
-        templatesIncluded: string;
-        updateDuration: string;
-        emailSupport: string;
+      developer: {
+        includedUnits: string;
+        discoveryTools: string;
+        workflowGuidance: string;
+        environmentChecks: string;
+        usageVisibility: string;
+        topUps: string;
+        support: string;
       };
     };
   };
@@ -93,151 +103,172 @@ export interface PricingContent {
     }[];
   };
   ui: {
-    freeLabel: string;
-    duringBeta: string;
-    getBetaAccess: string;
     paymentNotReady: string;
     priceConfigMissing: string;
   };
 }
 
-const pricingContent: Record<GlobalLocale, PricingContent> = {
+const pricingContent: Record<'en' | 'ko', PricingContent> = {
   en: {
     nav: {
       brandName: 'framingui',
-      getStarted: 'Get Started',
+      getStarted: 'Explore Free',
+    },
+    capabilities: {
+      badge: 'What You Get',
+      title: 'FramingUI supports the full UI workflow',
+      description:
+        'From discovery to preview to validation, FramingUI gives coding agents a clearer contract for building production UI.',
+      cards: [
+        {
+          title: 'Discover components and templates',
+          description:
+            'Browse component, theme, and screen-template catalogs before you generate anything.',
+        },
+        {
+          title: 'Preview themes and generation context',
+          description:
+            'Inspect theme recipes, component contracts, and screen-generation context before writing code.',
+        },
+        {
+          title: 'Validate before integration',
+          description:
+            'Use screen-definition and environment checks to catch dependency, styling, and workflow issues early.',
+        },
+      ],
+    },
+    quota: {
+      title: 'Plans',
+      description:
+        'Start with the product and workflow first. Move to monthly usage when FramingUI becomes part of your regular shipping loop.',
     },
     hero: {
-      title: 'Choose your plan',
-      description:
-        'Premium React templates with AI-powered design system. Start building production-ready interfaces today.',
-    },
-    betaBanner: {
-      mobile: '🎉 Single Template FREE!',
-      desktop: '🎉 Beta Launch: Single Template FREE during beta period!',
+      title: 'FramingUI Pricing Plan',
     },
     plans: {
-      single: {
-        name: 'Single Template',
-        description: 'Start with the perfect template for your project.',
-        priceLabel: '$49',
-        priceSub: 'one-time payment',
-        cta: 'Browse Templates',
+      free: {
+        name: 'Free Quota',
+        description: 'A starter plan for learning the product and understanding the workflow.',
+        priceLabel: '$0',
+        priceSub: 'shadow visibility',
+        cta: 'Start Free',
         features: [
-          '1 template of your choice',
-          '1 year of updates',
-          'Commercial use',
-          'Email support (72h)',
+          'Explore MCP tools and package surfaces',
+          'Preview components, templates, and themes',
+          'Inspect quota visibility in `whoami`',
+          'Start with guided onboarding',
         ],
       },
-      double: {
-        name: 'Double Package',
-        description: 'Best value for developers who need more.',
-        priceLabel: '$79',
-        priceSub: 'one-time payment',
-        cta: 'Choose Templates',
+      developer: {
+        name: 'Developer',
+        description: 'For solo developers using FramingUI regularly to ship real product UI.',
+        priceLabel: '$39',
+        priceSub: '/month',
+        cta: 'Subscribe to Developer',
         badge: 'Most Popular',
         features: [
-          '2 templates of your choice',
-          '1 year of updates',
-          'Commercial use',
+          '2,000 weighted tool units / month',
+          'Component, template, and theme discovery',
+          'Screen-generation context and validated workflow',
+          'Environment checks and code-audit guidance',
           'Email support (72h)',
-          'Save vs. buying separately',
+          'Top-up support when usage spikes',
         ],
+        renewalNotice:
+          'Renews monthly until cancelled. Top-ups or overage may apply after included units.',
       },
-      creator: {
-        name: 'Creator Pass',
-        description: 'Unlimited access for prolific builders.',
-        priceLabel: '$119',
-        priceSub: '/year',
-        cta: 'Subscribe',
-        badge: 'Best Value',
+      team: {
+        name: 'Team',
+        description: 'For product teams that need pooled quota, collaboration, and faster support.',
+        priceLabel: '$149',
+        priceSub: '/month',
+        cta: 'Contact Team Plan',
+        badge: 'Pooled Usage',
         features: [
-          'All current templates',
-          'All future templates included',
-          'Updates during subscription',
-          'Priority email support (48h)',
+          '10,000 weighted tool units / month',
+          'Pooled team usage visibility',
           'Priority support queue',
+          'Top-up path for launch weeks',
+          'Transition help for legacy customers',
         ],
-        renewalNotice: 'Auto-renews at $119/year. Cancel anytime.',
+        renewalNotice:
+          'Renews monthly until cancelled. Team rollout is staged and may require onboarding support.',
       },
     },
     comparison: {
-      title: 'Compare plans',
+      title: 'Compare plans by capability',
       tableHeaders: {
         feature: 'Feature',
-        single: 'Single',
-        double: 'Double',
-        creator: 'Creator Pass',
+        free: 'Free',
+        developer: 'Developer',
       },
       features: {
-        templatesIncluded: 'Templates included',
-        futureTemplates: 'Future templates',
-        updateDuration: 'Update duration',
-        commercialUse: 'Commercial use',
-        emailSupport: 'Email support',
-        priorityQueue: 'Priority queue',
-        communityDiscord: 'Community Discord',
-        documentation: 'Documentation',
+        includedUnits: 'Included monthly usage',
+        discoveryTools: 'Discovery tools',
+        workflowGuidance: 'Generation workflow guidance',
+        environmentChecks: 'Environment and integration checks',
+        usageVisibility: 'Usage visibility',
+        topUps: 'Top-ups available',
+        support: 'Support response target',
       },
       values: {
-        single: {
-          templatesIncluded: '1',
-          updateDuration: '1 year',
-          emailSupport: '72h',
+        free: {
+          includedUnits: 'Visibility only',
+          discoveryTools: 'Browse and preview',
+          workflowGuidance: 'Starter guidance',
+          environmentChecks: 'Not included',
+          usageVisibility: 'Shadow snapshot',
+          topUps: 'Not available',
+          support: 'Docs',
         },
-        double: {
-          templatesIncluded: '2',
-          updateDuration: '1 year',
-          emailSupport: '72h',
-        },
-        creator: {
-          templatesIncluded: 'All',
-          updateDuration: 'Subscription',
-          emailSupport: '48h',
+        developer: {
+          includedUnits: '2,000 / month',
+          discoveryTools: 'Included',
+          workflowGuidance: 'Included',
+          environmentChecks: 'Included',
+          usageVisibility: 'Billing + usage view',
+          topUps: 'Available',
+          support: '72h',
         },
       },
     },
     faq: {
       title: 'Frequently Asked Questions',
-      subtitle: 'Everything you need to know about our pricing and plans.',
+      subtitle: 'What the product supports, who each plan is for, and how usage is shown.',
       items: [
         {
-          title: 'How do I use the templates?',
+          title: 'What does FramingUI actually help with?',
           content:
-            'After purchasing a template (1 free during beta), run "npx @framingui/mcp-server init" in your project. This installs the MCP server, sets up design tokens, configures Tailwind CSS, and registers the server with your AI coding tool — all in one command. Then just ask your AI agent to generate screens using your chosen theme.',
+            'FramingUI helps agents discover components and templates, preview themes, inspect screen-generation context, and validate definitions and environments before integration.',
         },
         {
-          title: 'What happens after my update period ends?',
+          title: 'How far can I get on the free plan?',
           content:
-            "You keep full access to the templates you downloaded. You just won't receive new updates. You can renew anytime to get the latest versions.",
+            'Free is for exploring the toolchain, previewing product surfaces, and understanding usage visibility. It is the right place to learn the workflow before you need recurring monthly capacity.',
         },
         {
-          title: 'Can I use templates in client projects?',
+          title: 'Who is the Developer plan for?',
           content:
-            'Yes! All plans include a commercial license. You can use templates in unlimited personal and client projects. The only restriction is you cannot resell or redistribute the templates themselves.',
+            'Developer is for people using FramingUI as part of real UI delivery. It adds recurring monthly usage, the full validated workflow, and support when the tool becomes part of weekly product work.',
         },
         {
-          title: 'How does Creator Pass auto-renewal work?',
+          title: 'Where do I check usage?',
           content:
-            'Creator Pass renews automatically every year at $119/year. You can cancel anytime from your account settings — cancellation takes effect at the end of your current billing period, and you keep access until then.',
+            'Use `whoami` inside MCP for a quick snapshot, and the billing page for current entitlement, allocated units, and usage breakdown by tool class.',
         },
         {
-          title: 'What is your refund policy?',
+          title: 'What do the validation steps cover?',
           content:
-            'Since templates are digital products, refunds are available before download within 14 days of purchase. Technical defects and duplicate purchases are always eligible for refund. See our full refund policy for details.',
+            'Validation covers screen-definition checks for generation workflows and environment checks for dependencies, style contracts, and integration issues before code lands in your app.',
         },
         {
-          title: 'Do you offer team or education discounts?',
+          title: 'What happens if I need more usage?',
           content:
-            'Team licenses and education discounts are coming soon. Contact us at soo.kate.yeon@gmail.com for early access or custom pricing.',
+            'Developer includes monthly usage by default. When your workflow spikes, top-ups can add extra capacity without changing the rest of your setup.',
         },
       ],
     },
     ui: {
-      freeLabel: 'FREE',
-      duringBeta: 'during beta',
-      getBetaAccess: 'Get Beta Access - FREE',
       paymentNotReady: 'Payment system is not ready. Please try again later.',
       priceConfigMissing: 'Price configuration missing. Please contact support.',
     },
@@ -245,141 +276,160 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
   ko: {
     nav: {
       brandName: 'framingui',
-      getStarted: '시작하기',
+      getStarted: '무료로 둘러보기',
+    },
+    capabilities: {
+      badge: '주요 기능',
+      title: 'FramingUI가 지원하는 작업',
+      description:
+        '컴포넌트 탐색, 테마 프리뷰, 생성 전 컨텍스트 확인, 검증까지 한 흐름으로 이어집니다.',
+      cards: [
+        {
+          title: '컴포넌트와 템플릿 탐색',
+          description:
+            '필요한 컴포넌트와 화면 템플릿을 먼저 찾아보고 바로 작업에 넣을 수 있습니다.',
+        },
+        {
+          title: '테마 프리뷰와 생성 맥락',
+          description: '테마 구성과 화면 생성에 필요한 맥락을 확인한 뒤 작성할 수 있습니다.',
+        },
+        {
+          title: '정의 검증과 환경 점검',
+          description: '정의와 환경을 미리 확인해 통합 단계에서 생기는 시행착오를 줄입니다.',
+        },
+      ],
+    },
+    quota: {
+      title: '플랜 선택',
+      description:
+        '무료로 기능을 살펴보고, 실제 작업량이 늘면 월간 사용량 플랜으로 이어갈 수 있습니다.',
     },
     hero: {
-      title: '플랜을 선택하세요',
-      description:
-        'mcp installation을 지원하며 에이전틱 코딩에 특화된 디자인 시스템이 포함됩니다. 디자인 토큰과 레이아웃, 30개 이상의 사전 제작 컴포넌트로 일관된 프로덕션 UI를 바로 만들어보세요.',
-    },
-    betaBanner: {
-      mobile: '템플릿 1개를 3일간 무제한 사용할 수 있어요',
-      desktop: '템플릿 1개를 3일간 무제한 사용할 수 있어요',
+      title: 'UI 작업에 필요한 기능을 한곳에서',
     },
     plans: {
-      single: {
-        name: '템플릿 개별 구매',
-        description: '프로젝트에 적용할 템플릿 1개를 선택해 무제한으로 이용하세요.',
-        priceLabel: '₩69,000',
-        priceSub: '1회 결제',
-        cta: '템플릿 둘러보기',
+      free: {
+        name: '무료',
+        description: '제품과 작업 흐름을 먼저 익히는 시작 플랜입니다.',
+        priceLabel: '₩0',
+        priceSub: '가시성',
+        cta: '무료로 시작',
         features: [
-          '원하는 템플릿 1개',
-          '1년간 업데이트',
-          '상업적 사용 가능',
-          '이메일 지원 (72시간)',
+          'MCP 도구 둘러보기',
+          '컴포넌트와 테마 미리보기',
+          '사용량 가시성 확인',
+          '안내된 온보딩 경로',
         ],
       },
-      double: {
-        name: '1+1 혜택가',
-        description:
-          '2개 이상 프로젝트를 진행하시는 분들을 위해 개별 구매보다 합리적인 가격으로 준비했어요.',
-        priceLabel: '₩110,000',
-        priceSub: '1회 결제',
-        cta: '템플릿 선택하기',
-        badge: '인기 플랜',
+      developer: {
+        name: 'Developer',
+        description: 'FramingUI를 실제 UI 작업에 꾸준히 쓰는 개인 개발자에게 맞는 플랜입니다.',
+        priceLabel: '₩55,000',
+        priceSub: '/월',
+        cta: 'Developer 구독',
+        badge: '가장 많이 선택',
         features: [
-          '원하는 템플릿 2개',
-          '1년간 업데이트',
-          '상업적 사용 가능',
+          '월 2,000 weighted tool units',
+          '컴포넌트·템플릿·테마 탐색',
+          'screen generation context',
+          '환경 검증',
           '이메일 지원 (72시간)',
-          '개별 구매 대비 16% 할인',
+          '필요할 때 top-up',
         ],
+        renewalNotice:
+          '매월 갱신됩니다. 포함량을 넘는 사용은 top-up 또는 초과 사용 정책이 적용될 수 있습니다.',
       },
-      creator: {
-        name: '크리에이터 패스',
-        description:
-          '여러개 프로젝트를 동시에 진행하거나, 다양한 템플릿을 동시에 이용해보고 싶으시다면 추천드려요.',
-        priceLabel: '₩160,000',
-        priceSub: '/년',
-        cta: '구독하기',
-        badge: '최고의 가치',
+      team: {
+        name: 'Team',
+        description: '공유 사용량과 협업 가시성이 필요한 제품 팀용 플랜입니다.',
+        priceLabel: '₩210,000',
+        priceSub: '/월',
+        cta: 'Team 문의하기',
+        badge: 'Pooled Usage',
         features: [
-          '현재 제공되는 모든 템플릿',
-          '향후 출시 템플릿 포함',
-          '구독 기간 동안 업데이트 제공',
-          '빠른 이메일 지원 (48시간)',
-          '우선 지원',
+          '월 10,000 weighted tool units',
+          '팀 단위 사용량 가시성',
+          '우선 지원 큐',
+          '런치 기간 추가 용량',
+          '전환 지원',
         ],
-        renewalNotice: '연 ₩160,000으로 자동 갱신됩니다. 언제든지 해지할 수 있습니다.',
+        renewalNotice: '매월 갱신됩니다. Team 플랜은 별도 온보딩이 필요할 수 있습니다.',
       },
     },
     comparison: {
-      title: '플랜 비교',
+      title: '기능으로 비교',
       tableHeaders: {
         feature: '기능',
-        single: '단일',
-        double: '더블',
-        creator: '크리에이터 패스',
+        free: '무료',
+        developer: 'Developer',
       },
       features: {
-        templatesIncluded: '포함된 템플릿',
-        futureTemplates: '향후 템플릿',
-        updateDuration: '업데이트 기간',
-        commercialUse: '상업적 사용',
-        emailSupport: '이메일 지원',
-        priorityQueue: '우선 큐',
-        communityDiscord: '커뮤니티 Discord',
-        documentation: '문서',
+        includedUnits: '월 포함 사용량',
+        discoveryTools: '도구 탐색',
+        workflowGuidance: '생성 전 안내',
+        environmentChecks: '환경 검증',
+        usageVisibility: '사용량 보기',
+        topUps: '추가 용량',
+        support: '지원 응답 목표',
       },
       values: {
-        single: {
-          templatesIncluded: '1개',
-          updateDuration: '1년',
-          emailSupport: '72시간',
+        free: {
+          includedUnits: '가시성만',
+          discoveryTools: '둘러보기와 미리보기',
+          workflowGuidance: '기본 안내',
+          environmentChecks: '포함되지 않음',
+          usageVisibility: '`whoami`와 Billing에서 확인',
+          topUps: '불가',
+          support: '문서',
         },
-        double: {
-          templatesIncluded: '2개',
-          updateDuration: '1년',
-          emailSupport: '72시간',
-        },
-        creator: {
-          templatesIncluded: '전체',
-          updateDuration: '구독 기간',
-          emailSupport: '48시간',
+        developer: {
+          includedUnits: '월 2,000',
+          discoveryTools: '포함',
+          workflowGuidance: '포함',
+          environmentChecks: '포함',
+          usageVisibility: 'Billing + usage view',
+          topUps: '가능',
+          support: '72시간',
         },
       },
     },
     faq: {
       title: '자주 묻는 질문',
-      subtitle: '가격과 플랜 관련 주요 질문을 정리했습니다.',
+      subtitle: '제품이 지원하는 기능, 플랜 차이, 사용량 확인 방법을 정리했습니다.',
       items: [
         {
-          title: '템플릿은 어떻게 사용하나요?',
+          title: 'FramingUI는 어떤 기능을 제공하나요?',
           content:
-            '템플릿을 구매한 후 프로젝트 루트에서 "npx @framingui/mcp-server init" 명령을 실행하세요. MCP 서버 설치 및 사용하시는 AI 코딩 도구 (Claude Code, Codex 등)에 맞춰서 자동으로 실행 준비가 완료됩니다. 이후 브라우저 인증 진행 후, 보유한 템플릿으로 화면 생성을 요청하면 됩니다.',
+            'FramingUI는 컴포넌트와 템플릿 탐색, 테마 프리뷰, screen generation context 확인, 화면 정의 검증, 환경 점검까지 실제 UI 작업 흐름을 지원합니다.',
         },
         {
-          title: '업데이트 기간이 끝나면 어떻게 되나요?',
+          title: '무료 플랜으로 어디까지 해볼 수 있나요?',
           content:
-            '다운로드한 템플릿은 계속 사용할 수 있습니다. 업데이트 기간 종료 후에는 신규 업데이트만 중단됩니다. 갱신하면 최신 버전을 다시 받을 수 있습니다.',
+            '무료 플랜에서는 제품 표면과 도구 흐름을 먼저 살펴보고, 컴포넌트·템플릿·테마를 미리 확인하면서 사용량 가시성을 볼 수 있습니다.',
         },
         {
-          title: '클라이언트 프로젝트에도 사용할 수 있나요?',
+          title: 'Developer 플랜은 어떤 작업에 맞나요?',
           content:
-            '모든 플랜에는 상업용 라이선스가 포함됩니다. 개인 프로젝트와 클라이언트 프로젝트 모두에서 사용할 수 있습니다. 단, 템플릿 자체의 재판매 또는 재배포는 허용하지 않습니다.',
+            'FramingUI를 실제 제품 작업에 반복적으로 쓰는 개발자에게 맞습니다. 월간 사용량, 검증 워크플로우, 환경 점검, 지원이 함께 제공됩니다.',
         },
         {
-          title: '크리에이터 패스 자동 갱신은 어떻게 되나요?',
+          title: '사용량은 어디서 확인하나요?',
           content:
-            '크리에이터 패스는 매년 ₩160,000으로 자동 갱신됩니다. 계정 설정에서 언제든 취소할 수 있으며, 취소는 현재 결제 기간 종료 시점에 적용됩니다. 종료 시점까지는 계속 이용할 수 있습니다.',
+            'MCP 안에서는 `whoami`로 빠르게 확인할 수 있고, Billing 화면에서는 entitlement, 할당량, tool class별 사용량을 볼 수 있습니다.',
         },
         {
-          title: '환불은 어떻게 받을 수 있나요?',
+          title: '검증 단계에서는 무엇을 확인하나요?',
           content:
-            '템플릿은 디지털 제품이므로 구매 후 14일 이내이며 다운로드 전 상태라면 환불할 수 있습니다. 기술적 결함 또는 중복 구매는 항상 환불 대상입니다. 상세 기준은 환불 정책에서 확인할 수 있습니다.',
+            '스크린 정의 검증은 생성 결과의 구조를 확인하고, 환경 점검은 의존성, 스타일 계약, 통합 과정에서 생길 수 있는 문제를 미리 확인합니다.',
         },
         {
-          title: '팀 또는 교육 할인이 있나요?',
+          title: '사용량이 더 필요하면 어떻게 되나요?',
           content:
-            '팀 라이선스와 교육 할인은 준비 중입니다. 사전 도입 또는 맞춤 가격이 필요하면 soo.kate.yeon@gmail.com으로 문의해 주세요.',
+            'Developer 플랜에는 월간 사용량이 포함되어 있고, 작업량이 일시적으로 늘어나면 top-up으로 추가 용량을 붙일 수 있습니다.',
         },
       ],
     },
     ui: {
-      freeLabel: '무료',
-      duringBeta: '베타 기간 한정',
-      getBetaAccess: '베타 무료로 시작하기',
       paymentNotReady: '결제 시스템을 아직 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
       priceConfigMissing: '가격 설정을 찾을 수 없습니다. 지원팀에 문의해 주세요.',
     },
@@ -387,5 +437,5 @@ const pricingContent: Record<GlobalLocale, PricingContent> = {
 };
 
 export function getPricingContent(locale: GlobalLocale): PricingContent {
-  return pricingContent[locale];
+  return pricingContent[locale as 'en' | 'ko'] ?? pricingContent.en;
 }

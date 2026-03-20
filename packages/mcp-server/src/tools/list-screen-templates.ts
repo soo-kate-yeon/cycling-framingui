@@ -7,7 +7,7 @@
  * with category filtering and search capabilities
  */
 
-import { fetchTemplateList } from '../api/data-client.js';
+import { fetchTemplateList, type TemplateMeta } from '../api/data-client.js';
 import { formatToolError } from '../api/api-result.js';
 import type {
   ListScreenTemplatesInput,
@@ -16,13 +16,15 @@ import type {
 } from '../schemas/mcp-schemas.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
+type ListScreenTemplatesToolInput = Partial<ListScreenTemplatesInput>;
+
 /**
  * List all available screen templates
  * @param input - Filter options (category, search)
  * @returns Template metadata list with category counts
  */
 export async function listScreenTemplatesTool(
-  input: ListScreenTemplatesInput
+  input: ListScreenTemplatesToolInput = {}
 ): Promise<ListScreenTemplatesOutput> {
   try {
     // API에서 템플릿 목록 조회
@@ -44,23 +46,23 @@ export async function listScreenTemplatesTool(
     const allResult = await fetchTemplateList();
     const allTemplates = allResult.ok ? allResult.data : templates;
     const categories = {
-      auth: allTemplates.filter((t: any) => t.category === 'auth').length,
-      dashboard: allTemplates.filter((t: any) => t.category === 'dashboard').length,
-      form: allTemplates.filter((t: any) => t.category === 'form').length,
-      marketing: allTemplates.filter((t: any) => t.category === 'marketing').length,
-      feedback: allTemplates.filter((t: any) => t.category === 'feedback').length,
+      auth: allTemplates.filter((t: TemplateMeta) => t.category === 'auth').length,
+      dashboard: allTemplates.filter((t: TemplateMeta) => t.category === 'dashboard').length,
+      form: allTemplates.filter((t: TemplateMeta) => t.category === 'form').length,
+      marketing: allTemplates.filter((t: TemplateMeta) => t.category === 'marketing').length,
+      feedback: allTemplates.filter((t: TemplateMeta) => t.category === 'feedback').length,
     };
 
     return {
       success: true,
-      templates: templates.map((t: any) => ({
+      templates: templates.map((t: TemplateMeta) => ({
         id: t.id,
         name: t.name,
         category: t.category as TemplateCategory,
         description: t.description,
         requiredComponentsCount: t.requiredComponentsCount,
-        layoutType: t.layoutType,
-        version: t.version,
+        layoutType: (t.layoutType ?? 'centered') as 'centered' | 'sidebar' | 'full',
+        version: t.version ?? '1.0.0',
         tags: t.tags,
       })),
       count: templates.length,

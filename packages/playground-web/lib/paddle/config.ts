@@ -6,19 +6,51 @@
  * IMPACT: 환경변수만 변경하면 결제 환경 전환 가능
  */
 
+const legacyPrices = {
+  single: process.env.NEXT_PUBLIC_PADDLE_PRICE_SINGLE!,
+  double: process.env.NEXT_PUBLIC_PADDLE_PRICE_DOUBLE!,
+  creator: process.env.NEXT_PUBLIC_PADDLE_PRICE_CREATOR!,
+} as const;
+
+const quotaPrices = {
+  developerMonthly: process.env.NEXT_PUBLIC_PADDLE_PRICE_DEVELOPER_MONTHLY ?? '',
+  developerYearly: process.env.NEXT_PUBLIC_PADDLE_PRICE_DEVELOPER_YEARLY ?? '',
+  teamMonthly: process.env.NEXT_PUBLIC_PADDLE_PRICE_TEAM_MONTHLY ?? '',
+  teamYearly: process.env.NEXT_PUBLIC_PADDLE_PRICE_TEAM_YEARLY ?? '',
+  topUp1000: process.env.NEXT_PUBLIC_PADDLE_PRICE_TOPUP_1000 ?? '',
+} as const;
+
 export const PADDLE_CONFIG = {
   environment: (process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT ?? 'sandbox') as
     | 'sandbox'
     | 'production',
   clientToken: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!,
-  prices: {
-    single: process.env.NEXT_PUBLIC_PADDLE_PRICE_SINGLE!,
-    double: process.env.NEXT_PUBLIC_PADDLE_PRICE_DOUBLE!,
-    creator: process.env.NEXT_PUBLIC_PADDLE_PRICE_CREATOR!,
-  },
+  legacyPrices,
+  quotaPrices,
+  // Backward-compatible alias while legacy template flows remain active.
+  prices: legacyPrices,
 } as const;
 
 export type PaddlePriceTier = keyof typeof PADDLE_CONFIG.prices;
+export type LegacyPaddlePriceTier = keyof typeof PADDLE_CONFIG.legacyPrices;
+export type QuotaPaddlePriceKey = keyof typeof PADDLE_CONFIG.quotaPrices;
+
+export type ResolvedPaddlePriceTarget =
+  | {
+      purchaseKind: 'legacy_template';
+      billingModel: 'template_license';
+      legacyTier: LegacyPaddlePriceTier;
+    }
+  | {
+      purchaseKind: 'plan';
+      billingModel: 'quota';
+      planId: 'developer' | 'team';
+    }
+  | {
+      purchaseKind: 'top_up';
+      billingModel: 'quota';
+      topUpUnits: number;
+    };
 
 /**
  * 결제 기능 활성화 여부
@@ -36,8 +68,58 @@ export function isPaymentsEnabled(): boolean {
 export function toPaddlePriceTier(tier: string): PaddlePriceTier | null {
   const mapping: Record<string, PaddlePriceTier> = {
     Single: 'single',
+    'Legacy Single Access': 'single',
     Double: 'double',
+    'Legacy Double Access': 'double',
     'Creator Pass': 'creator',
+    'Legacy All Access': 'creator',
   };
   return mapping[tier] ?? null;
+}
+
+export function resolvePaddlePriceTarget(priceId: string): ResolvedPaddlePriceTarget | null {
+  if (priceId === legacyPrices.single) {
+    return {
+      purchaseKind: 'legacy_template',
+      billingModel: 'template_license',
+      legacyTier: 'single',
+    };
+  }
+  if (priceId === legacyPrices.double) {
+    return {
+      purchaseKind: 'legacy_template',
+      billingModel: 'template_license',
+      legacyTier: 'double',
+    };
+  }
+  if (priceId === legacyPrices.creator) {
+    return {
+      purchaseKind: 'legacy_template',
+      billingModel: 'template_license',
+      legacyTier: 'creator',
+    };
+  }
+  if (quotaPrices.developerMonthly && priceId === quotaPrices.developerMonthly) {
+    return {
+      purchaseKind: 'plan',
+      billingModel: 'quota',
+      planId: 'developer',
+    };
+  }
+  if (quotaPrices.teamMonthly && priceId === quotaPrices.teamMonthly) {
+    return {
+      purchaseKind: 'plan',
+      billingModel: 'quota',
+      planId: 'team',
+    };
+  }
+  if (quotaPrices.topUp1000 && priceId === quotaPrices.topUp1000) {
+    return {
+      purchaseKind: 'top_up',
+      billingModel: 'quota',
+      topUpUnits: 1000,
+    };
+  }
+
+  return null;
 }

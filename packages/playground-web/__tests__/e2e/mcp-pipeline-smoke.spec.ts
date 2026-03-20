@@ -12,8 +12,8 @@ test.describe('MCP Pipeline Smoke', () => {
     await expect(page.locator('body')).toContainText('preview-theme', { timeout: 30000 });
   });
 
-  test('@mcp should render the explore gallery entry points', async ({ page }) => {
-    await page.goto('/explore', { waitUntil: 'domcontentloaded' });
+  test('@mcp should render the homepage theme gallery entry points', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     const templateCards = page.locator('main article');
     await expect(page.locator('body')).toContainText('Square Minimalism', { timeout: 30000 });

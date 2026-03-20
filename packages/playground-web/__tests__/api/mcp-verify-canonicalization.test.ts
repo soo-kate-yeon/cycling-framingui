@@ -124,6 +124,44 @@ describe('GET /api/mcp/verify canonicalization', () => {
         };
       }
 
+      if (table === 'quota_entitlements') {
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: () =>
+                Promise.resolve({
+                  data: {
+                    user_id: 'user-1',
+                    plan_id: 'developer',
+                    status: 'active',
+                    included_units: 2000,
+                    current_period_start: '2026-04-01T00:00:00.000Z',
+                    current_period_end: '2026-05-01T00:00:00.000Z',
+                  },
+                  error: null,
+                }),
+            }),
+          }),
+        };
+      }
+
+      if (table === 'quota_allocations') {
+        return {
+          select: () => ({
+            eq: () => ({
+              returns: () =>
+                Promise.resolve({
+                  data: [
+                    { units: 2000, allocation_type: 'plan' },
+                    { units: 1000, allocation_type: 'top_up' },
+                  ],
+                  error: null,
+                }),
+            }),
+          }),
+        };
+      }
+
       throw new Error(`Unexpected table: ${table}`);
     });
   });
@@ -145,5 +183,14 @@ describe('GET /api/mcp/verify canonicalization', () => {
     expect(data.themes.licensed).not.toContain('default');
     expect(data.licenses[0].themeId).toBe('default');
     expect(data.licenses[0].resolvedThemeIds).toEqual(['pebble', 'square-minimalism']);
+    expect(data.quotaEntitlement).toEqual({
+      planId: 'developer',
+      status: 'active',
+      includedUnits: 2000,
+      currentPeriodStart: '2026-04-01T00:00:00.000Z',
+      currentPeriodEnd: '2026-05-01T00:00:00.000Z',
+      totalAllocatedUnits: 3000,
+      topUpAllocatedUnits: 1000,
+    });
   });
 });

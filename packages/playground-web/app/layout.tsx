@@ -67,13 +67,13 @@ const siteNavigation = {
     },
     {
       '@type': 'WebPage',
-      name: 'See Demo',
-      url: 'https://framingui.com/explore',
+      name: 'Homepage',
+      url: 'https://framingui.com/',
     },
     {
       '@type': 'WebPage',
-      name: 'Templates Gallery',
-      url: 'https://framingui.com/explore',
+      name: 'Theme Gallery',
+      url: 'https://framingui.com/#theme-gallery',
     },
     {
       '@type': 'WebPage',

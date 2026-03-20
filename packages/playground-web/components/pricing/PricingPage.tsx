@@ -1,19 +1,17 @@
 /**
- * Pricing Page - SaaS 스타일 가격 플랜 페이지
+ * Pricing Page
  *
- * ChatGPT pricing 페이지 레퍼런스:
- * - Hero + 3 cards + Feature comparison + FAQ
- * - ROSCA 준수: Creator Pass 자동갱신 고지
+ * - Hero + capability cards + pricing cards + comparison + FAQ
+ * - 제품 기능과 사용량 모델을 함께 설명
  */
 
 'use client';
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Check, X, ArrowRight, Sparkles } from 'lucide-react';
+import { Check, ArrowRight, Sparkles } from 'lucide-react';
 import { Accordion } from '../landing/Accordion';
 import { Footer } from '../shared/Footer';
-import { FreeTrialBanner } from '../shared/FreeTrialBanner';
 import { useGlobalLanguage } from '../../contexts/GlobalLanguageContext';
 import { getPricingContent } from '../../data/i18n/pricing';
 import { useAuth } from '../../contexts/AuthContext';
@@ -44,64 +42,46 @@ function FadeIn({
 }
 
 /* ─── 데이터 ─── */
+const PRICING_SECTION_SHELL = 'max-w-6xl mx-auto px-6 md:px-8';
+
 const PLANS = [
   {
-    id: 'single',
-    name: 'Single Template',
-    description: 'Start with the perfect template for your project.',
-    price: 59,
-    priceLabel: '$59',
-    priceSub: 'one-time payment',
-    cta: 'Browse Templates',
-    ctaHref: '/explore',
+    id: 'free',
+    name: 'Free Quota',
+    description: 'Learn the product and inspect the workflow before paying.',
+    price: 0,
+    priceLabel: '$0',
+    priceSub: 'shadow visibility',
+    cta: 'Start Free',
+    ctaHref: '/#theme-gallery',
     featured: false,
     badge: null,
     features: [
-      '1 template of your choice',
-      '1 year of updates',
-      'Commercial use',
-      'Email support (72h)',
+      'Explore MCP tools and package surfaces',
+      'Preview components, templates, and themes',
+      'Inspect usage visibility in `whoami`',
+      'Start with guided onboarding',
     ],
   },
   {
-    id: 'double',
-    name: 'Double Package',
-    description: 'Best value for developers who need more.',
-    price: 99,
-    priceLabel: '$99',
-    priceSub: 'one-time payment',
-    cta: 'Choose Templates',
-    ctaHref: '/explore?plan=double',
+    id: 'developer',
+    name: 'Developer',
+    description: 'For solo developers shipping real product UI with FramingUI.',
+    price: 39,
+    priceLabel: '$39',
+    priceSub: '/month',
+    cta: 'Subscribe to Developer',
+    ctaHref: '/pricing',
     featured: true,
     badge: 'Most Popular',
     features: [
-      '2 templates of your choice',
-      '1 year of updates',
-      'Commercial use',
+      '2,000 weighted tool units / month',
+      'Component, template, and theme discovery',
+      'Screen-generation context and validated workflow',
+      'Environment checks and code-audit guidance',
       'Email support (72h)',
-      'Save vs. buying separately',
+      'Top-up support when usage spikes',
     ],
-  },
-  {
-    id: 'creator',
-    name: 'Creator Pass',
-    description: 'Unlimited access for prolific builders.',
-    price: 149,
-    priceLabel: '$149',
-    priceSub: '/year',
-    cta: 'Subscribe',
-    ctaHref: '/auth/signup',
-    featured: false,
-    badge: 'Best Value',
-    features: [
-      'All current templates',
-      'All future templates included',
-      'Updates during subscription',
-      'Priority email support (48h)',
-      'Priority support queue',
-    ],
-    // ROSCA 준수: 자동갱신 고지
-    renewalNotice: true,
   },
 ] as const;
 
@@ -113,21 +93,13 @@ export function PricingPage() {
   const { user } = useAuth();
   const { openCheckout, isReady: isPaddleReady, notReadyReason } = usePaddle();
 
-  /**
-   * 베타 접근 핸들러 (Single Template 전용)
-   * - 로그인 안 됨: /auth/login으로 리디렉션
-   * - 로그인 됨: /explore로 바로 리디렉션 (결제 없이)
-   */
-  const handleBetaAccess = () => {
-    router.push('/explore');
+  const handleFreeAccess = () => {
+    router.push('/#theme-gallery');
   };
 
-  /**
-   * Paddle Checkout 핸들러 (Double, Creator 전용)
-   */
-  const handleCheckout = (planId: 'double' | 'creator') => {
+  const handleQuotaCheckout = (planId: 'developer') => {
     if (!user) {
-      const returnUrl = planId === 'double' ? '/explore?plan=double' : '/pricing';
+      const returnUrl = '/pricing';
       router.push(`/auth/login?returnUrl=${encodeURIComponent(returnUrl)}`);
       return;
     }
@@ -138,8 +110,7 @@ export function PricingPage() {
       return;
     }
 
-    // Paddle Price ID (lib/paddle/config.ts와 동일한 환경변수 사용)
-    const priceId = PADDLE_CONFIG.prices[planId];
+    const priceId = PADDLE_CONFIG.quotaPrices.developerMonthly;
 
     if (!priceId) {
       console.error('[Paddle] Price configuration missing for plan:', planId);
@@ -151,18 +122,17 @@ export function PricingPage() {
       priceId,
       userId: user.id,
       userEmail: user.email || '',
-      tier: planId,
+      purchaseKind: 'plan',
+      planId,
       successPath: `/pricing?checkout=success&plan=${planId}`,
     });
   };
 
   return (
     <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-900 selection:text-white">
-      <FreeTrialBanner />
-
       {/* 네비게이션 */}
-      <nav className="border-b border-neutral-200">
-        <div className="container mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
+      <nav className="border-b border-neutral-200 bg-white">
+        <div className={`${PRICING_SECTION_SHELL} h-16 flex items-center justify-between`}>
           <button
             onClick={() => router.push('/')}
             className="text-xl font-bold tracking-tighter hover:opacity-70 transition-opacity"
@@ -171,7 +141,7 @@ export function PricingPage() {
           </button>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => router.push('/auth/signup')}
+              onClick={() => router.push('/#theme-gallery')}
               className="h-9 px-5 rounded-full text-sm font-medium bg-neutral-950 text-white hover:bg-neutral-800 transition-colors"
             >
               {content.nav.getStarted}
@@ -181,31 +151,31 @@ export function PricingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="container mx-auto px-6 md:px-8 pt-16 pb-12 md:pt-24 md:pb-16 text-center max-w-3xl">
-        <FadeIn>
+      <section className="pt-16 pb-12 md:pt-24 md:pb-16">
+        <FadeIn className={`${PRICING_SECTION_SHELL} text-center`}>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4 md:mb-6">
             {content.hero.title}
           </h1>
-        </FadeIn>
-        <FadeIn delay={0.1}>
-          <p className="text-lg md:text-xl text-neutral-500 leading-relaxed max-w-2xl mx-auto">
-            {content.hero.description}
+          <p className="mx-auto max-w-3xl text-base md:text-lg leading-7 text-neutral-500">
+            {content.quota.description}
           </p>
         </FadeIn>
       </section>
 
       {/* Pricing Cards */}
-      <section className="container mx-auto px-6 md:px-8 pb-20 md:pb-32">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {(['single', 'double', 'creator'] as const).map((planId, index) => {
+      <section className="pb-20 md:pb-28">
+        <div className={`${PRICING_SECTION_SHELL} grid grid-cols-1 md:grid-cols-2 gap-6`}>
+          {(['free', 'developer'] as const).map((planId, index) => {
             const planContent = content.plans[planId];
             const planData = PLANS.find((p) => p.id === planId)!;
 
             return (
               <FadeIn key={planId} delay={index * 0.1} className="h-full">
                 <div
-                  className={`relative flex flex-col h-full p-6 md:p-8 rounded-2xl border transition-shadow hover:shadow-sm ${
-                    planData.featured ? 'border-neutral-950' : 'border-neutral-200'
+                  className={`relative flex flex-col h-full p-6 md:p-8 rounded-[28px] border bg-white transition-shadow hover:shadow-sm ${
+                    planData.featured
+                      ? 'border-neutral-950 shadow-[0_8px_24px_rgba(17,24,39,0.06)]'
+                      : 'border-neutral-200'
                   }`}
                 >
                   {/* 배지 */}
@@ -217,7 +187,7 @@ export function PricingPage() {
                           : 'bg-neutral-100 text-neutral-700 border border-neutral-200'
                       }`}
                     >
-                      {planData.badge === 'Best Value' && (
+                      {planData.badge === 'Most Popular' && (
                         <Sparkles className="w-3 h-3 inline mr-1 -mt-0.5" />
                       )}
                       {'badge' in planContent && planContent.badge}
@@ -264,12 +234,10 @@ export function PricingPage() {
                     {/* CTA 버튼 */}
                     <button
                       onClick={() => {
-                        if (planId === 'single') {
-                          handleBetaAccess();
-                        } else if (planId === 'double') {
-                          router.push('/explore?plan=double');
+                        if (planId === 'free') {
+                          handleFreeAccess();
                         } else {
-                          handleCheckout('creator');
+                          handleQuotaCheckout(planId);
                         }
                       }}
                       className={`w-full py-3 px-6 rounded-full text-sm font-semibold transition-colors mb-3 flex items-center justify-center gap-2 ${
@@ -297,8 +265,8 @@ export function PricingPage() {
       </section>
 
       {/* Feature Comparison Table */}
-      <section className="bg-neutral-50 py-16 md:py-24">
-        <div className="container mx-auto px-6 md:px-8 max-w-5xl">
+      <section className="py-16 md:py-24">
+        <div className={PRICING_SECTION_SHELL}>
           <FadeIn>
             <h2 className="text-3xl font-bold tracking-tight text-center mb-12">
               {content.comparison.title}
@@ -306,7 +274,7 @@ export function PricingPage() {
           </FadeIn>
 
           <FadeIn delay={0.1}>
-            <div className="overflow-x-auto rounded-xl border border-neutral-200">
+            <div className="overflow-x-auto">
               <table className="w-full text-sm min-w-[480px] [&_tr>*:last-child]:pr-6 [&_tr>*:first-child]:pl-6">
                 <thead>
                   <tr className="border-b border-neutral-200">
@@ -314,162 +282,132 @@ export function PricingPage() {
                       {content.comparison.tableHeaders.feature}
                     </th>
                     <th className="text-center py-4 px-4 font-bold text-neutral-900">
-                      {content.comparison.tableHeaders.single}
+                      {content.comparison.tableHeaders.free}
                     </th>
                     <th className="text-center py-4 px-4 font-bold text-neutral-900">
                       <span className="inline-flex items-center gap-1">
-                        {content.comparison.tableHeaders.double}
+                        {content.comparison.tableHeaders.developer}
                       </span>
-                    </th>
-                    <th className="text-center py-4 px-4 font-bold text-neutral-900">
-                      {content.comparison.tableHeaders.creator}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Templates included */}
+                  {/* Included usage */}
                   <tr className="border-b border-neutral-100">
                     <td className="py-4 pr-4 text-neutral-700">
-                      {content.comparison.features.templatesIncluded}
+                      {content.comparison.features.includedUnits}
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.single.templatesIncluded}
+                        {content.comparison.values.free.includedUnits}
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.double.templatesIncluded}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.creator.templatesIncluded}
+                        {content.comparison.values.developer.includedUnits}
                       </span>
                     </td>
                   </tr>
 
-                  {/* Future templates */}
+                  {/* Discovery tools */}
                   <tr className="border-b border-neutral-100">
                     <td className="py-4 pr-4 text-neutral-700">
-                      {content.comparison.features.futureTemplates}
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <X className="w-4 h-4 text-neutral-300 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <X className="w-4 h-4 text-neutral-300 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
-                    </td>
-                  </tr>
-
-                  {/* Update duration */}
-                  <tr className="border-b border-neutral-100">
-                    <td className="py-4 pr-4 text-neutral-700">
-                      {content.comparison.features.updateDuration}
+                      {content.comparison.features.discoveryTools}
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.single.updateDuration}
+                        {content.comparison.values.free.discoveryTools}
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.double.updateDuration}
+                        {content.comparison.values.developer.discoveryTools}
+                      </span>
+                    </td>
+                  </tr>
+
+                  {/* Workflow guidance */}
+                  <tr className="border-b border-neutral-100">
+                    <td className="py-4 pr-4 text-neutral-700">
+                      {content.comparison.features.workflowGuidance}
+                    </td>
+                    <td className="py-4 px-4 text-center">
+                      <span className="text-neutral-700 font-medium">
+                        {content.comparison.values.free.workflowGuidance}
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.creator.updateDuration}
+                        {content.comparison.values.developer.workflowGuidance}
                       </span>
                     </td>
                   </tr>
 
-                  {/* Commercial use */}
+                  {/* Environment checks */}
                   <tr className="border-b border-neutral-100">
                     <td className="py-4 pr-4 text-neutral-700">
-                      {content.comparison.features.commercialUse}
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
-                    </td>
-                  </tr>
-
-                  {/* Email support */}
-                  <tr className="border-b border-neutral-100">
-                    <td className="py-4 pr-4 text-neutral-700">
-                      {content.comparison.features.emailSupport}
+                      {content.comparison.features.environmentChecks}
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.single.emailSupport}
+                        {content.comparison.values.free.environmentChecks}
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.double.emailSupport}
+                        {content.comparison.values.developer.environmentChecks}
+                      </span>
+                    </td>
+                  </tr>
+
+                  {/* Usage visibility */}
+                  <tr className="border-b border-neutral-100">
+                    <td className="py-4 pr-4 text-neutral-700">
+                      {content.comparison.features.usageVisibility}
+                    </td>
+                    <td className="py-4 px-4 text-center">
+                      <span className="text-neutral-700 font-medium">
+                        {content.comparison.values.free.usageVisibility}
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="text-neutral-700 font-medium">
-                        {content.comparison.values.creator.emailSupport}
+                        {content.comparison.values.developer.usageVisibility}
                       </span>
                     </td>
                   </tr>
 
-                  {/* Priority queue */}
+                  {/* Top-ups */}
                   <tr className="border-b border-neutral-100">
                     <td className="py-4 pr-4 text-neutral-700">
-                      {content.comparison.features.priorityQueue}
+                      {content.comparison.features.topUps}
                     </td>
                     <td className="py-4 px-4 text-center">
-                      <X className="w-4 h-4 text-neutral-300 mx-auto" />
+                      <span className="text-neutral-700 font-medium">
+                        {content.comparison.values.free.topUps}
+                      </span>
                     </td>
                     <td className="py-4 px-4 text-center">
-                      <X className="w-4 h-4 text-neutral-300 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
+                      <span className="text-neutral-700 font-medium">
+                        {content.comparison.values.developer.topUps}
+                      </span>
                     </td>
                   </tr>
 
-                  {/* Community Discord */}
-                  <tr className="border-b border-neutral-100">
-                    <td className="py-4 pr-4 text-neutral-700">
-                      {content.comparison.features.communityDiscord}
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
-                    </td>
-                  </tr>
-
-                  {/* Documentation */}
+                  {/* Support */}
                   <tr className="border-b border-neutral-100 last:border-none">
                     <td className="py-4 pr-4 text-neutral-700">
-                      {content.comparison.features.documentation}
+                      {content.comparison.features.support}
                     </td>
                     <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
+                      <span className="text-neutral-700 font-medium">
+                        {content.comparison.values.free.support}
+                      </span>
                     </td>
                     <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-4 h-4 text-neutral-900 mx-auto" />
+                      <span className="text-neutral-700 font-medium">
+                        {content.comparison.values.developer.support}
+                      </span>
                     </td>
                   </tr>
                 </tbody>
@@ -480,8 +418,8 @@ export function PricingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="container mx-auto px-6 md:px-8 py-16 md:py-24 max-w-5xl">
-        <FadeIn>
+      <section className="py-16 md:py-24">
+        <FadeIn className={PRICING_SECTION_SHELL}>
           <div className="grid md:grid-cols-12 gap-8 md:gap-12">
             <div className="md:col-span-4">
               <h2 className="text-3xl font-bold tracking-tight mb-4">{content.faq.title}</h2>

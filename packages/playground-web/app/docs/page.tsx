@@ -56,9 +56,9 @@ const CARDS = [
     description: 'Token, layout, and component guidance for each theme',
   },
   {
-    href: '/explore',
+    href: '/#theme-gallery',
     icon: Palette,
-    title: 'Explore Themes',
+    title: 'Theme Gallery',
     description: 'Browse 7 production-ready themes',
   },
 ];

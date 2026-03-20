@@ -19,6 +19,9 @@ export type AnalyticsEvent =
   | 'pricing_view'
   | 'pricing_purchase_clicked'
   | 'pricing_manage_clicked'
+  | 'transition_access_signup_click'
+  | 'funnel_transition_access_started'
+  // Legacy aliases kept for compatibility with historical dashboards.
   | 'free_trial_signup_click'
   | 'funnel_home_entered'
   | 'funnel_docs_or_explore_entered'
@@ -63,10 +66,12 @@ export interface FunnelPrimaryCtaClickProps {
   cta_variant?: 'primary' | 'secondary' | 'beta' | 'free-start';
 }
 
-export interface FunnelFreeTrialStartedProps {
+export interface TransitionAccessStartedProps {
   entry_point: string;
   is_authenticated: boolean;
 }
+
+export type FunnelFreeTrialStartedProps = TransitionAccessStartedProps;
 
 export interface PricingPurchaseProps {
   tier: string;
@@ -149,10 +154,17 @@ export const trackPricingView = (): void => {
 };
 
 /**
- * 무료체험 가입 클릭 이벤트 트래킹 (구 베타)
+ * Transition access signup click tracking.
+ */
+export const trackTransitionAccessSignupClick = (): void => {
+  trackGA('transition_access_signup_click');
+};
+
+/**
+ * Legacy alias retained for existing call sites.
  */
 export const trackBetaSignupClick = (): void => {
-  trackGA('free_trial_signup_click');
+  trackTransitionAccessSignupClick();
 };
 
 /**
@@ -185,11 +197,18 @@ export const trackFunnelPrimaryCtaClick = (props: FunnelPrimaryCtaClickProps): v
   });
 };
 
-export const trackFunnelFreeTrialStarted = (props: FunnelFreeTrialStartedProps): void => {
-  trackGA('funnel_free_trial_started', {
+export const trackFunnelTransitionAccessStarted = (props: TransitionAccessStartedProps): void => {
+  trackGA('funnel_transition_access_started', {
     entry_point: props.entry_point,
     is_authenticated: props.is_authenticated,
   });
+};
+
+/**
+ * Legacy alias retained for existing call sites.
+ */
+export const trackFunnelFreeTrialStarted = (props: FunnelFreeTrialStartedProps): void => {
+  trackFunnelTransitionAccessStarted(props);
 };
 
 export const trackPricingPurchaseClick = (props: PricingPurchaseProps): void => {

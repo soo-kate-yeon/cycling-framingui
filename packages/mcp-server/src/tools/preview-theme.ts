@@ -18,6 +18,28 @@ import {
   shouldRewriteThemePreviewError,
 } from './theme-authority.js';
 
+type PreviewThemeToolInput = Pick<PreviewThemeInput, 'themeId'> &
+  Partial<Pick<PreviewThemeInput, 'includeCSS'>>;
+
+type TokenReferenceMap = Record<string, string | undefined>;
+
+function readTokenValue(source: unknown, key: string, fallback: string): string {
+  if (!source || typeof source !== 'object') {
+    return fallback;
+  }
+
+  const value = (source as TokenReferenceMap)[key];
+  return typeof value === 'string' ? value : fallback;
+}
+
+function toTokenReferenceMap(source: unknown): TokenReferenceMap | undefined {
+  if (!source || typeof source !== 'object') {
+    return undefined;
+  }
+
+  return source as TokenReferenceMap;
+}
+
 /**
  * ThemeV2 (core) -> ThemeDefinition (ui) 어댑터
  *
@@ -34,41 +56,49 @@ function themeV2ToDefinition(theme: ThemeV2): ThemeDefinition {
   const semantic = theme.tokens.semantic;
 
   // background.surface 매핑 (폴백 포함)
-  const surfaceRaw = semantic.background?.surface;
+  const surfaceRaw = toTokenReferenceMap(semantic.background?.surface);
   const surface = {
-    subtle: (surfaceRaw as any)?.subtle ?? 'atomic.color.neutral.50',
-    default: (surfaceRaw as any)?.default ?? 'atomic.color.neutral.white',
-    emphasis:
-      (surfaceRaw as any)?.emphasis ?? (surfaceRaw as any)?.popover ?? 'atomic.color.neutral.100',
+    subtle: readTokenValue(surfaceRaw, 'subtle', 'atomic.color.neutral.50'),
+    default: readTokenValue(surfaceRaw, 'default', 'atomic.color.neutral.white'),
+    emphasis: readTokenValue(
+      surfaceRaw,
+      'emphasis',
+      readTokenValue(surfaceRaw, 'popover', 'atomic.color.neutral.100')
+    ),
   };
 
   // background.brand 매핑 (폴백 포함)
-  const brandRaw = semantic.background?.brand;
+  const brandRaw = toTokenReferenceMap(semantic.background?.brand);
   const brand = {
-    subtle: (brandRaw as any)?.subtle ?? 'atomic.color.brand.100',
-    default: (brandRaw as any)?.default ?? 'atomic.color.brand.500',
-    emphasis: (brandRaw as any)?.emphasis ?? 'atomic.color.brand.700',
+    subtle: readTokenValue(brandRaw, 'subtle', 'atomic.color.brand.100'),
+    default: readTokenValue(brandRaw, 'default', 'atomic.color.brand.500'),
+    emphasis: readTokenValue(brandRaw, 'emphasis', 'atomic.color.brand.700'),
   };
 
   // border 매핑 - ThemeV2는 flat 구조, ThemeDefinition은 nested
   const borderRaw = semantic.border;
+  const borderDefaultRaw = toTokenReferenceMap(borderRaw?.default);
+  const borderFlatRaw = toTokenReferenceMap(borderRaw);
   const borderDefault = {
-    subtle:
-      (borderRaw?.default as any)?.subtle ??
-      (borderRaw as any)?.input ??
-      'atomic.color.neutral.200',
-    default:
-      (borderRaw?.default as any)?.default ??
-      (borderRaw as any)?.default ??
-      'atomic.color.neutral.200',
-    emphasis:
-      (borderRaw?.default as any)?.emphasis ??
-      (borderRaw as any)?.emphasis ??
-      'atomic.color.neutral.300',
+    subtle: readTokenValue(
+      borderDefaultRaw,
+      'subtle',
+      readTokenValue(borderFlatRaw, 'input', 'atomic.color.neutral.200')
+    ),
+    default: readTokenValue(
+      borderDefaultRaw,
+      'default',
+      readTokenValue(borderFlatRaw, 'default', 'atomic.color.neutral.200')
+    ),
+    emphasis: readTokenValue(
+      borderDefaultRaw,
+      'emphasis',
+      readTokenValue(borderFlatRaw, 'emphasis', 'atomic.color.neutral.300')
+    ),
   };
 
   // text 매핑 (optional)
-  const textRaw = (semantic as any).text;
+  const textRaw = toTokenReferenceMap((semantic as Record<string, unknown>).text);
   const text = textRaw
     ? {
         primary: textRaw.primary ?? 'atomic.color.neutral.900',
@@ -128,7 +158,7 @@ function themeV2ToDefinition(theme: ThemeV2): ThemeDefinition {
  * @param input - Theme ID to preview, optional includeCSS flag
  * @returns Full v2.1 theme data (MCP JSON-RPC format), optionally with CSS variables
  */
-export async function previewThemeTool(input: PreviewThemeInput): Promise<PreviewThemeOutput> {
+export async function previewThemeTool(input: PreviewThemeToolInput): Promise<PreviewThemeOutput> {
   try {
     const authData = getAuthData();
     const themeId = input.themeId;
@@ -138,7 +168,7 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
     if (!authData || !authData.valid) {
       return {
         success: false,
-        error: `🔐 Authentication required to preview themes.\n\n🎁 Start your FREE 3-day trial (no credit card):\n   → https://framingui.com/auth/signup?utm_source=mcp&utm_medium=cli&utm_campaign=theme_preview\n\nAlready have an account? Run \`framingui-mcp login\``,
+        error: `🔐 Authentication required to preview themes.\n\n📊 Start with free quota visibility:\n   → https://framingui.com/auth/signup?utm_source=mcp&utm_medium=cli&utm_campaign=theme_preview\n\nAlready have an account? Run \`framingui-mcp login\``,
       };
     }
 
@@ -203,7 +233,7 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
           atomic: theme.tokens.atomic,
           semantic: theme.tokens.semantic,
           component: theme.tokens.component,
-          recipes: (theme.tokens as any).recipes,
+          recipes: theme.tokens.recipes,
         },
         stateLayer: theme.stateLayer,
         motion: theme.motion,

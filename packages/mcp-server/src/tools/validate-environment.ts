@@ -15,6 +15,12 @@ import { readPackageJson } from '../utils/package-json-reader.js';
 import { readTailwindConfig } from '../utils/tailwind-config-reader.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
 
+type ValidateEnvironmentToolInput = Pick<
+  ValidateEnvironmentInput,
+  'projectPath' | 'requiredPackages'
+> &
+  Partial<Pick<ValidateEnvironmentInput, 'platform' | 'checkTailwind' | 'sourceFiles'>>;
+
 function getInstalledMajor(versionSpec?: string): number | undefined {
   if (!versionSpec) {
     return undefined;
@@ -78,7 +84,7 @@ function findBootstrapEntry(projectPath: string): string | undefined {
  * ```
  */
 export async function validateEnvironmentTool(
-  input: ValidateEnvironmentInput
+  input: ValidateEnvironmentToolInput
 ): Promise<ValidateEnvironmentOutput> {
   try {
     const { projectPath, requiredPackages } = input;

@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import {
   generateAgentsMdSection,
   generateClaudeMdSection,
-} from '../../src/cli/agent-md-templates.js';
-import { generateGuide } from '../../src/cli/guide-template.js';
+} from '../../src/cli/agent-md-templates.ts';
+import { generateGuide } from '../../src/cli/guide-template.ts';
 import { getInitSuccessMessage } from '../../src/cli/init.ts';
 import { getGettingStartedPrompt } from '../../src/prompts/getting-started.ts';
 import { getScreenWorkflowPrompt } from '../../src/prompts/screen-workflow.ts';
@@ -18,9 +18,12 @@ describe('project-context guidance', () => {
 
     expect(guide).toContain('detect-project-context');
     expect(guide).toContain('do not repeat `platform: "react-native"`');
+    expect(guide).toContain('shadow quota snapshot');
     expect(claude).toContain('call `detect-project-context`');
+    expect(claude).toContain('shadow quota snapshot');
     expect(claude).toContain('without repeating `platform`');
     expect(agents).toContain('call `detect-project-context` first');
+    expect(agents).toContain('quota visibility');
     expect(agents).toContain('stored session default');
   });
 
@@ -36,7 +39,9 @@ describe('project-context guidance', () => {
 
     expect(gettingStartedText).toContain('detect-project-context');
     expect(gettingStartedText).toContain('detected default platform/runtime');
+    expect(gettingStartedText).toContain('Shadow quota usage snapshot');
     expect(workflowText).toContain('detect-project-context');
+    expect(workflowText).toContain('shadow quota snapshot');
     expect(workflowText).toContain('If the project path is known');
     expect(workflowText).toContain('platform: "react-native"');
   });

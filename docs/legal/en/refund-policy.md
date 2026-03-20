@@ -1,13 +1,13 @@
 # Refund Policy
 
-**Effective Date:** February 7, 2026  
-**Last Updated:** February 7, 2026
+**Effective Date:** March 17, 2026  
+**Last Updated:** March 17, 2026
 
 ---
 
 ## 1. Overview
 
-This Refund Policy applies to all purchases made through the Tekton platform operated by Morak (모락).
+This Refund Policy applies to purchases made through the Tekton platform operated by Morak (모락).
 
 **Contact Information:**
 
@@ -18,102 +18,94 @@ This Refund Policy applies to all purchases made through the Tekton platform ope
 
 ---
 
-## 2. Digital Product Nature
+## 2. Service Nature
 
-All products sold on Tekton are **digital goods** (React UI templates, design assets, and code packages). Due to the nature of digital products:
+Tekton sells digital services and digital assets, including:
 
-> **Once a product has been downloaded, refunds are generally not available.**
+- recurring Plans with included MCP Tool Units
+- Top-Ups or metered usage entitlements
+- legacy downloadable themes, templates, or related assets
 
-This is because digital products cannot be "returned" like physical goods, and access to the full product is granted immediately upon download.
+Because access is delivered immediately and usage can begin as soon as a purchase is activated, refund eligibility depends on whether meaningful usage or download has already occurred.
 
----
-
-## 3. Refund Eligibility
-
-### 3.1 Eligible for Refund
-
-| Situation                     | Refund Available | Conditions                                             |
-| ----------------------------- | ---------------- | ------------------------------------------------------ |
-| **Pre-download cancellation** | ✅ Yes           | Request within 14 days of purchase AND before download |
-| **Technical defect**          | ✅ Yes           | Product is fundamentally broken and we cannot fix it   |
-| **Duplicate purchase**        | ✅ Yes           | Accidental duplicate payment for same product          |
-
-### 3.2 Not Eligible for Refund
-
-| Situation                                        | Refund Available |
-| ------------------------------------------------ | ---------------- |
-| Downloaded product (regardless of use)           | ❌ No            |
-| Changed mind after download                      | ❌ No            |
-| Incompatibility with your project (not a defect) | ❌ No            |
-| Lack of expertise to use the product             | ❌ No            |
-| Similar product already purchased elsewhere      | ❌ No            |
+Shadow billing views shown during transition do not themselves create a charge. Only amounts that were actually purchased or billed are eligible for refund review.
 
 ---
 
-## 4. Subscription Refunds (Creator Pass)
+## 3. Eligible Refund Cases
 
-### 4.1 Cancellation Policy
+You may be eligible for a refund in the following cases:
 
-- You may cancel your Creator Pass subscription at any time
-- Cancellation takes effect at the end of the current billing period
-- You retain access to all Templates until the subscription expires
-
-### 4.2 Refund Policy for Subscriptions
-
-| Situation                                                | Refund                                                |
-| -------------------------------------------------------- | ----------------------------------------------------- |
-| Cancel within 14 days of initial purchase (no downloads) | ✅ Full refund                                        |
-| Cancel after 14 days or after downloading templates      | ❌ No refund; access continues until period ends      |
-| Renewal charge (if cancelled before renewal date)        | Renewal will not occur; no refund for previous period |
+| Situation             | Refund Available | Conditions                                                                                        |
+| --------------------- | ---------------- | ------------------------------------------------------------------------------------------------- |
+| Duplicate purchase    | Yes              | Duplicate charge for the same account or order                                                    |
+| Billing error         | Yes              | Incorrect amount charged due to our or Paddle's error                                             |
+| Technical failure     | Yes              | The purchased entitlement cannot be materially used and we cannot fix it within a reasonable time |
+| Initial Plan purchase | Possible         | Requested within 14 days and before material Tool Unit consumption                                |
+| Top-Up purchase       | Possible         | Requested within 14 days and before material consumption of the purchased Tool Units              |
+| Legacy asset purchase | Possible         | Requested within 14 days and before download or activation of the asset                           |
 
 ---
 
-## 5. How to Request a Refund
+## 4. Non-Refundable Cases
 
-### Step 1: Contact Us
+Refunds are generally not available in the following cases:
+
+| Situation                                                        | Refund Available |
+| ---------------------------------------------------------------- | ---------------- |
+| Material Tool Unit consumption has already occurred              | No               |
+| Downloaded or activated legacy assets                            | No               |
+| Change of mind after meaningful use                              | No               |
+| Compatibility issues outside the documented scope of the Service | No               |
+| Lack of expertise to use the Service or assets                   | No               |
+| Charges for prior completed billing periods                      | No               |
+
+---
+
+## 5. Cancellation
+
+### 5.1 Recurring Plans
+
+- You may cancel a recurring Plan at any time.
+- Cancellation takes effect at the end of the current billing period unless applicable law requires otherwise.
+- Cancellation stops future renewals but does not automatically create a refund for the current billing period.
+
+### 5.2 Top-Ups
+
+Top-Ups are one-time purchases. Once materially consumed, they are non-refundable.
+
+### 5.3 Legacy Purchases
+
+Legacy theme or template purchases remain governed by the access rights granted at the time of purchase. Refund review for those purchases follows this Policy.
+
+---
+
+## 6. How to Request a Refund
 
 Send an email to **soo.kate.yeon@gmail.com** with:
 
-- Subject line: "Refund Request - [Your Order ID]"
-- Your registered email address
-- Order ID or transaction reference
-- Reason for refund request
+- subject line: `Refund Request - [Order ID]`
+- your registered email address
+- order ID or transaction reference
+- the reason for the request
 
-### Step 2: Review Process
+We will review your request and respond within **5 business days** with approval, denial, or a request for more information.
 
-We will review your request within **5 business days** and respond with:
+Approved refunds are processed through **Paddle** and usually appear within:
 
-- Approval and refund processing (if eligible)
-- Denial with explanation (if not eligible)
-- Request for additional information (if needed)
-
-### Step 3: Refund Processing
-
-Approved refunds are processed through **Paddle** (our payment processor) and typically appear within:
-
-- Credit/debit cards: 5-10 business days
+- cards: 5-10 business days
 - PayPal: 3-5 business days
 
 ---
 
-## 6. Chargebacks
+## 7. Chargebacks
 
-If you initiate a chargeback (dispute) through your bank or payment provider without first contacting us:
+If you initiate a chargeback without first contacting us:
 
-- Your account may be suspended pending investigation
-- If the chargeback is found to be unjustified (e.g., product was downloaded and used), we reserve the right to pursue appropriate remedies
+- your Account may be suspended while the matter is reviewed
+- we may contest unjustified chargebacks when usage, download, or delivery already occurred
 
-We encourage you to contact us first to resolve any issues before initiating a chargeback.
-
----
-
-## 7. Exceptions and Special Circumstances
-
-In exceptional circumstances, we may offer refunds on a case-by-case basis. These include:
-
-- Significant discrepancy between product description and actual product
-- Extended service outages preventing product access
-- Other circumstances at our sole discretion
+We encourage you to contact us first so we can try to resolve the issue directly.
 
 ---
 
@@ -128,4 +120,4 @@ Email: soo.kate.yeon@gmail.com
 
 ---
 
-_This Refund Policy is provided in both English and Korean. In case of discrepancy, the Korean version shall prevail for users in the Republic of Korea._
+_This Refund Policy is provided in English, Korean, and Japanese. In case of discrepancy, the Korean version shall prevail for users in the Republic of Korea._

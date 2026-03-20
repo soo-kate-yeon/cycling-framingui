@@ -94,7 +94,7 @@ export default function EditorialTechDemo() {
       <aside className="hidden md:flex flex-col w-64 lg:w-72 border-r border-[var(--border-default)] bg-[var(--bg-surface)] h-full overflow-y-auto shrink-0">
         <div className="p-8">
           <Link
-            href="/explore"
+            href="/#theme-gallery"
             className="inline-flex items-center gap-2 mb-12 hover:opacity-70 transition-opacity"
           >
             <span className="text-xl font-bold tracking-tighter text-[var(--text-primary)]">
@@ -215,9 +215,7 @@ function OverviewDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Dashboard</h2>
-          <p className="mt-3 text-[var(--text-secondary)] text-base">
-            Your business at a glance.
-          </p>
+          <p className="mt-3 text-[var(--text-secondary)] text-base">Your business at a glance.</p>
         </div>
         <div className="flex items-center gap-3">
           {/* pill 버튼 */}
@@ -273,9 +271,7 @@ function OverviewDashboard() {
               <div className="text-xl lg:text-3xl font-bold tracking-tight tabular-nums truncate">
                 {stat.value}
               </div>
-              <p className="text-xs text-[var(--text-secondary)] mt-1 truncate">
-                {stat.sub}
-              </p>
+              <p className="text-xs text-[var(--text-secondary)] mt-1 truncate">{stat.sub}</p>
             </div>
           </div>
         ))}
@@ -299,9 +295,7 @@ function OverviewDashboard() {
         <div className="lg:col-span-3 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)]">
           <div className="flex flex-col space-y-1.5 p-7">
             <h3 className="text-lg font-semibold leading-none tracking-tight">Recent Activity</h3>
-            <p className="text-sm text-[var(--text-secondary)]">
-              24 new sales recorded today.
-            </p>
+            <p className="text-sm text-[var(--text-secondary)]">24 new sales recorded today.</p>
           </div>
           <div className="p-7 pt-0">
             <div className="space-y-7">
@@ -318,9 +312,7 @@ function OverviewDashboard() {
                   </span>
                   <div className="min-w-0 flex-1 space-y-0.5">
                     <p className="text-sm font-medium leading-none truncate">{user.name}</p>
-                    <p className="text-xs text-[var(--text-secondary)] truncate">
-                      {user.email}
-                    </p>
+                    <p className="text-xs text-[var(--text-secondary)] truncate">{user.email}</p>
                   </div>
                   <div className="shrink-0 font-semibold tabular-nums text-sm">{user.amount}</div>
                 </div>

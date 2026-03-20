@@ -3,9 +3,9 @@
 /**
  * TrialLaunchModal
  *
- * 랜딩 히어로 "3일 무료체험" CTA 클릭 후 표시되는 모달.
+ * 랜딩 히어로의 무료 접근 CTA 클릭 후 표시되는 모달.
  * Step 1: 템플릿 선택 (하나만 가능)
- * Step 2: 확인 → POST /api/licenses/trial → 성공 시 onActivated 호출
+ * Step 2: 확인 → POST /api/access/transition → 성공 시 onActivated 호출
  *
  * editorial-tech 테마 적용:
  * - rounded-2xl 모달 컨테이너
@@ -17,7 +17,10 @@
 import { useEffect, useState } from 'react';
 import { X, Check, AlertTriangle } from 'lucide-react';
 import { useGlobalLanguage } from '../../contexts/GlobalLanguageContext';
-import { trackFunnelFreeTrialStarted, trackFunnelPrimaryCtaClick } from '../../lib/analytics';
+import {
+  trackFunnelPrimaryCtaClick,
+  trackFunnelTransitionAccessStarted,
+} from '../../lib/analytics';
 
 interface Template {
   id: string;
@@ -35,31 +38,31 @@ interface TrialLaunchModalProps {
 
 const CONTENT = {
   en: {
-    title: 'Start Your 3-Day Free Trial',
-    subtitle: 'Pick one template to try for free.',
-    notice: 'Free trial is limited to 1 template. Choose carefully.',
-    step2Title: 'Start free trial with this template?',
+    title: 'Start with Free Access',
+    subtitle: 'Pick one theme to inspect first during the transition.',
+    notice: 'This transition access is limited to 1 theme path. Choose carefully.',
+    step2Title: 'Start free access with this theme?',
     step2Desc: (name: string) =>
-      `You'll get full access to "${name}" for 3 days. This is a one-time offer.`,
+      `You'll get temporary access to "${name}" while you evaluate the MCP workflow. This access path is limited to one selection.`,
     selectBtn: 'Next',
-    confirmBtn: 'Start Free Trial',
+    confirmBtn: 'Start Free Access',
     back: 'Back',
     activating: 'Activating\u2026',
-    errorAlready: 'You have already used your free trial.',
+    errorAlready: 'You have already used this transition access.',
     errorGeneric: 'Something went wrong. Please try again.',
   },
   ko: {
-    title: '3일 무료체험 시작하기',
-    subtitle: '체험할 템플릿 하나를 선택해주세요.',
-    notice: '무료체험은 템플릿 1개에 대해서만 가능해요. 신중하게 선택해주세요.',
-    step2Title: '이 템플릿으로 무료체험을 시작할까요?',
+    title: '무료 접근 시작하기',
+    subtitle: '전환 기간에 먼저 확인할 테마 하나를 선택해주세요.',
+    notice: '이 전환용 무료 접근은 테마 1개 경로에만 제공됩니다. 신중하게 선택해주세요.',
+    step2Title: '이 테마로 무료 접근을 시작할까요?',
     step2Desc: (name: string) =>
-      `"${name}"을 3일간 무료로 사용할 수 있어요. 무료체험은 1회만 제공됩니다.`,
+      `"${name}"을 기준으로 MCP workflow를 먼저 확인할 수 있습니다. 이 접근 경로는 1회만 제공됩니다.`,
     selectBtn: '다음',
-    confirmBtn: '무료체험 시작',
+    confirmBtn: '무료 접근 시작',
     back: '뒤로',
     activating: '활성화 중\u2026',
-    errorAlready: '이미 무료체험을 사용하셨어요.',
+    errorAlready: '이미 이 전환용 접근을 사용하셨어요.',
     errorGeneric: '오류가 발생했어요. 다시 시도해주세요.',
   },
 };
@@ -116,17 +119,17 @@ export function TrialLaunchModal({
     setError(null);
 
     try {
-      const res = await fetch('/api/licenses/trial', { method: 'POST' });
+      const res = await fetch('/api/access/transition', { method: 'POST' });
       if (res.ok) {
-        // 무료체험 시작 트래킹
-        trackFunnelFreeTrialStarted({
-          entry_point: 'trial_launch_modal',
+        // 전환용 무료 접근 시작 트래킹
+        trackFunnelTransitionAccessStarted({
+          entry_point: 'transition_access_launch_modal',
           is_authenticated: true,
         });
         trackFunnelPrimaryCtaClick({
-          cta_id: 'free_trial_confirm',
+          cta_id: 'transition_access_confirm',
           cta_label: c.confirmBtn,
-          location: 'trial_launch_modal',
+          location: 'transition_access_launch_modal',
           destination: `/explore/${selectedTemplate.id}`,
           cta_variant: 'free-start',
         });

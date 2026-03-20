@@ -12,26 +12,39 @@ import { loadCredentials } from '../cli/credentials.js';
 // Cache TTL: 5 minutes (300,000 milliseconds)
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
-// Global authentication data cache
-const authCache = new MemoryCache<VerifyResponse>();
+interface FraminguiAuthState {
+  authCache: MemoryCache<VerifyResponse>;
+  currentAuthData: VerifyResponse | null;
+  authStateExplicitlySet: boolean;
+  rawApiKey: string | null;
+}
 
-// Current authentication state
-let currentAuthData: VerifyResponse | null = null;
-let authStateExplicitlySet = false;
+declare global {
+  var __framinguiAuthState: FraminguiAuthState | undefined;
+}
 
-// Raw API key (API 데이터 클라이언트에서 Bearer 헤더로 사용)
-let rawApiKey: string | null = null;
+function getGlobalAuthState(): FraminguiAuthState {
+  globalThis.__framinguiAuthState ??= {
+    authCache: new MemoryCache<VerifyResponse>(),
+    currentAuthData: null,
+    authStateExplicitlySet: false,
+    rawApiKey: null,
+  };
+
+  return globalThis.__framinguiAuthState;
+}
 
 /**
  * Set authentication data and cache it
  * @param authData - Verification response from API
  */
 export function setAuthData(authData: VerifyResponse | null): void {
-  currentAuthData = authData;
-  authStateExplicitlySet = true;
+  const state = getGlobalAuthState();
+  state.currentAuthData = authData;
+  state.authStateExplicitlySet = true;
 
   if (authData && authData.valid) {
-    authCache.set('auth', authData, CACHE_TTL_MS);
+    state.authCache.set('auth', authData, CACHE_TTL_MS);
     info('Authentication data cached for 5 minutes');
   }
 }
@@ -41,19 +54,21 @@ export function setAuthData(authData: VerifyResponse | null): void {
  * @returns Current authentication data or null if not authenticated
  */
 export function getAuthData(): VerifyResponse | null {
+  const state = getGlobalAuthState();
+
   // Try to get from cache first
-  const cachedAuth = authCache.get('auth');
+  const cachedAuth = state.authCache.get('auth');
 
   if (cachedAuth) {
     info('Using cached authentication data');
     return cachedAuth;
   }
 
-  if (!authStateExplicitlySet) {
+  if (!state.authStateExplicitlySet) {
     const credentials = loadCredentials();
     if (credentials?.api_key) {
-      rawApiKey = rawApiKey ?? credentials.api_key;
-      currentAuthData = {
+      state.rawApiKey = state.rawApiKey ?? credentials.api_key;
+      state.currentAuthData = {
         valid: true,
         user: {
           id: 'credentials-user',
@@ -62,12 +77,12 @@ export function getAuthData(): VerifyResponse | null {
         },
         themes: { licensed: [] },
       };
-      return currentAuthData;
+      return state.currentAuthData;
     }
   }
 
   // Return current state
-  return currentAuthData;
+  return state.currentAuthData;
 }
 
 /**
@@ -75,37 +90,40 @@ export function getAuthData(): VerifyResponse | null {
  * When false, the server is operating on credential-file fallback only.
  */
 export function isAuthStateExplicitlySet(): boolean {
-  return authStateExplicitlySet;
+  return getGlobalAuthState().authStateExplicitlySet;
 }
 
 /**
  * Store raw API key for data-client API calls
  */
 export function setRawApiKey(apiKey: string | null): void {
-  rawApiKey = apiKey;
+  getGlobalAuthState().rawApiKey = apiKey;
 }
 
 /**
  * Get raw API key for data-client API calls
  */
 export function getRawApiKey(): string | null {
-  if (!rawApiKey) {
+  const state = getGlobalAuthState();
+
+  if (!state.rawApiKey) {
     const credentials = loadCredentials();
     if (credentials?.api_key) {
-      rawApiKey = credentials.api_key;
+      state.rawApiKey = credentials.api_key;
     }
   }
-  return rawApiKey;
+  return state.rawApiKey;
 }
 
 /**
  * Clear authentication data and cache
  */
 export function clearAuthData(): void {
-  currentAuthData = null;
-  rawApiKey = null;
-  authStateExplicitlySet = false;
-  authCache.clear();
+  const state = getGlobalAuthState();
+  state.currentAuthData = null;
+  state.rawApiKey = null;
+  state.authStateExplicitlySet = false;
+  state.authCache.clear();
   info('Authentication data cleared');
 }
 

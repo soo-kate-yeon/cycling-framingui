@@ -25,6 +25,15 @@ export interface VerifyResponse {
     /** @deprecated free 테마 개념 제거됨 - 하위 호환용 */
     free?: string[];
   };
+  quotaEntitlement?: {
+    planId: string;
+    status: string;
+    includedUnits: number;
+    currentPeriodStart: string | null;
+    currentPeriodEnd: string | null;
+    totalAllocatedUnits: number;
+    topUpAllocatedUnits: number;
+  } | null;
   error?: string;
 }
 

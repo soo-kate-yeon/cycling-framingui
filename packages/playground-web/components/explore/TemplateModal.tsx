@@ -91,6 +91,7 @@ export function TemplateModal({
       priceId,
       userId: user.id,
       userEmail: user.email ?? '',
+      purchaseKind: 'legacy_template',
       ...(tier === 'single' ? { themeId: template.id } : {}),
       tier,
       successPath:
@@ -123,6 +124,7 @@ export function TemplateModal({
       priceId,
       userId: user.id,
       userEmail: user.email ?? '',
+      purchaseKind: 'legacy_template',
       themeId: template.id,
       tier: 'single',
       successPath: `/explore/template/${template.id}?checkout=success`,
@@ -152,6 +154,7 @@ export function TemplateModal({
       priceId,
       userId: user.id,
       userEmail: user.email ?? '',
+      purchaseKind: 'legacy_template',
       tier: 'creator',
       successPath: `/explore/template/${template.id}?checkout=success&plan=creator`,
     });

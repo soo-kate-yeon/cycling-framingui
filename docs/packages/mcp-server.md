@@ -143,6 +143,8 @@ AI 에이전트가 이 서버를 통해 다음 작업을 수행할 수 있습니
 
 `whoami` is optional. Use it to inspect the current session and licensed themes, but authenticated tool calls do not require a prior `whoami` request.
 
+`whoami` also exposes a shadow quota snapshot. This is non-blocking metering for Phase 0/1 business-model work: weighted tool units are recorded and summarized, but no quota enforcement happens yet.
+
 `licensedThemes` is always the canonical current theme-id list that MCP tools can actually open. Legacy stored license ids such as `default` are normalized before they reach MCP responses so `whoami`, `list-themes`, and `preview-theme` stay aligned.
 
 Production MCP routes no longer depend on deployment-time `.moai` filesystem access. Theme catalog metadata is bundled into the runtime so serverless deployments keep `verify`, `list-themes`, and `preview-theme` consistent.

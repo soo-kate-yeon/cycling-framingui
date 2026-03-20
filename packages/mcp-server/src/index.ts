@@ -34,6 +34,14 @@ import { detectProjectContextTool } from './tools/detect-project-context.js';
 import { whoamiTool } from './tools/whoami.js';
 import { readPackageJson } from './utils/package-json-reader.js';
 import { getPromptDefinition, listPromptDefinitions } from './prompts/prompt-catalog.js';
+import { getAuthData } from './auth/state.js';
+import {
+  recordToolUsage,
+  getUsageQuotaSnapshot,
+  type UsageOutcome,
+} from './billing/usage-ledger.js';
+import { evaluateQuotaPolicy } from './billing/quota-policy.js';
+import { syncUsageEvent } from './billing/usage-sync.js';
 import {
   WhoamiInputSchema,
   GenerateBlueprintInputSchema,
@@ -54,6 +62,67 @@ import {
   ValidateEnvironmentInputSchema,
   DetectProjectContextInputSchema,
 } from './schemas/mcp-schemas.js';
+
+function buildToolResponse(result: unknown) {
+  return {
+    content: [
+      {
+        type: 'text' as const,
+        text: JSON.stringify(result, null, 2),
+      },
+    ],
+  };
+}
+
+function inferUsageOutcome(result: unknown): UsageOutcome {
+  if (
+    typeof result === 'object' &&
+    result !== null &&
+    'success' in result &&
+    (result as { success?: boolean }).success === false
+  ) {
+    return 'tool_error';
+  }
+
+  return 'success';
+}
+
+function meterToolCall(name: string, outcome: UsageOutcome): void {
+  const authData = getAuthData();
+  const entry = recordToolUsage({
+    toolName: name,
+    outcome,
+    userId: authData?.user?.id ?? null,
+    plan: authData?.user?.plan ?? null,
+  });
+
+  void syncUsageEvent(entry);
+}
+
+function getQuotaPolicyDecision(name: string) {
+  const authData = getAuthData();
+  const snapshot = getUsageQuotaSnapshot({
+    userId: authData?.user?.id ?? null,
+    plan: authData?.user?.plan ?? null,
+    paidQuotaEntitlement: authData?.quotaEntitlement ?? null,
+  });
+
+  return evaluateQuotaPolicy({
+    toolName: name,
+    snapshot,
+  });
+}
+
+function attachQuotaWarning(result: unknown, warning?: string): unknown {
+  if (!warning || typeof result !== 'object' || result === null || Array.isArray(result)) {
+    return result;
+  }
+
+  return {
+    ...result,
+    quotaWarning: warning,
+  };
+}
 
 const packageJsonResult = readPackageJson(
   fileURLToPath(new URL('../package.json', import.meta.url))
@@ -704,6 +773,7 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
       requireAuth();
     } catch (e) {
       if (e instanceof AuthRequiredError) {
+        meterToolCall(name, 'auth_error');
         return {
           content: [
             {
@@ -725,6 +795,7 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
       }
       // 예상치 못한 예외는 로깅 후 에러 반환 (silent swallow 방지)
       logError(`Unexpected error in requireAuth: ${e}`);
+      meterToolCall(name, 'auth_error');
       return {
         content: [
           {
@@ -743,274 +814,195 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
     }
   }
 
+  const quotaDecision = getQuotaPolicyDecision(name);
+  if (!quotaDecision.allowed) {
+    meterToolCall(name, 'validation_error');
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            success: false,
+            code: 'QUOTA_EXCEEDED',
+            error:
+              quotaDecision.warning ??
+              'This tool call would exceed the included quota while hard cap mode is enabled.',
+            retryable: false,
+          }),
+        },
+      ],
+      isError: true,
+    };
+  }
+
   try {
     switch (name) {
       case 'whoami': {
         WhoamiInputSchema.parse(args);
-        const result = await whoamiTool();
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(await whoamiTool(), quotaDecision.warning);
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'generate-blueprint': {
-        // Validate input
         const validatedInput = GenerateBlueprintInputSchema.parse(args);
-        const result = await generateBlueprintTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await generateBlueprintTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'list-icon-libraries': {
-        // Validate input (no required fields)
         ListIconLibrariesInputSchema.parse(args);
-        const result = await listIconLibrariesTool();
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(await listIconLibrariesTool(), quotaDecision.warning);
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'preview-icon-library': {
-        // Validate input
         const validatedInput = PreviewIconLibraryInputSchema.parse(args);
-        const result = await previewIconLibraryTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await previewIconLibraryTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'list-themes': {
-        // Validate input (no required fields)
         ListThemesInputSchema.parse(args);
-        const result = await listThemesTool();
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(await listThemesTool(), quotaDecision.warning);
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'preview-theme': {
-        // Validate input
         const validatedInput = PreviewThemeInputSchema.parse(args);
-        const result = await previewThemeTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await previewThemeTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'export-screen': {
-        // Validate input
         const validatedInput = ExportScreenInputSchema.parse(args);
-        const result = await exportScreenTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await exportScreenTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'validate_screen': {
-        // Validate input
         const validatedInput = ValidateScreenInputSchema.parse(args);
-        const result = await validateScreenTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await validateScreenTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'list_tokens': {
-        // Validate input
         const validatedInput = ListTokensInputSchema.parse(args);
-        const result = await listTokensTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await listTokensTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'list-components': {
-        // Validate input
         const validatedInput = ListComponentsInputSchema.parse(args);
-        const result = await listComponentsTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await listComponentsTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'preview-component': {
-        // Validate input
         const validatedInput = PreviewComponentInputSchema.parse(args);
-        const result = await previewComponentTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await previewComponentTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'list-screen-templates': {
-        // Validate input
         const validatedInput = ListScreenTemplatesInputSchema.parse(args);
-        const result = await listScreenTemplatesTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await listScreenTemplatesTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'preview-screen-template': {
-        // Validate input
         const validatedInput = PreviewScreenTemplateInputSchema.parse(args);
-        const result = await previewScreenTemplateTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await previewScreenTemplateTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'get-screen-generation-context': {
-        // Validate input
         const validatedInput = GetScreenGenerationContextInputSchema.parse(args);
-        const result = await getScreenGenerationContextTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await getScreenGenerationContextTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'validate-screen-definition': {
-        // Validate input
         const validatedInput = ValidateScreenDefinitionInputSchema.parse(args);
-        const result = await validateScreenDefinitionTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await validateScreenDefinitionTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'generate_screen': {
-        // Validate input
         const validatedInput = GenerateScreenInputSchema.parse(args);
-        const result = await generateScreenTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await generateScreenTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'validate-environment': {
-        // Validate input
         const validatedInput = ValidateEnvironmentInputSchema.parse(args);
-        const result = await validateEnvironmentTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        const result = attachQuotaWarning(
+          await validateEnvironmentTool(validatedInput),
+          quotaDecision.warning
+        );
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       case 'detect-project-context': {
         const validatedInput = DetectProjectContextInputSchema.parse(args);
         const result = await detectProjectContextTool(validatedInput);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        meterToolCall(name, inferUsageOutcome(result));
+        return buildToolResponse(result);
       }
 
       default:
@@ -1018,6 +1010,9 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
     }
   } catch (error) {
     logError(`Tool execution error: ${error}`);
+    const outcome =
+      error instanceof Error && error.name === 'ZodError' ? 'validation_error' : 'runtime_error';
+    meterToolCall(name, outcome);
 
     return {
       content: [

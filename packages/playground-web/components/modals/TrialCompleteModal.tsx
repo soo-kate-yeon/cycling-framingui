@@ -1,5 +1,5 @@
 /**
- * TrialCompleteModal - 무료 체험 시작 완료 모달
+ * TrialCompleteModal - 무료 접근 시작 완료 모달
  *
  * 기능:
  * - 선택된 템플릿 정보 표시
@@ -12,6 +12,7 @@
 import { useEffect, useState } from 'react';
 import { X, Copy, CheckCircle2 } from 'lucide-react';
 import type { TemplateData } from '../../data/templates';
+import { TRANSITION_ACCESS_DURATION_DAYS } from '@/lib/access/constants';
 
 // ============================================================================
 // Types
@@ -43,11 +44,11 @@ export function TrialCompleteModal({ isOpen, onClose, selectedTemplate }: TrialC
       document.body.style.overflow = 'hidden';
       setIsClosing(false);
 
-      // TODO: Replace with backend API call to create trial license
-      // POST /api/licenses/trial { userId, templateId, durationDays: 3 }
+      // TODO: Replace with backend API call to persist transition access state
+      // POST /api/access/transition { userId, templateId }
       const startDate = new Date();
       const endDate = new Date();
-      endDate.setDate(endDate.getDate() + 3); // 3일 후
+      endDate.setDate(endDate.getDate() + TRANSITION_ACCESS_DURATION_DAYS);
 
       const trialLicense = {
         templateId: selectedTemplate.id,
@@ -127,13 +128,13 @@ export function TrialCompleteModal({ isOpen, onClose, selectedTemplate }: TrialC
 
           {/* Title */}
           <h2 className="text-2xl sm:text-3xl font-bold text-neutral-950 text-center mb-2">
-            무료체험이 시작되었습니다! 🎉
+            무료 접근이 시작되었습니다
           </h2>
 
           {/* Body */}
           <p className="text-base sm:text-lg text-neutral-600 text-center mb-8">
-            3일간 <span className="font-semibold text-neutral-950">{selectedTemplate.name}</span>의
-            모든 기능을 사용할 수 있어요.
+            이제 <span className="font-semibold text-neutral-950">{selectedTemplate.name}</span>을
+            기준으로 MCP workflow와 theme access를 먼저 확인할 수 있습니다.
           </p>
 
           {/* MCP Setup Guide */}
@@ -143,8 +144,9 @@ export function TrialCompleteModal({ isOpen, onClose, selectedTemplate }: TrialC
             </h3>
 
             <p className="text-sm text-neutral-600 mb-4 leading-relaxed">
-              아래 명령어를 터미널에서 실행하여 FramingUI CLI를 설치하세요. 설치 후 Claude Code 또는
-              Cursor에서 MCP 서버를 연결하면 자연어로 UI를 생성할 수 있어요.
+              아래 명령어를 터미널에서 실행해 MCP 설정을 시작하세요. 설치 후 Claude Code 또는
+              Cursor에서 MCP 서버를 연결하면 component discovery와 screen workflow를 바로 확인할 수
+              있습니다.
             </p>
 
             {/* Command Block */}
@@ -180,8 +182,8 @@ export function TrialCompleteModal({ isOpen, onClose, selectedTemplate }: TrialC
               <li className="flex gap-2">
                 <span className="font-semibold text-neutral-950 shrink-0">3.</span>
                 <span>
-                  "Use generate-blueprint tool with themeId: {selectedTemplate.id}"와 같이 요청하여
-                  UI를 생성하세요!
+                  `whoami`로 quota와 entitlement를 확인하고, `get-screen-generation-context`부터
+                  실제 workflow를 시작해보세요.
                 </span>
               </li>
             </ol>
@@ -196,8 +198,11 @@ export function TrialCompleteModal({ isOpen, onClose, selectedTemplate }: TrialC
           </button>
 
           <p className="text-xs text-neutral-500 text-center mt-4">
-            체험 기간은 {new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('ko-KR')}
-            까지입니다
+            이 전환용 접근 표시는{' '}
+            {new Date(
+              Date.now() + TRANSITION_ACCESS_DURATION_DAYS * 24 * 60 * 60 * 1000
+            ).toLocaleDateString('ko-KR')}
+            까지 유지됩니다
           </p>
         </div>
       </div>

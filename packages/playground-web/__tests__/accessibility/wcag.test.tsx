@@ -25,8 +25,8 @@ function MockNavigation() {
     <nav aria-label="Main navigation">
       <ul role="list">
         <li>
-          <a href="/explore" aria-label="Explore templates">
-            Explore
+          <a href="/#theme-gallery" aria-label="Open theme gallery">
+            Theme Gallery
           </a>
         </li>
         <li>

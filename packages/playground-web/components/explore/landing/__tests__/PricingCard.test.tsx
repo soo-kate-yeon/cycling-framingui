@@ -10,47 +10,47 @@ import { PricingCard } from '../PricingCard';
 
 describe('PricingCard', () => {
   const defaultProps = {
-    tier: 'Single' as const,
-    price: 59,
-    features: ['1 template', '1 year updates'],
+    tier: 'Free' as const,
+    price: 0,
+    features: ['Explore MCP tools', 'Check usage visibility'],
   };
 
   describe('Content Rendering', () => {
     it('should render tier name', () => {
       render(<PricingCard {...defaultProps} />);
-      expect(screen.getByText('Single')).toBeInTheDocument();
+      expect(screen.getByText('Free')).toBeInTheDocument();
     });
 
     it('should render price', () => {
       render(<PricingCard {...defaultProps} />);
-      expect(screen.getByText('$59')).toBeInTheDocument();
+      expect(screen.getByText('$0')).toBeInTheDocument();
     });
 
     it('should render all features', () => {
       render(<PricingCard {...defaultProps} />);
-      expect(screen.getByText('1 template')).toBeInTheDocument();
-      expect(screen.getByText('1 year updates')).toBeInTheDocument();
+      expect(screen.getByText('Explore MCP tools')).toBeInTheDocument();
+      expect(screen.getByText('Check usage visibility')).toBeInTheDocument();
     });
   });
 
   describe('[TAG-STUDIO-001-S001] License State UI', () => {
-    it('should show Buy Now button when no license', () => {
+    it('should show View Plan button when no license', () => {
       render(<PricingCard {...defaultProps} hasLicense={false} />);
-      expect(screen.getByRole('button', { name: /buy now/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /view plan/i })).toBeInTheDocument();
     });
 
-    it('should show Manage License button when has license', () => {
+    it('should show Manage Access button when has license', () => {
       render(<PricingCard {...defaultProps} hasLicense={true} />);
-      expect(screen.getByRole('button', { name: /manage license/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /manage access/i })).toBeInTheDocument();
     });
 
-    it('should call onPurchase when Buy Now clicked', async () => {
+    it('should call onPurchase when View Plan clicked', async () => {
       const user = userEvent.setup();
       const onPurchase = vi.fn();
       render(<PricingCard {...defaultProps} onPurchase={onPurchase} />);
 
-      await user.click(screen.getByRole('button', { name: /buy now/i }));
-      expect(onPurchase).toHaveBeenCalledWith('Single');
+      await user.click(screen.getByRole('button', { name: /view plan/i }));
+      expect(onPurchase).toHaveBeenCalledWith('Free');
     });
   });
 

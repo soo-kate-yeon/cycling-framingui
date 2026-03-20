@@ -56,10 +56,10 @@ npx @framingui/mcp-server init
 ## Links
 
 - Website: https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=home
-- Templates: https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=templates#theme-gallery
-- Free Trial: https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=trial
+- Themes: https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=themes#theme-gallery
+- Free Quota: https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=quota
 
 ## Try It Now
 
-Start your 3-day free trial - no credit card required.
+Start with free quota visibility and inspect your MCP workflow before upgrading.
 https://framingui.com?utm_source=ai&utm_medium=llms&utm_content=cta

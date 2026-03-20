@@ -62,23 +62,23 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
       pricing: 'Pricing',
       docs: 'Docs',
       tryStudio: 'Try Explore',
-      getStarted: 'Start Free Trial',
+      getStarted: 'Start with Free Quota',
     },
     hero: {
       brandName: 'framingui',
       title: {
-        part1: 'Design Templates',
+        part1: 'MCP Design System',
         part2: 'for AI Agents',
       },
       description:
-        "Tired of AI-generated UIs that look like every other AI app? Install framingui's design system and ship clean, consistent UI—without a designer. The Canva for agentic coding.",
+        "Stop relying on prompt luck for UI. Install framingui's MCP design system, give your agent real components and themes, and ship production screens with visible quota instead of vague template unlocks.",
       buttons: {
         tryStudio: 'Try Explore Free',
-        getStarted: 'Start Free Trial',
-        browseThemes: 'Browse Templates',
-        freeTrial: 'Start 3-Day Free Trial',
+        getStarted: 'Start with Free Quota',
+        browseThemes: 'Explore Themes',
+        freeTrial: 'Start with Free Quota',
       },
-      noCreditCard: 'No credit card required',
+      noCreditCard: 'Free quota visible during transition',
     },
     mainImage: {
       alt: 'Main Dashboard Preview',
@@ -103,34 +103,34 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
       s4: {
         title: 'Adopt Immediately with MCP',
         description:
-          'No Figma, no canvas required. Issue natural language commands directly in your IDE, CLI, or OpenClaw to design instantly.',
+          'No canvas guessing required. Use MCP in your IDE, CLI, or agent runtime to discover components, validate screens, and track workflow usage.',
       },
     },
     section5: {
-      badge: 'March Launch Beta Invite',
-      title: 'Choose 1 Design System for Free',
+      badge: 'Quota Transition Access',
+      title: 'Start Free, Upgrade by Usage',
       description:
-        'Leave a detailed review to receive a 1-Year Creator Pass with unlimited access.',
-      cta: 'Explore design system',
+        'Inspect shadow quota first, then move to included monthly tool units when your workflow is stable.',
+      cta: 'View pricing',
     },
     faq: {
       title: 'Frequently Asked Questions',
       subtitle: 'Everything you need to know about framingui.',
       items: [
         {
-          title: 'How do I use the templates?',
+          title: 'How does framingui work?',
           content:
-            'Pick a template, install the MCP server with one command, and your AI coding tool is ready to generate production UI. During beta, your first template is free.',
+            'Install the MCP server, authenticate once, inspect `whoami` for theme entitlements and shadow quota, then use the screen workflow to generate and validate production UI.',
         },
         {
           title: 'Is framingui free?',
           content:
-            'framingui requires a paid license. You need to purchase at least one template to unlock MCP server access and start generating production UI with your agent.',
+            'framingui is moving to a quota-based MCP pricing model. During the transition, some workflows can start with free quota visibility before hard billing is enforced.',
         },
         {
           title: 'Can I use it for app development?',
           content:
-            'Currently, TEKTON supports the React ecosystem — including Next.js and Vite projects. The init CLI auto-detects both frameworks. Native mobile design system support is coming soon.',
+            'Yes. framingui supports web React workflows and now includes a direct-write path for Expo and React Native through `@framingui/react-native`.',
         },
         {
           title: 'Can I apply it to an existing project?',
@@ -140,7 +140,7 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
         {
           title: 'Is there a Figma import feature?',
           content:
-            "Not yet. We're building a Figma-to-Tekton bridge that will convert your custom designs into AI-native tokens. Stay tuned for updates.",
+            "Not yet. Today's core workflow is MCP-first: component discovery, theme guidance, validation, and direct code output in your coding environment.",
         },
       ],
     },
@@ -151,23 +151,23 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
       pricing: '요금',
       docs: '문서',
       tryStudio: 'Explore 둘러보기',
-      getStarted: '가입하기',
+      getStarted: '무료 quota로 시작',
     },
     hero: {
       brandName: 'framingui',
       title: {
         part1: 'AI 에이전트를 위한',
-        part2: '디자인 템플릿',
+        part2: 'MCP 디자인 시스템',
       },
       description:
-        'AI로 개발할 때, 어디선가 본 듯한 AI스러운 디자인 때문에 고민한 적 있으신가요? 이제 그럴 필요 없어요. framingui의 디자인 시스템을 설치하기만 하면 디자이너 없이도 간결함과 일관성이 유지되는 UI를 만들 수 있습니다.',
+        'UI를 프롬프트 운에 맡기지 마세요. framingui MCP 디자인 시스템을 설치하면 에이전트가 실제 컴포넌트와 테마를 바탕으로 작업하고, quota도 눈에 보이는 상태에서 프로덕션 화면을 만들 수 있습니다.',
       buttons: {
         tryStudio: '무료로 Explore 시작',
-        getStarted: '가입하기',
-        browseThemes: '템플릿 둘러보기',
-        freeTrial: '3일 무료체험 시작',
+        getStarted: '무료 quota로 시작',
+        browseThemes: '테마 둘러보기',
+        freeTrial: '무료 quota로 시작',
       },
-      noCreditCard: '카드 등록 없이 시작',
+      noCreditCard: '전환 기간 동안 shadow quota 표시',
     },
     mainImage: {
       alt: '메인 대시보드 미리보기',
@@ -192,34 +192,34 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
       s4: {
         title: 'MCP로 바로 투입',
         description:
-          'Figma 없이도 시작할 수 있습니다. IDE, CLI, OpenClaw에서 자연어로 지시하면 에이전트가 프론트엔드 코드를 즉시 생성합니다.',
+          '캔버스에서 감으로 맞출 필요가 없습니다. IDE, CLI, OpenClaw에서 MCP로 컴포넌트를 찾고 화면을 검증하면서 사용량까지 확인할 수 있습니다.',
       },
     },
     section5: {
-      badge: '3월 런칭 베타 한정 혜택',
-      title: '디자인 시스템 1개를 무료로 이용해 보세요.',
+      badge: 'Quota 전환 안내',
+      title: '무료로 시작하고 사용량에 맞춰 확장하세요.',
       description:
-        '리뷰를 남기면 1년 Creator Pass를 제공합니다. 기간 내에 제한 없이 이용할 수 있습니다.',
-      cta: '디자인 시스템 살펴보기',
+        '먼저 shadow quota로 실제 사용량을 확인한 뒤, 워크플로우가 안정되면 월간 tool unit 플랜으로 전환할 수 있습니다.',
+      cta: '요금 보기',
     },
     faq: {
       title: '자주 묻는 질문',
       subtitle: 'framingui 시작 전에 자주 확인하는 내용입니다.',
       items: [
         {
-          title: '템플릿은 어떻게 사용하나요?',
+          title: 'framingui는 어떻게 사용하나요?',
           content:
-            '템플릿을 선택한 뒤 명령어 한 번으로 MCP 서버를 설치합니다. 바로 AI 코딩 도구에서 프로덕션 UI를 생성할 수 있으며, 베타 기간에는 첫 템플릿을 무료로 제공합니다.',
+            'MCP 서버를 설치하고 로그인한 뒤 `whoami`로 테마 entitlement와 shadow quota를 확인합니다. 이후 screen workflow로 프로덕션 UI를 생성하고 검증합니다.',
         },
         {
           title: 'framingui는 무료인가요?',
           content:
-            'framingui는 유료 서비스입니다. MCP 서버 접근과 실사용 UI 생성을 위해 템플릿을 최소 1개 구매해야 합니다.',
+            'framingui는 quota 기반 MCP 과금 모델로 전환 중입니다. 전환 기간에는 일부 워크플로우를 무료 quota 가시성과 함께 시작할 수 있습니다.',
         },
         {
           title: '앱 개발에 사용할 수 있나요?',
           content:
-            '현재는 React 생태계(Next.js, Vite)를 지원합니다. init CLI가 프레임워크를 자동으로 감지하고 설정합니다. 네이티브 모바일 디자인 시스템 지원도 준비 중입니다.',
+            '네. 현재는 web React 워크플로우를 지원하고, Expo/React Native를 위한 direct-write 경로도 `@framingui/react-native`로 제공하고 있습니다.',
         },
         {
           title: '기존 프로젝트에 적용할 수 있나요?',
@@ -229,7 +229,7 @@ const landingContent: Record<GlobalLocale, LandingContent> = {
         {
           title: 'Figma 가져오기 기능이 있나요?',
           content:
-            '아직 제공하지 않습니다. 커스텀 디자인을 AI가 읽을 수 있는 토큰으로 변환하는 Figma-to-Tekton 브리지를 개발하고 있습니다.',
+            '아직 제공하지 않습니다. 현재 핵심은 MCP 기반의 컴포넌트 discovery, theme guidance, validation, direct code output입니다.',
         },
       ],
     },

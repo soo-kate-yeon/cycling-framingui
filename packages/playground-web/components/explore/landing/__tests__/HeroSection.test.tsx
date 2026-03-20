@@ -53,10 +53,10 @@ describe('HeroSection', () => {
     });
   });
 
-  describe('Buy Now Button', () => {
-    it('should render Buy Now button', () => {
+  describe('Pricing CTA', () => {
+    it('should render View Pricing button', () => {
       render(<HeroSection {...defaultProps} />);
-      const buyButton = screen.getByRole('button', { name: /buy now/i });
+      const buyButton = screen.getByRole('button', { name: /view pricing/i });
       expect(buyButton).toBeInTheDocument();
     });
 
@@ -65,7 +65,7 @@ describe('HeroSection', () => {
       const onBuyClick = vi.fn();
       render(<HeroSection {...defaultProps} onBuyClick={onBuyClick} />);
 
-      const buyButton = screen.getByRole('button', { name: /buy now/i });
+      const buyButton = screen.getByRole('button', { name: /view pricing/i });
       await user.click(buyButton);
 
       expect(onBuyClick).toHaveBeenCalledOnce();

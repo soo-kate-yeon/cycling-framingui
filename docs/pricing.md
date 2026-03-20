@@ -1,164 +1,90 @@
-# Tekton Pricing Model
+# FramingUI Pricing Model
 
-> Last Updated: 2026-02-07
+> Last Updated: 2026-03-20
 
-## 📋 가격 플랜
+## Product Model
 
-| 플랜                | 가격          | 포함 내용                                        | 비고                 |
-| ------------------- | ------------- | ------------------------------------------------ | -------------------- |
-| **Single Template** | 템플릿별 상이 | 선택 템플릿 1개 (1년 업데이트)                   | 상품 페이지에서 확인 |
-| **Double Package**  | $99           | 선택 템플릿 2개 (1년 업데이트)                   | 고정가 - 할인 효과   |
-| **Creator Pass**    | $149/년       | 모든 템플릿 접근 (구독 기간 중 신규 템플릿 포함) | Best Value           |
+FramingUI now sells MCP workflow capacity, not vague template ownership.
 
----
+- Billing is based on `weighted tool units`.
+- Each MCP tool is assigned a provisional unit weight based on cost and workflow impact.
+- Accounts can inspect quota before enforcement through shadow billing surfaces such as `whoami` and the billing settings page.
+- Legacy template and theme purchases remain valid during the migration window, but they are no longer the default product catalog.
 
-## 🏷️ 플랜별 상세
+## Plans
 
-### Single Template - 개별 가격
+| Plan           | Price                | Included Quota         | Best For                                             | Notes                                                        |
+| -------------- | -------------------- | ---------------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
+| **Free Quota** | $0                   | Starter monthly quota  | Evaluation, first project setup, light discovery     | Shadow usage visibility is available before hard enforcement |
+| **Developer**  | Active catalog price | Monthly included units | Individual builders shipping recurring MCP workflows | Upgrade path from transition access                          |
 
-- 원하는 템플릿 **1개** 선택
-- **템플릿의 범위와 수준에 따라 가격이 다르게 책정됨**
-- 구매일로부터 **1년간 업데이트** 제공
-- 상업적 사용 가능 (1인 개발자/프리랜서)
-- 가격은 각 템플릿 상품 페이지에서 확인
+## How Quota Works
 
-### Double Package - $99 (고정가)
+Quota is measured in weighted tool units rather than raw call counts.
 
-- 원하는 템플릿 **2개** 선택
-- 구매일로부터 **1년간 업데이트** 제공
-- **고정가 $99** - 개별 구매 대비 할인 효과
-- 상업적 사용 가능
+| Tool Class         | Example Tools                                         | Typical Weight |
+| ------------------ | ----------------------------------------------------- | -------------- |
+| Discovery          | `list-components`, `list-themes`, `preview-component` | 1              |
+| Context            | `preview-theme`, `get-screen-generation-context`      | 2              |
+| Generation         | `generate-blueprint`, `generate_screen`               | 4              |
+| Guarded Validation | `validate-screen-definition`, `validate-environment`  | 6              |
+| Execution          | `export-screen` and similar heavy delivery paths      | 10             |
 
-> 💡 **넛지 효과**: 템플릿 1개 가격이 $60 이상인 경우, Double Package가 더 경제적!
+This weighting exists because LLM and MCP workflows are probabilistic. A retry-heavy guarded validation path should not be priced the same as a lightweight catalog lookup.
 
-### Creator Pass - $149/년 (고정가)
+## Shadow Billing
 
-- **모든 템플릿** 무제한 접근
-- 구독 기간 중 **신규 템플릿 자동 추가**
-- 1년 단위 구독 갱신
-- 상업적 사용 가능
+Shadow billing records usage as if quota were enforced, without charging or blocking by default.
 
-> 💡 **가치 인식**: 개별 템플릿 2-3개 가격으로 전체 라이브러리 접근!
+FramingUI uses shadow billing to answer three questions before turning on enforcement:
 
----
+1. How many units does a real workflow consume for a screen, feature, or app?
+2. How much free quota should be included before the product stops feeling usable?
+3. Which tools create retries or cost spikes that should be reweighted before rollout?
 
-## 🔄 업데이트 정책 (Update Policy)
+When enforcement is enabled, FramingUI can operate in two modes:
 
-### 업데이트 범위
+- `soft cap`: calls continue, but the response warns that usage exceeded the included quota
+- `hard cap`: billable calls that would exceed quota are blocked until the account upgrades or adds more quota
 
-구매/구독 기간 동안 아래 업데이트가 제공됩니다:
+## Top-Ups And Overage
 
-| 유형                      | 설명                                       | 제공              |
-| ------------------------- | ------------------------------------------ | ----------------- |
-| **Bug Fixes**             | 템플릿 버그 수정                           | ✅                |
-| **Compatibility Updates** | 프레임워크 호환성 유지 (React, Next.js 등) | ✅                |
-| **Security Patches**      | 보안 취약점 패치                           | ✅                |
-| **Minor Enhancements**    | 기존 컴포넌트 개선                         | ✅                |
-| **Major New Features**    | 완전히 새로운 기능/섹션 추가               | ⚠️ Creator Pass만 |
+- Paid plans can include one-time `top_up` purchases for additional units.
+- Plan subscriptions store the current billing period and included monthly allowance.
+- Top-up units are tracked separately so the system can explain how much of an account's quota came from plan allowance versus add-on capacity.
+- Overage billing should only be enabled after the same accounting is visible to the user in billing and MCP surfaces.
 
-### 업데이트 알림
+## Legacy Customer Migration
 
-- 업데이트 발생 시 **이메일 알림** 발송
-- 대시보드에서 업데이트 내역 확인 가능
-- 다운로드는 고객 책임 (자동 설치 아님)
+Legacy customers keep the access rights they already purchased.
 
-### 업데이트 기간 만료 후
+- Existing template and theme licenses remain valid.
+- Legacy all-access customers keep their historical access while migration rules are applied.
+- Transition-access onboarding remains available during the pivot so existing users are not forced into an abrupt cutover.
+- New pricing conversations should start from quota plans, not from legacy asset bundles.
 
-- 기간 만료 시 **기존 다운로드 파일 계속 사용 가능**
-- 신규 업데이트 접근 불가
-- 재구독/재구매로 업데이트 접근 복구
+## Update And Support Policy
 
----
+Included support and product maintenance depend on the active plan or entitlement state.
 
-## ⚖️ 서비스 약관 요점
+- Hosted catalog access, MCP verification, and quota visibility are service features.
+- Support covers onboarding, billing questions, account recovery, and MCP workflow issues.
+- FramingUI does not guarantee that probabilistic LLM workflows will always produce the same result from the same prompt.
+- Enforcement, warning thresholds, and unit weights may evolve as shadow billing data improves accuracy.
 
-### 라이선스
+## Legal Alignment
 
-- **개인/소규모 팀**: 본인 프로젝트에 무제한 사용
-- **고객 프로젝트**: 최종 결과물에 Tekton 템플릿 사용 가능
-- **재판매 금지**: 템플릿 자체를 재배포/재판매 불가
+Pricing, billing, and legal text must describe the same service model.
 
-### 책임 제한 (Limitation of Liability)
+- Terms of Service define FramingUI primarily as an MCP-backed software service.
+- Refund Policy distinguishes quota plans from legacy downloadable assets.
+- Privacy Policy covers usage, billing, and entitlement metadata needed to operate the quota model.
 
-> Tekton은 템플릿 사용으로 인한 직접적, 간접적, 우발적 또는 결과적 손해에 대해 책임지지 않습니다.
+## Operational Checklist
 
-- 템플릿은 "있는 그대로(AS-IS)" 제공
-- 특정 결과 보장하지 않음
-- 최대 책임 범위: 구매 금액 한도 내
-
-### 환불 정책
-
-- 디지털 상품 특성상 **다운로드 후 환불 불가**
-- 다운로드 전 7일 이내 요청 시 검토
-
----
-
-## 📞 지원 리소스 (Support Resources)
-
-### 제공되는 지원
-
-| 지원 유형            | Single/Double | Creator Pass  |
-| -------------------- | ------------- | ------------- |
-| Documentation (문서) | ✅            | ✅            |
-| Community Discord    | ✅            | ✅            |
-| Email Support        | ✅ (72h 응답) | ✅ (48h 응답) |
-| Priority Queue       | ❌            | ✅            |
-
-### 지원 범위
-
-- ✅ 템플릿 설치/설정 가이드
-- ✅ 기본 커스터마이징 질문
-- ✅ 버그 리포트 접수
-- ❌ 고객 프로젝트 직접 개발 지원
-- ❌ 제3자 라이브러리 통합 지원
-
-### 지원 채널
-
-1. **Documentation**: 셀프서비스 가이드 (24/7)
-2. **Discord Community**: 커뮤니티 지원
-3. **Email**: support@tekton.design
-
----
-
-## 🛡️ 운영에 필요한 리소스 체크리스트
-
-### 필수 (Must Have)
-
-- [x] 이용약관 (Terms of Service) 페이지
-- [x] 개인정보처리방침 (Privacy Policy) 페이지
-- [x] 환불정책 (Refund Policy) 명시
-- [x] 라이선스 계약서 (License Agreement)
-- [ ] 업데이트 알림 이메일 시스템
-
-### 권장 (Recommended)
-
-- [ ] FAQ 페이지
-- [ ] Documentation 사이트
-- [ ] Discord 또는 Slack 커뮤니티
-- [ ] 이슈 트래커 (GitHub Issues 등)
-
-### 선택 (Nice to Have)
-
-- [ ] SLA (Service Level Agreement) 문서
-- [ ] Changelog 자동화
-- [ ] 인앱 업데이트 알림
-
----
-
-## 📊 경쟁사 가격 비교
-
-| 서비스          | 유사 가격대    | Tekton 포지션 |
-| --------------- | -------------- | ------------- |
-| Framer 템플릿   | $49-$99 (단품) | ⚖️ 동등       |
-| UI8 Elite       | $220/년        | ✅ 32% 저렴   |
-| Envato Elements | $198/년        | ✅ 25% 저렴   |
-| Tailwind UI     | $299 (영구)    | 다른 모델     |
-
----
-
-## 📝 향후 고려사항
-
-1. **Team License**: 팀 규모별 가격 (5인/10인/25인)
-2. **Early Bird**: 런칭 시 20% 할인 프로모션
-3. **Lifetime Deal**: 추후 $299-$399 영구 라이선스 검토
-4. **교육 할인**: 학생/교육기관 50% 할인
+- [x] Pricing surfaces default to quota plans.
+- [x] Shadow quota is visible in account-facing surfaces.
+- [x] Paddle checkout supports `plan`, `top_up`, and `legacy_template` purchase kinds.
+- [x] Webhook handling writes durable quota allocations and entitlement periods.
+- [x] Hard-cap and soft-cap behaviors are covered by executable tests.
+- [ ] Refund and credit reversal rules for unused quota are fully automated.

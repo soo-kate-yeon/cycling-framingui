@@ -16,7 +16,7 @@ Use this workflow when the user asks why FramingUI generation or styling is not 
 
 ## Workflow
 
-1. Inspect session status with \`whoami\` when auth or entitlement issues are suspected.
+1. Inspect session status with \`whoami\` when auth, entitlement, or quota-visibility issues are suspected.
 2. Confirm theme access with \`list-themes\`.
 3. Run \`validate-environment\` for package presence, Tailwind compatibility, and style contract detection.
 4. Inspect the style contract result and decide whether the project should stay utility-first or migrate to FramingUI-native variables.

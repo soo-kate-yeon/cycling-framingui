@@ -3,7 +3,7 @@
     "landing": {
       "hero": {
         "openDemo": "デモを見る",
-        "buyNow": "今すぐ購入",
+        "buyNow": "料金を見る",
         "tryFree": "無料で試す"
       },
       "topNav": {
@@ -13,12 +13,26 @@
         "signIn": "ログイン"
       },
       "pricing": {
-        "title": "シンプルでわかりやすい料金",
-        "description": "用途に合うプランを選択してください",
+        "title": "Plans",
+        "description": "作業量とワークフローに合うプランを選択してください",
         "perMonth": "/月",
         "perYear": "/年",
         "getStarted": "始める",
-        "mostPopular": "人気プラン"
+        "mostPopular": "人気プラン",
+        "viewPlan": "プランを見る",
+        "manageAccess": "アクセス管理",
+        "free": {
+          "tier": "Free",
+          "features": ["MCPツールを試す", "コンポーネントとテーマをプレビュー", "使用量の可視化"]
+        },
+        "developer": {
+          "tier": "Developer",
+          "features": ["月 2,000 weighted units", "screen generation context", "環境チェック"]
+        },
+        "team": {
+          "tier": "Team",
+          "features": ["月 10,000 weighted units", "共有使用量の可視化", "優先サポート"]
+        }
       },
       "component": {
         "title": "コンポーネント概要"
@@ -32,9 +46,9 @@
   "explore": {
     "topBanner": {
       "eyebrow": "Explore · デザインシステム",
-      "message": "3日間の無料トライアルを開始",
-      "cta": "無料トライアルを開始",
-      "dismissAriaLabel": "無料トライアルバナーを閉じる"
+      "message": "まず機能を見て、必要になったら拡張",
+      "cta": "料金を見る",
+      "dismissAriaLabel": "料金案内バナーを閉じる"
     }
   },
   "common": {

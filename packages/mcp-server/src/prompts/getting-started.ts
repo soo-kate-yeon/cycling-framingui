@@ -27,9 +27,9 @@ framingui-mcp login
 This opens your browser for OAuth authentication. Your credentials are stored in \`~/.framingui/credentials.json\`.
 
 **Why authentication is required:**
-- All 6 themes require valid licenses
-- No free themes are available
-- Authentication verifies your license status
+- Theme access is account-scoped and entitlement-aware
+- Shadow quota snapshots are account-scoped
+- Authentication verifies your entitlement and current billing visibility
 
 ## Step 2: Call whoami (Recommended Session Check)
 
@@ -42,25 +42,26 @@ Call whoami (no parameters needed)
 
 **What it returns:**
 - Your subscription plan (free/pro/enterprise/master)
-- List of licensed themes you can access
+- List of entitled themes you can access
+- Shadow quota usage snapshot for the current billing window
 - MCP tool support period and renewal status
 
 **IMPORTANT:** Only use themes listed in \`licensedThemes\` from the whoami response.
-Attempting to use unlicensed themes will fail.
+Attempting to use themes outside your current entitlement will fail.
 
 ## Step 3: Explore Available Themes
 
 Use MCP tools to discover themes:
 
 \`\`\`
-1. Call list-themes to see your licensed themes
+1. Call list-themes to see your entitled themes
 2. Call preview-theme with a themeId to see design tokens
 3. Choose a theme for your project
 \`\`\`
 
 You can call \`list-themes\` and \`preview-theme\` directly after authentication without calling \`whoami\` first.
 
-**Available themes (all require license):**
+**Available themes (all require entitlement):**
 - classic-magazine - Classic magazine style
 - dark-boldness - Fitness & wellness
 - minimal-workspace - Minimal workspace
@@ -115,13 +116,13 @@ For Expo / React Native targets:
 
 ## Common Mistakes to Avoid
 
-1. ❌ Skipping authentication - All themes require licenses
+1. ❌ Skipping authentication - theme access and account-scoped quota visibility will be unavailable
 2. ❌ Assuming whoami is a hard prerequisite - it is optional session inspection, not a hidden unlock step
 3. ❌ Using non-existent theme IDs - Only 6 themes exist
 4. ❌ Skipping detect-project-context when the project path is known - you lose automatic platform defaults
 5. ❌ Skipping validate-screen-definition for web work - Always validate before writing code
 6. ❌ Ignoring dependencies warnings - Check required packages before running code
-7. ❌ Using unlicensed themes - Only use themes from whoami licensedThemes list
+7. ❌ Using unentitled themes - Only use themes from whoami licensedThemes list
 8. ❌ Parsing MCP transcript text with shell/python/json tools - Use tool output directly instead
 9. ❌ Treating templateMatch as the source of truth - components and preview tools are the contract
 

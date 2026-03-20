@@ -131,20 +131,20 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             Get Beta Access
           </Link>
           <Link
-            href="/explore"
+            href="/#theme-gallery"
             onClick={() => {
               trackDocsCta(
-                'docs_mobile_open_explore',
-                'Open Explore',
+                'docs_mobile_open_theme_gallery',
+                'Open Theme Gallery',
                 'docs_mobile_menu',
-                '/explore',
+                '/#theme-gallery',
                 'primary'
               );
               closeMobileMenu();
             }}
             className="block w-full text-center py-3 px-4 border border-neutral-300 text-neutral-700 rounded-full font-medium hover:bg-neutral-100 transition-colors"
           >
-            Open Explore
+            Open Theme Gallery
           </Link>
         </div>
       </div>
@@ -175,19 +175,19 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
               Get Beta Access
             </Link>
             <Link
-              href="/explore"
+              href="/#theme-gallery"
               onClick={() =>
                 trackDocsCta(
-                  'docs_desktop_open_explore',
-                  'Open Explore',
+                  'docs_desktop_open_theme_gallery',
+                  'Open Theme Gallery',
                   'docs_desktop_header',
-                  '/explore',
+                  '/#theme-gallery',
                   'primary'
                 )
               }
               className="text-sm font-medium bg-neutral-900 text-white px-4 py-2 rounded-full hover:bg-neutral-800 transition-colors"
             >
-              Open Explore
+              Open Theme Gallery
             </Link>
           </nav>
         </div>

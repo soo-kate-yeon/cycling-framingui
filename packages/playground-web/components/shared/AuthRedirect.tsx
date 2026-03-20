@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 
 /**
- * 로그인된 사용자를 /explore로 리디렉트하는 클라이언트 컴포넌트.
+ * 로그인된 사용자를 홈 랜딩으로 리디렉트하는 클라이언트 컴포넌트.
  * 비로그인 시에는 아무것도 렌더링하지 않음 — LandingPage는 서버에서 이미 렌더링됨.
  */
 export function AuthRedirect() {
@@ -17,7 +17,7 @@ export function AuthRedirect() {
       return;
     }
     if (user) {
-      router.push('/explore');
+      router.push('/');
     }
   }, [user, isLoading, router]);
 

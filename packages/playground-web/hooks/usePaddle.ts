@@ -13,15 +13,46 @@ import { initializePaddle, type Paddle, type PaddleEventData } from '@paddle/pad
 import { PADDLE_CONFIG, isPaymentsEnabled } from '@/lib/paddle/config';
 import { getPaddleCheckoutErrorMessage } from '@/lib/paddle/errors';
 import { buildCheckoutSuccessUrl } from '@/lib/paddle/urls';
+import type { LicenseTier } from '@/lib/db/types';
+import {
+  buildLegacyTemplateCheckoutData,
+  buildQuotaPlanCheckoutData,
+  buildQuotaTopUpCheckoutData,
+  type QuotaPlanId,
+} from '@/lib/paddle/contracts';
 
-export interface OpenCheckoutParams {
+type LegacyCheckoutParams = {
   priceId: string;
   userId: string;
   userEmail?: string | null;
-  themeId?: string;
-  tier: 'single' | 'double' | 'creator';
   successPath?: string;
-}
+  purchaseKind: 'legacy_template';
+  tier: LicenseTier;
+  themeId?: string;
+};
+
+type QuotaPlanCheckoutParams = {
+  priceId: string;
+  userId: string;
+  userEmail?: string | null;
+  successPath?: string;
+  purchaseKind: 'plan';
+  planId: QuotaPlanId;
+};
+
+type QuotaTopUpCheckoutParams = {
+  priceId: string;
+  userId: string;
+  userEmail?: string | null;
+  successPath?: string;
+  purchaseKind: 'top_up';
+  topUpUnits: number;
+};
+
+export type OpenCheckoutParams =
+  | LegacyCheckoutParams
+  | QuotaPlanCheckoutParams
+  | QuotaTopUpCheckoutParams;
 
 export function usePaddle() {
   const [paddle, setPaddle] = useState<Paddle | null>(null);
@@ -91,29 +122,41 @@ export function usePaddle() {
   }, []);
 
   const openCheckout = useCallback(
-    ({ priceId, userId, userEmail, themeId, tier, successPath }: OpenCheckoutParams) => {
+    (params: OpenCheckoutParams) => {
       if (!paddle) {
         console.error('[Paddle] Paddle이 초기화되지 않았습니다');
         return;
       }
 
-      const trimmedEmail = userEmail?.trim();
-      const normalizedThemeId = themeId?.trim();
+      const trimmedEmail = params.userEmail?.trim();
+
+      const customData =
+        params.purchaseKind === 'legacy_template'
+          ? buildLegacyTemplateCheckoutData({
+              userId: params.userId,
+              tier: params.tier,
+              themeId: params.themeId?.trim(),
+            })
+          : params.purchaseKind === 'plan'
+            ? buildQuotaPlanCheckoutData({
+                userId: params.userId,
+                planId: params.planId,
+              })
+            : buildQuotaTopUpCheckoutData({
+                userId: params.userId,
+                topUpUnits: params.topUpUnits,
+              });
 
       // NOTE:
       // - 빈 email/theme_id를 전달하면 Paddle checkout-service에서 400이 발생할 수 있어
       //   유효한 값만 조건부로 포함한다.
       const checkoutOptions: Parameters<typeof paddle.Checkout.open>[0] = {
-        items: [{ priceId, quantity: 1 }],
-        customData: {
-          user_id: userId,
-          tier,
-          ...(normalizedThemeId ? { theme_id: normalizedThemeId } : {}),
-        },
+        items: [{ priceId: params.priceId, quantity: 1 }],
+        customData: customData as unknown as Record<string, unknown>,
         ...(trimmedEmail ? { customer: { email: trimmedEmail } } : {}),
         settings: {
           // 결제 완료 후 사용자가 앱으로 복귀할 수 있도록 명시
-          successUrl: buildCheckoutSuccessUrl(window.location.origin, successPath),
+          successUrl: buildCheckoutSuccessUrl(window.location.origin, params.successPath),
         },
       };
 
@@ -121,10 +164,11 @@ export function usePaddle() {
         paddle.Checkout.open(checkoutOptions);
       } catch (error) {
         console.error('[Paddle] Checkout.open failed:', {
-          tier,
-          priceId,
+          purchaseKind: params.purchaseKind,
+          priceId: params.priceId,
           hasEmail: Boolean(trimmedEmail),
-          hasThemeId: Boolean(normalizedThemeId),
+          hasThemeId:
+            params.purchaseKind === 'legacy_template' ? Boolean(params.themeId?.trim()) : false,
           error,
         });
       }

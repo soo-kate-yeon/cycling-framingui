@@ -2,7 +2,7 @@
 
 Production UI through an MCP-installed design system.
 
-FramingUI is a design system for AI-assisted product teams. Instead of asking an agent to invent UI from scratch, you install FramingUI as an MCP server and give the agent a real component catalog, theme system, layout tokens, and validated screen workflow.
+FramingUI is a design system for AI-assisted product teams. Instead of asking an agent to invent UI from scratch, you install FramingUI as an MCP server and give the agent a real component catalog, theme system, layout tokens, quota-backed tool workflow, and validated screen contracts.
 
 The goal is simple: use MCP to build production UI with stronger contracts, fewer hallucinated components, and clearer integration steps.
 
@@ -32,6 +32,12 @@ Then authenticate:
 npx @framingui/mcp-server@latest login
 ```
 
+Inspect the current account state when needed:
+
+```bash
+npx @framingui/mcp-server@latest whoami
+```
+
 This setup flow can:
 
 - install `@framingui/ui`
@@ -40,6 +46,15 @@ This setup flow can:
 - generate a local `framingui-theme` module and mount `FramingUIProvider` in the app root
 - register the MCP server in `.mcp.json`
 - generate project guidance for `FRAMINGUI-GUIDE.md`, `CLAUDE.md`, and `AGENTS.md`
+
+## Account and Quota
+
+FramingUI is transitioning from template-first licensing to MCP tool-unit plans.
+
+- `whoami` shows current theme entitlements and the shadow quota snapshot for the active billing window
+- shadow quota is visible before hard enforcement so teams can estimate real workflow cost
+- legacy theme or template customers keep their existing access during the migration window
+- paid plans are moving toward included monthly tool units plus top-up or overage paths
 
 ## MCP Workflow
 

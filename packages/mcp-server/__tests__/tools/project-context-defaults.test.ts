@@ -104,7 +104,7 @@ describe('project context session defaults', () => {
 
     expect(result.success).toBe(true);
     expect(
-      result.components?.every(component => component.platforms.includes('react-native'))
+      result.components?.every(component => component.platforms?.includes('react-native') === true)
     ).toBe(true);
   });
 

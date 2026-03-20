@@ -62,14 +62,15 @@ const content: Record<GlobalLocale, ExploreI18nContent> = {
     },
     selectionHeader: {
       subtitle: 'framingui/explore',
-      title: 'Pick 2 Templates',
-      description: 'Choose 2 templates for your Double Package.',
+      title: 'Compare Theme Options',
+      description:
+        'Review the available themes before choosing your quota plan or legacy access path.',
     },
     topBanner: {
       eyebrow: 'Explore · Design System',
-      message: 'Start your 3-day free trial',
-      cta: 'Start free trial',
-      dismissAriaLabel: 'Dismiss free trial banner',
+      message: 'Inspect shadow quota before you upgrade',
+      cta: 'View pricing',
+      dismissAriaLabel: 'Dismiss quota transition banner',
     },
     gallery: {
       noTemplates: 'No templates found',
@@ -114,14 +115,15 @@ const content: Record<GlobalLocale, ExploreI18nContent> = {
     },
     selectionHeader: {
       subtitle: 'framingui/explore',
-      title: '템플릿 2개를 선택합니다',
-      description: '더블 패키지에 포함할 템플릿 2개를 선택합니다.',
+      title: '테마 옵션을 비교합니다',
+      description:
+        'quota 플랜 또는 레거시 접근 방식을 선택하기 전에 사용 가능한 테마를 비교합니다.',
     },
     topBanner: {
       eyebrow: 'Explore · 디자인 시스템',
-      message: '3일 무료체험을 시작합니다',
-      cta: '무료체험 시작',
-      dismissAriaLabel: '무료체험 배너 닫기',
+      message: '업그레이드 전에 shadow quota를 먼저 확인하세요',
+      cta: '요금 보기',
+      dismissAriaLabel: 'quota 전환 배너 닫기',
     },
     gallery: {
       noTemplates: '템플릿을 찾을 수 없습니다.',

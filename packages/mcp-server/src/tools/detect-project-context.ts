@@ -5,8 +5,11 @@ import type {
 import { detectProjectContext } from '../project-context.js';
 import { setActiveProjectContext } from '../project-context-state.js';
 
+type DetectProjectContextToolInput = Pick<DetectProjectContextInput, 'projectPath'> &
+  Partial<Pick<DetectProjectContextInput, 'setAsDefault'>>;
+
 export async function detectProjectContextTool(
-  input: DetectProjectContextInput
+  input: DetectProjectContextToolInput
 ): Promise<DetectProjectContextOutput> {
   const result = detectProjectContext(input.projectPath);
 

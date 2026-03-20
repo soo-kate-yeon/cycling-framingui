@@ -15,7 +15,7 @@ export function getScreenWorkflowPrompt() {
 This is the current production workflow for building screens with FramingUI.
 
 Prerequisite: authenticate with \`framingui-mcp login\` or provide \`FRAMINGUI_API_KEY\`.
-Optional: call \`whoami\` to inspect licensed themes before starting.
+Optional: call \`whoami\` to inspect entitled themes and the current shadow quota snapshot before starting.
 
 ## Overview
 

@@ -112,7 +112,7 @@ export default function BoldLineDemo() {
         {/* 로고 & 브랜드 — MCP 레시피: 내부 섹션 구분은 spacing만, border 없음 */}
         <div className="px-8 py-8 pb-6">
           <Link
-            href="/explore"
+            href="/#theme-gallery"
             className="inline-flex items-center gap-2 mb-8 hover:opacity-60 transition-opacity"
           >
             <span className="text-2xl font-black tracking-tighter text-black">framingui</span>
@@ -152,9 +152,7 @@ export default function BoldLineDemo() {
               >
                 <item.icon size={16} strokeWidth={3} />
                 <span>{locale === 'ko' ? item.labelKo : item.label}</span>
-                {isActive && (
-                  <span className="ml-auto w-1.5 h-1.5 bg-[var(--color-brand)]" />
-                )}
+                {isActive && <span className="ml-auto w-1.5 h-1.5 bg-[var(--color-brand)]" />}
               </button>
             );
           })}

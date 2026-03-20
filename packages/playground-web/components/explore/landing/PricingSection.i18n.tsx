@@ -11,9 +11,9 @@ import { useTranslations } from 'next-intl';
 import { PricingCardI18n, PricingTier } from './PricingCard.i18n';
 
 const PRICING_TIERS = [
-  { tier: 'Single' as const, price: 59 },
-  { tier: 'Double' as const, price: 99, featured: true },
-  { tier: 'Creator Pass' as const, price: 149 },
+  { tier: 'Free' as const, price: 0 },
+  { tier: 'Developer' as const, price: 39, featured: true },
+  { tier: 'Team' as const, price: 149 },
 ];
 
 export interface PricingSectionI18nProps {

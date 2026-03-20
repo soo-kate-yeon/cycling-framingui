@@ -37,20 +37,20 @@ export interface FreeTrialModalContent {
 const freeTrialModalContent: Record<GlobalLocale, FreeTrialModalContent> = {
   en: {
     title: {
-      part1: 'Start with a',
-      part2: '3-day free trial',
+      part1: 'Start with',
+      part2: 'free quota visibility',
     },
     subtitle: {
       line1:
-        'Start your free trial to load your selected design system through MCP and use all features free for 3 days.',
-      line2: 'Start now with no credit card required.',
+        'Sign in to inspect your theme entitlements and start the MCP onboarding flow with shadow quota visibility.',
+      line2: 'You can explore the workflow before paid quota enforcement begins.',
     },
-    noCreditCard: 'No credit card required',
+    noCreditCard: 'No credit card required during shadow mode',
     buttons: {
-      startTrial: 'Start Free Trial',
-      startFree: 'Start Free',
+      startTrial: 'Continue with Free Quota',
+      startFree: 'Start with Free Quota',
       loggingIn: 'Logging in...',
-      creatingTrial: 'Creating trial...',
+      creatingTrial: 'Preparing access...',
     },
     errors: {
       trialAlreadyExists: 'You have already used the trial',
@@ -65,20 +65,20 @@ const freeTrialModalContent: Record<GlobalLocale, FreeTrialModalContent> = {
   },
   ko: {
     title: {
-      part1: '로그인하면',
-      part2: '3일간 무료체험이 가능해요',
+      part1: '로그인하고',
+      part2: '무료 quota 가시성으로 시작하세요',
     },
     subtitle: {
       line1:
-        '무료체험을 시작하면 3일간 선택한 디자인 템플릿을 MCP로 불러와 모든 기능을 무료로 사용해볼 수 있어요.',
-      line2: '카드 등록 없이 바로 시작해보세요.',
+        '로그인하면 theme entitlement를 확인하고 shadow quota가 보이는 상태로 MCP 온보딩을 시작할 수 있습니다.',
+      line2: '유료 quota가 강제되기 전에 workflow를 먼저 살펴볼 수 있습니다.',
     },
-    noCreditCard: '카드 등록 없이 시작',
+    noCreditCard: 'shadow mode 동안 카드 등록 없이 시작',
     buttons: {
-      startTrial: '무료체험 시작',
-      startFree: '무료로 시작하기',
+      startTrial: '무료 quota로 계속하기',
+      startFree: '무료 quota로 시작하기',
       loggingIn: '로그인 중...',
-      creatingTrial: '체험 생성 중...',
+      creatingTrial: '접근 준비 중...',
     },
     errors: {
       trialAlreadyExists: '이미 체험을 사용했습니다',

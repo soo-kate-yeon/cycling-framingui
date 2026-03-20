@@ -6,9 +6,9 @@
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { listScreenTemplatesTool } from '../../src/tools/list-screen-templates.ts';
-import { fetchTemplateList } from '../../src/api/data-client.ts';
+import { fetchTemplateList } from '../../src/api/data-client.js';
 
-vi.mock('../../src/api/data-client.ts', () => ({
+vi.mock('../../src/api/data-client.js', () => ({
   fetchTemplateList: vi.fn(),
 }));
 
@@ -106,7 +106,7 @@ describe('listScreenTemplatesTool', () => {
 
   it('passes category and search filters to the API', async () => {
     mockFetchTemplateList
-      .mockResolvedValueOnce({ ok: true, data: [allTemplates[0]] })
+      .mockResolvedValueOnce({ ok: true, data: [allTemplates[0]!] })
       .mockResolvedValueOnce({ ok: true, data: allTemplates });
 
     const result = await listScreenTemplatesTool({

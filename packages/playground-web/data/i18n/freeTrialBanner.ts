@@ -7,12 +7,12 @@ export interface FreeTrialBannerContent {
 
 export const freeTrialBannerContent: Record<BlogLocale, FreeTrialBannerContent> = {
   en: {
-    label: 'See what you can build — browse our UI templates',
-    cta: 'Explore',
+    label: 'Inspect themes, workflow, and shadow quota before you upgrade',
+    cta: 'View plans',
   },
   ko: {
-    label: '어떤 템플릿이 있는지 둘러보세요. 모든 템플릿은 3일 무료체험이 가능해요.',
-    cta: '둘러보기',
+    label: '업그레이드 전에 테마, workflow, shadow quota를 먼저 확인하세요',
+    cta: '플랜 보기',
   },
 };
 

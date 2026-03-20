@@ -33,10 +33,41 @@ export const WhoamiOutputSchema = z.object({
       renewable: z.boolean(),
     })
     .optional(),
-  // Trial 정보
+  // Transition access fields
+  has_transition_access: z.boolean().optional(),
+  access_expires_at: z.string().nullable().optional(),
+  access_days_left: z.number().nullable().optional(),
+  // Legacy trial aliases kept for compatibility
   is_trial: z.boolean().optional(),
   trial_expires_at: z.string().nullable().optional(),
   trial_days_left: z.number().nullable().optional(),
+  quota: z
+    .object({
+      enabled: z.boolean(),
+      billingPhase: z.literal('shadow'),
+      unitModel: z.literal('weighted_tool_units'),
+      monthlyIncludedUnits: z.number().nullable(),
+      usedUnits: z.number(),
+      remainingUnits: z.number().nullable(),
+      usagePercent: z.number().nullable(),
+      warningThresholds: z.array(z.number()),
+      warningsTriggered: z.array(z.number()),
+      currentPeriodStart: z.string(),
+      currentPeriodEnd: z.string(),
+    })
+    .optional(),
+  paid_quota_entitlement: z
+    .object({
+      planId: z.string(),
+      status: z.string(),
+      includedUnits: z.number(),
+      currentPeriodStart: z.string().nullable(),
+      currentPeriodEnd: z.string().nullable(),
+      totalAllocatedUnits: z.number(),
+      topUpAllocatedUnits: z.number(),
+    })
+    .nullable()
+    .optional(),
   message: z.string().optional(),
   error: z.string().optional(),
 });

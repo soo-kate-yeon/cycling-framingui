@@ -12,6 +12,7 @@ import type { WhoamiOutput } from '../schemas/mcp-schemas.js';
 import { getAuthData, setAuthData } from '../auth/state.js';
 import { isMasterAccount, PREMIUM_THEMES } from '../auth/theme-access.js';
 import { addMcpUtmParams } from '../utils/url-utils.js';
+import { getUsageQuotaSnapshot } from '../billing/usage-ledger.js';
 
 /**
  * whoami 도구 구현
@@ -24,7 +25,7 @@ export async function whoamiTool(): Promise<WhoamiOutput> {
     return {
       success: false,
       error:
-        '🔐 Authentication required to use FramingUI MCP tools.\n\n🎁 Start your FREE 3-day trial (no credit card):\n   → https://framingui.com/auth/signup?utm_source=mcp&utm_medium=cli&utm_campaign=auth_prompt\n\nAlready have an account? Run `framingui-mcp login`',
+        '🔐 Authentication required to use FramingUI MCP tools.\n\n📊 Start with free quota visibility:\n   → https://framingui.com/auth/signup?utm_source=mcp&utm_medium=cli&utm_campaign=auth_prompt\n\nAlready have an account? Run `framingui-mcp login`',
     };
   }
 
@@ -57,29 +58,29 @@ export async function whoamiTool(): Promise<WhoamiOutput> {
     latestExpiry = expiryDates[0] || null;
   }
 
-  // Trial 라이선스 확인
-  let isTrial = false;
-  let trialExpiresAt: string | null = null;
-  let trialDaysLeft: number | null = null;
+  // Transition access is still backed by the legacy trial license type for compatibility.
+  let hasTransitionAccess = false;
+  let accessExpiresAt: string | null = null;
+  let accessDaysLeft: number | null = null;
   let trialMessage: string | null = null;
 
   if (authData.licenses && authData.licenses.length > 0) {
     const trialLicense = authData.licenses.find(l => l.type === 'trial');
     if (trialLicense) {
-      isTrial = true;
-      trialExpiresAt = trialLicense.expiresAt || null;
+      hasTransitionAccess = true;
+      accessExpiresAt = trialLicense.expiresAt || null;
 
-      if (trialExpiresAt) {
+      if (accessExpiresAt) {
         const now = new Date();
-        const expiryDate = new Date(trialExpiresAt);
+        const expiryDate = new Date(accessExpiresAt);
         const diffMs = expiryDate.getTime() - now.getTime();
-        trialDaysLeft = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+        accessDaysLeft = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
 
-        if (trialDaysLeft > 0) {
-          trialMessage = `You have ${trialDaysLeft} day${trialDaysLeft !== 1 ? 's' : ''} left in your free trial.`;
+        if (accessDaysLeft > 0) {
+          trialMessage = `You have ${accessDaysLeft} day${accessDaysLeft !== 1 ? 's' : ''} left in your transition access window.`;
         } else {
           const pricingUrl = addMcpUtmParams('https://framingui.com/pricing', 'whoami');
-          trialMessage = `Your free trial has expired. Upgrade to continue using premium themes: ${pricingUrl}`;
+          trialMessage = `Your transition access window has expired. Upgrade to continue using premium themes: ${pricingUrl}`;
         }
       }
     }
@@ -95,10 +96,19 @@ export async function whoamiTool(): Promise<WhoamiOutput> {
       expiresAt: latestExpiry,
       renewable: true,
     },
-    // Trial 정보
-    is_trial: isTrial,
-    trial_expires_at: trialExpiresAt,
-    trial_days_left: trialDaysLeft,
+    has_transition_access: hasTransitionAccess,
+    access_expires_at: accessExpiresAt,
+    access_days_left: accessDaysLeft,
+    // Legacy aliases kept until downstream clients stop reading trial_* keys.
+    is_trial: hasTransitionAccess,
+    trial_expires_at: accessExpiresAt,
+    trial_days_left: accessDaysLeft,
+    quota: getUsageQuotaSnapshot({
+      userId: authData.user?.id ?? null,
+      plan: isMaster ? 'master' : (authData.user?.plan ?? 'free'),
+      paidQuotaEntitlement: authData.quotaEntitlement ?? null,
+    }),
+    paid_quota_entitlement: authData.quotaEntitlement ?? null,
     ...(trialMessage && { message: trialMessage }),
   };
 }

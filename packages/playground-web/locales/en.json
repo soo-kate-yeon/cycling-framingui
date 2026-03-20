@@ -3,8 +3,8 @@
     "landing": {
       "hero": {
         "openDemo": "Open Demo",
-        "buyNow": "Buy Now",
-        "tryFree": "Try Free"
+        "buyNow": "View Pricing",
+        "tryFree": "Explore Free"
       },
       "topNav": {
         "features": "Features",
@@ -13,12 +13,30 @@
         "signIn": "Sign In"
       },
       "pricing": {
-        "title": "Simple, Transparent Pricing",
-        "description": "Choose the plan that works best for you",
+        "title": "Plans",
+        "description": "Choose the workflow and monthly usage that fit your pace",
         "perMonth": "/month",
         "perYear": "/year",
         "getStarted": "Get Started",
-        "mostPopular": "Most Popular"
+        "mostPopular": "Most Popular",
+        "viewPlan": "View Plan",
+        "manageAccess": "Manage Access",
+        "free": {
+          "tier": "Free",
+          "features": [
+            "Explore MCP tools",
+            "Preview components and themes",
+            "Check usage visibility"
+          ]
+        },
+        "developer": {
+          "tier": "Developer",
+          "features": ["2,000 weighted units", "Screen generation context", "Environment checks"]
+        },
+        "team": {
+          "tier": "Team",
+          "features": ["10,000 weighted units", "Shared usage visibility", "Priority support"]
+        }
       },
       "component": {
         "title": "Component Overview"
@@ -32,9 +50,9 @@
   "explore": {
     "topBanner": {
       "eyebrow": "Explore · Design System",
-      "message": "Start your 3-day free trial",
-      "cta": "Start free trial",
-      "dismissAriaLabel": "Dismiss free trial banner"
+      "message": "See the product first, then expand when usage grows",
+      "cta": "View pricing",
+      "dismissAriaLabel": "Dismiss pricing banner"
     }
   },
   "common": {

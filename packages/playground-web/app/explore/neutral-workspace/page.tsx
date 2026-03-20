@@ -93,7 +93,7 @@ export default function NeutralHumanismDemo() {
       <aside className="hidden md:flex flex-col w-64 lg:w-72 border-r border-[var(--border-default)] bg-[var(--bg-surface)] h-full overflow-y-auto shrink-0">
         <div className="p-6">
           <Link
-            href="/explore"
+            href="/#theme-gallery"
             className="inline-flex items-center gap-2 mb-10 hover:opacity-70 transition-opacity"
           >
             <span className="text-xl font-bold tracking-tighter text-[var(--text-primary)]">
@@ -272,9 +272,7 @@ function OverviewDashboard() {
         <div className="lg:col-span-3 rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm">
           <div className="flex flex-col space-y-1.5 p-6">
             <h3 className="font-semibold leading-none tracking-tight">Recent Activity</h3>
-            <p className="text-sm text-[var(--text-secondary)]">
-              24 new sales recorded today.
-            </p>
+            <p className="text-sm text-[var(--text-secondary)]">24 new sales recorded today.</p>
           </div>
           <div className="p-6 pt-0">
             <div className="space-y-8">
@@ -291,9 +289,7 @@ function OverviewDashboard() {
                   </span>
                   <div className="min-w-0 flex-1 space-y-0.5">
                     <p className="text-sm font-medium leading-none truncate">{user.name}</p>
-                    <p className="text-xs text-[var(--text-secondary)] truncate">
-                      {user.email}
-                    </p>
+                    <p className="text-xs text-[var(--text-secondary)] truncate">{user.email}</p>
                   </div>
                   <div className="shrink-0 font-medium text-sm tabular-nums">{user.amount}</div>
                 </div>

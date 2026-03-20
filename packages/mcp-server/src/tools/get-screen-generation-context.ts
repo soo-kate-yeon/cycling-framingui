@@ -9,6 +9,7 @@ import {
   fetchComponent,
   fetchScreenExamples,
   fetchTemplate,
+  type ScreenExample as ApiScreenExample,
 } from '../api/data-client.js';
 import { getScreenComponentTypes } from './screen-component-contract.js';
 import type {
@@ -30,6 +31,9 @@ import {
 } from '../data/react-native-runtime-catalog.js';
 import { resolvePlatformTarget } from '../project-context-resolution.js';
 import { extractErrorMessage } from '../utils/error-handler.js';
+
+type GetScreenGenerationContextToolInput = Pick<GetScreenGenerationContextInput, 'description'> &
+  Partial<Omit<GetScreenGenerationContextInput, 'description'>>;
 
 const TEMPLATE_CONFIDENCE_THRESHOLD = 20;
 const DEFAULT_COMPONENT_CANDIDATES = ['Card', 'Heading', 'Text', 'Button', 'Badge', 'Separator'];
@@ -203,7 +207,10 @@ async function getComponentInfo(componentIds: string[]): Promise<ContextComponen
 /**
  * Extract component types from template skeleton
  */
-function extractComponentTypes(template: any): string[] {
+function extractComponentTypes(template: {
+  category?: string;
+  requiredComponents?: string[];
+}): string[] {
   const types = new Set<string>();
 
   // Add required components from template
@@ -422,7 +429,7 @@ function buildDefinitionStarter(options: {
  * Provides complete context for coding agents to generate screen definitions
  */
 export async function getScreenGenerationContextTool(
-  input: GetScreenGenerationContextInput
+  input: GetScreenGenerationContextToolInput
 ): Promise<GetScreenGenerationContextOutput> {
   try {
     const { platform: targetPlatform } = resolvePlatformTarget(input.platform);
@@ -480,7 +487,7 @@ export async function getScreenGenerationContextTool(
       const allExamples = examplesResult.ok ? examplesResult.data : [];
       // 설명과 관련된 예제 필터링 (간단한 키워드 매칭)
       const lowerDesc = input.description.toLowerCase();
-      const scored = allExamples.map((ex: any) => {
+      const scored = allExamples.map((ex: ApiScreenExample) => {
         let score = 0;
         const exWords = [
           ...ex.name.toLowerCase().split(' '),
@@ -494,10 +501,10 @@ export async function getScreenGenerationContextTool(
         return { ex, score };
       });
       const filtered = scored
-        .filter((s: any) => s.score > 0)
-        .sort((a: any, b: any) => b.score - a.score)
+        .filter(s => s.score > 0)
+        .sort((a, b) => b.score - a.score)
         .slice(0, 2)
-        .map((s: any) => s.ex);
+        .map(s => s.ex);
       examples = filtered.length > 0 ? filtered : undefined;
     }
 

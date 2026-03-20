@@ -1,11 +1,12 @@
 import { listThemes } from '@framingui/core';
+import { TRANSITION_ACCESS_THEME_ID, CREATOR_ALL_ACCESS_THEME_ID } from '@/lib/access/constants';
 
-export const TRIAL_ALL_ACCESS_THEME_ID = 'trial-all-access';
-export const CREATOR_ALL_ACCESS_THEME_ID = 'creator-all-access';
+export const TRIAL_ALL_ACCESS_THEME_ID = TRANSITION_ACCESS_THEME_ID;
+export { CREATOR_ALL_ACCESS_THEME_ID };
 
 const LEGACY_PLACEHOLDER_THEME_IDS = new Set(['default']);
-const EXPLICIT_ALL_ACCESS_THEME_IDS = new Set([
-  TRIAL_ALL_ACCESS_THEME_ID,
+const EXPLICIT_ALL_ACCESS_THEME_IDS = new Set<string>([
+  TRANSITION_ACCESS_THEME_ID,
   CREATOR_ALL_ACCESS_THEME_ID,
 ]);
 

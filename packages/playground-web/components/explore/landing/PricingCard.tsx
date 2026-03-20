@@ -1,6 +1,6 @@
 /**
  * PricingCard Component
- * SPEC-STUDIO-001: TAG-STUDIO-001-S001 (License-aware UI)
+ * SPEC-STUDIO-001: TAG-STUDIO-001-S001 (Access-aware UI)
  */
 
 'use client';
@@ -9,7 +9,7 @@ import { clsx } from 'clsx';
 import { Check } from 'lucide-react';
 import { trackPricingPurchaseClick, trackPricingManageClick } from '@/lib/analytics';
 
-export type PricingTier = 'Single' | 'Double' | 'Creator Pass';
+export type PricingTier = 'Free' | 'Developer' | 'Team';
 
 export interface PricingCardProps {
   tier: PricingTier;
@@ -22,8 +22,8 @@ export interface PricingCardProps {
 }
 
 /**
- * PricingCard - Pricing tier card with license state
- * [TAG-STUDIO-001-S001] Shows "Manage License" when user has license
+ * PricingCard - Pricing tier card with access state
+ * [TAG-STUDIO-001-S001] Shows "Manage Access" when user already has entitlement
  */
 export function PricingCard({
   tier,
@@ -47,7 +47,7 @@ export function PricingCard({
       {/* Price */}
       <div className="mb-6">
         <span className="text-4xl font-bold text-neutral-900">${price}</span>
-        {tier === 'Creator Pass' && <span className="text-neutral-600">/year</span>}
+        {tier !== 'Free' && <span className="text-neutral-600">/month</span>}
       </div>
 
       {/* Features */}
@@ -70,7 +70,7 @@ export function PricingCard({
           }}
           className="w-full px-6 py-3 text-sm font-bold uppercase tracking-wider text-neutral-900 bg-neutral-100 hover:bg-neutral-200 transition-colors rounded"
         >
-          Manage License
+          Manage Access
         </button>
       ) : (
         <button
@@ -86,7 +86,7 @@ export function PricingCard({
               : 'text-neutral-900 bg-neutral-100 hover:bg-neutral-200'
           )}
         >
-          Buy Now
+          View Plan
         </button>
       )}
     </div>

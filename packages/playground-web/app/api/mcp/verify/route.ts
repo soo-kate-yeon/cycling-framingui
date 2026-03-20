@@ -41,6 +41,15 @@ interface VerifySuccessResponse {
   themes: {
     licensed: string[];
   };
+  quotaEntitlement: {
+    planId: string;
+    status: string;
+    includedUnits: number;
+    currentPeriodStart: string | null;
+    currentPeriodEnd: string | null;
+    totalAllocatedUnits: number;
+    topUpAllocatedUnits: number;
+  } | null;
 }
 
 /**
@@ -83,6 +92,20 @@ interface UserLicense {
 interface UserProfile {
   id: string;
   plan: string;
+}
+
+interface QuotaEntitlementRow {
+  user_id: string;
+  plan_id: string;
+  status: string;
+  included_units: number;
+  current_period_start: string | null;
+  current_period_end: string | null;
+}
+
+interface QuotaAllocationRow {
+  units: number;
+  allocation_type: 'plan' | 'top_up' | 'migration' | 'adjustment';
 }
 
 // 모든 테마 유료 - FREE_THEMES 제거됨 (SPEC-DEPLOY-001)
@@ -316,6 +339,23 @@ export async function GET(request: NextRequest) {
     const normalizedEntitlements = normalizeLicensedThemes(activeLicenses, { logger: console });
     const licensedThemes = normalizedEntitlements.licensedThemes;
 
+    const { data: quotaEntitlement } = await supabase
+      .from('quota_entitlements')
+      .select('user_id, plan_id, status, included_units, current_period_start, current_period_end')
+      .eq('user_id', matchedKey.user_id)
+      .maybeSingle<QuotaEntitlementRow>();
+
+    const { data: quotaAllocations } = await supabase
+      .from('quota_allocations')
+      .select('units, allocation_type')
+      .eq('user_id', matchedKey.user_id)
+      .returns<QuotaAllocationRow[]>();
+
+    const totalAllocatedUnits = (quotaAllocations ?? []).reduce((sum, row) => sum + row.units, 0);
+    const topUpAllocatedUnits = (quotaAllocations ?? [])
+      .filter((row) => row.allocation_type === 'top_up')
+      .reduce((sum, row) => sum + row.units, 0);
+
     const response: VerifySuccessResponse = {
       valid: true,
       user: {
@@ -336,6 +376,17 @@ export async function GET(request: NextRequest) {
       themes: {
         licensed: licensedThemes,
       },
+      quotaEntitlement: quotaEntitlement
+        ? {
+            planId: quotaEntitlement.plan_id,
+            status: quotaEntitlement.status,
+            includedUnits: quotaEntitlement.included_units,
+            currentPeriodStart: quotaEntitlement.current_period_start,
+            currentPeriodEnd: quotaEntitlement.current_period_end,
+            totalAllocatedUnits,
+            topUpAllocatedUnits,
+          }
+        : null,
     };
 
     // 11. last_used_at 비동기 업데이트 (응답 지연 없이)

@@ -97,8 +97,8 @@ export default function QuickStartPage() {
           </li>
           <li>
             →{' '}
-            <a href="/explore" className="text-neutral-900 underline hover:no-underline">
-              Explore Themes
+            <a href="/#theme-gallery" className="text-neutral-900 underline hover:no-underline">
+              Theme Gallery
             </a>{' '}
             — Browse all 7 available themes
           </li>

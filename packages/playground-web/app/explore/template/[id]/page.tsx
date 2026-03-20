@@ -94,6 +94,7 @@ export default function TemplateLandingPage({ params }: TemplatePageProps) {
       priceId,
       userId: user.id,
       userEmail: user.email ?? '',
+      purchaseKind: 'legacy_template',
       themeId: templateId,
       tier: 'single',
       successPath: `/explore/template/${templateId}?checkout=success`,

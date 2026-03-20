@@ -12,7 +12,7 @@ import { useTranslations } from 'next-intl';
 import { Check } from 'lucide-react';
 import clsx from 'clsx';
 
-export type PricingTier = 'Single' | 'Double' | 'Creator Pass';
+export type PricingTier = 'Free' | 'Developer' | 'Team';
 
 export interface PricingCardI18nProps {
   tier: PricingTier;
@@ -34,7 +34,7 @@ export function PricingCardI18n({
   const t = useTranslations('studio.landing.pricing');
 
   // Get tier-specific translations
-  const tierKey = tier.toLowerCase().replace(' ', '') as 'single' | 'double' | 'creatorpass';
+  const tierKey = tier.toLowerCase() as 'free' | 'developer' | 'team';
   const tierName = t(`${tierKey}.tier`);
   const features = t.raw(`${tierKey}.features`) as string[];
 
@@ -65,7 +65,7 @@ export function PricingCardI18n({
           onClick={onManage}
           className="w-full px-4 py-3 text-sm font-bold uppercase tracking-wider text-neutral-900 bg-neutral-100 hover:bg-neutral-200 transition-colors"
         >
-          {t('manageLicense')}
+          {t('manageAccess')}
         </button>
       ) : (
         <button
@@ -73,7 +73,7 @@ export function PricingCardI18n({
           onClick={() => onPurchase?.(tier)}
           className="w-full px-4 py-3 text-sm font-bold uppercase tracking-wider text-white bg-neutral-900 hover:bg-neutral-800 transition-colors"
         >
-          {t('buyNow')}
+          {t('viewPlan')}
         </button>
       )}
     </div>

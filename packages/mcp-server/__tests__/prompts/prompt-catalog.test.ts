@@ -16,15 +16,11 @@ describe('prompt catalog', () => {
   it('returns slash command help prompts through the catalog', () => {
     const screenPrompt = getPromptDefinition('screen');
     const helpPrompt = getPromptDefinition('command-help');
+    const screenMessage = screenPrompt?.getPrompt().messages[0];
+    const helpMessage = helpPrompt?.getPrompt({ command: '/screen' }).messages[0];
 
-    const screenText =
-      screenPrompt?.getPrompt().messages[0]?.content.type === 'text'
-        ? screenPrompt.getPrompt().messages[0].content.text
-        : '';
-    const helpText =
-      helpPrompt?.getPrompt({ command: '/screen' }).messages[0]?.content.type === 'text'
-        ? helpPrompt.getPrompt({ command: '/screen' }).messages[0].content.text
-        : '';
+    const screenText = screenMessage?.content.type === 'text' ? screenMessage.content.text : '';
+    const helpText = helpMessage?.content.type === 'text' ? helpMessage.content.text : '';
 
     expect(screenText).toContain('# /screen');
     expect(helpText).toContain('## MCP workflow');

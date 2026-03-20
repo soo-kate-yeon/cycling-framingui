@@ -17,7 +17,7 @@ export interface HeroSectionProps {
   subtitle: string;
   /** Callback when Open Full Demo button is clicked [TAG-STUDIO-001-E003] */
   onOpenDemoClick?: () => void;
-  /** Callback when Buy Now button is clicked */
+  /** Callback when pricing CTA is clicked */
   onBuyClick?: () => void;
   /** Additional CSS classes */
   className?: string;
@@ -64,13 +64,13 @@ export function HeroSection({
             Open Full Demo
           </button>
 
-          {/* Buy Now Button */}
+          {/* Pricing CTA */}
           <button
             type="button"
             onClick={() => {
               trackFunnelPrimaryCtaClick({
-                cta_id: 'hero_buy_now',
-                cta_label: 'Buy Now',
+                cta_id: 'hero_view_pricing',
+                cta_label: 'View Pricing',
                 location: 'hero',
                 destination: 'pricing',
                 cta_variant: 'primary',
@@ -79,7 +79,7 @@ export function HeroSection({
             }}
             className="px-6 py-3 text-sm font-bold uppercase tracking-wider text-neutral-900 bg-neutral-100 hover:bg-neutral-200 transition-colors rounded"
           >
-            Buy Now
+            View Pricing
           </button>
         </div>
       </div>

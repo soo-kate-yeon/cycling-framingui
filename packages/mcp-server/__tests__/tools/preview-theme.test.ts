@@ -3,9 +3,49 @@
  * SPEC-MCP-002: AC-007 Theme Preview
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { previewThemeTool } from '../../src/tools/preview-theme.js';
+import { beforeEach, describe, it, expect, afterEach, vi } from 'vitest';
+import { previewThemeTool } from '../../src/tools/preview-theme.ts';
 import { setAuthData, clearAuthData } from '../../src/auth/state.js';
+import { fetchTheme } from '../../src/api/data-client.js';
+
+vi.mock('../../src/api/data-client.js', () => ({
+  fetchTheme: vi.fn(),
+}));
+
+const mockFetchTheme = vi.mocked(fetchTheme);
+
+const classicMagazineTheme = {
+  id: 'classic-magazine',
+  name: 'Classic Magazine',
+  description: 'Editorial theme',
+  brandTone: 'editorial',
+  schemaVersion: '2.1.0',
+  designDNA: {
+    moodKeywords: ['classic', 'editorial'],
+    targetEmotion: 'confidence',
+    visualAtmosphere: 'structured',
+  },
+  tokens: {
+    atomic: {
+      color: {
+        neutral: {
+          50: '#f8fafc',
+          white: '#ffffff',
+        },
+      },
+    },
+    semantic: {
+      background: {},
+      text: {},
+      border: {},
+    },
+    component: {},
+  },
+  stateLayer: {},
+  motion: {},
+  elevation: {},
+  typography: {},
+};
 
 // 테스트 전: 인증 상태 설정 (모든 테마 라이선스 보유 가정)
 function setupAuth(licensedThemes: string[] = []) {
@@ -17,6 +57,10 @@ function setupAuth(licensedThemes: string[] = []) {
 }
 
 describe('previewThemeTool', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   afterEach(() => {
     // 캐시 포함 완전 초기화
     clearAuthData();
@@ -24,6 +68,7 @@ describe('previewThemeTool', () => {
 
   it('should generate preview for valid theme', async () => {
     setupAuth(['classic-magazine']);
+    mockFetchTheme.mockResolvedValueOnce({ ok: true, data: classicMagazineTheme });
     const result = await previewThemeTool({
       themeId: 'classic-magazine',
     });
@@ -39,6 +84,7 @@ describe('previewThemeTool', () => {
 
   it('should include non-empty token payload', async () => {
     setupAuth(['classic-magazine']);
+    mockFetchTheme.mockResolvedValueOnce({ ok: true, data: classicMagazineTheme });
     const result = await previewThemeTool({
       themeId: 'classic-magazine',
     });
@@ -62,6 +108,7 @@ describe('previewThemeTool', () => {
 
   it('should return theme without custom base URL', async () => {
     setupAuth(['classic-magazine']);
+    mockFetchTheme.mockResolvedValueOnce({ ok: true, data: classicMagazineTheme });
     const result = await previewThemeTool({ themeId: 'classic-magazine' });
 
     expect(result.success).toBe(true);

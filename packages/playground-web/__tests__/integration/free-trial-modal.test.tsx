@@ -13,12 +13,12 @@ import { GlobalLanguageProvider } from '@/contexts/GlobalLanguageContext';
 const {
   mockUseAuth,
   mockTrackFunnelPrimaryCtaClick,
-  mockTrackFunnelFreeTrialStarted,
+  mockTrackFunnelTransitionAccessStarted,
   mockUseGlobalLanguage,
 } = vi.hoisted(() => ({
   mockUseAuth: vi.fn(),
   mockTrackFunnelPrimaryCtaClick: vi.fn(),
-  mockTrackFunnelFreeTrialStarted: vi.fn(),
+  mockTrackFunnelTransitionAccessStarted: vi.fn(),
   mockUseGlobalLanguage: vi.fn(),
 }));
 
@@ -28,7 +28,7 @@ vi.mock('@/contexts/AuthContext', () => ({
 
 vi.mock('@/lib/analytics', () => ({
   trackFunnelPrimaryCtaClick: mockTrackFunnelPrimaryCtaClick,
-  trackFunnelFreeTrialStarted: mockTrackFunnelFreeTrialStarted,
+  trackFunnelTransitionAccessStarted: mockTrackFunnelTransitionAccessStarted,
 }));
 
 vi.mock('@/contexts/GlobalLanguageContext', async (importOriginal) => {
@@ -112,8 +112,14 @@ describe('FreeTrialModal', () => {
 
     expect(localStorage.getItem('hasSeenFreeTrial')).toBe('true');
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(mockTrackFunnelFreeTrialStarted).toHaveBeenCalledWith({
-      entry_point: 'free_trial_modal',
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/access/transition',
+      expect.objectContaining({
+        method: 'POST',
+      })
+    );
+    expect(mockTrackFunnelTransitionAccessStarted).toHaveBeenCalledWith({
+      entry_point: 'transition_access_modal',
       is_authenticated: true,
     });
   });
@@ -140,7 +146,7 @@ describe('FreeTrialModal', () => {
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(console.error).toHaveBeenCalledWith(
-      '[FreeTrialModal] Trial creation failed:',
+      '[FreeTrialModal] Transition access creation failed:',
       expect.objectContaining({
         status: 500,
         errorCode: null,
@@ -148,12 +154,12 @@ describe('FreeTrialModal', () => {
     );
   });
 
-  it('trial_already_exists(409) 응답 시 전용 안내 메시지를 표시한다', async () => {
+  it('transition_access_already_exists(409) 응답 시 전용 안내 메시지를 표시한다', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       createMockResponse({
         ok: false,
         status: 409,
-        body: JSON.stringify({ error: 'trial_already_exists' }),
+        body: JSON.stringify({ error: 'transition_access_already_exists' }),
       })
     );
     vi.stubGlobal('fetch', fetchMock);

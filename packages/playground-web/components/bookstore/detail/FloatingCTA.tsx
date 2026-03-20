@@ -33,7 +33,7 @@ export function FloatingCTA({ price }: FloatingCTAProps) {
             <p className="text-xl font-bold text-[var(--atomic-semantic-text-brand)]">{price}</p>
           </div>
           <button className="flex-1 max-w-[200px] px-6 py-3 bg-[var(--atomic-semantic-text-brand)] text-white font-semibold rounded-[var(--atomic-radius-full)] hover:opacity-90 transition-opacity shadow-lg min-h-[56px]">
-            Add to Cart
+            View Access
           </button>
         </div>
         {/* Safe area spacer */}
@@ -45,7 +45,7 @@ export function FloatingCTA({ price }: FloatingCTAProps) {
         <button className="px-8 py-4 bg-[var(--atomic-semantic-text-brand)] text-white font-semibold rounded-[var(--atomic-radius-full)] hover:opacity-90 transition-all shadow-2xl flex items-center gap-3 hover:scale-105">
           <span className="text-lg">{price}</span>
           <span className="text-2xl">→</span>
-          <span>Buy Now</span>
+          <span>View Access</span>
         </button>
       </div>
     </>

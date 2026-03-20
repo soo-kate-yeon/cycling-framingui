@@ -1,13 +1,13 @@
 # Privacy Policy
 
-**Effective Date:** February 7, 2026  
-**Last Updated:** February 7, 2026
+**Effective Date:** March 17, 2026  
+**Last Updated:** March 17, 2026
 
 ---
 
 ## 1. Introduction
 
-Morak ("**Company**," "**we**," "**us**," or "**our**") operates the Tekton service (the "**Service**"), an AI-powered design system engine and marketplace for premium React UI templates. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you use our Service.
+Morak ("**Company**," "**we**," "**us**," or "**our**") operates the Tekton service (the "**Service**"), an MCP-assisted UI workflow platform with hosted billing and account surfaces. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you use our Service.
 
 **Data Controller:**
 
@@ -32,11 +32,11 @@ By using our Service, you consent to the collection and use of your information 
 
 ### 2.2 Information Collected Automatically
 
-| Data Type                                             | Purpose                       | Legal Basis         |
-| ----------------------------------------------------- | ----------------------------- | ------------------- |
-| **Usage Data** (pages visited, features used)         | Service improvement           | Legitimate interest |
-| **Device Information** (browser type, OS, IP address) | Security and analytics        | Legitimate interest |
-| **Cookies and Tracking Technologies**                 | Session management, analytics | Consent             |
+| Data Type                                                                      | Purpose                                                   | Legal Basis         |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------- | ------------------- |
+| **Usage Data** (pages visited, features used, MCP tool activity, quota events) | Service improvement, billing visibility, abuse prevention | Legitimate interest |
+| **Device Information** (browser type, OS, IP address)                          | Security and analytics                                    | Legitimate interest |
+| **Cookies and Tracking Technologies**                                          | Session management, analytics                             | Consent             |
 
 ---
 
@@ -46,10 +46,11 @@ We use collected information to:
 
 - Provide, maintain, and improve the Service
 - Process transactions and send related information
+- Measure usage for quota, shadow billing, and billing support
 - Send administrative notifications (account, security, updates)
 - Respond to customer support requests
 - Monitor and analyze usage patterns
-- Detect and prevent fraudulent transactions
+- Detect and prevent fraudulent transactions or quota abuse
 
 ---
 

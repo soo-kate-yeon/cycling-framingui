@@ -12,6 +12,23 @@ export type {
   UserLicense,
   CreateLicenseData,
   UpdateLicenseData,
+  QuotaAllocationType,
+  QuotaAllocation,
+  CreateQuotaAllocationData,
+  QuotaEntitlementStatus,
+  QuotaEntitlement,
+  UpsertQuotaEntitlementData,
+  QuotaSummary,
+  QuotaUsageToolClass,
+  QuotaUsageOutcome,
+  QuotaUsageEvent,
+  CreateQuotaUsageEventData,
+  QuotaUsageClassBreakdown,
+  QuotaUsageSummary,
+  BillingAccount,
+  UpsertBillingAccountData,
+  BillingSubscription,
+  UpsertBillingSubscriptionData,
   FreeScreenTemplate,
   UserProfile,
   UpdateUserData,
@@ -34,6 +51,14 @@ export {
   getActiveLicenseCount,
   deactivateExpiredLicenses,
 } from './licenses';
+
+// Quota allocation operations
+export { createQuotaAllocation } from './quota-allocations';
+export { upsertQuotaEntitlement } from './quota-entitlements';
+export { getUserQuotaSummary } from './quota-summary';
+export { createQuotaUsageEvent, getUserUsageSummary } from './quota-usage-events';
+export { upsertBillingAccount } from './billing-accounts';
+export { upsertBillingSubscription } from './billing-subscriptions';
 
 // Template operations
 export {

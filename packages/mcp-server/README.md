@@ -2,7 +2,7 @@
 
 MCP server for building production UI through FramingUI.
 
-`@framingui/mcp-server` gives AI coding agents a real UI contract: components, themes, layout tokens, templates, validation, and environment checks.
+`@framingui/mcp-server` gives AI coding agents a real UI contract: components, themes, layout tokens, validated workflows, quota visibility, and environment checks.
 
 ## Install
 
@@ -23,6 +23,8 @@ Authenticate:
 ```bash
 npx -y @framingui/mcp-server@latest login
 ```
+
+`whoami` now also returns a shadow quota snapshot so teams can inspect weighted tool-unit usage before usage-based billing is enforced.
 
 ## CLI Commands
 

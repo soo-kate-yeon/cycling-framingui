@@ -41,7 +41,7 @@ export function FreeTrialBanner({ onStartFreeTrial }: FreeTrialBannerProps) {
           <button
             onClick={() => {
               trackFunnelPrimaryCtaClick({
-                cta_id: 'free_trial_banner',
+                cta_id: 'transition_access_banner',
                 cta_label: content.cta,
                 location: 'top_banner',
                 destination: '/#theme-gallery',

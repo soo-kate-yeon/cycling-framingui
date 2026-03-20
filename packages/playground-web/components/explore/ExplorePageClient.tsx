@@ -18,7 +18,7 @@ import {
   TrialCompleteModal,
 } from '../modals';
 import type { TemplateData } from '../../data/templates';
-import { trackFunnelFreeTrialStarted } from '../../lib/analytics';
+import { trackFunnelTransitionAccessStarted } from '../../lib/analytics';
 
 // ============================================================================
 // Types
@@ -82,8 +82,8 @@ export function ExplorePageClient({ children }: ExplorePageClientProps) {
   // 모달 플로우 핸들러
   const handleStartTrial = () => {
     console.log('[ExplorePageClient] Moving to template selection');
-    trackFunnelFreeTrialStarted({
-      entry_point: 'explore_free_trial_modal',
+    trackFunnelTransitionAccessStarted({
+      entry_point: 'explore_transition_access_modal',
       is_authenticated: !!user,
     });
     setCurrentModal('template-select');

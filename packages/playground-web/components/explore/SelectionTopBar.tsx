@@ -98,6 +98,7 @@ export function SelectionTopBar({
       priceId,
       userId: user.id,
       userEmail: user.email || '',
+      purchaseKind: 'legacy_template',
       themeId: selectedTemplates.join(','),
       tier: 'double',
       successPath: `/explore?plan=double&checkout=success&selected=${selectedTemplates.join(',')}`,

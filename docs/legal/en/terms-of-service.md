@@ -1,7 +1,7 @@
 # Terms of Service
 
-**Effective Date:** February 7, 2026  
-**Last Updated:** February 7, 2026
+**Effective Date:** March 17, 2026  
+**Last Updated:** March 17, 2026
 
 ---
 
@@ -16,21 +16,23 @@ Welcome to Tekton. These Terms of Service ("**Terms**") constitute a legally bin
 - **Address:** 30, Art Center-daero 97beon-gil, Yeonsu-gu, Incheon, Republic of Korea
 - **Contact:** soo.kate.yeon@gmail.com
 
-**By accessing or using our Service, you agree to be bound by these Terms.** If you do not agree, do not use the Service.
+By accessing or using the Service, you agree to be bound by these Terms. If you do not agree, do not use the Service.
 
 ---
 
 ## 2. Definitions
 
-- **"Service"**: The Tekton platform, including the website, design system engine, and template marketplace.
-- **"Template"**: Any React UI component, design asset, or code package available for purchase or download.
-- **"License"**: The rights granted to you upon purchase of a Template.
-- **"Subscription"**: The Creator Pass annual subscription plan.
+- **"Service"**: The Tekton platform, including the website, MCP tools, account surfaces, runtime packages, documentation, and related downloadable assets.
+- **"Tool Unit"**: A weighted usage unit we use to measure MCP tool consumption for quota, top-up, or metered billing.
+- **"Plan"**: A paid or free entitlement bundle that may include monthly Tool Units, feature access, or support terms.
+- **"Top-Up"**: Additional Tool Units purchased separately from a recurring Plan.
+- **"Legacy Asset"**: A theme, template, or downloadable package purchased under an older template-license business model.
+- **"Output"**: Code, configuration, suggestions, validation results, or other material produced through the Service.
 - **"Account"**: Your registered user account on the Service.
 
 ---
 
-## 3. Account Registration
+## 3. Account Registration and Security
 
 ### 3.1 Eligibility
 
@@ -40,90 +42,88 @@ You must be at least 18 years old (or the age of majority in your jurisdiction) 
 
 You are responsible for:
 
-- Maintaining the confidentiality of your account credentials
-- All activities that occur under your Account
-- Notifying us immediately of any unauthorized access
+- maintaining the confidentiality of your account credentials
+- all activities that occur under your Account
+- notifying us promptly of any unauthorized use
 
-### 3.3 Account Termination
+### 3.3 Suspension or Termination
 
-We reserve the right to suspend or terminate your Account if you violate these Terms.
+We may suspend or terminate Accounts that violate these Terms, abuse the Service, or create legal, operational, or security risk.
 
 ---
 
-## 4. Products and Services
+## 4. Scope of the Service
 
-### 4.1 Product Description
+### 4.1 What Tekton Provides
 
 Tekton provides:
 
-- Premium React UI templates and component libraries
-- AI-powered design system engine
-- Design tokens with WCAG compliance
+- MCP-assisted UI workflows, including discovery, validation, and integration tools
+- design system runtimes, tokens, themes, and related packages
+- account surfaces that may show usage, entitlements, shadow billing, or billing status
+- legacy downloadable assets for customers who purchased them under prior plans
 
 ### 4.2 Delivery Method
 
-All products are digital goods delivered via electronic download. No physical products are shipped.
+The Service is delivered digitally through hosted account surfaces, MCP/API access, and downloadable packages. No physical goods are shipped.
 
-### 4.3 Updates
+### 4.3 Updates and Availability
 
-Purchased Templates include updates for the duration specified in the applicable plan:
-
-- **Single Template / Double Package**: 1 year of updates from purchase date
-- **Creator Pass**: Updates during active subscription period
-
----
-
-## 5. Pricing and Payment
-
-### 5.1 Pricing Plans
-
-| Plan            | Price              | Includes                             |
-| --------------- | ------------------ | ------------------------------------ |
-| Single Template | Varies by template | 1 template + 1 year updates          |
-| Double Package  | $99 (fixed)        | 2 templates + 1 year updates         |
-| Creator Pass    | $149/year (fixed)  | All templates + subscription updates |
-
-**Single Template Pricing:** Individual templates are priced based on their scope and complexity. Current pricing is displayed on each product page at the time of purchase.
-
-### 5.2 Payment Processing
-
-All payments are processed through **Paddle** (our Merchant of Record). By making a purchase, you also agree to Paddle's terms of service.
-
-### 5.3 Subscription Terms
-
-- Creator Pass subscriptions automatically renew annually unless cancelled
-- You may cancel at any time through your account settings
-- Cancellation takes effect at the end of the current billing period
-
-### 5.4 Currency and Taxes
-
-Prices are in USD. Applicable taxes (including VAT) are calculated and collected by Paddle based on your location.
+- Active Plans receive access, updates, and support according to the pricing page or checkout terms shown at purchase.
+- Legacy Assets continue to receive the update/support window stated at the time of the original purchase, unless a different migration policy is explicitly announced.
+- During transition phases, we may show shadow billing or quota forecasts before those amounts become billable.
 
 ---
 
-## 6. License Grant
+## 5. Pricing, Billing, and Payment
 
-### 6.1 Permitted Uses
+### 5.1 Pricing Model
 
-Upon valid purchase, we grant you a **non-exclusive, non-transferable license** to:
+Pricing, included Tool Units, renewal intervals, top-up availability, and any overage terms are shown on the pricing page and at checkout at the time of purchase.
 
-- Use Templates in unlimited personal projects
-- Use Templates in client projects (final deliverables only)
-- Modify Templates for your own use
+### 5.2 Shadow Billing
+
+We may display estimated or shadow usage before billing enforcement begins. Shadow usage is informational unless the pricing page, checkout, or an in-product billing notice explicitly states that billing enforcement is active.
+
+### 5.3 Payment Processing
+
+All payments are processed through **Paddle** (our Merchant of Record). By making a purchase, you also agree to Paddle's applicable terms.
+
+### 5.4 Subscription Terms
+
+- Recurring Plans renew automatically unless cancelled before renewal.
+- You may cancel through the billing surface or by contacting us.
+- Cancellation takes effect at the end of the current billing period unless otherwise required by law.
+
+### 5.5 Currency and Taxes
+
+Prices are shown in the currency displayed at checkout. Applicable taxes are calculated and collected by Paddle based on your location.
+
+---
+
+## 6. Access Rights and Restrictions
+
+### 6.1 Permitted Use
+
+Subject to these Terms and your purchased entitlements, we grant you a non-exclusive, non-transferable right to:
+
+- use the Service for your own internal projects and client work
+- use Outputs in your products and deliverables, subject to third-party and open-source license obligations
+- access Legacy Assets you validly purchased under the prior business model
 
 ### 6.2 Restrictions
 
-You may **NOT**:
+You may not:
 
-- Resell, redistribute, or sublicense Templates (in original or modified form)
-- Share Templates with individuals who have not purchased a license
-- Use Templates to create competing template/UI kit products
-- Remove or alter copyright notices
+- resell, redistribute, sublicense, or share Service access, Accounts, API keys, or raw downloadable assets except as explicitly permitted
+- circumvent quota controls, usage metering, billing enforcement, or authentication systems
+- use the Service to build a competing template or asset marketplace by redistributing our assets
+- interfere with the Service, perform abusive automation, or create unreasonable load
+- use the Service for unlawful purposes or to violate third-party rights
 
-### 6.3 License Scope
+### 6.3 Legacy Asset Rights
 
-- **Single Template / Double Package**: License is perpetual for purchased Templates, updates limited to 1 year
-- **Creator Pass**: Access to all Templates valid only during active subscription; downloaded Templates may be used perpetually
+If you purchased Legacy Assets under the prior template-license model, those asset-use rights continue under the terms that applied at the time of purchase, except where a migration policy gives you additional rights.
 
 ---
 
@@ -131,177 +131,92 @@ You may **NOT**:
 
 ### 7.1 Our Ownership
 
-All Templates, design assets, code, and the Tekton platform remain the exclusive property of Morak. Your purchase grants a license, not ownership.
+The Service, MCP tools, prompts, themes, components, documentation, branding, and downloadable assets remain our property or the property of our licensors. Your purchase grants access or usage rights, not ownership.
 
-### 7.2 User Content
+### 7.2 Your Content and Outputs
 
-You retain ownership of any original content you create using our Templates. We do not claim rights over your projects.
+You retain ownership of your original content. Subject to our underlying intellectual property and any third-party licenses, you may use Outputs generated for your Account in your own products and client deliverables.
 
 ---
 
-## 8. Disclaimer of Warranties
+## 8. Service Characteristics and Disclaimer of Warranties
 
-**PLEASE READ THIS SECTION CAREFULLY. IT LIMITS OUR OBLIGATIONS TO YOU.**
+Tekton includes MCP, LLM-assisted, and automated workflow features. These systems are probabilistic and may produce incomplete, incorrect, inconsistent, or non-production-ready results.
 
-THE SERVICE AND ALL TEMPLATES ARE PROVIDED "AS-IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
+You are responsible for reviewing and validating Outputs before using them in production, legal, financial, security-sensitive, or customer-facing contexts.
 
-WE DO NOT WARRANT THAT:
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SERVICE, OUTPUTS, AND ALL RELATED MATERIALS ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
 
-- THE SERVICE WILL BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE
-- TEMPLATES WILL MEET YOUR SPECIFIC REQUIREMENTS OR EXPECTATIONS
-- TEMPLATES ARE FREE FROM DEFECTS, BUGS, OR SECURITY VULNERABILITIES
-- ANY ERRORS OR DEFECTS WILL BE CORRECTED
-- THE SERVICE OR SERVERS ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS
+We do not guarantee that:
 
-YOUR USE OF THE SERVICE AND ANY TEMPLATES IS AT YOUR OWN RISK. YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
+- the Service will be uninterrupted, secure, or error-free
+- any Output will be accurate, complete, or suitable for your use case
+- defects or errors will always be corrected
+- the Service will be available at all times
 
 ---
 
 ## 9. Limitation of Liability
 
-**PLEASE READ THIS SECTION CAREFULLY. IT LIMITS OUR LIABILITY TO YOU.**
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, WE WILL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR LOSS OF PROFITS, REVENUE, DATA, GOODWILL, OR BUSINESS OPPORTUNITY, ARISING OUT OF OR RELATED TO THE SERVICE, OUTPUTS, BILLING, OR YOUR USE OF OR INABILITY TO USE THE SERVICE.
 
-TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL MORAK, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, AFFILIATES, OR LICENSORS BE LIABLE FOR:
+OUR TOTAL LIABILITY FOR ALL CLAIMS ARISING OUT OF OR RELATED TO THE SERVICE WILL NOT EXCEED THE AMOUNT YOU PAID TO US DURING THE TWELVE (12) MONTHS IMMEDIATELY PRECEDING THE EVENT GIVING RISE TO THE CLAIM.
 
-- ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES
-- ANY LOSS OF PROFITS, REVENUE, DATA, GOODWILL, OR BUSINESS OPPORTUNITIES
-- ANY LOSS OR DAMAGE ARISING FROM YOUR USE OF OR INABILITY TO USE THE SERVICE OR TEMPLATES
-- ANY UNAUTHORIZED ACCESS TO OR ALTERATION OF YOUR DATA OR TRANSMISSIONS
-- ANY CONDUCT OR CONTENT OF ANY THIRD PARTY ON THE SERVICE
-
-THIS LIMITATION APPLIES WHETHER THE ALLEGED LIABILITY IS BASED ON CONTRACT, TORT, NEGLIGENCE, STRICT LIABILITY, OR ANY OTHER BASIS, EVEN IF MORAK HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-**MAXIMUM LIABILITY:** IN NO EVENT SHALL OUR TOTAL LIABILITY TO YOU FOR ALL CLAIMS ARISING FROM OR RELATED TO THE SERVICE EXCEED THE AMOUNT YOU PAID TO US IN THE TWELVE (12) MONTHS IMMEDIATELY PRECEDING THE EVENT GIVING RISE TO THE CLAIM.
-
-SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OR LIMITATION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THE ABOVE LIMITATIONS MAY NOT APPLY TO YOU. IN SUCH JURISDICTIONS, OUR LIABILITY IS LIMITED TO THE GREATEST EXTENT PERMITTED BY LAW.
+Nothing in these Terms excludes liability that cannot be excluded under applicable law.
 
 ---
 
-## 10. Copyright Infringement / DMCA Notice
+## 10. Copyright and IP Complaints
 
-### 10.1 Respect for Intellectual Property
-
-Morak respects the intellectual property rights of others and expects users of the Service to do the same. We will respond to notices of alleged copyright infringement that comply with applicable law and are properly submitted to us.
-
-### 10.2 DMCA Notification Procedure
-
-If you believe that your copyrighted work has been copied in a way that constitutes copyright infringement, please provide our Copyright Agent with the following information in accordance with the Digital Millennium Copyright Act ("DMCA"):
-
-1. **Identification** of the copyrighted work claimed to have been infringed
-2. **Identification** of the material that is claimed to be infringing or to be the subject of infringing activity, with enough detail so that we can locate it on the Service
-3. **Your contact information**, including your address, telephone number, and email address
-4. **A statement** that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law
-5. **A statement**, made under penalty of perjury, that the information in your notification is accurate and that you are the copyright owner or authorized to act on the copyright owner's behalf
-6. **Your physical or electronic signature**
-
-### 10.3 Designated Copyright Agent
-
-Please send DMCA notices to:
-
-**Morak - Copyright Agent**  
-Sooyeon Kim  
-30, Art Center-daero 97beon-gil, Yeonsu-gu, Incheon, Republic of Korea  
-Email: soo.kate.yeon@gmail.com  
-Subject Line: "DMCA Notice"
-
-### 10.4 Counter-Notification
-
-If you believe that the material you posted was removed by mistake or misidentification, you may submit a counter-notification to our Copyright Agent containing the information required by the DMCA. Upon receipt of a valid counter-notification, we may reinstate the removed material in accordance with the DMCA.
-
-### 10.5 Repeat Infringers
-
-We reserve the right to terminate the accounts of users who are determined to be repeat infringers.
+We respect the intellectual property rights of others. If you believe material on the Service infringes your rights, please contact us at **soo.kate.yeon@gmail.com** with enough detail for us to review the claim.
 
 ---
 
-## 11. Acceptable Use
-
-You agree not to:
-
-- Use the Service for any illegal purpose
-- Attempt to gain unauthorized access to the Service
-- Interfere with or disrupt the Service
-- Upload malicious code or content
-
----
-
-## 12. Third-Party Services
+## 11. Third-Party Services
 
 The Service integrates with third-party services including:
 
-- **Paddle**: Payment processing
-- **Supabase**: Authentication and database
-- **Vercel**: Hosting
+- **Paddle**: payment processing
+- **Supabase**: authentication and database
+- **Vercel**: hosting
 
-We are not responsible for the availability or practices of these third-party services.
-
----
-
-## 13. Force Majeure
-
-We shall not be liable for any failure or delay in performing our obligations due to circumstances beyond our reasonable control, including natural disasters, war, terrorism, strikes, or internet outages.
+We are not responsible for the availability or practices of those third-party services.
 
 ---
 
-## 14. Termination
+## 12. Termination
 
-### 14.1 By You
+### 12.1 By You
 
-You may terminate your Account at any time by contacting us at soo.kate.yeon@gmail.com.
+You may stop using the Service at any time and may request Account deletion by contacting us.
 
-### 14.2 By Us
+### 12.2 By Us
 
-We may terminate or suspend your access immediately, without prior notice, for conduct that we believe violates these Terms or is harmful to other users.
+We may terminate or suspend access if you violate these Terms, fail to pay amounts due, abuse the Service, or create security or legal risk.
 
-### 14.3 Effect of Termination
+### 12.3 Effect of Termination
 
 Upon termination:
 
-- Your right to access the Service ceases
-- Previously downloaded Templates under valid licenses may continue to be used
-- We may delete your Account data after a reasonable period
+- your right to access the Service ends
+- accrued payment obligations remain enforceable
+- legacy asset rights that were already validly granted continue according to their applicable terms
 
 ---
 
-## 15. Changes to Terms
+## 13. Changes to These Terms
 
-We may modify these Terms at any time. Material changes will be notified via:
-
-- Email to registered users
-- Prominent notice on our website
-
-Continued use after changes take effect constitutes acceptance.
+We may update these Terms from time to time. If we make material changes, we will provide notice by email, the website, or the product. Continued use of the Service after the effective date of the updated Terms constitutes acceptance.
 
 ---
 
-## 16. Governing Law and Disputes
+## 14. Governing Law and Disputes
 
-### 16.1 Governing Law
-
-These Terms shall be governed by the laws of the **Republic of Korea**, without regard to conflict of law principles.
-
-### 16.2 Dispute Resolution
-
-Any disputes shall be resolved through:
-
-1. Good-faith negotiation between the parties
-2. If unresolved, binding arbitration in Incheon, Republic of Korea, or the competent courts of Korea
+These Terms are governed by the laws of the **Republic of Korea**, without regard to conflict of law principles. Unless applicable law requires otherwise, disputes shall be resolved by the competent courts of Korea.
 
 ---
 
-## 17. Severability
-
-If any provision of these Terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.
-
----
-
-## 18. Entire Agreement
-
-These Terms, together with our Privacy Policy and Refund Policy, constitute the entire agreement between you and Morak regarding the Service.
-
----
-
-## 19. Contact Us
+## 15. Contact Us
 
 For questions about these Terms:
 
@@ -312,4 +227,4 @@ Email: soo.kate.yeon@gmail.com
 
 ---
 
-_These Terms are provided in both English and Korean. In case of discrepancy, the Korean version shall prevail for users in the Republic of Korea._
+_These Terms are provided in English, Korean, and Japanese. In case of discrepancy, the Korean version shall prevail for users in the Republic of Korea._

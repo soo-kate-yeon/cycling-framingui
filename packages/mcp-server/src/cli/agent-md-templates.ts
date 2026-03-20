@@ -8,11 +8,13 @@ export function generateClaudeMdSection(framework: Framework): string {
 
 ### Authentication
 
-Before using licensed themes:
+Before using account-scoped themes or checking quota visibility:
 
 \`\`\`bash
 framingui-mcp login
 \`\`\`
+
+Use \`whoami\` when you need the current entitlement list or shadow quota snapshot.
 
 ### Production Screen Flow
 
@@ -108,7 +110,7 @@ FramingUI is available in this project through MCP.
 
 ### Required Sequence
 
-1. Confirm authentication if licensed themes are needed.
+1. Confirm authentication if entitled themes or quota visibility are needed.
 2. If the project path is known, call \`detect-project-context\` first.
 3. Decide the style contract before generation.
 4. Use \`preview-theme\` when theme defaults or recipes matter.

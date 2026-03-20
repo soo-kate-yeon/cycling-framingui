@@ -9,7 +9,7 @@ FramingUI is installed in this project as an MCP-assisted design system for prod
 
 ## Authentication
 
-Authenticate before using licensed themes:
+Authenticate before using account-scoped themes and quota visibility:
 
 \`\`\`bash
 framingui-mcp login
@@ -20,6 +20,8 @@ Check the current state with:
 \`\`\`bash
 framingui-mcp status
 \`\`\`
+
+Use \`whoami\` when you need the current entitlement list or shadow quota snapshot.
 
 ## Recommended Workflow
 

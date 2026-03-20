@@ -7,9 +7,9 @@
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { previewScreenTemplateTool } from '../../src/tools/preview-screen-template.ts';
-import { fetchTemplate, fetchTemplateList } from '../../src/api/data-client.ts';
+import { fetchTemplate, fetchTemplateList } from '../../src/api/data-client.js';
 
-vi.mock('../../src/api/data-client.ts', () => ({
+vi.mock('../../src/api/data-client.js', () => ({
   fetchTemplate: vi.fn(),
   fetchTemplateList: vi.fn(),
 }));
@@ -95,7 +95,26 @@ describe('previewScreenTemplateTool', () => {
     });
     mockFetchTemplateList.mockResolvedValueOnce({
       ok: true,
-      data: [{ id: 'auth.login' }, { id: 'dashboard.overview' }],
+      data: [
+        {
+          id: 'auth.login',
+          name: 'Login',
+          category: 'auth',
+          description: 'Login screen with authentication',
+          requiredComponentsCount: 5,
+          layoutType: 'centered',
+          version: '1.0.0',
+        },
+        {
+          id: 'dashboard.overview',
+          name: 'Dashboard Overview',
+          category: 'dashboard',
+          description: 'Main dashboard overview',
+          requiredComponentsCount: 3,
+          layoutType: 'sidebar',
+          version: '1.0.0',
+        },
+      ],
     });
 
     const result = await previewScreenTemplateTool({ templateId: 'auth.unknown' });

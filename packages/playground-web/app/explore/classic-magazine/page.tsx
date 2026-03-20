@@ -85,7 +85,7 @@ export default function ClassicMagazineDemo() {
       <aside className="hidden md:flex flex-col w-64 lg:w-72 border-r border-[var(--border-default)] bg-[var(--bg-surface)] h-full overflow-y-auto shrink-0">
         <div className="p-6">
           <Link
-            href="/explore"
+            href="/#theme-gallery"
             className="inline-flex items-center gap-2 mb-10 hover:opacity-70 transition-opacity"
           >
             <span className="text-xl font-bold tracking-tighter text-[var(--text-primary)]">
@@ -281,9 +281,7 @@ function OverviewDashboard() {
                   </span>
                   <div className="min-w-0 flex-1 space-y-0.5">
                     <p className="text-sm font-medium leading-none truncate">{user.name}</p>
-                    <p className="text-xs text-[var(--text-secondary)] truncate">
-                      {user.email}
-                    </p>
+                    <p className="text-xs text-[var(--text-secondary)] truncate">{user.email}</p>
                   </div>
                   <div className="shrink-0 font-medium text-sm tabular-nums">{user.amount}</div>
                 </div>

@@ -24,7 +24,20 @@ import {
   createRateLimitErrorResponse,
 } from '@/lib/security/rate-limit';
 import type { LicenseTier } from '@/lib/db/types';
-import { CREATOR_ALL_ACCESS_THEME_ID } from '@/lib/mcp/theme-entitlements';
+import { CREATOR_ALL_ACCESS_THEME_ID } from '@/lib/access/constants';
+import {
+  buildQuotaSettlementPreview,
+  extractSubscriptionPeriod,
+} from '@/lib/billing/quota-settlement';
+import { insertQuotaAllocationWithClient } from '@/lib/db/quota-allocations';
+import {
+  upsertQuotaEntitlementWithClient,
+  updateQuotaEntitlementStatusBySubscriptionIdWithClient,
+} from '@/lib/db/quota-entitlements';
+import { upsertBillingAccountWithClient } from '@/lib/db/billing-accounts';
+import { upsertBillingSubscriptionWithClient } from '@/lib/db/billing-subscriptions';
+import { parsePaddleCustomData } from '@/lib/paddle/contracts';
+import { resolvePaddlePriceTarget } from '@/lib/paddle/config';
 
 // Paddle 서버 SDK 초기화
 function getPaddleClient(): Paddle | null {
@@ -56,53 +69,11 @@ function getAdminClient() {
   });
 }
 
-/**
- * Price ID를 기반으로 라이선스 티어 결정
- */
-function resolveTier(priceId: string): LicenseTier {
-  const priceSingle = process.env.NEXT_PUBLIC_PADDLE_PRICE_SINGLE;
-  const priceDouble = process.env.NEXT_PUBLIC_PADDLE_PRICE_DOUBLE;
-  const priceCreator = process.env.NEXT_PUBLIC_PADDLE_PRICE_CREATOR;
-
-  if (priceId === priceSingle) {
-    return 'single';
-  }
-  if (priceId === priceDouble) {
-    return 'double';
-  }
-  if (priceId === priceCreator) {
-    return 'creator';
-  }
-
-  console.warn(`[Paddle Webhook] 알 수 없는 Price ID: ${priceId}, 기본값 'single' 사용`);
-  return 'single';
-}
-
-/**
- * custom_data에서 사용자 정보 추출
- */
-interface PaddleCustomData {
-  user_id: string;
-  theme_id?: string;
-  tier?: string;
-}
-
-function parseCustomData(customData: unknown): PaddleCustomData | null {
-  if (!customData || typeof customData !== 'object') {
-    return null;
-  }
-
-  const data = customData as Record<string, unknown>;
-  const userId = data.user_id;
-  if (typeof userId !== 'string' || !userId) {
-    return null;
-  }
-
-  return {
-    user_id: userId,
-    theme_id: typeof data.theme_id === 'string' ? data.theme_id : undefined,
-    tier: typeof data.tier === 'string' ? data.tier : undefined,
-  };
+function extractCustomerId(payload: Record<string, unknown>): string | null {
+  const direct =
+    (typeof payload.customerId === 'string' && payload.customerId) ||
+    (typeof payload.customer_id === 'string' && payload.customer_id);
+  return direct || null;
 }
 
 export async function POST(request: NextRequest) {
@@ -154,7 +125,7 @@ export async function POST(request: NextRequest) {
       // 결제 완료 → 라이선스 생성
       case EventName.TransactionCompleted: {
         const transaction = event.data;
-        const customData = parseCustomData(transaction.customData);
+        const customData = parsePaddleCustomData(transaction.customData);
 
         if (!customData) {
           console.error('[Paddle Webhook] custom_data에 user_id가 없습니다');
@@ -169,7 +140,117 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: 'missing_price_id' }, { status: 400 });
         }
 
-        const tier = resolveTier(priceId);
+        const priceTarget = resolvePaddlePriceTarget(priceId);
+        const purchaseKind =
+          customData.purchase_kind ?? priceTarget?.purchaseKind ?? 'legacy_template';
+
+        if (purchaseKind === 'plan') {
+          const settlement = buildQuotaSettlementPreview({
+            transactionId: transaction.id,
+            customData: { ...customData, purchase_kind: 'plan' },
+            priceTarget,
+          });
+
+          if (!settlement) {
+            console.error(
+              `[Paddle Webhook] Invalid quota plan purchase payload: user=${customData.user_id}`
+            );
+            return NextResponse.json({ error: 'invalid_quota_purchase' }, { status: 400 });
+          }
+
+          const customerId = extractCustomerId(transaction as unknown as Record<string, unknown>);
+          if (customerId) {
+            await upsertBillingAccountWithClient(adminClient, {
+              user_id: settlement.userId,
+              paddle_customer_id: customerId,
+            });
+          }
+
+          try {
+            await insertQuotaAllocationWithClient(adminClient, {
+              user_id: settlement.userId,
+              allocation_type: 'plan',
+              units: settlement.grantedUnits,
+              source: settlement.source,
+              paddle_transaction_id: settlement.transactionId,
+              metadata: settlement.planId ? { plan_id: settlement.planId } : null,
+            });
+          } catch (error) {
+            if ((error as { code?: string }).code === '23505') {
+              return NextResponse.json({ status: 'already_processed' });
+            }
+            throw error;
+          }
+
+          await upsertQuotaEntitlementWithClient(adminClient, {
+            user_id: settlement.userId,
+            plan_id: settlement.planId ?? 'developer',
+            status: 'active',
+            included_units: settlement.grantedUnits,
+          });
+
+          console.log(
+            `[Paddle Webhook] Quota plan purchase received: user=${settlement.userId}, plan=${settlement.planId}, units=${settlement.grantedUnits}`
+          );
+          return NextResponse.json({
+            status: 'quota_plan_recorded',
+            mode: 'transition',
+            plan_id: settlement.planId,
+            granted_units: settlement.grantedUnits,
+          });
+        }
+
+        if (purchaseKind === 'top_up') {
+          const settlement = buildQuotaSettlementPreview({
+            transactionId: transaction.id,
+            customData: { ...customData, purchase_kind: 'top_up' },
+            priceTarget,
+          });
+
+          if (!settlement) {
+            console.error(
+              `[Paddle Webhook] Invalid quota top-up purchase payload: user=${customData.user_id}`
+            );
+            return NextResponse.json({ error: 'invalid_quota_purchase' }, { status: 400 });
+          }
+
+          const customerId = extractCustomerId(transaction as unknown as Record<string, unknown>);
+          if (customerId) {
+            await upsertBillingAccountWithClient(adminClient, {
+              user_id: settlement.userId,
+              paddle_customer_id: customerId,
+            });
+          }
+
+          try {
+            await insertQuotaAllocationWithClient(adminClient, {
+              user_id: settlement.userId,
+              allocation_type: 'top_up',
+              units: settlement.grantedUnits,
+              source: settlement.source,
+              paddle_transaction_id: settlement.transactionId,
+              metadata: { purchase_kind: 'top_up' },
+            });
+          } catch (error) {
+            if ((error as { code?: string }).code === '23505') {
+              return NextResponse.json({ status: 'already_processed' });
+            }
+            throw error;
+          }
+
+          console.log(
+            `[Paddle Webhook] Quota top-up purchase received: user=${settlement.userId}, units=${settlement.grantedUnits}`
+          );
+          return NextResponse.json({
+            status: 'quota_top_up_recorded',
+            mode: 'transition',
+            granted_units: settlement.grantedUnits,
+          });
+        }
+
+        const tier: LicenseTier =
+          customData.tier ??
+          (priceTarget && 'legacyTier' in priceTarget ? priceTarget.legacyTier : 'single');
         const requestedThemeId = customData.theme_id?.trim();
         const themeId =
           tier === 'creator'
@@ -250,13 +331,132 @@ export async function POST(request: NextRequest) {
       // 구독 활성화
       case EventName.SubscriptionActivated: {
         const subscription = event.data;
-        const customData = parseCustomData(subscription.customData);
+        const customData = parsePaddleCustomData(subscription.customData);
 
         if (customData) {
+          if (customData.purchase_kind === 'plan') {
+            const settlement = buildQuotaSettlementPreview({
+              transactionId: subscription.id,
+              customData: { ...customData, purchase_kind: 'plan' },
+              priceTarget: null,
+            });
+
+            if (settlement?.planId) {
+              const { currentPeriodStart, currentPeriodEnd } = extractSubscriptionPeriod(
+                subscription as {
+                  currentBillingPeriod?: {
+                    startsAt?: string | null;
+                    endsAt?: string | null;
+                  } | null;
+                  current_billing_period?: {
+                    starts_at?: string | null;
+                    ends_at?: string | null;
+                  } | null;
+                }
+              );
+              const customerId = extractCustomerId(
+                subscription as unknown as Record<string, unknown>
+              );
+              if (customerId) {
+                await upsertBillingAccountWithClient(adminClient, {
+                  user_id: settlement.userId,
+                  paddle_customer_id: customerId,
+                });
+              }
+
+              await upsertQuotaEntitlementWithClient(adminClient, {
+                user_id: settlement.userId,
+                plan_id: settlement.planId,
+                status: 'active',
+                included_units: settlement.grantedUnits,
+                current_period_start: currentPeriodStart,
+                current_period_end: currentPeriodEnd,
+                paddle_subscription_id: subscription.id,
+              });
+              await upsertBillingSubscriptionWithClient(adminClient, {
+                user_id: settlement.userId,
+                paddle_subscription_id: subscription.id,
+                plan_id: settlement.planId,
+                status: 'active',
+                current_period_start: currentPeriodStart,
+                current_period_end: currentPeriodEnd,
+              });
+            }
+          }
+
           console.log(
-            `[Paddle Webhook] 구독 활성화: user=${customData.user_id}, sub=${subscription.id}`
+            `[Paddle Webhook] 구독 활성화: user=${customData.user_id}, kind=${customData.purchase_kind}, sub=${subscription.id}`
           );
         }
+        break;
+      }
+
+      case 'subscription.updated': {
+        const subscription = event.data as {
+          id: string;
+          customData?: unknown;
+          currentBillingPeriod?: { startsAt?: string | null; endsAt?: string | null } | null;
+          current_billing_period?: {
+            starts_at?: string | null;
+            ends_at?: string | null;
+          } | null;
+        };
+        const customData = parsePaddleCustomData(subscription.customData);
+
+        if (customData?.purchase_kind === 'plan') {
+          const settlement = buildQuotaSettlementPreview({
+            transactionId: subscription.id,
+            customData: { ...customData, purchase_kind: 'plan' },
+            priceTarget: null,
+          });
+
+          if (settlement?.planId) {
+            const { currentPeriodStart, currentPeriodEnd } =
+              extractSubscriptionPeriod(subscription);
+            const customerId = extractCustomerId(
+              subscription as unknown as Record<string, unknown>
+            );
+
+            if (customerId) {
+              await upsertBillingAccountWithClient(adminClient, {
+                user_id: settlement.userId,
+                paddle_customer_id: customerId,
+              });
+            }
+
+            await insertQuotaAllocationWithClient(adminClient, {
+              user_id: settlement.userId,
+              allocation_type: 'plan',
+              units: settlement.grantedUnits,
+              source: 'subscription_renewal',
+              billing_period_start: currentPeriodStart,
+              billing_period_end: currentPeriodEnd,
+              paddle_transaction_id: `${subscription.id}:${currentPeriodStart ?? 'renewal'}`,
+              paddle_subscription_id: subscription.id,
+              metadata: { plan_id: settlement.planId, renewal: true },
+            });
+
+            await upsertQuotaEntitlementWithClient(adminClient, {
+              user_id: settlement.userId,
+              plan_id: settlement.planId,
+              status: 'active',
+              included_units: settlement.grantedUnits,
+              current_period_start: currentPeriodStart,
+              current_period_end: currentPeriodEnd,
+              paddle_subscription_id: subscription.id,
+            });
+            await upsertBillingSubscriptionWithClient(adminClient, {
+              user_id: settlement.userId,
+              paddle_subscription_id: subscription.id,
+              plan_id: settlement.planId,
+              status: 'active',
+              current_period_start: currentPeriodStart,
+              current_period_end: currentPeriodEnd,
+            });
+          }
+        }
+
+        console.log(`[Paddle Webhook] 구독 갱신 처리 완료: sub=${subscription.id}`);
         break;
       }
 
@@ -264,6 +464,24 @@ export async function POST(request: NextRequest) {
       case EventName.SubscriptionCanceled: {
         const subscription = event.data;
         const subscriptionId = subscription.id;
+        const customData = parsePaddleCustomData(
+          (subscription as { customData?: unknown }).customData
+        );
+
+        await updateQuotaEntitlementStatusBySubscriptionIdWithClient(
+          adminClient,
+          subscriptionId,
+          'canceled'
+        );
+
+        if (customData?.user_id && customData.plan_id) {
+          await upsertBillingSubscriptionWithClient(adminClient, {
+            user_id: customData.user_id,
+            paddle_subscription_id: subscriptionId,
+            plan_id: customData.plan_id,
+            status: 'canceled',
+          });
+        }
 
         const { error: updateError } = await adminClient
           .from('user_licenses')
@@ -282,6 +500,23 @@ export async function POST(request: NextRequest) {
       // 결제 연체
       case EventName.SubscriptionPastDue: {
         const subscription = event.data;
+        const customData = parsePaddleCustomData(
+          (subscription as { customData?: unknown }).customData
+        );
+        await updateQuotaEntitlementStatusBySubscriptionIdWithClient(
+          adminClient,
+          subscription.id,
+          'past_due'
+        );
+
+        if (customData?.user_id && customData.plan_id) {
+          await upsertBillingSubscriptionWithClient(adminClient, {
+            user_id: customData.user_id,
+            paddle_subscription_id: subscription.id,
+            plan_id: customData.plan_id,
+            status: 'past_due',
+          });
+        }
         console.warn(`[Paddle Webhook] 구독 연체: sub=${subscription.id}`);
         break;
       }
@@ -294,8 +529,37 @@ export async function POST(request: NextRequest) {
         // 환불(refund) 또는 크레딧(credit)인 경우만 처리
         if (action === 'refund' || action === 'credit') {
           const transactionId = adjustment.transactionId;
+          const customData = parsePaddleCustomData(
+            (adjustment as { customData?: unknown }).customData
+          );
 
           if (transactionId) {
+            if (
+              customData &&
+              (customData.purchase_kind === 'plan' || customData.purchase_kind === 'top_up')
+            ) {
+              const settlement = buildQuotaSettlementPreview({
+                transactionId,
+                customData,
+                priceTarget: null,
+              });
+
+              if (settlement) {
+                await insertQuotaAllocationWithClient(adminClient, {
+                  user_id: settlement.userId,
+                  allocation_type: 'adjustment',
+                  units: settlement.grantedUnits * -1,
+                  source: 'paddle_adjustment',
+                  paddle_transaction_id: adjustment.id,
+                  metadata: {
+                    action,
+                    purchase_kind: customData.purchase_kind,
+                    original_transaction_id: transactionId,
+                  },
+                });
+              }
+            }
+
             const { error: updateError } = await adminClient
               .from('user_licenses')
               .update({ is_active: false })

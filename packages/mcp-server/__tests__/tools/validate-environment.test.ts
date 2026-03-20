@@ -7,7 +7,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { validateEnvironmentTool } from '../../src/tools/validate-environment.js';
+import { validateEnvironmentTool } from '../../src/tools/validate-environment.ts';
 import * as packageJsonReader from '../../src/utils/package-json-reader.js';
 
 // package-json-reader 모듈 모킹
@@ -466,10 +466,11 @@ describe('validateEnvironmentTool', () => {
         runtime: 'expo',
       });
       expect(result.tailwind).toBeUndefined();
-      expect(result.sourceAudit?.issues.some(issue => issue.includes('@framingui/ui'))).toBe(true);
-      expect(result.sourceAudit?.issues.some(issue => issue.includes('className'))).toBe(true);
-      expect(result.sourceAudit?.issues.some(issue => issue.includes('raw color'))).toBe(true);
-      expect(result.sourceAudit?.issues.some(issue => issue.includes('raw spacing'))).toBe(true);
+      const issues = result.sourceAudit?.issues ?? [];
+      expect(issues.some(issue => issue.includes('@framingui/ui'))).toBe(true);
+      expect(issues.some(issue => issue.includes('className'))).toBe(true);
+      expect(issues.some(issue => issue.includes('raw color'))).toBe(true);
+      expect(issues.some(issue => issue.includes('raw spacing'))).toBe(true);
     });
   });
 });

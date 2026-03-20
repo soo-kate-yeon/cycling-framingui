@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import { PricingPage } from '../../components/pricing/PricingPage';
 
 export const metadata: Metadata = {
-  title: 'Pricing | Tekton',
-  description:
-    'Choose the right plan for your project. Premium React templates with AI-powered design system.',
+  title: 'Pricing | FramingUI',
+  description: 'Explore FramingUI plans, UI workflow tools, theme previews, and usage visibility.',
 };
 
 export default function Page() {
