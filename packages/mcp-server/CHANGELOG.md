@@ -2,6 +2,22 @@
 
 All notable changes to `@framingui/mcp-server` will be documented in this file.
 
+## [0.6.28] - 2026-03-21
+
+### Added
+
+- Added weighted tool metering, usage ledgers, quota policy evaluation, and usage-event sync for MCP tool calls.
+- Added paid quota entitlement details to `whoami` so MCP clients can inspect included units, current period, and remaining quota context.
+
+### Changed
+
+- Updated tool handlers to enforce soft and hard quota policy decisions before execution and append quota warnings to compatible responses.
+- Expanded MCP auth, bootstrap, and screen workflow guidance to describe transition access and quota-aware usage visibility instead of legacy template unlock messaging.
+
+### Fixed
+
+- Relaxed MCP test input typing and aligned schema compatibility fields so `typecheck:tests` now passes with the quota-aware `whoami` response shape.
+
 ## [0.6.27] - 2026-03-15
 
 ### Added

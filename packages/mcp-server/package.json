@@ -1,6 +1,6 @@
 {
   "name": "@framingui/mcp-server",
-  "version": "0.6.27",
+  "version": "0.6.28",
   "description": "FramingUI MCP server for production UI workflows, discovery, validation, and quota-aware billing visibility",
   "type": "module",
   "main": "./dist/index.js",
