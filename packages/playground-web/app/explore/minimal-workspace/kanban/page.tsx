@@ -1,5 +1,7 @@
 'use client';
 
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { KanbanBoardView } from '@/components/explore/workspace/KanbanBoardView';
 import { useTektonTheme } from '@/hooks/useTektonTheme';
 import { PreviewBanner } from '@/components/explore/PreviewBanner';
@@ -20,19 +22,31 @@ const MINIMAL_WORKSPACE_FALLBACK: Record<string, string> = {
   '--radius-xl': '12px',
 };
 
-export default function MinimalWorkspaceKanbanPage() {
+function KanbanPageInner() {
+  const searchParams = useSearchParams();
+  const isEmbed = searchParams.get('embed') === 'true';
   const { loaded } = useTektonTheme('minimal-workspace', {
     fallback: MINIMAL_WORKSPACE_FALLBACK,
   });
 
   return (
     <div
-      className={`h-screen flex flex-col bg-[var(--bg-canvas)] transition-opacity duration-500 pt-12 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+      className={`h-screen flex flex-col bg-[var(--bg-canvas)] transition-opacity duration-500 ${isEmbed ? 'pt-0' : 'pt-12'} ${loaded ? 'opacity-100' : 'opacity-0'}`}
     >
-      <PreviewBanner templateId="minimal-workspace" templateName="Minimal Workspace" />
+      {!isEmbed && (
+        <PreviewBanner templateId="minimal-workspace" templateName="Minimal Workspace" />
+      )}
       <main className="flex-1 overflow-hidden p-4 md:p-6 lg:p-10">
         <KanbanBoardView themeName="minimal-workspace" />
       </main>
     </div>
+  );
+}
+
+export default function MinimalWorkspaceKanbanPage() {
+  return (
+    <Suspense>
+      <KanbanPageInner />
+    </Suspense>
   );
 }

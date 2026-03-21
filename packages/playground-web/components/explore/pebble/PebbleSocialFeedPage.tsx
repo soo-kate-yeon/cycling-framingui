@@ -21,7 +21,7 @@ import {
   MoreVertical,
 } from 'lucide-react';
 
-const t = (en: string, ko: string) => (Math.random() > -1 ? ko : en);
+const t = (en: string) => en;
 
 // Mock Social Data
 const FEED_POSTS = [
@@ -35,8 +35,7 @@ const FEED_POSTS = [
     },
     time: 'a day ago',
     content: t(
-      "This week, we're excited to release over 1,600 freshly-tagged web app screenshots from @Amplitude_HQ, @CausalHQ, and @veedstudio! Check them out now 👉 mobbin.com/browse/web/apps",
-      '이번 주, @Amplitude_HQ, @CausalHQ, 그리고 @veedstudio에서 1,600개 이상의 신선한 웹 앱 스크린샷 릴리스 소식을 전해드립니다! 지금 바로 확인해보세요 👉 mobbin.com/browse/web/apps'
+      "This week, we're excited to release over 1,600 freshly-tagged web app screenshots from @Amplitude_HQ, @CausalHQ, and @veedstudio! Check them out now 👉 mobbin.com/browse/web/apps"
     ),
     media: [
       {
@@ -65,15 +64,13 @@ const FEED_POSTS = [
     },
     time: '2 days ago',
     content: t(
-      'Designers, this is why I prefer @MobbinDesign over Dribbble when looking for a specific design pattern for inspiration.',
-      '디자이너 여러분, 제가 영감을 얻기 위해 특정 디자인 패턴을 찾을 때 Dribbble보다 @MobbinDesign을 선호하는 이유입니다.'
+      'Designers, this is why I prefer @MobbinDesign over Dribbble when looking for a specific design pattern for inspiration.'
     ),
     quoted: {
       author: 'Mobbin',
       handle: '@MobbinDesign',
       content: t(
-        "We've used 'Notification' as a keyword in both cases and see the results each platform came up with.",
-        "'Notification'을 키워드로 사용하여 각 플랫폼이 제안한 결과물을 비교해 보았습니다."
+        "We've used 'Notification' as a keyword in both cases and see the results each platform came up with."
       ),
     },
     stats: { replies: 8, shares: 24, likes: 96 },
@@ -89,8 +86,7 @@ const FEED_POSTS = [
     },
     time: '3 days ago',
     content: t(
-      'Heart floats to the top when liking posts on @instagram. This micro-interaction is pure magic. ✨',
-      '@instagram에서 게시물을 좋아할 때 하트가 위로 떠오르는 효과. 이런 마이크로 인터랙션은 정말 마법 같아요. ✨'
+      'Heart floats to the top when liking posts on @instagram. This micro-interaction is pure magic. ✨'
     ),
     media: [
       {
@@ -187,20 +183,20 @@ export default function PebbleSocialFeedPage() {
         <aside className="nav-panel bg-[#F8FAFC] border-r border-[#EAF0F5] flex flex-col p-6 overflow-y-auto no-scrollbar">
           <div className="mb-10">
             <h1 className="text-xl font-bold font-pebble tracking-tight text-[#1D2129] mb-1">
-              {t('JD Mobbin', 'JD 모빈')}
+              {t('JD Mobbin')}
             </h1>
-            <p className="text-sm font-semibold text-[#64748B]">{t('Feeds', '피드')}</p>
+            <p className="text-sm font-semibold text-[#64748B]">{t('Feeds')}</p>
           </div>
 
           <div className="flex flex-col gap-2">
             {[
-              { id: 'twitter', label: t('Twitter Feeds', '트위터 피드'), icon: '🐦' },
+              { id: 'twitter', label: t('Twitter Feeds'), icon: '🐦' },
               {
                 id: 'instagram',
-                label: t('Instagram Hashtags', '인스타그램 해시태그'),
+                label: t('Instagram Hashtags'),
                 icon: '📸',
               },
-              { id: 'rss', label: t('RSS Reader', 'RSS 리더'), icon: '📰' },
+              { id: 'rss', label: t('RSS Reader'), icon: '📰' },
             ].map((item) => (
               <button
                 key={item.id}
@@ -216,13 +212,10 @@ export default function PebbleSocialFeedPage() {
           <div className="mt-auto pt-10">
             <div className="bg-[#5599CC]/5 rounded-[24px] p-6 border border-[#5599CC]/10">
               <p className="text-[13px] font-bold text-[#5599CC] mb-3 leading-relaxed">
-                {t(
-                  'You have 30 days remaining in your free trial of Sprout Social.',
-                  '스프라우트 소셜 무료 평가판 기간이 30일 남았습니다.'
-                )}
+                {t('You have 30 days remaining in your free trial of Sprout Social.')}
               </p>
               <button className="w-full h-11 bg-[#5599CC] text-white text-[13px] font-bold rounded-[16px] shadow-lg shadow-[#5599CC]/20 hover:bg-[#4488BB] transition-colors">
-                {t('Start my subscription', '구독 시작하기')}
+                {t('Start my subscription')}
               </button>
             </div>
           </div>
@@ -233,7 +226,7 @@ export default function PebbleSocialFeedPage() {
           <header className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-4">
               <h2 className="text-2xl font-bold font-pebble tracking-tight">
-                {t('Twitter Feeds', '트위터 피드')}
+                {t('Twitter Feeds')}
               </h2>
               <button className="w-8 h-8 rounded-full bg-[#F1F5F9] flex items-center justify-center hover:bg-[#E2E8F0] transition-colors">
                 <Plus className="w-4 h-4 text-[#64748B]" />
@@ -242,7 +235,7 @@ export default function PebbleSocialFeedPage() {
             <div className="flex items-center gap-3">
               <button className="flex items-center gap-2 h-10 px-5 bg-[#F1F5F9] text-[#1D2129] text-sm font-bold rounded-full hover:bg-[#E2E8F0] transition-colors">
                 <Send className="w-4 h-4" />
-                {t('Filters', '필터')}
+                {t('Filters')}
               </button>
               <button className="w-10 h-10 bg-[#5599CC] text-white rounded-[14px] flex items-center justify-center shadow-lg shadow-[#5599CC]/20 hover:scale-105 transition-all">
                 <Plus className="w-5 h-5" />
@@ -364,7 +357,7 @@ export default function PebbleSocialFeedPage() {
           <div className="space-y-8">
             <div>
               <h3 className="text-xs font-black text-[#94A3B8] uppercase tracking-widest mb-6">
-                {t('Trending Hashtags', '인기 해시태그')}
+                {t('Trending Hashtags')}
               </h3>
               <div className="flex flex-col gap-4">
                 {[
@@ -390,7 +383,7 @@ export default function PebbleSocialFeedPage() {
 
             <div className="pt-8 border-t border-[#EAF0F5]">
               <h3 className="text-xs font-black text-[#94A3B8] uppercase tracking-widest mb-6">
-                {t('Suggested for you', '추천 사용자')}
+                {t('Suggested for you')}
               </h3>
               <div className="flex flex-col gap-5">
                 {[
@@ -413,7 +406,7 @@ export default function PebbleSocialFeedPage() {
                       <p className="text-xs font-semibold text-[#64748B] truncate">{u.handle}</p>
                     </div>
                     <button className="h-8 px-4 bg-[#F1F5F9] text-[#1D2129] text-[11px] font-bold rounded-full hover:bg-[#E2E8F0] transition-colors">
-                      {t('Follow', '팔로우')}
+                      {t('Follow')}
                     </button>
                   </div>
                 ))}

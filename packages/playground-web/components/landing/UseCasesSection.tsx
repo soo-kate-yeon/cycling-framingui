@@ -65,7 +65,7 @@ export function UseCasesSection({ content }: UseCasesSectionProps) {
           </div>
         )}
         <iframe
-          src={`/explore/${activePreset.theme}?embed=true`}
+          src={`${activePreset.route}?embed=true`}
           className={`w-full h-full border-0 transition-opacity duration-500 ${
             iframeLoaded ? 'opacity-100' : 'opacity-0'
           }`}

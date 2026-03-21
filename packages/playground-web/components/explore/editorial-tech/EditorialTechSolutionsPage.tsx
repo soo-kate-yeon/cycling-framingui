@@ -13,7 +13,6 @@ import {
   Layers,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useExploreLanguage } from '../../../contexts/ExploreLanguageContext';
 import { useTektonTheme } from '../../../hooks/useTektonTheme';
 import { PreviewBanner } from '../PreviewBanner';
 
@@ -30,7 +29,6 @@ const EDITORIAL_TECH_FALLBACK: Record<string, string> = {
 
 export function EditorialTechSolutionsPage() {
   const router = useRouter();
-  const { locale, toggleLocale } = useExploreLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -43,8 +41,6 @@ export function EditorialTechSolutionsPage() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const t = (en: string, ko?: string) => (locale === 'ko' && ko ? ko : en);
 
   if (!themeLoaded) {
     return <div className="min-h-screen bg-white" />;
@@ -86,30 +82,22 @@ export function EditorialTechSolutionsPage() {
               className="font-mono text-[11px] font-medium tracking-[0.2em] uppercase flex items-center gap-3 group text-neutral-400 hover:text-neutral-900 transition-colors"
             >
               <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-              {t('Directory', '디렉토리')}
+              Directory
             </button>
             <div className="hidden md:flex items-center gap-10 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-300">
-              <span className="text-neutral-900 border-b border-neutral-900 pb-0.5">
-                {t('Solutions', '솔루션')}
+              <span className="text-neutral-900 border-b border-neutral-900 pb-0.5">Solutions</span>
+              <span className="hover:text-neutral-900 cursor-pointer transition-colors">
+                Research
               </span>
               <span className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Research', '연구')}
-              </span>
-              <span className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Infrastructure', '인프라')}
+                Infrastructure
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-10">
-            <button
-              onClick={toggleLocale}
-              className="font-mono text-[11px] font-medium hover:text-neutral-400 transition-colors uppercase tracking-widest text-neutral-400"
-            >
-              {locale.toUpperCase()}
-            </button>
             <button className="hidden sm:block rounded-full border border-neutral-200 px-8 py-3.5 text-[11px] font-medium uppercase tracking-[0.15em] hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all">
-              {t('Contact Sales', '팀에 문의하기')}
+              Contact Sales
             </button>
             <button
               onClick={() => setMenuOpen(true)}
@@ -125,27 +113,23 @@ export function EditorialTechSolutionsPage() {
       <header className="pt-72 pb-48 px-8 max-w-[1240px] mx-auto text-center space-y-16">
         <div className="space-y-10">
           <h1 className="text-5xl md:text-7xl lg:text-[88px] hero-title leading-[1.05] tracking-tight">
-            <span className="text-neutral-900">{t('Design for', '디자인,')}</span>
+            <span className="text-neutral-900">Design for</span>
             <br />
-            <span className="italic font-normal text-neutral-400">
-              {t('Academic Excellence.', '학문적 탁월함을 위해.')}
-            </span>
+            <span className="italic font-normal text-neutral-400">Academic Excellence.</span>
           </h1>
           <p className="max-w-2xl mx-auto text-lg md:text-xl text-neutral-400 font-normal leading-relaxed tracking-tight">
-            {t(
-              'Empowering institutions with reasoning models that bridge the gap between complex research and personalized learning environments.',
-              '고급 연구와 개인화된 학습 환경 사이의 간극을 좁히는 추론 모델로 교육 기관에 새로운 가능성을 제공합니다.'
-            )}
+            Empowering institutions with reasoning models that bridge the gap between complex
+            research and personalized learning environments.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
           <button className="w-full sm:w-auto rounded-full bg-neutral-900 text-white px-14 py-6 text-sm font-medium uppercase tracking-[0.15em] hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md">
-            {t('Start for Education', '교육용 시작하기')}
+            Start for Education
             <ArrowRight size={18} />
           </button>
           <button className="w-full sm:w-auto rounded-full border border-neutral-200 bg-white text-neutral-900 px-14 py-6 text-sm font-medium uppercase tracking-[0.15em] hover:bg-neutral-50 transition-colors">
-            {t('Read the Guide', '가이드 읽어보기')}
+            Read the Guide
           </button>
         </div>
       </header>
@@ -154,7 +138,7 @@ export function EditorialTechSolutionsPage() {
       <section className="border-y border-neutral-100 py-20 mb-32 overflow-hidden bg-neutral-50/30">
         <div className="max-w-[1240px] mx-auto px-8">
           <p className="text-center font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-neutral-300 mb-16">
-            {t('TRUSTED BY WORLD-CLASS INSTITUTIONS', '세계 최고 수준의 교육 기관이 신뢰합니다')}
+            TRUSTED BY WORLD-CLASS INSTITUTIONS
           </p>
           <div className="flex flex-wrap justify-between items-center gap-12 md:gap-4 px-10 opacity-30 grayscale saturate-0">
             <span className="text-xl md:text-2xl font-medium tracking-tighter uppercase italic">
@@ -176,17 +160,13 @@ export function EditorialTechSolutionsPage() {
       <section className="max-w-[1240px] mx-auto px-8 py-32 space-y-32">
         <div className="max-w-2xl">
           <h2 className="text-3xl md:text-5xl font-light tracking-tight text-neutral-900 mb-10 leading-[1.1]">
-            {t('Built for scale.', '규모를 위한 구축.')}
+            Built for scale.
             <br />
-            <span className="text-neutral-400">
-              {t('Secured for privacy.', '프라이버시를 위한 보안.')}
-            </span>
+            <span className="text-neutral-400">Secured for privacy.</span>
           </h2>
           <p className="text-lg text-neutral-500 font-normal leading-relaxed">
-            {t(
-              'Our platform maintains architectural precision while meeting the highest administrative standards of global research organizations.',
-              '우리 플랫폼은 글로벌 연구 기관의 가장 높은 행정 기준을 충족하는 동시에 건축적 정밀함을 유지합니다.'
-            )}
+            Our platform maintains architectural precision while meeting the highest administrative
+            standards of global research organizations.
           </p>
         </div>
 
@@ -195,30 +175,22 @@ export function EditorialTechSolutionsPage() {
             {
               icon: <ShieldCheck size={28} strokeWidth={1} />,
               title: 'Security',
-              titleKo: '보안',
               desc: 'SOC2 Type II compliance and end-to-end data encryption by default.',
-              descKo: 'SOC2 Type II 준수 및 기본 엔터프라이즈급 데이터 암호화.',
             },
             {
               icon: <Command size={28} strokeWidth={1} />,
               title: 'Admin',
-              titleKo: '관리자',
               desc: 'Centralized tools for user management and usage tracking.',
-              descKo: '사용자 관리 및 사용량 추적을 위한 중앙 집중식 도구.',
             },
             {
               icon: <Layers size={28} strokeWidth={1} />,
               title: 'Custom',
-              titleKo: '커스텀',
               desc: 'Deploy department-specific AI assistants trained on internal data.',
-              descKo: '내부 데이터를 학습한 학과별 맞춤형 AI 어시스턴트 배포.',
             },
             {
               icon: <Users size={28} strokeWidth={1} />,
               title: 'Unlimited',
-              titleKo: '무제한',
               desc: 'Flat-rate pricing with no seat limits for researchers.',
-              descKo: '연구원을 위한 인원 제한 없는 고정 요금체계.',
             },
           ].map((feature, i) => (
             <div key={i} className="space-y-10 group">
@@ -227,11 +199,11 @@ export function EditorialTechSolutionsPage() {
               </div>
               <div className="space-y-5">
                 <h3 className="text-xl font-medium uppercase tracking-[0.1em] text-neutral-900">
-                  {t(feature.title, feature.titleKo)}
+                  {feature.title}
                 </h3>
                 <div className="h-[1px] w-8 bg-neutral-100 group-hover:w-full transition-all duration-700" />
                 <p className="text-base text-neutral-400 leading-relaxed font-normal">
-                  {t(feature.desc, feature.descKo)}
+                  {feature.desc}
                 </p>
               </div>
             </div>
@@ -251,21 +223,19 @@ export function EditorialTechSolutionsPage() {
           </div>
           <div className="lg:col-span-12 xl:col-span-4 xl:col-start-9 space-y-10">
             <p className="font-mono text-[11px] font-medium text-neutral-300 uppercase tracking-[0.3em]">
-              {t('Infrastructure', '인프라')}
+              Infrastructure
             </p>
             <h3 className="text-3xl md:text-5xl font-light tracking-tight text-neutral-900 leading-[1.15]">
-              {t('A new standard for research.', '연구를 위한')}
+              A new standard for research.
               <br />
-              <span className="italic">{t('New Standards.', '새로운 기준.')}</span>
+              <span className="italic">New Standards.</span>
             </h3>
             <p className="text-lg text-neutral-400 font-normal leading-relaxed">
-              {t(
-                'Consolidate institutional knowledge into a secure intelligence layer that evolves with your department.',
-                '학과와 함께 발전하는 안전한 지능형 계층으로 기관의 지식을 통합하세요.'
-              )}
+              Consolidate institutional knowledge into a secure intelligence layer that evolves with
+              your department.
             </p>
             <button className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-900 border-b border-neutral-900/10 hover:border-neutral-900 transition-all pb-2">
-              {t('Learn about security', '보안에 대해 알아보기')}
+              Learn about security
             </button>
           </div>
         </div>
@@ -273,21 +243,19 @@ export function EditorialTechSolutionsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 max-w-[1400px] mx-auto px-8 gap-24 items-center">
           <div className="lg:col-span-12 xl:col-span-4 xl:col-start-1 space-y-10 order-2 xl:order-1">
             <p className="font-mono text-[11px] font-medium text-neutral-300 uppercase tracking-[0.3em]">
-              {t('Deployment', '배포')}
+              Deployment
             </p>
             <h3 className="text-3xl md:text-5xl font-light tracking-tight text-neutral-900 leading-[1.15]">
-              {t('Intelligence for', '인텔리전스,')}
+              Intelligence for
               <br />
-              {t('everyone.', '모두를 위해.')}
+              everyone.
             </h3>
             <p className="text-lg text-neutral-400 font-normal leading-relaxed">
-              {t(
-                'Simple enough for daily tasks, powerful enough for groundbreaking discovery. Scalable to every student and faculty member.',
-                '학생부터 교수까지 누구나 쉽게 사용할 수 있으며, 일상적인 작업에서 획기적인 연구 결과까지 이끌어낼 수 있는 강력한 성능을 제공합니다.'
-              )}
+              Simple enough for daily tasks, powerful enough for groundbreaking discovery. Scalable
+              to every student and faculty member.
             </p>
             <button className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-900 border-b border-neutral-900/10 hover:border-neutral-900 transition-all pb-2">
-              {t('See user stories', '사용자 스토리 보기')}
+              See user stories
             </button>
           </div>
           <div className="lg:col-span-12 xl:col-span-7 xl:col-start-6 aspect-[21/10] bg-neutral-50 overflow-hidden rounded-[40px] border border-neutral-100 p-4 order-1 xl:order-2">
@@ -304,25 +272,23 @@ export function EditorialTechSolutionsPage() {
       <section className="bg-neutral-950 text-white pt-64 pb-32 px-8 overflow-hidden relative border-t border-neutral-900">
         <div className="max-w-[1000px] mx-auto text-center space-y-24 relative z-10">
           <h2 className="text-4xl md:text-6xl lg:text-[96px] font-light tracking-tighter leading-[1] text-balance">
-            {t('Ready to', '연구 가속화를')}
+            Ready to
             <br />
-            <span className="text-neutral-500">
-              {t('accelerate discovery?', '시작할 준비가 되셨나요?')}
-            </span>
+            <span className="text-neutral-500">accelerate discovery?</span>
           </h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
             <button className="w-full sm:w-auto rounded-full bg-white text-neutral-950 px-16 py-7 text-base font-medium uppercase tracking-[0.1em] hover:bg-neutral-100 transition-all">
-              {t('Get Started Now', '지금 시작하기')}
+              Get Started Now
             </button>
             <button className="w-full sm:w-auto rounded-full border border-neutral-800 bg-transparent text-neutral-400 px-16 py-7 text-base font-medium uppercase tracking-[0.1em] hover:bg-neutral-900 hover:text-white transition-colors">
-              {t('Talk to an Expert', '전문가와 상담하기')}
+              Talk to an Expert
             </button>
           </div>
 
           <div className="pt-32 flex flex-col items-center gap-8">
             <div className="h-20 w-[1px] bg-gradient-to-b from-neutral-800 to-transparent" />
             <p className="font-mono text-[11px] text-neutral-500 uppercase tracking-[0.4em]">
-              {t('ESTABLISHED 2026', '2026년 설립')}
+              ESTABLISHED 2026
             </p>
           </div>
         </div>
@@ -338,58 +304,39 @@ export function EditorialTechSolutionsPage() {
               Tekton.
             </h3>
             <p className="text-base font-normal text-neutral-400 max-w-xs leading-relaxed">
-              {t(
-                'Forging the future of human-AI collaboration through architectural precision.',
-                '건축학적 정밀함을 통해 인간과 AI 협업의 미래를 개척합니다.'
-              )}
+              Forging the future of human-AI collaboration through architectural precision.
             </p>
           </div>
           <div className="space-y-8">
             <h4 className="font-mono text-[11px] font-medium uppercase tracking-widest text-neutral-900">
-              {t('Platform', '플랫폼')}
+              Platform
             </h4>
             <ul className="space-y-5 text-sm font-medium uppercase tracking-widest text-neutral-400">
+              <li className="hover:text-neutral-900 cursor-pointer transition-colors">Overview</li>
               <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Overview', '개요')}
+                Enterprise
               </li>
-              <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Enterprise', '엔터프라이즈')}
-              </li>
-              <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Research', '연구')}
-              </li>
+              <li className="hover:text-neutral-900 cursor-pointer transition-colors">Research</li>
             </ul>
           </div>
           <div className="space-y-8">
             <h4 className="font-mono text-[11px] font-medium uppercase tracking-widest text-neutral-900">
-              {t('Resources', '리소스')}
+              Resources
             </h4>
             <ul className="space-y-5 text-sm font-medium uppercase tracking-widest text-neutral-400">
-              <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Docs', '문서')}
-              </li>
-              <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Security', '보안')}
-              </li>
-              <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Status', '상태')}
-              </li>
+              <li className="hover:text-neutral-900 cursor-pointer transition-colors">Docs</li>
+              <li className="hover:text-neutral-900 cursor-pointer transition-colors">Security</li>
+              <li className="hover:text-neutral-900 cursor-pointer transition-colors">Status</li>
             </ul>
           </div>
           <div className="space-y-8">
             <h4 className="font-mono text-[11px] font-medium uppercase tracking-widest text-neutral-900">
-              {t('Company', '회사')}
+              Company
             </h4>
             <ul className="space-y-5 text-sm font-medium uppercase tracking-widest text-neutral-400">
-              <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Privacy', '개인정보')}
-              </li>
-              <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Terms', '약관')}
-              </li>
-              <li className="hover:text-neutral-900 cursor-pointer transition-colors">
-                {t('Contact', '연락처')}
-              </li>
+              <li className="hover:text-neutral-900 cursor-pointer transition-colors">Privacy</li>
+              <li className="hover:text-neutral-900 cursor-pointer transition-colors">Terms</li>
+              <li className="hover:text-neutral-900 cursor-pointer transition-colors">Contact</li>
             </ul>
           </div>
         </div>
@@ -428,10 +375,10 @@ export function EditorialTechSolutionsPage() {
             <div className="mt-32 flex-1 space-y-24">
               <div className="space-y-5">
                 <p className="font-mono text-[11px] text-neutral-300 uppercase tracking-[0.4em]">
-                  {t('Index', '인덱스')}
+                  Index
                 </p>
                 <h3 className="text-4xl font-light tracking-tighter uppercase italic text-neutral-900">
-                  {t('Explorer.', '익스플로러.')}
+                  Explorer.
                 </h3>
               </div>
 
@@ -446,7 +393,7 @@ export function EditorialTechSolutionsPage() {
                         0{i + 1}
                       </span>
                       <span className="text-3xl font-light uppercase tracking-tight group-hover:pl-4 transition-all duration-500 text-neutral-900 group-hover:text-neutral-400">
-                        {t(item, item)}
+                        {item}
                       </span>
                     </div>
                     <ChevronRight
@@ -461,7 +408,7 @@ export function EditorialTechSolutionsPage() {
 
             <div className="pt-20 border-t border-neutral-50">
               <button className="w-full rounded-full bg-neutral-900 text-white py-6 text-sm font-medium uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all">
-                {t('Contact Sales Team', '세일즈 팀에 문의')}
+                Contact Sales Team
               </button>
             </div>
           </div>

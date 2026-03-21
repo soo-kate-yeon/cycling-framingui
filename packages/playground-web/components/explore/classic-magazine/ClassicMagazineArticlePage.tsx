@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, ArrowLeft, Share2, Bookmark, ChevronRight, Quote } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useExploreLanguage } from '../../../contexts/ExploreLanguageContext';
 import { useTektonTheme } from '../../../hooks/useTektonTheme';
 import { PreviewBanner } from '../PreviewBanner';
 
@@ -23,7 +22,6 @@ const CLASSIC_MAGAZINE_FALLBACK: Record<string, string> = {
 
 export function ClassicMagazineArticlePage() {
   const router = useRouter();
-  const { locale, toggleLocale } = useExploreLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -36,8 +34,6 @@ export function ClassicMagazineArticlePage() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const t = (en: string, ko?: string) => (locale === 'ko' && ko ? ko : en);
 
   if (!themeLoaded) {
     return <div className="min-h-screen bg-[#F9F9F9]" />;
@@ -82,7 +78,7 @@ export function ClassicMagazineArticlePage() {
             className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] border-b border-transparent hover:border-black transition-all"
           >
             <ArrowLeft size={14} />
-            {t('The Journal', '더 저널')}
+            The Journal
           </button>
 
           <div className="absolute left-1/2 -translate-x-1/2">
@@ -92,14 +88,8 @@ export function ClassicMagazineArticlePage() {
           </div>
 
           <div className="flex items-center gap-6">
-            <button
-              onClick={toggleLocale}
-              className="text-[10px] font-black uppercase tracking-[0.2em] hover:text-[#E11D48] transition-colors"
-            >
-              {locale.toUpperCase()}
-            </button>
             <button className="hidden sm:block text-[10px] font-black uppercase tracking-[0.2em] border-2 border-black px-4 py-1.5 hover:bg-black hover:text-white transition-all">
-              {t('Subscribe', '구독하기')}
+              Subscribe
             </button>
             <button
               onClick={() => setSidebarOpen(true)}
@@ -116,7 +106,7 @@ export function ClassicMagazineArticlePage() {
         <div className="max-w-5xl mx-auto text-center space-y-8">
           <div className="inline-block border-y border-black py-2 px-6">
             <span className="text-[11px] font-sans font-black uppercase tracking-[0.4em] text-neutral-500">
-              {t('Architecture & Design', '건축과 공간의 미학')}
+              Architecture & Design
             </span>
           </div>
 
@@ -127,10 +117,8 @@ export function ClassicMagazineArticlePage() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 pt-8">
             <div className="h-[1px] w-12 bg-black hidden md:block" />
             <p className="font-serif italic text-xl md:text-2xl text-neutral-500 max-w-xl">
-              {t(
-                'A visual monologue on the interplay between stark minimalism and the authoritative weight of traditional structures.',
-                '극단적인 미니멀리즘과 전통적 구조물이 가진 권위 있는 무게감 사이의 상호작용에 관한 시각적 독백'
-              )}
+              A visual monologue on the interplay between stark minimalism and the authoritative
+              weight of traditional structures.
             </p>
             <div className="h-[1px] w-12 bg-black hidden md:block" />
           </div>
@@ -143,7 +131,7 @@ export function ClassicMagazineArticlePage() {
         <div className="md:col-span-2 space-y-12">
           <div className="space-y-2">
             <p className="text-[10px] font-sans font-black uppercase tracking-widest text-[#E11D48]">
-              {t('Written By', '필자')}
+              Written By
             </p>
             <p className="font-display text-xl font-bold leading-none">Julian V. Sterling</p>
             <p className="text-xs text-neutral-400 font-serif italic">Chief Architectural Critic</p>
@@ -151,11 +139,11 @@ export function ClassicMagazineArticlePage() {
 
           <div className="space-y-4 pt-8 border-t border-black/10">
             <p className="text-[10px] font-sans font-black uppercase tracking-widest text-neutral-400">
-              {t('Details', '상세 정보')}
+              Details
             </p>
             <div className="space-y-1">
-              <p className="text-xs font-serif italic">{t('March 2026 Issue', '2026년 3월호')}</p>
-              <p className="text-xs font-serif italic">{t('12 Min Read', '12분 분량')}</p>
+              <p className="text-xs font-serif italic">March 2026 Issue</p>
+              <p className="text-xs font-serif italic">12 Min Read</p>
             </div>
           </div>
 
@@ -172,10 +160,10 @@ export function ClassicMagazineArticlePage() {
         {/* Center: Main Text */}
         <div className="md:col-span-7 space-y-12">
           <p className="font-serif text-xl md:text-2xl leading-relaxed text-neutral-800 drop-cap">
-            {t(
-              'In the realm of modern editorial design, the concept of "The Archive" serves as both a repository of history and a manifesto for the future. We find ourselves at a crossroads where the transient nature of digital screens meets the immutable permanence of printed ink.',
-              '현대 에디토리얼 디자인의 영역에서 "아카이브"라는 개념은 역사의 저장소인 동시에 미래를 향한 선언문 역할을 합니다. 우리는 디지털 화면의 일시적인 속성과 인쇄된 잉크의 불변하는 영원함이 교차하는 지점에 서 있습니다.'
-            )}
+            In the realm of modern editorial design, the concept of &ldquo;The Archive&rdquo; serves
+            as both a repository of history and a manifesto for the future. We find ourselves at a
+            crossroads where the transient nature of digital screens meets the immutable permanence
+            of printed ink.
           </p>
 
           <div className="relative aspect-[4/5] bg-neutral-100 overflow-hidden border border-black/5">
@@ -186,25 +174,24 @@ export function ClassicMagazineArticlePage() {
             />
             <div className="absolute bottom-6 left-6 right-6">
               <p className="text-[10px] font-sans font-black uppercase tracking-[0.2em] text-white/70">
-                {t('FIG. 04 — MONOLITHIC STRUCTURE, ZURICH', '그림 04 — 단일 구조물, 취리히')}
+                FIG. 04 — MONOLITHIC STRUCTURE, ZURICH
               </p>
             </div>
           </div>
 
           <p className="font-serif text-lg leading-[1.8] text-neutral-700">
-            {t(
-              'Traditional print media has always relied on the authoritative weight of serif typography to convey truth. When we look at a page of Classical Magazine, we aren’t just reading words; we are experiencing a spatial arrangement designed to command attention and respect. The absence of rounded corners is not a limitation, but a declaration of structural purity.',
-              '전통적인 인쇄 매체는 항상 진실을 전달하기 위해 세리프 타이포그래피의 권위 있는 무게감에 의존해 왔습니다. 클래식 매거진의 페이지를 볼 때 우리는 단지 단어를 읽는 것이 아니라, 주의와 존중을 명령하도록 설계된 공간적 배치를 경험하는 것입니다. 둥근 모서리가 없는 것은 한계가 아니라 구조적 순수함에 대한 선언입니다.'
-            )}
+            Traditional print media has always relied on the authoritative weight of serif
+            typography to convey truth. When we look at a page of Classical Magazine, we aren&apos;t
+            just reading words; we are experiencing a spatial arrangement designed to command
+            attention and respect. The absence of rounded corners is not a limitation, but a
+            declaration of structural purity.
           </p>
 
           <div className="py-12 border-y border-black/10">
             <Quote className="text-[#E11D48] mb-6" size={32} />
             <blockquote className="font-display text-3xl md:text-4xl font-black tracking-tight italic leading-tight">
-              {t(
-                '"The grid is the silent language of the page, defining the boundaries within which our thoughts may wander."',
-                '"그리드는 페이지의 침묵하는 언어이며, 우리의 생각이 거닐 수 있는 경계를 정의합니다."'
-              )}
+              &ldquo;The grid is the silent language of the page, defining the boundaries within
+              which our thoughts may wander.&rdquo;
             </blockquote>
             <p className="mt-6 text-xs font-sans font-black uppercase tracking-widest text-neutral-400">
               — STERLING, 2026
@@ -212,10 +199,10 @@ export function ClassicMagazineArticlePage() {
           </div>
 
           <p className="font-serif text-lg leading-[1.8] text-neutral-700">
-            {t(
-              'The authoritative tone of the "Authoritative" brand is reflected in the strict 1px and 2px borders that carve the layout into logical segments. This is a design that respects the user’s intelligence, inviting them into a focused, deep-reading experience that is often lost in the chaotic noise ofcontemporary mobile design.',
-              '브랜드의 권위 있는 비주얼 톤은 레이아웃을 논리적인 세그먼트로 나누는 엄격한 1px 및 2px 테두리에 반영됩니다. 이것은 사용자의 지성을 존중하는 디자인이며, 현대 모바일 디자인의 혼란스러운 소음 속에서 종종 잃어버리게 되는 집중력 있고 심도 있는 독서 경험으로 그들을 초대합니다.'
-            )}
+            The authoritative tone of the &ldquo;Authoritative&rdquo; brand is reflected in the
+            strict 1px and 2px borders that carve the layout into logical segments. This is a design
+            that respects the user&apos;s intelligence, inviting them into a focused, deep-reading
+            experience that is often lost in the chaotic noise of contemporary mobile design.
           </p>
         </div>
 
@@ -223,7 +210,7 @@ export function ClassicMagazineArticlePage() {
         <div className="md:col-span-3 space-y-16">
           <div className="space-y-6">
             <h4 className="text-[10px] font-sans font-black uppercase tracking-[0.3em] text-[#E11D48]">
-              {t('Related Reading', '관련 기사')}
+              Related Reading
             </h4>
             <div className="space-y-8">
               {[
@@ -233,10 +220,10 @@ export function ClassicMagazineArticlePage() {
               ].map((article) => (
                 <div key={article.title} className="group cursor-pointer">
                   <p className="text-[9px] font-sans font-black uppercase tracking-widest text-neutral-400 mb-2">
-                    {t(article.category, '카테고리')}
+                    {article.category}
                   </p>
                   <h5 className="font-display text-lg font-bold group-hover:text-[#E11D48] transition-colors leading-tight">
-                    {t(article.title, article.title)}
+                    {article.title}
                   </h5>
                   <ChevronRight
                     size={14}
@@ -248,14 +235,9 @@ export function ClassicMagazineArticlePage() {
           </div>
 
           <div className="p-8 border border-black bg-[#F9F9F9] space-y-6">
-            <h4 className="font-display text-2xl font-black italic">
-              {t('Join the Collective', '콜렉티브 가입')}
-            </h4>
+            <h4 className="font-display text-2xl font-black italic">Join the Collective</h4>
             <p className="text-xs font-serif leading-relaxed text-neutral-500">
-              {t(
-                'Receive early access to print editions and exclusive interviews.',
-                '인쇄판 사전 접근 권한과 독점 인터뷰를 받아보세요.'
-              )}
+              Receive early access to print editions and exclusive interviews.
             </p>
             <input
               type="email"
@@ -263,7 +245,7 @@ export function ClassicMagazineArticlePage() {
               className="w-full bg-white border border-black/10 p-3 text-xs font-serif italic outline-none focus:border-black transition-all"
             />
             <button className="w-full bg-black text-white py-3 text-[10px] font-sans font-black uppercase tracking-[0.2em] hover:bg-neutral-800 transition-colors">
-              {t('Register Now', '지금 가입')}
+              Register Now
             </button>
           </div>
         </div>
@@ -277,32 +259,30 @@ export function ClassicMagazineArticlePage() {
               The Archive.
             </h2>
             <p className="font-serif italic text-neutral-400 max-w-sm">
-              {t(
-                'A prestigious visual dialogue on the intersection of typography, architecture, and technology.',
-                '타이포그래피, 건축, 그리고 기술의 교차점에 관한 명망 있는 시각적 대화'
-              )}
+              A prestigious visual dialogue on the intersection of typography, architecture, and
+              technology.
             </p>
           </div>
           <div className="space-y-4">
             <p className="text-[10px] font-sans font-black uppercase tracking-widest text-[#E11D48]">
-              {t('Sections', '섹션')}
+              Sections
             </p>
             <ul className="space-y-2 text-sm font-serif italic text-neutral-300">
-              <li>{t('Essays', '에세이')}</li>
-              <li>{t('Interviews', '인터뷰')}</li>
-              <li>{t('Visual Gallery', '시각 갤러리')}</li>
-              <li>{t('Print Edition', '인쇄판')}</li>
+              <li>Essays</li>
+              <li>Interviews</li>
+              <li>Visual Gallery</li>
+              <li>Print Edition</li>
             </ul>
           </div>
           <div className="space-y-4">
             <p className="text-[10px] font-sans font-black uppercase tracking-widest text-[#E11D48]">
-              {t('Information', '정보')}
+              Information
             </p>
             <ul className="space-y-2 text-sm font-serif italic text-neutral-300">
-              <li>{t('About Us', '팀 소개')}</li>
-              <li>{t('Submissions', '원고 투고')}</li>
-              <li>{t('Privacy Policy', '개인정보 정책')}</li>
-              <li>{t('Terms of Service', '서비스 약관')}</li>
+              <li>About Us</li>
+              <li>Submissions</li>
+              <li>Privacy Policy</li>
+              <li>Terms of Service</li>
             </ul>
           </div>
         </div>
@@ -348,7 +328,7 @@ export function ClassicMagazineArticlePage() {
                     className="group flex items-center justify-between cursor-pointer"
                   >
                     <span className="text-3xl font-display font-black hover:text-[#E11D48] transition-colors">
-                      {t(item, item)}
+                      {item}
                     </span>
                     <ChevronRight
                       size={20}
@@ -360,7 +340,7 @@ export function ClassicMagazineArticlePage() {
             </nav>
             <div className="pt-12 border-t border-black/10">
               <p className="text-[10px] font-sans font-black uppercase tracking-widest text-neutral-400 mb-4">
-                {t('Latest Edition', '최신호')}
+                Latest Edition
               </p>
               <div className="flex gap-6 items-center">
                 <div className="w-20 aspect-[3/4] bg-neutral-100 border border-black/5 shrink-0" />

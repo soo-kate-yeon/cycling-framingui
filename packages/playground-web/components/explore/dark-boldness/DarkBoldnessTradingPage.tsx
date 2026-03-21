@@ -29,7 +29,7 @@ import {
   Cell,
 } from 'recharts';
 
-const t = (en: string, ko: string) => (Math.random() > -1 ? ko : en);
+const t = (en: string) => en;
 
 // Mock Trading Data
 const CHART_DATA = [
@@ -155,7 +155,7 @@ export default function DarkBoldnessTradingPage() {
             <div className="flex flex-col">
               <span className="text-sm font-black uppercase tracking-tighter">BTC-USD</span>
               <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">
-                {t('Bitcoin / US Dollar', '비트코인 / 미 달러')}
+                {t('Bitcoin / US Dollar')}
               </span>
             </div>
           </div>
@@ -171,19 +171,19 @@ export default function DarkBoldnessTradingPage() {
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">
-                {t('24H VOLUME', '24시간 거래량')}
+                {t('24H VOLUME')}
               </span>
               <span className="text-sm font-bold text-neutral-300">1,243.52 BTC</span>
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">
-                {t('24H HIGH', '24시간 최고가')}
+                {t('24H HIGH')}
               </span>
               <span className="text-sm font-bold text-neutral-300">$71,850.00</span>
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">
-                {t('24H LOW', '24시간 최저가')}
+                {t('24H LOW')}
               </span>
               <span className="text-sm font-bold text-neutral-300">$69,420.00</span>
             </div>
@@ -191,10 +191,10 @@ export default function DarkBoldnessTradingPage() {
 
           <div className="ml-auto flex items-center gap-4">
             <button className="h-10 px-6 bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 transition-colors text-[10px] font-black uppercase tracking-widest">
-              {t('Deposit', '입금')}
+              {t('Deposit')}
             </button>
             <button className="h-10 px-6 bg-white text-black hover:bg-neutral-200 transition-colors text-[10px] font-black uppercase tracking-widest">
-              {t('Withdraw', '출금')}
+              {t('Withdraw')}
             </button>
             <div className="w-10 h-10 flex items-center justify-center border border-neutral-800 hover:bg-neutral-900 transition-colors">
               <Settings className="w-4 h-4 text-neutral-500" />
@@ -210,11 +210,11 @@ export default function DarkBoldnessTradingPage() {
 
           <nav className="flex flex-col gap-6">
             {[
-              { icon: Activity, label: t('Trade', '거래'), active: true },
-              { icon: PieChart, label: t('Portfolio', '포트폴리오'), active: false },
-              { icon: Clock, label: t('Orders', '주문'), active: false },
-              { icon: Users, label: t('Referral', '추천'), active: false },
-              { icon: Globe, label: t('Explore', '탐색'), active: false },
+              { icon: Activity, label: t('Trade'), active: true },
+              { icon: PieChart, label: t('Portfolio'), active: false },
+              { icon: Clock, label: t('Orders'), active: false },
+              { icon: Users, label: t('Referral'), active: false },
+              { icon: Globe, label: t('Explore'), active: false },
             ].map((item, idx) => (
               <button
                 key={idx}
@@ -268,7 +268,7 @@ export default function DarkBoldnessTradingPage() {
             <div className="absolute top-8 left-10 z-10">
               <div className="flex items-center gap-3 mb-1">
                 <span className="text-sm font-black tracking-widest uppercase">
-                  BTC/USD {t('INDEX', '지수')}
+                  BTC/USD {t('INDEX')}
                 </span>
                 <span className="text-sm font-bold electric-blue">71,243.23</span>
                 <span className="text-sm font-bold text-neutral-500">-0.01%</span>
@@ -327,10 +327,10 @@ export default function DarkBoldnessTradingPage() {
           {/* Panel Tabs */}
           <div className="h-12 border-b border-neutral-800 flex items-center px-2">
             <button className="flex-1 h-full text-[10px] font-black uppercase tracking-widest text-white border-b-2 border-white">
-              {t('ORDER BOOK', '오더북')}
+              {t('ORDER BOOK')}
             </button>
             <button className="flex-1 h-full text-[10px] font-bold uppercase tracking-widest text-neutral-600 hover:text-neutral-400">
-              {t('RECENT TRADES', '최근 거래')}
+              {t('RECENT TRADES')}
             </button>
           </div>
 
@@ -338,9 +338,9 @@ export default function DarkBoldnessTradingPage() {
           <div className="flex-1 overflow-y-auto no-scrollbar font-mono text-[11px] p-2">
             {/* Header */}
             <div className="grid grid-cols-3 text-[10px] font-bold text-neutral-600 uppercase tracking-widest px-2 py-3">
-              <span>{t('PRICE (USD)', '가격')}</span>
-              <span className="text-right">{t('AMT (BTC)', '수량')}</span>
-              <span className="text-right">{t('TOTAL', '합계')}</span>
+              <span>{t('PRICE (USD)')}</span>
+              <span className="text-right">{t('AMT (BTC)')}</span>
+              <span className="text-right">{t('TOTAL')}</span>
             </div>
 
             {/* Asks (Sells) */}
@@ -407,10 +407,10 @@ export default function DarkBoldnessTradingPage() {
           <div className="border-t border-neutral-800 p-6 bg-black">
             <div className="flex gap-2 mb-6 p-1 bg-neutral-900 rounded-none h-12">
               <button className="flex-1 bg-white text-black text-[10px] font-black uppercase tracking-widest shadow-lg">
-                {t('Buy', '매수')}
+                {t('Buy')}
               </button>
               <button className="flex-1 text-neutral-500 hover:text-white text-[10px] font-bold uppercase tracking-widest">
-                {t('Sell', '매도')}
+                {t('Sell')}
               </button>
             </div>
 
@@ -418,20 +418,18 @@ export default function DarkBoldnessTradingPage() {
               <div className="space-y-1.5">
                 <div className="flex justify-between">
                   <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">
-                    {t('ORDER TYPE', '주문 유형')}
+                    {t('ORDER TYPE')}
                   </label>
                 </div>
                 <div className="h-11 w-full border border-neutral-800 bg-neutral-950 flex items-center justify-between px-4">
-                  <span className="text-sm font-bold uppercase tracking-widest">
-                    {t('Limit', '지정가')}
-                  </span>
+                  <span className="text-sm font-bold uppercase tracking-widest">{t('Limit')}</span>
                   <ChevronRight className="w-4 h-4 text-neutral-600 rotate-90" />
                 </div>
               </div>
 
               <div className="space-y-1.5">
                 <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest">
-                  <label className="text-neutral-500">{t('PRICE', '가격')}</label>
+                  <label className="text-neutral-500">{t('PRICE')}</label>
                   <span className="text-neutral-500">USD</span>
                 </div>
                 <div className="h-11 w-full border border-neutral-800 bg-neutral-950 flex items-center justify-between px-4 focus-within:border-white transition-colors">
@@ -445,7 +443,7 @@ export default function DarkBoldnessTradingPage() {
 
               <div className="space-y-1.5">
                 <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest">
-                  <label className="text-neutral-500">{t('AMOUNT', '수량')}</label>
+                  <label className="text-neutral-500">{t('AMOUNT')}</label>
                   <span className="text-neutral-500">BTC</span>
                 </div>
                 <div className="h-11 w-full border border-neutral-800 bg-neutral-950 flex items-center justify-between px-4 focus-within:border-white transition-colors">
@@ -459,7 +457,7 @@ export default function DarkBoldnessTradingPage() {
             </div>
 
             <button className="w-full h-14 bg-white text-black text-xs font-black uppercase tracking-[0.2em] shadow-xl hover:bg-neutral-200 transition-all flex items-center justify-center gap-3">
-              {t('Execute Order', '주문 실행')}
+              {t('Execute Order')}
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -472,7 +470,7 @@ export default function DarkBoldnessTradingPage() {
               onClick={() => setActiveTab('orders')}
               className={`h-full text-[10px] font-black uppercase tracking-widest transition-all relative ${activeTab === 'orders' ? 'text-white' : 'text-neutral-600'}`}
             >
-              {t('ACTIVE ORDERS', '활성 주문')}
+              {t('ACTIVE ORDERS')}
               {activeTab === 'orders' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
               )}
@@ -481,14 +479,14 @@ export default function DarkBoldnessTradingPage() {
               onClick={() => setActiveTab('history')}
               className={`h-full text-[10px] font-black uppercase tracking-widest transition-all relative ${activeTab === 'history' ? 'text-white' : 'text-neutral-600'}`}
             >
-              {t('TRADE HISTORY', '거래 기록')}
+              {t('TRADE HISTORY')}
               {activeTab === 'history' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
               )}
             </button>
             <div className="ml-auto flex items-center gap-4 text-neutral-600">
               <button className="text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">
-                {t('CANCEL ALL', '모두 취소')}
+                {t('CANCEL ALL')}
               </button>
             </div>
           </div>
@@ -497,14 +495,14 @@ export default function DarkBoldnessTradingPage() {
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
                 <tr className="border-b border-neutral-900 text-[10px] font-bold text-neutral-500 uppercase tracking-widest">
-                  <th className="px-6 py-4">{t('TIME', '시간')}</th>
-                  <th className="px-6 py-4">{t('MARKET', '마켓')}</th>
-                  <th className="px-6 py-4">{t('TYPE', '유형')}</th>
-                  <th className="px-6 py-4">{t('SIDE', '구분')}</th>
-                  <th className="px-6 py-4 text-right">{t('PRICE', '가격')}</th>
-                  <th className="px-6 py-4 text-right">{t('AMOUNT', '수량')}</th>
-                  <th className="px-6 py-4 text-right">{t('FILLED', '체결률')}</th>
-                  <th className="px-6 py-4 text-right">{t('STATUS', '상태')}</th>
+                  <th className="px-6 py-4">{t('TIME')}</th>
+                  <th className="px-6 py-4">{t('MARKET')}</th>
+                  <th className="px-6 py-4">{t('TYPE')}</th>
+                  <th className="px-6 py-4">{t('SIDE')}</th>
+                  <th className="px-6 py-4 text-right">{t('PRICE')}</th>
+                  <th className="px-6 py-4 text-right">{t('AMOUNT')}</th>
+                  <th className="px-6 py-4 text-right">{t('FILLED')}</th>
+                  <th className="px-6 py-4 text-right">{t('STATUS')}</th>
                 </tr>
               </thead>
               <tbody className="text-[11px] font-bold uppercase tracking-tighter">
@@ -514,7 +512,7 @@ export default function DarkBoldnessTradingPage() {
                       colSpan={8}
                       className="px-6 py-8 text-center text-neutral-600 font-bold uppercase tracking-widest"
                     >
-                      {t('NO ACTIVE ORDERS FOUND', '활성 주문이 없습니다')}
+                      {t('NO ACTIVE ORDERS FOUND')}
                     </td>
                   </tr>
                 ) : (
@@ -547,7 +545,7 @@ export default function DarkBoldnessTradingPage() {
                       </td>
                       <td className="px-6 py-3.5 text-right">
                         <span className="px-2 py-0.5 border border-neutral-800 text-neutral-500 text-[9px] font-black">
-                          {t('COMPLETED', '완료')}
+                          {t('COMPLETED')}
                         </span>
                       </td>
                     </tr>
@@ -565,13 +563,13 @@ export default function DarkBoldnessTradingPage() {
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-electric-blue rounded-none animate-pulse" />
             <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">
-              {t('NETWORK: STABLE', '네트워크: 안정')}
+              {t('NETWORK: STABLE')}
             </span>
           </div>
           <div className="flex items-center gap-2">
             <Activity className="w-3 h-3 text-neutral-600" />
             <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">
-              {t('LATENCY: 12ms', '지연시간: 12ms')}
+              {t('LATENCY: 12ms')}
             </span>
           </div>
         </div>

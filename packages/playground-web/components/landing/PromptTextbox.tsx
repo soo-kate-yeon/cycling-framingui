@@ -8,45 +8,51 @@ import { trackTemplatePromptCopied } from '../../lib/analytics';
 export interface ScreenPreset {
   keyword: string;
   theme: string;
+  route: string;
   prompt: string;
   copyPrompt: string;
 }
 
 export const SCREEN_PRESETS: ScreenPreset[] = [
   {
-    keyword: 'dashboard',
-    theme: 'editorial-tech',
-    prompt: 'Create a clean analytics dashboard with revenue charts, KPI cards, and activity feed',
-    copyPrompt:
-      'Using framingui MCP server with the editorial-tech theme, create a responsive analytics dashboard page. Include: revenue overview chart, 4 KPI stat cards (total revenue, subscriptions, sales, active users), recent activity list, and a transactions table. Use the screen generation workflow with adaptive layout for desktop sidebar + mobile bottom nav.',
-  },
-  {
-    keyword: 'admin',
+    keyword: 'trading',
     theme: 'dark-boldness',
-    prompt: 'Build a dark-themed admin panel with trading interface and real-time data tables',
+    route: '/explore/dark-boldness/trading',
+    prompt: 'Build a dark-themed trading interface with real-time charts and order book',
     copyPrompt:
-      'Using framingui MCP server with the dark-boldness theme, create a responsive dark admin panel. Include: trading chart with candlestick view, real-time data table with sortable columns, sidebar navigation, and KPI cards. Use the screen generation workflow with adaptive layout for desktop sidebar + mobile hamburger drawer.',
+      'Using framingui MCP server with the dark-boldness theme, create a responsive trading interface. Include: price chart with candlestick view, order book with bid/ask depth, trade entry form, active orders table, and a vertical icon nav. Use the screen generation workflow with adaptive layout for desktop grid + mobile hamburger drawer.',
   },
   {
-    keyword: 'kanban',
+    keyword: 'issue tracker',
     theme: 'minimal-workspace',
-    prompt: 'Create a kanban board workspace with task cards, status columns, and calendar view',
+    route: '/explore/minimal-workspace/kanban',
+    prompt: 'Create a kanban board workspace with task cards, status columns, and filters',
     copyPrompt:
       'Using framingui MCP server with the minimal-workspace theme, create a responsive kanban workspace. Include: multi-column board with To Do / In Progress / Done, draggable task cards with priority labels, top navigation with search, and a calendar sidebar. Use the screen generation workflow with adaptive layout for desktop and tablet breakpoints.',
   },
   {
-    keyword: 'magazine',
-    theme: 'classic-magazine',
-    prompt: 'Design a magazine-style page with editorial typography and featured article grid',
+    keyword: 'solutions',
+    theme: 'editorial-tech',
+    route: '/explore/editorial-tech/solutions',
+    prompt: 'Design a SaaS solutions page with clean typography and feature grid',
     copyPrompt:
-      'Using framingui MCP server with the classic-magazine theme, create a responsive magazine landing page. Include: featured hero article with large image, article grid (2-3 columns), category navigation bar, author bylines, and a newsletter signup section. Use the screen generation workflow with adaptive layout for desktop grid + mobile single column.',
+      'Using framingui MCP server with the editorial-tech theme, create a responsive SaaS solutions landing page. Include: hero section with headline, trusted-by logos, feature grid with icons, infrastructure section, CTA block, and a minimal footer. Use the screen generation workflow with adaptive layout for desktop grid + mobile single column.',
   },
   {
-    keyword: 'mobile app',
-    theme: 'pebble',
-    prompt: 'Design a mobile app interface with soft rounded cards and bottom tab navigation',
+    keyword: 'magazine',
+    theme: 'classic-magazine',
+    route: '/explore/classic-magazine/article',
+    prompt: 'Design a magazine article page with editorial typography and rich layout',
     copyPrompt:
-      'Using framingui MCP server with the pebble theme, create a responsive mobile app interface. Include: bottom tab navigation (Home, Search, Notifications, Profile), card-based feed with soft rounded corners, floating action button, and pull-to-refresh header. Use the screen generation workflow with mobile-first adaptive layout.',
+      'Using framingui MCP server with the classic-magazine theme, create a responsive magazine article page. Include: masthead navigation, hero headline with author byline, full-width imagery, pull quotes, related articles grid, and a newsletter signup section. Use the screen generation workflow with adaptive layout for desktop grid + mobile single column.',
+  },
+  {
+    keyword: 'social feed',
+    theme: 'pebble',
+    route: '/explore/pebble/feed',
+    prompt: 'Design a social feed app with soft rounded cards and bottom tab navigation',
+    copyPrompt:
+      'Using framingui MCP server with the pebble theme, create a responsive social feed interface. Include: bottom tab navigation (Home, Search, Notifications, Profile), card-based feed with soft rounded corners, trending hashtags sidebar, and suggested users. Use the screen generation workflow with mobile-first adaptive layout.',
   },
 ];
 
