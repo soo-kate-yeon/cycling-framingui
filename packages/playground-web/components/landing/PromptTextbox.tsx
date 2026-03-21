@@ -18,7 +18,7 @@ export const SCREEN_PRESETS: ScreenPreset[] = [
     keyword: 'trading',
     theme: 'dark-boldness',
     route: '/explore/dark-boldness/trading',
-    prompt: 'Build a dark-themed trading interface with real-time charts and order book',
+    prompt: 'Create a crypto trading terminal',
     copyPrompt:
       'Using framingui MCP server with the dark-boldness theme, create a responsive trading interface. Include: price chart with candlestick view, order book with bid/ask depth, trade entry form, active orders table, and a vertical icon nav. Use the screen generation workflow with adaptive layout for desktop grid + mobile hamburger drawer.',
   },
@@ -26,7 +26,7 @@ export const SCREEN_PRESETS: ScreenPreset[] = [
     keyword: 'issue tracker',
     theme: 'minimal-workspace',
     route: '/explore/minimal-workspace/kanban',
-    prompt: 'Create a kanban board workspace with task cards, status columns, and filters',
+    prompt: 'Build a kanban board for issue tracking',
     copyPrompt:
       'Using framingui MCP server with the minimal-workspace theme, create a responsive kanban workspace. Include: multi-column board with To Do / In Progress / Done, draggable task cards with priority labels, top navigation with search, and a calendar sidebar. Use the screen generation workflow with adaptive layout for desktop and tablet breakpoints.',
   },
@@ -34,7 +34,7 @@ export const SCREEN_PRESETS: ScreenPreset[] = [
     keyword: 'solutions',
     theme: 'editorial-tech',
     route: '/explore/editorial-tech/solutions',
-    prompt: 'Design a SaaS solutions page with clean typography and feature grid',
+    prompt: 'Design a SaaS solutions landing page',
     copyPrompt:
       'Using framingui MCP server with the editorial-tech theme, create a responsive SaaS solutions landing page. Include: hero section with headline, trusted-by logos, feature grid with icons, infrastructure section, CTA block, and a minimal footer. Use the screen generation workflow with adaptive layout for desktop grid + mobile single column.',
   },
@@ -42,7 +42,7 @@ export const SCREEN_PRESETS: ScreenPreset[] = [
     keyword: 'magazine',
     theme: 'classic-magazine',
     route: '/explore/classic-magazine/article',
-    prompt: 'Design a magazine article page with editorial typography and rich layout',
+    prompt: 'Create an editorial magazine article',
     copyPrompt:
       'Using framingui MCP server with the classic-magazine theme, create a responsive magazine article page. Include: masthead navigation, hero headline with author byline, full-width imagery, pull quotes, related articles grid, and a newsletter signup section. Use the screen generation workflow with adaptive layout for desktop grid + mobile single column.',
   },
@@ -50,7 +50,7 @@ export const SCREEN_PRESETS: ScreenPreset[] = [
     keyword: 'social feed',
     theme: 'pebble',
     route: '/explore/pebble/feed',
-    prompt: 'Design a social feed app with soft rounded cards and bottom tab navigation',
+    prompt: 'Design a social feed with rounded cards',
     copyPrompt:
       'Using framingui MCP server with the pebble theme, create a responsive social feed interface. Include: bottom tab navigation (Home, Search, Notifications, Profile), card-based feed with soft rounded corners, trending hashtags sidebar, and suggested users. Use the screen generation workflow with mobile-first adaptive layout.',
   },
@@ -116,7 +116,7 @@ export function PromptTextbox({ activeIndex, onSelect }: PromptTextboxProps) {
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const lines = displayed ? displayed.match(/.{1,48}/g) || [displayed] : [''];
+  const lines = displayed ? displayed.match(/.{1,90}/g) || [displayed] : [''];
 
   return (
     <motion.div

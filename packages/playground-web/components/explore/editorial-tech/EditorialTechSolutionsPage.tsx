@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTektonTheme } from '../../../hooks/useTektonTheme';
-import { PreviewBanner } from '../PreviewBanner';
 
 // Editorial Tech fallback tokens - Pure Grayscale, Airy Canvas
 const EDITORIAL_TECH_FALLBACK: Record<string, string> = {
@@ -69,11 +68,9 @@ export function EditorialTechSolutionsPage() {
         }
       `}</style>
 
-      <PreviewBanner templateId="editorial-tech" templateName="Editorial Tech" />
-
       {/* Lucid Navigation - Mandatory BG for Fixed Element */}
       <nav
-        className={`fixed top-12 left-0 right-0 z-50 transition-[padding] duration-700 bg-white shadow-sm py-4 border-b border-neutral-100 ${scrolled ? 'py-4' : 'py-6'}`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-[padding] duration-700 bg-white shadow-sm py-4 border-b border-neutral-100 ${scrolled ? 'py-4' : 'py-6'}`}
       >
         <div className="max-w-[1240px] mx-auto px-8 flex items-center justify-between">
           <div className="flex items-center gap-12">

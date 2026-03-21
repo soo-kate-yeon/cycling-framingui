@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Menu, X, ArrowLeft, Share2, Bookmark, ChevronRight, Quote } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTektonTheme } from '../../../hooks/useTektonTheme';
-import { PreviewBanner } from '../PreviewBanner';
 
 // Classic Magazine fallback tokens
 const CLASSIC_MAGAZINE_FALLBACK: Record<string, string> = {
@@ -40,7 +39,7 @@ export function ClassicMagazineArticlePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black selection:bg-[#E11D48] selection:text-white pt-12">
+    <div className="min-h-screen bg-white text-black selection:bg-[#E11D48] selection:text-white">
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Inter:wght@400;700;900&display=swap');
 
@@ -66,11 +65,9 @@ export function ClassicMagazineArticlePage() {
         }
       `}</style>
 
-      <PreviewBanner templateId="classic-magazine" templateName="Classic Magazine" />
-
       {/* Navigation - Authoritative & Minimal */}
       <nav
-        className={`fixed top-12 left-0 right-0 z-40 transition-[background-color,padding] duration-500 border-b-2 border-black ${scrolled ? 'bg-white/95 backdrop-blur-md py-3' : 'bg-white py-6'}`}
+        className={`fixed top-0 left-0 right-0 z-40 transition-[background-color,padding] duration-500 border-b-2 border-black ${scrolled ? 'bg-white/95 backdrop-blur-md py-3' : 'bg-white py-6'}`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <button
@@ -110,7 +107,7 @@ export function ClassicMagazineArticlePage() {
             </span>
           </div>
 
-          <h2 className="text-6xl md:text-8xl lg:text-9xl font-display font-black leading-[0.85] tracking-tighter italic">
+          <h2 className="text-3xl md:text-4xl font-display font-black leading-[0.85] tracking-tighter italic">
             The Geometry <br className="hidden md:block" /> of Silence.
           </h2>
 
@@ -166,15 +163,28 @@ export function ClassicMagazineArticlePage() {
             of printed ink.
           </p>
 
-          <div className="relative aspect-[4/5] bg-neutral-100 overflow-hidden border border-black/5">
+          <div className="relative aspect-[3/2] bg-neutral-100 overflow-hidden border border-black/5">
             <img
-              src="https://images.unsplash.com/photo-1542646272-bcfe25916325?auto=format&fit=crop&q=80&w=2000"
-              alt="Minimalist Architecture"
+              src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1200&h=800&fit=crop&auto=format"
+              alt="Modern architecture with clean geometric lines and glass facade"
               className="object-cover w-full h-full grayscale opacity-90 sepia-[0.1]"
             />
             <div className="absolute bottom-6 left-6 right-6">
               <p className="text-[10px] font-sans font-black uppercase tracking-[0.2em] text-white/70">
                 FIG. 04 — MONOLITHIC STRUCTURE, ZURICH
+              </p>
+            </div>
+          </div>
+
+          <div className="relative aspect-[16/10] bg-neutral-100 overflow-hidden border border-black/5">
+            <img
+              src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800&h=500&fit=crop&auto=format"
+              alt="Minimal concrete structure with dramatic light and shadow"
+              className="object-cover w-full h-full grayscale opacity-90 sepia-[0.1]"
+            />
+            <div className="absolute bottom-6 left-6 right-6">
+              <p className="text-[10px] font-sans font-black uppercase tracking-[0.2em] text-white/70">
+                FIG. 05 — CONCRETE VOLUMES, BERLIN
               </p>
             </div>
           </div>
@@ -214,11 +224,36 @@ export function ClassicMagazineArticlePage() {
             </h4>
             <div className="space-y-8">
               {[
-                { title: 'The Fall of the Pixel', category: 'Technology' },
-                { title: 'Redefining the Editorial Grid', category: 'Theory' },
-                { title: 'Shadows of Modernism', category: 'Arts' },
+                {
+                  title: 'The Fall of the Pixel',
+                  category: 'Technology',
+                  image:
+                    'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=400&h=300&fit=crop&auto=format',
+                  alt: 'Elegant typography specimen on textured paper',
+                },
+                {
+                  title: 'Redefining the Editorial Grid',
+                  category: 'Theory',
+                  image:
+                    'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&h=300&fit=crop&auto=format',
+                  alt: 'Architectural detail showing repeating geometric patterns',
+                },
+                {
+                  title: 'Shadows of Modernism',
+                  category: 'Arts',
+                  image:
+                    'https://images.unsplash.com/photo-1494526585095-c41746248156?w=400&h=300&fit=crop&auto=format',
+                  alt: 'Minimalist interior design with natural light',
+                },
               ].map((article) => (
                 <div key={article.title} className="group cursor-pointer">
+                  <div className="aspect-[4/3] bg-neutral-100 overflow-hidden border border-black/5 mb-3">
+                    <img
+                      src={article.image}
+                      alt={article.alt}
+                      className="object-cover w-full h-full grayscale opacity-90 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500"
+                    />
+                  </div>
                   <p className="text-[9px] font-sans font-black uppercase tracking-widest text-neutral-400 mb-2">
                     {article.category}
                   </p>
