@@ -252,7 +252,7 @@ export function ThemeRecipeCard({ template, copyPromptLabel }: ThemeRecipeCardPr
   };
 
   return (
-    <div className="w-[85vw] sm:w-[80vw] md:w-[75vw] lg:w-[820px] flex-shrink-0 snap-center rounded-2xl border border-neutral-200 shadow-sm transition-shadow hover:shadow-md overflow-hidden">
+    <div className="w-full md:w-[75vw] lg:w-[820px] flex-shrink-0 snap-center rounded-2xl border border-neutral-200 shadow-sm transition-shadow hover:shadow-md overflow-hidden">
       {/* Themed zone — all CSS vars from themeToCSS() injected directly */}
       <div
         className="p-5 sm:p-6"
@@ -263,7 +263,7 @@ export function ThemeRecipeCard({ template, copyPromptLabel }: ThemeRecipeCardPr
         }}
       >
         {/* Row 1: Color Palette + Typography */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-2 gap-4 md:mb-4">
           <div
             className="p-4 rounded-xl"
             style={{ background: vars['--bg-card'] ?? vars['--bg-surface'] }}
@@ -278,8 +278,8 @@ export function ThemeRecipeCard({ template, copyPromptLabel }: ThemeRecipeCardPr
           </div>
         </div>
 
-        {/* Row 2: Card + Switch + Buttons — exact ComponentGallery components */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Row 2: Card + Switch + Buttons — hidden on mobile, visible on md+ */}
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-3 gap-4">
           <CardFormCell prefix={template.id} />
           <SwitchCell prefix={template.id} />
           <ButtonsCell />

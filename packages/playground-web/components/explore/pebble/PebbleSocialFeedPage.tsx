@@ -103,7 +103,7 @@ export default function PebbleSocialFeedPage() {
   const [activeNav, setActiveNav] = useState('twitter');
 
   return (
-    <div className="min-h-screen bg-[#F5F8FA] text-[#1D2129] font-sans selection:bg-[#5599CC]/20">
+    <div className="min-h-screen bg-[#F5F8FA] text-[#1D2129] font-sans selection:bg-[#5599CC]/20 overflow-x-hidden">
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
@@ -124,6 +124,10 @@ export default function PebbleSocialFeedPage() {
 
         .no-scrollbar::-webkit-scrollbar {
           display: none;
+        }
+
+        .safe-area-bottom {
+          padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         .pebble-grid {
@@ -163,7 +167,7 @@ export default function PebbleSocialFeedPage() {
         }
       `}</style>
 
-      <div className="pebble-grid overflow-hidden">
+      <div className="pebble-grid overflow-hidden max-w-full">
         {/* Leftmost Global Icon Nav */}
         <aside className="icon-sidebar bg-white border-r border-[#EAF0F5] flex flex-col items-center py-8 gap-10 z-30">
           <div className="w-12 h-12 bg-[#22C55E] rounded-[16px] flex items-center justify-center shadow-lg shadow-green-500/20">
@@ -235,62 +239,62 @@ export default function PebbleSocialFeedPage() {
 
         {/* Main Feed Section */}
         <main className="flex-1 overflow-y-auto bg-white p-4 md:p-8 no-scrollbar">
-          <header className="flex items-center justify-between mb-6 md:mb-10">
-            <div className="flex items-center gap-4">
-              <h2 className="text-2xl font-bold font-pebble tracking-tight">
+          <header className="flex items-center justify-between mb-6 md:mb-10 gap-2">
+            <div className="flex items-center gap-3 min-w-0">
+              <h2 className="text-xl md:text-2xl font-bold font-pebble tracking-tight truncate">
                 {t('Twitter Feeds')}
               </h2>
-              <button className="w-8 h-8 rounded-full bg-[#F1F5F9] flex items-center justify-center hover:bg-[#E2E8F0] transition-colors">
+              <button className="w-8 h-8 rounded-full bg-[#F1F5F9] flex items-center justify-center hover:bg-[#E2E8F0] transition-colors shrink-0">
                 <Plus className="w-4 h-4 text-[#64748B]" />
               </button>
             </div>
-            <div className="flex items-center gap-3">
-              <button className="flex items-center gap-2 h-10 px-5 bg-[#F1F5F9] text-[#1D2129] text-sm font-bold rounded-full hover:bg-[#E2E8F0] transition-colors">
+            <div className="flex items-center gap-2 md:gap-3 shrink-0">
+              <button className="flex items-center gap-2 h-9 md:h-10 px-3 md:px-5 bg-[#F1F5F9] text-[#1D2129] text-sm font-bold rounded-full hover:bg-[#E2E8F0] transition-colors">
                 <Send className="w-4 h-4" />
-                {t('Filters')}
+                <span className="hidden sm:inline">{t('Filters')}</span>
               </button>
-              <button className="w-10 h-10 bg-[#5599CC] text-white rounded-[14px] flex items-center justify-center shadow-lg shadow-[#5599CC]/20 hover:scale-105 transition-all">
+              <button className="w-9 h-9 md:w-10 md:h-10 bg-[#5599CC] text-white rounded-[14px] flex items-center justify-center shadow-lg shadow-[#5599CC]/20 hover:scale-105 transition-all shrink-0">
                 <Plus className="w-5 h-5" />
               </button>
             </div>
           </header>
 
-          <div className="max-w-2xl mx-auto flex flex-col gap-8">
+          <div className="max-w-2xl mx-auto flex flex-col gap-4 md:gap-8">
             {FEED_POSTS.map((post) => (
               <article
                 key={post.id}
-                className="bg-white border border-[#EAF0F5] rounded-[24px] md:rounded-[32px] p-5 md:p-8 transition-all hover:pebble-shadow group"
+                className="bg-white border border-[#EAF0F5] rounded-2xl md:rounded-[32px] p-4 md:p-8 transition-all hover:pebble-shadow group overflow-hidden"
               >
-                <div className="flex gap-3 md:gap-5">
+                <div className="flex gap-3 md:gap-5 min-w-0">
                   <div
                     className={`w-10 h-10 md:w-14 md:h-14 rounded-[14px] md:rounded-[20px] ${post.author.color} flex items-center justify-center text-white text-base md:text-xl font-bold shadow-inner shrink-0`}
                   >
                     {post.author.avatar}
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-start md:items-center justify-between mb-1 gap-2">
-                      <div className="flex items-center gap-2 flex-wrap min-w-0">
-                        <span className="font-bold text-[#1D2129] text-sm md:text-base">
+                      <div className="flex items-center gap-1.5 md:gap-2 min-w-0 overflow-hidden">
+                        <span className="font-semibold md:font-bold text-[#1D2129] text-sm md:text-base shrink-0">
                           {post.author.name}
                         </span>
-                        <span className="text-xs md:text-sm font-semibold text-[#64748B] truncate">
+                        <span className="text-xs text-[#64748B] truncate">
                           {post.author.handle}
                         </span>
                       </div>
                       <span className="text-xs font-bold text-[#94A3B8] shrink-0">{post.time}</span>
                     </div>
-                    <div className="text-[15px] font-semibold text-[#334155] leading-relaxed mb-6">
+                    <div className="text-sm md:text-[15px] font-semibold text-[#334155] leading-relaxed mb-4 md:mb-6 break-words overflow-hidden">
                       {post.content}
                     </div>
 
                     {post.media && (
                       <div
-                        className={`grid gap-3 mb-6 rounded-[24px] overflow-hidden ${post.media.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}
+                        className={`grid gap-2 md:gap-3 mb-4 md:mb-6 rounded-xl md:rounded-[24px] overflow-hidden ${post.media.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}
                       >
                         {post.media.map((item, idx) => (
                           <div
                             key={idx}
-                            className={`relative group/media overflow-hidden bg-[#F1F5F9] ${post.media.length === 3 && idx === 0 ? 'row-span-2' : ''}`}
+                            className={`relative group/media overflow-hidden bg-[#F1F5F9] ${post.media.length === 3 && idx === 0 ? 'row-span-2' : ''} ${post.media.length === 1 ? 'aspect-video' : 'aspect-square'}`}
                           >
                             <img
                               src={item.url}
@@ -299,8 +303,8 @@ export default function PebbleSocialFeedPage() {
                             />
                             {item.type === 'video' && (
                               <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-14 h-14 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-xl">
-                                  <Play className="w-6 h-6 text-[#1D2129] fill-current ml-1" />
+                                <div className="w-12 h-12 md:w-14 md:h-14 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-xl">
+                                  <Play className="w-5 h-5 md:w-6 md:h-6 text-[#1D2129] fill-current ml-0.5" />
                                 </div>
                               </div>
                             )}
@@ -310,43 +314,43 @@ export default function PebbleSocialFeedPage() {
                     )}
 
                     {post.quoted && (
-                      <div className="border border-[#EAF0F5] rounded-[24px] p-6 mb-6 bg-[#F8FAFC]">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="w-6 h-6 rounded-full bg-[#5599CC] text-white text-[10px] flex items-center justify-center font-bold">
+                      <div className="border border-[#EAF0F5] rounded-2xl md:rounded-[24px] p-4 md:p-6 mb-4 md:mb-6 bg-[#F8FAFC] overflow-hidden">
+                        <div className="flex items-center gap-2 mb-2 min-w-0">
+                          <div className="w-6 h-6 rounded-full bg-[#5599CC] text-white text-[10px] flex items-center justify-center font-bold shrink-0">
                             M
                           </div>
-                          <span className="text-xs font-bold">{post.quoted.author}</span>
-                          <span className="text-xs font-semibold text-[#64748B]">
+                          <span className="text-xs font-bold shrink-0">{post.quoted.author}</span>
+                          <span className="text-xs text-[#64748B] truncate">
                             {post.quoted.handle}
                           </span>
                         </div>
-                        <p className="text-sm font-semibold text-[#475569] leading-relaxed">
+                        <p className="text-sm font-semibold text-[#475569] leading-relaxed break-words">
                           {post.quoted.content}
                         </p>
                       </div>
                     )}
 
-                    <footer className="flex items-center gap-4 md:gap-10">
-                      <button className="flex items-center gap-2 text-[#64748B] hover:text-[#5599CC] transition-colors group/btn">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center group-hover/btn:bg-[#5599CC]/10 transition-colors">
-                          <MessageCircle className="w-5 h-5" />
+                    <footer className="flex items-center gap-1 md:gap-10">
+                      <button className="flex items-center gap-1 md:gap-2 text-[#64748B] hover:text-[#5599CC] transition-colors group/btn">
+                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center group-hover/btn:bg-[#5599CC]/10 transition-colors">
+                          <MessageCircle className="w-[18px] h-[18px] md:w-5 md:h-5" />
                         </div>
                         <span className="text-xs font-bold">{post.stats.replies}</span>
                       </button>
-                      <button className="flex items-center gap-2 text-[#64748B] hover:text-[#22C55E] transition-colors group/btn">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center group-hover/btn:bg-[#22C55E]/10 transition-colors">
-                          <Repeat2 className="w-5 h-5" />
+                      <button className="flex items-center gap-1 md:gap-2 text-[#64748B] hover:text-[#22C55E] transition-colors group/btn">
+                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center group-hover/btn:bg-[#22C55E]/10 transition-colors">
+                          <Repeat2 className="w-[18px] h-[18px] md:w-5 md:h-5" />
                         </div>
                         <span className="text-xs font-bold">{post.stats.shares}</span>
                       </button>
-                      <button className="flex items-center gap-2 text-[#64748B] hover:text-rose-500 transition-colors group/btn">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center group-hover/btn:bg-rose-500/10 transition-colors">
-                          <Heart className="w-5 h-5" />
+                      <button className="flex items-center gap-1 md:gap-2 text-[#64748B] hover:text-rose-500 transition-colors group/btn">
+                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center group-hover/btn:bg-rose-500/10 transition-colors">
+                          <Heart className="w-[18px] h-[18px] md:w-5 md:h-5" />
                         </div>
                         <span className="text-xs font-bold">{post.stats.likes}</span>
                       </button>
-                      <button className="ml-auto w-9 h-9 rounded-full flex items-center justify-center text-[#64748B] hover:bg-[#F1F5F9] transition-colors">
-                        <MoreHorizontal className="w-5 h-5" />
+                      <button className="ml-auto w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center text-[#64748B] hover:bg-[#F1F5F9] transition-colors shrink-0">
+                        <MoreHorizontal className="w-[18px] h-[18px] md:w-5 md:h-5" />
                       </button>
                     </footer>
                   </div>
@@ -357,7 +361,7 @@ export default function PebbleSocialFeedPage() {
         </main>
 
         {/* Right Utility/Context Panel */}
-        <aside className="right-panel bg-[#F8FAFC] border-l border-[#EAF0F5] p-8 flex flex-col gap-10 overflow-y-auto no-scrollbar">
+        <aside className="right-panel bg-[#F8FAFC] border-l border-[#EAF0F5] p-6 md:p-8 flex flex-col gap-8 md:gap-10 overflow-y-auto no-scrollbar overflow-x-hidden">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#F1F5F9] flex items-center justify-center">
@@ -384,10 +388,10 @@ export default function PebbleSocialFeedPage() {
                     key={item.tag}
                     className="flex items-center justify-between group cursor-pointer"
                   >
-                    <span className="text-sm font-bold text-[#475569] group-hover:text-[#5599CC] transition-colors">
+                    <span className="text-sm font-bold text-[#475569] group-hover:text-[#5599CC] transition-colors truncate min-w-0">
                       {item.tag}
                     </span>
-                    <span className="text-xs font-semibold text-[#94A3B8] bg-white px-2 py-1 rounded-full pebble-shadow">
+                    <span className="text-xs font-semibold text-[#94A3B8] bg-white px-2 py-1 rounded-full pebble-shadow shrink-0">
                       {item.count}
                     </span>
                   </div>
@@ -440,7 +444,7 @@ export default function PebbleSocialFeedPage() {
         </div>
 
         {/* Mobile Bottom Tab Navigation */}
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#EAF0F5] flex items-center justify-around h-[72px] z-50 pebble-shadow">
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg rounded-t-2xl flex items-center justify-around h-[72px] z-50 pebble-shadow-lg safe-area-bottom">
           {[
             { icon: Home, label: t('Home'), active: true },
             { icon: Hash, label: t('Explore'), active: false },
@@ -449,10 +453,12 @@ export default function PebbleSocialFeedPage() {
           ].map((item, idx) => (
             <button
               key={idx}
-              className={`flex flex-col items-center gap-1 py-2 px-3 ${item.active ? 'text-[#5599CC]' : 'text-[#94A3B8]'}`}
+              className={`flex flex-col items-center gap-1 py-2 px-4 rounded-2xl transition-colors ${item.active ? 'text-[#5599CC] bg-[#5599CC]/[0.08]' : 'text-[#94A3B8]'}`}
             >
-              <item.icon className="w-6 h-6" />
-              <span className="text-[10px] font-bold">{item.label}</span>
+              <item.icon className={`w-5 h-5 ${item.active ? 'stroke-[2.5]' : ''}`} />
+              <span className={`text-[10px] font-bold ${item.active ? 'text-[#5599CC]' : ''}`}>
+                {item.label}
+              </span>
             </button>
           ))}
         </nav>

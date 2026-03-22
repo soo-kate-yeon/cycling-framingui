@@ -17,6 +17,10 @@ import {
   LineChart,
   Globe,
   Zap,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Send,
+  Repeat,
 } from 'lucide-react';
 import {
   BarChart,
@@ -79,6 +83,7 @@ const TRADES = [
 export default function DarkBoldnessTradingPage() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('orders');
+  const [mobileTab, setMobileTab] = useState<'chart' | 'orderbook' | 'history'>('chart');
 
   useEffect(() => {
     setMounted(true);
@@ -125,13 +130,19 @@ export default function DarkBoldnessTradingPage() {
         }
 
         .trading-grid {
-          display: grid;
-          grid-template-columns: 64px 1fr 340px;
-          grid-template-rows: 64px 1fr 280px;
-          height: 100vh;
+          display: none;
         }
 
-        @media (max-width: 1200px) {
+        @media (min-width: 769px) {
+          .trading-grid {
+            display: grid;
+            grid-template-columns: 64px 1fr 340px;
+            grid-template-rows: 64px 1fr 280px;
+            height: 100vh;
+          }
+        }
+
+        @media (min-width: 769px) and (max-width: 1200px) {
           .trading-grid {
             grid-template-columns: 64px 1fr;
             grid-template-rows: 64px 1fr 1fr;
@@ -143,25 +154,281 @@ export default function DarkBoldnessTradingPage() {
             border-top: 1px solid #1f2937;
           }
         }
-
-        @media (max-width: 768px) {
-          .trading-grid {
-            grid-template-columns: 1fr;
-            grid-template-rows: auto 1fr auto auto;
-          }
-          .right-panel {
-            grid-column: 1;
-            grid-row: 3;
-            border-left: none;
-            border-top: 1px solid #1f2937;
-          }
-          .bottom-panel {
-            grid-column: 1;
-            grid-row: 4;
-          }
-        }
       `}</style>
 
+      {/* ============================================= */}
+      {/* MOBILE LAYOUT - Only visible below 768px      */}
+      {/* ============================================= */}
+      <div className="md:hidden flex flex-col min-h-screen pb-[72px]">
+        {/* Mobile Top Bar (sticky) */}
+        <header className="sticky top-0 z-30 bg-black border-b border-neutral-800 h-14 flex items-center justify-between px-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-white flex items-center justify-center">
+              <Zap className="w-5 h-5 text-black" fill="currentColor" />
+            </div>
+            <span className="text-sm font-black uppercase tracking-tight">BTC-USD</span>
+          </div>
+          <button className="w-10 h-10 flex items-center justify-center">
+            <Settings className="w-5 h-5 text-neutral-500" />
+          </button>
+        </header>
+
+        {/* Price Hero Section */}
+        <section className="px-5 pt-6 pb-4">
+          <div className="flex items-baseline gap-3 mb-1">
+            <span className="text-4xl font-black text-white tracking-tight">$71,243.23</span>
+          </div>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#5599DD]/15 text-[#5599DD] text-xs font-black uppercase tracking-wider">
+              <TrendingUp className="w-3 h-3" />
+              +2.45%
+            </span>
+            <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
+              {t('24H')}
+            </span>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="flex flex-col">
+              <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest">
+                {t('VOLUME')}
+              </span>
+              <span className="text-xs font-bold text-neutral-400">1,243.52 BTC</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest">
+                {t('HIGH')}
+              </span>
+              <span className="text-xs font-bold text-neutral-400">$71,850.00</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest">
+                {t('LOW')}
+              </span>
+              <span className="text-xs font-bold text-neutral-400">$69,420.00</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Action Buttons Row (Coinbase-style circular icons) */}
+        <section className="px-5 py-4">
+          <div className="flex items-center justify-between px-2">
+            {[
+              { icon: ArrowDownLeft, label: t('Buy'), color: 'bg-[#5599DD]' },
+              { icon: ArrowUpRight, label: t('Sell'), color: 'bg-[#DD8855]' },
+              { icon: Send, label: t('Send'), color: 'bg-neutral-800' },
+              { icon: ArrowDownLeft, label: t('Receive'), color: 'bg-neutral-800' },
+              { icon: Repeat, label: t('Trade'), color: 'bg-neutral-800' },
+            ].map((action, idx) => (
+              <button key={idx} className="flex flex-col items-center gap-2">
+                <div
+                  className={`w-14 h-14 rounded-full ${action.color} flex items-center justify-center`}
+                >
+                  <action.icon className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                  {action.label}
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Mobile Tab Bar (pill tabs) */}
+        <div className="px-5 py-2">
+          <div className="flex items-center gap-1 p-1 bg-[#0D0D0D] border border-neutral-800">
+            {[
+              { key: 'chart' as const, label: t('Chart') },
+              { key: 'orderbook' as const, label: t('Order Book') },
+              { key: 'history' as const, label: t('History') },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setMobileTab(tab.key)}
+                className={`flex-1 h-9 text-[10px] font-black uppercase tracking-widest transition-colors ${
+                  mobileTab === tab.key
+                    ? 'bg-white text-black'
+                    : 'text-neutral-500 hover:text-neutral-300'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Content Area */}
+        <div className="flex-1 px-5 py-3">
+          {/* Chart Tab */}
+          {mobileTab === 'chart' && (
+            <div className="w-full aspect-[4/3] bg-[#0D0D0D] border border-neutral-800 p-3">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-[10px] font-black tracking-widest uppercase text-neutral-400">
+                  BTC/USD
+                </span>
+                <span className="text-[10px] font-bold electric-blue">71,243.23</span>
+              </div>
+              <div className="w-full h-[calc(100%-28px)]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={CHART_DATA}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#171717" />
+                    <XAxis
+                      dataKey="time"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: '#404040', fontSize: 9, fontWeight: 700 }}
+                      dy={5}
+                      interval={1}
+                    />
+                    <YAxis
+                      orientation="right"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: '#404040', fontSize: 9, fontWeight: 700 }}
+                      domain={['dataMin - 500', 'dataMax + 500']}
+                      width={50}
+                    />
+                    <Tooltip
+                      cursor={{ fill: '#171717' }}
+                      contentStyle={{
+                        backgroundColor: '#000',
+                        border: '1px solid #262626',
+                        borderRadius: 0,
+                        fontSize: 11,
+                      }}
+                      itemStyle={{ fontSize: 11, fontWeight: 700 }}
+                    />
+                    <Bar dataKey="price" radius={0}>
+                      {CHART_DATA.map((entry, index) => (
+                        <Cell
+                          key={`cell-m-${index}`}
+                          fill={entry.status === 'up' ? '#5599DD' : '#DD8855'}
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+
+          {/* Order Book Tab */}
+          {mobileTab === 'orderbook' && (
+            <div className="bg-[#0D0D0D] border border-neutral-800">
+              {/* Header */}
+              <div className="grid grid-cols-3 text-[9px] font-bold text-neutral-600 uppercase tracking-widest px-4 py-3 border-b border-neutral-800">
+                <span>{t('PRICE (USD)')}</span>
+                <span className="text-right">{t('AMT (BTC)')}</span>
+                <span className="text-right">{t('TOTAL')}</span>
+              </div>
+
+              {/* Asks */}
+              <div className="flex flex-col-reverse font-mono text-[11px]">
+                {ORDER_BOOK.asks.map((ask, i) => (
+                  <div key={`m-ask-${i}`} className="grid grid-cols-3 px-4 py-2 relative">
+                    <div
+                      className="absolute inset-y-0 right-0 bg-[#DD8855]/8 pointer-events-none"
+                      style={{ width: `${(ask.amount / 16) * 100}%` }}
+                    />
+                    <span className="kinetic-orange font-bold relative z-10">
+                      {ask.price.toLocaleString()}
+                    </span>
+                    <span className="text-right text-neutral-400 relative z-10">
+                      {ask.amount.toFixed(4)}
+                    </span>
+                    <span className="text-right text-neutral-600 relative z-10">
+                      {ask.total.toLocaleString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Current Price */}
+              <div className="py-3 px-4 border-y border-neutral-800 flex items-center justify-between bg-black">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-black electric-blue">71,243.23</span>
+                  <TrendingUp className="w-4 h-4 electric-blue" />
+                </div>
+                <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest">
+                  INDEX
+                </span>
+              </div>
+
+              {/* Bids */}
+              <div className="flex flex-col font-mono text-[11px]">
+                {ORDER_BOOK.bids.map((bid, i) => (
+                  <div key={`m-bid-${i}`} className="grid grid-cols-3 px-4 py-2 relative">
+                    <div
+                      className="absolute inset-y-0 right-0 bg-[#5599DD]/8 pointer-events-none"
+                      style={{ width: `${(bid.amount / 0.5) * 100}%` }}
+                    />
+                    <span className="electric-blue font-bold relative z-10">
+                      {bid.price.toLocaleString()}
+                    </span>
+                    <span className="text-right text-neutral-400 relative z-10">
+                      {bid.amount.toFixed(4)}
+                    </span>
+                    <span className="text-right text-neutral-600 relative z-10">
+                      {bid.total.toLocaleString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* History Tab */}
+          {mobileTab === 'history' && (
+            <div className="bg-[#0D0D0D] border border-neutral-800">
+              {/* Header */}
+              <div className="grid grid-cols-4 text-[9px] font-bold text-neutral-600 uppercase tracking-widest px-4 py-3 border-b border-neutral-800">
+                <span>{t('TIME')}</span>
+                <span>{t('SIDE')}</span>
+                <span className="text-right">{t('PRICE')}</span>
+                <span className="text-right">{t('SIZE')}</span>
+              </div>
+
+              {/* Trade rows */}
+              <div className="font-mono text-[11px]">
+                {TRADES.map((trade) => (
+                  <div
+                    key={`m-trade-${trade.id}`}
+                    className="grid grid-cols-4 px-4 py-3 border-b border-neutral-900/50"
+                  >
+                    <span className="text-neutral-500 font-bold">{trade.time}</span>
+                    <span
+                      className={`font-black uppercase ${trade.side === 'buy' ? 'electric-blue' : 'kinetic-orange'}`}
+                    >
+                      {trade.side}
+                    </span>
+                    <span className="text-right text-white font-bold">
+                      ${trade.price.toLocaleString()}
+                    </span>
+                    <span className="text-right text-neutral-400 font-bold">
+                      {trade.size.toFixed(4)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Fixed Bottom Action Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-black border-t border-neutral-800 px-4 py-3 flex items-center gap-3">
+        <button className="flex-1 h-[48px] bg-[#5599DD] text-white text-xs font-black uppercase tracking-[0.15em] flex items-center justify-center gap-2 active:opacity-80 transition-opacity">
+          <ArrowDownLeft className="w-4 h-4" />
+          {t('Buy')}
+        </button>
+        <button className="flex-1 h-[48px] bg-transparent border-2 border-[#DD8855] text-[#DD8855] text-xs font-black uppercase tracking-[0.15em] flex items-center justify-center gap-2 active:opacity-80 transition-opacity">
+          <ArrowUpRight className="w-4 h-4" />
+          {t('Sell')}
+        </button>
+      </div>
+
+      {/* ============================================= */}
+      {/* DESKTOP LAYOUT - Only visible 768px+          */}
+      {/* ============================================= */}
       <div className="trading-grid overflow-hidden">
         {/* Top Header - Trade Pair Info */}
         <header className="col-span-3 border-b border-neutral-800 bg-black flex flex-wrap items-center px-4 md:px-6 gap-4 md:gap-8 z-20">
@@ -574,8 +841,8 @@ export default function DarkBoldnessTradingPage() {
         </section>
       </div>
 
-      {/* Floating Status Bar - Elite Aesthetic */}
-      <footer className="fixed bottom-0 left-0 right-0 h-6 bg-neutral-900 border-t border-neutral-800 px-4 flex items-center justify-between z-30 pointer-events-none text-[8px] sm:text-[9px]">
+      {/* Floating Status Bar - Elite Aesthetic (desktop only) */}
+      <footer className="hidden md:flex fixed bottom-0 left-0 right-0 h-6 bg-neutral-900 border-t border-neutral-800 px-4 items-center justify-between z-30 pointer-events-none text-[8px] sm:text-[9px]">
         <div className="flex items-center gap-3 sm:gap-6">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-electric-blue rounded-none animate-pulse" />
@@ -592,7 +859,7 @@ export default function DarkBoldnessTradingPage() {
         </div>
         <div className="hidden sm:flex items-center gap-6">
           <span className="font-black text-neutral-400 uppercase tracking-widest">
-            © 2026 FRAMINGUI ELITE TRADER V4.0
+            &copy; 2026 FRAMINGUI ELITE TRADER V4.0
           </span>
           <div className="flex items-center gap-2">
             <Zap className="w-3 h-3 text-white" />
