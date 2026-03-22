@@ -1,0 +1,810 @@
+---
+title: "From Figma to AI-Ready Tokens: Design Handoff for AI Code Generation"
+description: "Transform your Figma design system into AI-ready design tokens that Cursor, Claude Code, and other AI coding tools can use for consistent code generation."
+date: "2026-03-23"
+author:
+  name: "FramingUI Team"
+tags:
+  - figma
+  - design-tokens
+  - design-to-code
+  - ai-handoff
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+You've built a beautiful design system in Figma. Colors, typography, components—everything is documented. But when developers (or AI) build features, the code doesn't match the designs.
+
+The gap isn't a skill issue. It's a handoff issue.
+
+Designers work in visual tools. Developers work in code. AI tools work with text. The translation layer between them is broken.
+
+Design tokens bridge this gap. They turn your Figma design system into structured data that AI coding tools can reference automatically.
+
+This guide shows how to extract tokens from Figma and configure them for AI code generation with tools like Cursor and Claude Code.
+
+## The Figma → Code Handoff Problem
+
+Here's the traditional flow:
+
+1. **Designer creates components in Figma**
+   - Primary button: `#2563eb`, padding `12px 24px`, radius `6px`
+   
+2. **Developer asks "what's the primary color?"**
+   - Designer: "It's in Figma, check the design"
+   
+3. **Developer looks at Figma, eyeballs values**
+   - Implements: `bg-blue-600 px-6 py-3 rounded-md`
+   
+4. **Designer reviews code**
+   - "That's not the right blue, and the padding is off"
+
+5. **Developer fixes**
+   - Tries `bg-blue-500`, asks "is this right?"
+
+This loop repeats for every color, spacing, shadow, radius, and typography decision.
+
+Now multiply that by AI generating dozens of components. Each one makes independent guesses based on training data, not your design system.
+
+## Design Tokens as the Translation Layer
+
+Design tokens encode design decisions in a format both humans and AI can understand:
+
+```json
+{
+  "color": {
+    "primary": {
+      "base": "#2563eb",
+      "foreground": "#ffffff"
+    }
+  },
+  "spacing": {
+    "button-x": "24px",
+    "button-y": "12px"
+  },
+  "radius": {
+    "button": "6px"
+  }
+}
+```
+
+Instead of:
+- Designer says: "Use the primary color"
+- Developer implements: `bg-blue-600` (guesses)
+- AI generates: `bg-blue-500` (guesses)
+
+With tokens:
+- Designer defines: `color.primary.base = #2563eb`
+- Developer references: `bg-primary`
+- AI references: `bg-primary`
+
+Everyone speaks the same language.
+
+## Step 1: Audit Your Figma Design System
+
+Before extracting tokens, audit what you have:
+
+### Check Figma Variables
+
+Open your Figma file → **Local variables** panel
+
+Look for:
+- **Color variables** — Brand colors, semantic colors, grays
+- **Number variables** — Spacing scale, sizing scale
+- **String variables** — Font names (if used)
+
+If you have variables, you're 80% done. If not, you'll need to create them.
+
+### Identify Design Primitives
+
+Your design system should define:
+
+#### 1. Color Palette
+
+- Brand colors (primary, secondary, accent)
+- Grays (50, 100, 200, ... 900)
+- Semantic colors (success, warning, error, info)
+- Surface colors (background, card, popover)
+
+#### 2. Spacing Scale
+
+Common values: `4, 8, 12, 16, 24, 32, 48, 64`
+
+Or rem-based: `0.25rem, 0.5rem, 0.75rem, 1rem, 1.5rem, 2rem, 3rem, 4rem`
+
+#### 3. Typography Scale
+
+- Heading styles (h1, h2, h3, h4, h5, h6)
+- Body styles (large, default, small)
+- UI text (caption, label, overline)
+
+Each should define: font-family, font-size, font-weight, line-height
+
+#### 4. Border Radius
+
+Common values: `2px, 4px, 6px, 8px, 12px, 16px, 9999px` (full)
+
+#### 5. Shadows
+
+Elevation system: `sm, base, md, lg, xl, 2xl`
+
+### Example Audit Checklist
+
+```
+✅ Colors
+  ✅ Primary (5 shades: 50, 100, 500, 700, 900)
+  ✅ Grays (9 shades)
+  ✅ Success, warning, error
+  ✅ Background, surface colors
+  
+✅ Spacing
+  ✅ 8pt grid (4, 8, 12, 16, 24, 32, 48)
+  
+✅ Typography
+  ✅ Font families defined
+  ✅ 6 heading sizes
+  ✅ 3 body sizes
+  
+⚠️ Radius - Only using 6px, needs small/large variants
+⚠️ Shadows - Not documented, need elevation system
+```
+
+## Step 2: Export Tokens from Figma
+
+### Option A: Using Figma Variables (Recommended)
+
+If you have Figma variables configured:
+
+1. Install **Figma Tokens** plugin (free)
+   - Go to Figma → Plugins → Browse plugins → Search "Figma Tokens"
+   
+2. Open the plugin in your design file
+   - Click on your file → Plugins → Figma Tokens
+
+3. Sync variables
+   - The plugin reads your local variables automatically
+
+4. Export as JSON
+   - Click "Export" → Choose "Style Dictionary" format
+   - Save as `tokens.json`
+
+Example output:
+
+```json
+{
+  "color": {
+    "primary": {
+      "50": { "value": "#eff6ff" },
+      "500": { "value": "#3b82f6" },
+      "900": { "value": "#1e3a8a" }
+    },
+    "gray": {
+      "50": { "value": "#f9fafb" },
+      "500": { "value": "#6b7280" },
+      "900": { "value": "#111827" }
+    }
+  },
+  "spacing": {
+    "1": { "value": "4px" },
+    "2": { "value": "8px" },
+    "4": { "value": "16px" }
+  }
+}
+```
+
+### Option B: Manual Token Definition
+
+If you don't have Figma variables, create tokens manually:
+
+1. Open your Figma design system
+2. Select a color/text style
+3. Note the values in the right panel
+4. Document in JSON format
+
+```json
+{
+  "color": {
+    "primary": {
+      "base": "#2563eb",
+      "hover": "#1d4ed8",
+      "foreground": "#ffffff"
+    },
+    "text": {
+      "primary": "#111827",
+      "secondary": "#6b7280",
+      "tertiary": "#9ca3af"
+    }
+  },
+  "typography": {
+    "heading": {
+      "h1": {
+        "fontSize": "48px",
+        "fontWeight": "700",
+        "lineHeight": "1.2"
+      },
+      "h2": {
+        "fontSize": "36px",
+        "fontWeight": "600",
+        "lineHeight": "1.3"
+      }
+    }
+  }
+}
+```
+
+### Option C: Use FramingUI Base Tokens
+
+If you're starting from scratch or want to extend a foundation:
+
+```bash
+npm install @framingui/tokens
+npx framingui init
+```
+
+This generates a base `tokens.json` with 450+ semantic tokens you can customize:
+
+```json
+{
+  "color": {
+    "primary": {
+      "base": "oklch(0.55 0.25 250)",
+      "foreground": "oklch(1 0 0)"
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "4": "1rem"
+  }
+}
+```
+
+Edit values to match your Figma design system.
+
+## Step 3: Transform Tokens to Semantic Structure
+
+Raw Figma exports often use primitive names (`blue-500`). For AI code generation, you need semantic names (`primary`, `secondary`, `success`).
+
+### Before (Primitive Names)
+
+```json
+{
+  "color": {
+    "blue-500": "#3b82f6",
+    "gray-900": "#111827",
+    "red-500": "#ef4444"
+  }
+}
+```
+
+AI doesn't know when to use `blue-500` vs `gray-900`.
+
+### After (Semantic Names)
+
+```json
+{
+  "color": {
+    "primary": {
+      "base": "#3b82f6",
+      "foreground": "#ffffff"
+    },
+    "content": {
+      "primary": "#111827",
+      "secondary": "#6b7280"
+    },
+    "destructive": {
+      "base": "#ef4444",
+      "foreground": "#ffffff"
+    }
+  }
+}
+```
+
+Now AI knows:
+- Use `primary` for main actions
+- Use `content.primary` for body text
+- Use `destructive` for delete buttons
+
+### Semantic Mapping Template
+
+Map your Figma colors to semantic names:
+
+```javascript
+// scripts/map-semantic-tokens.js
+const figmaTokens = require('./figma-export.json');
+
+const semanticMapping = {
+  // Brand colors
+  'primary': figmaTokens.color['blue-600'],
+  'primary-foreground': figmaTokens.color['white'],
+  'secondary': figmaTokens.color['purple-600'],
+  'secondary-foreground': figmaTokens.color['white'],
+  
+  // Surfaces
+  'background': figmaTokens.color['gray-50'],
+  'card': figmaTokens.color['white'],
+  'border': figmaTokens.color['gray-200'],
+  
+  // Text
+  'content': figmaTokens.color['gray-900'],
+  'muted-foreground': figmaTokens.color['gray-500'],
+  
+  // Status
+  'success': figmaTokens.color['green-600'],
+  'destructive': figmaTokens.color['red-600'],
+  'warning': figmaTokens.color['yellow-600'],
+};
+
+// Output semantic tokens
+fs.writeFileSync(
+  'tokens/semantic.json',
+  JSON.stringify({ color: semanticMapping }, null, 2)
+);
+```
+
+Run this once to generate semantic tokens from Figma exports.
+
+## Step 4: Configure for AI Code Generation
+
+Now that you have semantic tokens, configure AI tools to use them.
+
+### For Cursor AI
+
+Create `.cursorrules`:
+
+```markdown
+# Design System - Figma Tokens
+
+## Color Usage
+
+Always use semantic color tokens from our Figma design system:
+
+**Brand Colors:**
+- `bg-primary` `text-primary-foreground` — Main actions, primary buttons
+- `bg-secondary` `text-secondary-foreground` — Secondary actions
+
+**Surfaces:**
+- `bg-background` — Page background
+- `bg-card` — Card, panel backgrounds
+- `border-border` — Default borders
+
+**Text:**
+- `text-content` — Body text, headings
+- `text-muted-foreground` — Secondary text, captions
+
+**Status:**
+- `bg-success` — Success states, confirmations
+- `bg-destructive` — Delete, error states
+- `bg-warning` — Warnings, alerts
+
+**NEVER use:** `bg-blue-500`, `text-gray-900`, arbitrary hex colors
+
+## Spacing
+
+Use spacing scale from Figma (8pt grid):
+
+- `p-1` = 4px
+- `p-2` = 8px
+- `p-4` = 16px
+- `p-6` = 24px
+- `p-8` = 32px
+
+**NEVER use:** arbitrary values like `p-[14px]`
+
+## Typography
+
+Use Figma text styles:
+
+- `text-heading-xl` — Page titles (48px)
+- `text-heading-lg` — Section headings (36px)
+- `text-heading-md` — Card headings (24px)
+- `text-body` — Body text (16px)
+- `text-caption` — Small text (14px)
+
+**NEVER use:** `text-2xl`, `text-base`, arbitrary font sizes
+
+## Border Radius
+
+From Figma:
+- `rounded-sm` = 4px (tags, badges)
+- `rounded-base` = 6px (buttons, inputs)
+- `rounded-lg` = 12px (cards, modals)
+
+## Shadows
+
+Figma elevation system:
+- `shadow-sm` — Subtle elevation
+- `shadow-base` — Default cards
+- `shadow-lg` — Modals, popovers
+```
+
+### For Claude Code
+
+Create `.claude/instructions.md`:
+
+```markdown
+# Figma Design System Integration
+
+This project uses design tokens exported from Figma. All components must reference these tokens for consistency.
+
+## Token Reference
+
+Tokens are defined in `src/styles/tokens.css` (generated from Figma).
+
+### Available Tokens
+
+**Colors (from Figma):**
+```css
+--color-primary: #2563eb;
+--color-primary-foreground: #ffffff;
+--color-background: #ffffff;
+--color-card: #f9fafb;
+--color-border: #e5e7eb;
+--color-content: #111827;
+--color-muted-foreground: #6b7280;
+```
+
+**Spacing (Figma 8pt grid):**
+```css
+--spacing-1: 0.25rem; /* 4px */
+--spacing-2: 0.5rem;  /* 8px */
+--spacing-4: 1rem;    /* 16px */
+--spacing-6: 1.5rem;  /* 24px */
+```
+
+## Component Pattern
+
+When generating components, ALWAYS use token CSS variables:
+
+```tsx
+<button
+  style={{
+    background: 'var(--color-primary)',
+    color: 'var(--color-primary-foreground)',
+    padding: 'var(--spacing-2) var(--spacing-4)',
+    borderRadius: 'var(--radius-base)',
+  }}
+>
+  Click me
+</button>
+```
+
+Or with Tailwind (configured to use Figma tokens):
+
+```tsx
+<button className="bg-primary text-primary-foreground px-4 py-2 rounded-base">
+  Click me
+</button>
+```
+
+## Validation
+
+Before completing a feature, verify:
+- ✅ All colors use token variables (no hex codes)
+- ✅ All spacing uses token scale (no arbitrary px values)
+- ✅ All typography uses Figma text styles
+- ✅ Components match Figma designs visually
+```
+
+## Step 5: Integrate Tokens into Build System
+
+### Tailwind Configuration
+
+Transform Figma tokens into Tailwind theme:
+
+```javascript
+// tailwind.config.js
+const tokens = require('./tokens/semantic.json');
+
+module.exports = {
+  theme: {
+    colors: {
+      primary: {
+        DEFAULT: tokens.color.primary.base,
+        foreground: tokens.color.primary.foreground,
+      },
+      secondary: {
+        DEFAULT: tokens.color.secondary.base,
+        foreground: tokens.color.secondary.foreground,
+      },
+      background: tokens.color.background,
+      card: tokens.color.card,
+      border: tokens.color.border,
+      content: tokens.color.content,
+      'muted-foreground': tokens.color['muted-foreground'],
+      // ... more mappings
+    },
+    spacing: tokens.spacing,
+    borderRadius: tokens.radius,
+    fontSize: tokens.typography.fontSize,
+  },
+};
+```
+
+Now `bg-primary` in code matches Figma's primary color exactly.
+
+### CSS Variables
+
+For non-Tailwind projects, generate CSS:
+
+```javascript
+// scripts/generate-css-tokens.js
+const tokens = require('./tokens/semantic.json');
+
+const cssVars = Object.entries(tokens.color).map(([key, value]) => {
+  const varName = `--color-${key}`;
+  const varValue = typeof value === 'string' ? value : value.base;
+  return `  ${varName}: ${varValue};`;
+}).join('\n');
+
+const css = `:root {\n${cssVars}\n}`;
+
+fs.writeFileSync('src/styles/figma-tokens.css', css);
+```
+
+Output:
+
+```css
+:root {
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #7c3aed;
+  --color-background: #ffffff;
+  --color-card: #f9fafb;
+  /* ... */
+}
+```
+
+Import in your app:
+
+```tsx
+import './styles/figma-tokens.css';
+```
+
+## Step 6: Validate Tokens Match Figma
+
+Create a validation script:
+
+```javascript
+// scripts/validate-tokens.js
+const figmaTokens = require('./figma-export.json');
+const codeTokens = require('./tokens/semantic.json');
+
+const mismatches = [];
+
+// Check primary color
+if (codeTokens.color.primary.base !== figmaTokens.color['blue-600']) {
+  mismatches.push({
+    token: 'primary',
+    figma: figmaTokens.color['blue-600'],
+    code: codeTokens.color.primary.base,
+  });
+}
+
+// Check spacing scale
+Object.keys(codeTokens.spacing).forEach((key) => {
+  const figmaValue = figmaTokens.spacing[key];
+  const codeValue = codeTokens.spacing[key];
+  
+  if (figmaValue !== codeValue) {
+    mismatches.push({
+      token: `spacing.${key}`,
+      figma: figmaValue,
+      code: codeValue,
+    });
+  }
+});
+
+if (mismatches.length > 0) {
+  console.error('❌ Token mismatches found:');
+  console.table(mismatches);
+  process.exit(1);
+} else {
+  console.log('✅ All tokens match Figma');
+}
+```
+
+Run before releases:
+
+```bash
+npm run validate-tokens
+```
+
+## Step 7: Automate Token Sync
+
+Keep Figma and code tokens in sync:
+
+### Option A: Figma API
+
+Use Figma's REST API to fetch variables programmatically:
+
+```javascript
+// scripts/sync-figma-tokens.js
+const fetch = require('node-fetch');
+
+const FIGMA_FILE_KEY = process.env.FIGMA_FILE_KEY;
+const FIGMA_TOKEN = process.env.FIGMA_TOKEN;
+
+async function syncTokens() {
+  const response = await fetch(
+    `https://api.figma.com/v1/files/${FIGMA_FILE_KEY}/variables/local`,
+    {
+      headers: { 'X-Figma-Token': FIGMA_TOKEN },
+    }
+  );
+  
+  const data = await response.json();
+  
+  // Transform Figma variables to tokens
+  const tokens = transformFigmaVariables(data);
+  
+  // Write to tokens file
+  fs.writeFileSync('tokens/figma.json', JSON.stringify(tokens, null, 2));
+  
+  console.log('✅ Tokens synced from Figma');
+}
+
+syncTokens();
+```
+
+Run on a schedule or before builds:
+
+```json
+{
+  "scripts": {
+    "sync-tokens": "node scripts/sync-figma-tokens.js",
+    "build": "npm run sync-tokens && next build"
+  }
+}
+```
+
+### Option B: Figma Webhooks
+
+Set up webhooks to trigger token sync when Figma files change:
+
+```javascript
+// api/figma-webhook.js
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    const { event_type } = req.body;
+    
+    if (event_type === 'FILE_VERSION_UPDATE') {
+      // Trigger token sync
+      await syncTokens();
+      
+      // Optionally trigger rebuild
+      await fetch(process.env.DEPLOY_HOOK_URL, { method: 'POST' });
+    }
+    
+    res.status(200).json({ synced: true });
+  }
+}
+```
+
+Now tokens auto-update when designers change Figma.
+
+## Real-World Example: AI-Generated Dashboard
+
+**Designer in Figma:**
+- Creates primary color: `#2563eb`
+- Defines spacing: 8pt grid
+- Sets up card component with `shadow-base`, `radius-lg`
+
+**Tokens exported:**
+```json
+{
+  "color": {
+    "primary": { "base": "#2563eb" }
+  },
+  "spacing": { "4": "1rem", "6": "1.5rem" },
+  "shadow": { "base": "0 1px 3px rgba(0,0,0,0.1)" },
+  "radius": { "lg": "12px" }
+}
+```
+
+**Developer prompts Claude Code:**
+> "Build a dashboard with stats cards showing user count, revenue, and growth"
+
+**Claude generates (using Figma tokens):**
+
+```tsx
+<div className="grid grid-cols-3 gap-6 p-6">
+  <div className="bg-card border border-border rounded-lg p-6 shadow-base">
+    <p className="text-caption text-muted-foreground mb-2">Total Users</p>
+    <p className="text-heading-xl">1,234</p>
+    <p className="text-body-sm text-success mt-2">↑ 12%</p>
+  </div>
+  {/* more cards */}
+</div>
+```
+
+**Result:**
+- Colors match Figma exactly (`bg-card`, `border-border`)
+- Spacing uses 8pt grid (`gap-6`, `p-6`)
+- Radius matches design (`rounded-lg`)
+- Shadow matches elevation (`shadow-base`)
+
+Zero back-and-forth. The code matches the design because both reference the same tokens.
+
+## Common Figma → Token Challenges
+
+### Challenge 1: Figma Uses Effects, Code Needs Box-Shadow
+
+**Solution:** Transform effects to CSS:
+
+```javascript
+function transformShadow(figmaEffect) {
+  const { offset, radius, color } = figmaEffect;
+  return `${offset.x}px ${offset.y}px ${radius}px ${color}`;
+}
+```
+
+### Challenge 2: Figma Has Too Many Color Variants
+
+**Problem:** Figma has `blue-50` through `blue-900`, but code only needs 3-4
+
+**Solution:** Map to semantic names:
+
+```javascript
+{
+  "primary": figmaColors['blue-600'],
+  "primary-hover": figmaColors['blue-700'],
+  "primary-light": figmaColors['blue-50'],
+}
+```
+
+### Challenge 3: Typography Values Don't Match Figma Exactly
+
+**Problem:** Figma shows `20px`, Tailwind uses `1.25rem`
+
+**Solution:** Use exact px values in tokens, let build tools convert:
+
+```json
+{
+  "fontSize": {
+    "heading-lg": "20px"  // Build tool converts to rem if needed
+  }
+}
+```
+
+## Measuring Success
+
+Track Figma → code consistency:
+
+```bash
+# Check for hardcoded colors (should be 0)
+git grep -E '#[0-9A-Fa-f]{6}' src/ | grep -v test | wc -l
+
+# Check token usage
+git grep 'bg-primary\|text-content' src/ | wc -l
+
+# Compare visual similarity (manual review)
+# Figma screenshot vs. production screenshot
+```
+
+Aim for:
+- 0 hardcoded hex colors
+- 95%+ token usage in components
+- Visual match between Figma and production
+
+## Key Takeaways
+
+1. **Tokens bridge design and code** — Both reference the same source of truth
+2. **Semantic names enable AI** — AI knows when to use `primary` vs `destructive`
+3. **Automate sync** — Keep Figma and code tokens in sync automatically
+4. **Validate regularly** — Ensure tokens haven't drifted
+5. **One-time setup, continuous benefit** — Setup once, AI uses tokens forever
+
+With Figma tokens integrated, AI code generation produces pixel-perfect implementations that match your designs by default.
+
+---
+
+**Next steps:**
+- Export tokens from your Figma design system
+- Transform to semantic names
+- Configure AI tools with `.cursorrules` or `.claude/instructions.md`
+- Generate a component and compare to Figma
+
+Questions about Figma → token workflows? Join [FramingUI Discord](https://discord.gg/framingui) to discuss with designers and developers.

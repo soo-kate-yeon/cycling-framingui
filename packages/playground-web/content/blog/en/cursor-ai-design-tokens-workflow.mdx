@@ -1,0 +1,428 @@
+---
+title: "How to Use Design Tokens with Cursor AI: A Complete Workflow"
+description: "Learn how to configure Cursor AI with design tokens for consistent, production-ready components. Step-by-step guide from setup to automation."
+date: "2026-03-23"
+author:
+  name: "FramingUI Team"
+tags:
+  - cursor-ai
+  - design-tokens
+  - workflow
+  - automation
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+You've tried generating UI with Cursor AI. The code works, but the design? Generic blue buttons, random spacing, inconsistent styles. You end up fixing every component manually, wondering if AI actually saves time.
+
+The problem isn't Cursor—it's the lack of design context. Without tokens, Cursor makes up values based on common patterns it's seen. With tokens, it references your actual design system.
+
+This guide walks through the complete workflow: from installing tokens to automating consistent component generation in Cursor.
+
+## Why Design Tokens Matter for Cursor
+
+When you ask Cursor to create a button, it needs to make dozens of styling decisions:
+
+- What's the primary color?
+- How much padding?
+- What border radius?
+- What font size?
+- What hover state?
+
+Without tokens, Cursor guesses based on training data. You get `bg-blue-500`, `px-4 py-2`, `rounded-md`—values that work anywhere but don't match your brand anywhere.
+
+With tokens, Cursor references your system: `bg-primary`, `p-button`, `rounded-base`. Every component automatically inherits your design language.
+
+## The Setup: Three Configuration Layers
+
+Getting Cursor to use design tokens requires three pieces:
+
+1. **Token package** — The source of truth for your design system
+2. **Cursor context** — Instructions that guide AI generation
+3. **Project config** — Tailwind/CSS setup that applies tokens
+
+Let's walk through each.
+
+### Layer 1: Install Token Package
+
+Add FramingUI tokens to your project:
+
+```bash
+npm install @framingui/tokens @framingui/tailwind-preset
+```
+
+This gives you:
+- 450+ semantic design tokens
+- Tailwind preset with token integration
+- Type definitions for autocomplete
+
+If you're using vanilla CSS or other frameworks, you can export tokens as CSS variables:
+
+```bash
+npx framingui export --format css --output src/styles/tokens.css
+```
+
+### Layer 2: Configure Cursor Context
+
+Create `.cursorrules` in your project root. This file tells Cursor how to use tokens:
+
+```markdown
+# Design System Rules
+
+## Always Use Design Tokens
+
+For colors, spacing, typography, and other design properties, ALWAYS reference FramingUI tokens instead of arbitrary values.
+
+### Colors
+
+- Use semantic tokens: `bg-primary`, `text-content`, `border-default`
+- Never use: `bg-blue-500`, `text-gray-900`, `border-gray-300`
+
+### Spacing
+
+- Use scale tokens: `p-4`, `gap-3`, `space-y-2`
+- Corresponds to: 4 = 1rem, 3 = 0.75rem, 2 = 0.5rem
+- Never use arbitrary values: `p-[14px]`, `gap-[18px]`
+
+### Typography
+
+- Use text tokens: `text-heading-lg`, `text-body`, `text-caption`
+- Never use: `text-2xl`, `text-base`, custom font sizes
+
+### Border Radius
+
+- Use radius tokens: `rounded-base`, `rounded-sm`, `rounded-lg`
+- Never use: `rounded`, `rounded-md`, arbitrary values
+
+## Component Pattern
+
+When creating new components, follow this structure:
+
+```tsx
+interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export function Button({ variant = 'primary', size = 'md' }: ButtonProps) {
+  return (
+    <button
+      className={cn(
+        'inline-flex items-center justify-center',
+        'font-medium transition-colors',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'disabled:pointer-events-none disabled:opacity-50',
+        {
+          'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'primary',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
+          'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
+        },
+        {
+          'h-9 px-3 text-body-sm': size === 'sm',
+          'h-10 px-4 text-body': size === 'md',
+          'h-11 px-6 text-body-lg': size === 'lg',
+        }
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+## Token Reference
+
+Import token values when needed:
+
+```tsx
+import { tokens } from '@framingui/tokens';
+
+// Access raw values
+const primaryColor = tokens.color.primary.base; // 'oklch(0.55 0.25 250)'
+const spacing4 = tokens.spacing[4]; // '1rem'
+```
+
+## File Organization
+
+- Components: `src/components/ui/`
+- Token configs: `tailwind.config.js`, `src/styles/tokens.css`
+- Utilities: `src/lib/utils.ts` (for `cn` helper)
+```
+
+This `.cursorrules` file becomes Cursor's design system documentation. Every time you generate code, Cursor references these rules.
+
+### Layer 3: Configure Tailwind
+
+Update your `tailwind.config.js`:
+
+```javascript
+import { framinguiPreset } from '@framingui/tailwind-preset';
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  presets: [framinguiPreset],
+  content: [
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {
+      // Your custom overrides
+    },
+  },
+};
+```
+
+The preset automatically maps FramingUI tokens to Tailwind utilities:
+- `bg-primary` → your primary color
+- `p-4` → your spacing scale
+- `text-heading-lg` → your typography system
+- `rounded-base` → your default border radius
+
+## The Workflow: Generating Components
+
+Now that setup is complete, here's the daily workflow:
+
+### 1. Prompt with Intent
+
+Instead of:
+```
+"Create a card component"
+```
+
+Try:
+```
+"Create a card component using design tokens. Should have primary and secondary variants, support different sizes, and include proper hover states."
+```
+
+Cursor will:
+- Reference `.cursorrules` for token usage
+- Generate variants using semantic tokens
+- Apply proper spacing and typography
+- Include accessible focus states
+
+### 2. Review Generated Code
+
+Cursor should produce something like:
+
+```tsx
+export function Card({ variant = 'primary', children }: CardProps) {
+  return (
+    <div
+      className={cn(
+        'rounded-base border transition-colors',
+        {
+          'bg-card border-border': variant === 'primary',
+          'bg-accent border-accent': variant === 'secondary',
+        }
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+```
+
+Notice:
+- ✅ Uses `rounded-base` (token) not `rounded-lg` (arbitrary)
+- ✅ Uses `bg-card`, `border-border` (semantic) not `bg-white`, `border-gray-200`
+- ✅ Follows the component pattern from `.cursorrules`
+
+### 3. Iterate with Token Context
+
+If the first generation isn't quite right, provide token-aware feedback:
+
+```
+"Update the card to use elevation tokens instead of border. Add spacing-4 padding."
+```
+
+Cursor understands the token names from `.cursorrules` and can iterate accordingly.
+
+## Advanced: Cursor Composers with Token Context
+
+Cursor's Composer feature can build entire features. Give it token-aware instructions:
+
+```
+"Create a user settings page with:
+- Layout using spacing tokens (gap-6, p-8)
+- Form inputs following the design system
+- Primary/secondary buttons
+- Card components for sections
+- Proper color contrast using semantic tokens"
+```
+
+Composer will:
+1. Reference `.cursorrules` throughout generation
+2. Use tokens consistently across all components
+3. Maintain design system patterns across files
+
+## Common Issues & Solutions
+
+### Issue 1: Cursor Still Uses Arbitrary Values
+
+**Problem:** You see `bg-blue-500` instead of `bg-primary`
+
+**Solution:** 
+- Check that `.cursorrules` is in the project root
+- Restart Cursor's language server (Cmd+Shift+P → "Restart Extension Host")
+- Make the rule more explicit: "NEVER use color-[number] classes. ONLY use semantic tokens."
+
+### Issue 2: Tokens Not Autocompleting
+
+**Problem:** Typing `bg-pri` doesn't suggest `bg-primary`
+
+**Solution:**
+- Ensure Tailwind preset is properly configured
+- Check `tailwind.config.js` is in project root
+- Install Tailwind CSS IntelliSense extension
+- Restart TypeScript server
+
+### Issue 3: Inconsistent Token Usage Across Files
+
+**Problem:** Some components use tokens, others don't
+
+**Solution:**
+- Add token validation to your linter
+- Create a `.cursorrules-checklist.md` for component reviews
+- Use Cursor's "Fix with AI" on non-compliant files with instruction: "Update to use design tokens per .cursorrules"
+
+## Automation: Token Linting
+
+Prevent token violations before they reach production:
+
+```javascript
+// .eslintrc.js
+module.exports = {
+  rules: {
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'Literal[value=/^#[0-9A-Fa-f]{6}$/]',
+        message: 'Use design tokens instead of hex colors',
+      },
+      {
+        selector: 'TemplateLiteral[expressions.length=0][quasis.0.value.raw=/\\d+px/]',
+        message: 'Use spacing tokens instead of px values',
+      },
+    ],
+  },
+};
+```
+
+Add a pre-commit hook:
+
+```bash
+npm install -D husky lint-staged
+npx husky install
+```
+
+```json
+// package.json
+{
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
+```
+
+Now arbitrary values get caught before commit.
+
+## Measuring Success
+
+Track design system consistency:
+
+```bash
+# Check for arbitrary color usage
+git grep -E "bg-\w+-\d{3}" src/
+
+# Check for px values outside tokens
+git grep -E "\d+px" src/ | grep -v "tokens"
+
+# Count components using tokens
+git grep "bg-primary\|text-content\|border-default" src/ | wc -l
+```
+
+Aim for:
+- 0 arbitrary hex colors in components
+- 90%+ token usage in new components
+- Decreasing count of `TODO: use tokens` comments
+
+## Real-World Example: Dashboard Component
+
+Here's what a complete, token-driven component looks like:
+
+```tsx
+// src/components/dashboard/stats-card.tsx
+import { cn } from '@/lib/utils';
+
+interface StatsCardProps {
+  title: string;
+  value: string | number;
+  change?: {
+    value: number;
+    trend: 'up' | 'down';
+  };
+  variant?: 'default' | 'accent';
+}
+
+export function StatsCard({ title, value, change, variant = 'default' }: StatsCardProps) {
+  return (
+    <div
+      className={cn(
+        'rounded-base border p-6 transition-colors',
+        {
+          'bg-card border-border': variant === 'default',
+          'bg-accent border-accent': variant === 'accent',
+        }
+      )}
+    >
+      <p className="text-caption text-muted-foreground mb-2">
+        {title}
+      </p>
+      <p className="text-heading-xl font-semibold text-content mb-1">
+        {value}
+      </p>
+      {change && (
+        <p
+          className={cn('text-body-sm font-medium', {
+            'text-success': change.trend === 'up',
+            'text-destructive': change.trend === 'down',
+          })}
+        >
+          {change.trend === 'up' ? '↑' : '↓'} {Math.abs(change.value)}%
+        </p>
+      )}
+    </div>
+  );
+}
+```
+
+Generated with a single Cursor prompt:
+```
+"Create a stats card component using design tokens. Should show title, value, and optional change percentage with trend indicator."
+```
+
+## Key Takeaways
+
+1. **Setup is one-time** — Install tokens, configure `.cursorrules`, update Tailwind once
+2. **Context drives consistency** — `.cursorrules` becomes Cursor's design system guide
+3. **Iterate with tokens** — When refining generations, reference token names
+4. **Automate validation** — Linting catches token violations early
+5. **Measure adoption** — Track token usage as a code quality metric
+
+With this workflow, Cursor generates production-ready components that match your design system by default. No more manual cleanup, no more "fix styles later" comments.
+
+The AI does what it's best at (structure, logic, patterns), and your design tokens ensure it looks like your brand.
+
+---
+
+**Next steps:**
+- Install [@framingui/tokens](https://www.npmjs.com/package/@framingui/tokens) in your project
+- Create `.cursorrules` with your design system rules
+- Generate your first component and see the difference
+- Share your setup with the team so everyone benefits
+
+Questions? Join the [FramingUI Discord](https://discord.gg/framingui) to discuss Cursor workflows with other developers.

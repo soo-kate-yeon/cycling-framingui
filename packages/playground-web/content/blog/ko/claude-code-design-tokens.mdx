@@ -1,0 +1,564 @@
+---
+title: "Claude Code UI 디자인: 토큰으로 일반적인 UI 벗어나기"
+description: "Claude Code에 디자인 토큰을 설정해서 일반적인 UI 대신 프로덕션 수준의 브랜드 일관 컴포넌트 생성하는 방법"
+date: "2026-03-22"
+author:
+  name: "FramingUI Team"
+tags:
+  - claude-code
+  - design-tokens
+  - ai-coding
+  - consistency
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+Claude Code는 전체 기능을 자율적으로 구축할 수 있습니다. 하지만 디자인 제약 없이는 다른 AI 생성 인터페이스와 똑같아 보이는 기능적 UI를 만듭니다: 합리적인 간격, 일반적인 파란색, Tailwind 기본값. 코드는 작동하지만 디자인은 제품과 맞지 않습니다.
+
+해결책은 Claude가 생성하는 모든 컴포넌트를 미시관리하는 게 아닙니다. 미리 디자인 시스템에 접근할 수 있게 해서 모든 결정이 시각 언어와 일치하도록 만드는 것입니다.
+
+## 일반적인 UI 문제
+
+Claude Code에게 대시보드를 만들어달라고 하면 이런 걸 얻습니다:
+
+```tsx
+<div className="p-6 bg-white rounded-lg shadow">
+  <h2 className="text-xl font-bold text-gray-900 mb-4">대시보드</h2>
+  <div className="grid grid-cols-3 gap-4">
+    <div className="p-4 bg-blue-50 border border-blue-200 rounded">
+      <p className="text-sm text-gray-600">전체 사용자</p>
+      <p className="text-2xl font-semibold text-gray-900">1,234</p>
+    </div>
+    {/* 더 많은 카드... */}
+  </div>
+</div>
+```
+
+이 코드는:
+- ✅ 올바르게 작동
+- ✅ 일반적인 패턴 따름
+- ✅ 시맨틱 HTML 사용
+- ❌ 브랜드 색상과 맞지 않음
+- ❌ 간격 시스템 무시
+- ❌ 임의의 Tailwind 기본값 사용
+- ❌ 디자인 리뷰 통과 못함
+
+문제는 복합됩니다. Claude는 여러 기능에 걸쳐 수십 개의 컴포넌트를 생성합니다. 각각 독립적인 스타일링 결정을 내립니다. 6개월 후:
+- 12가지 다른 파란색 음영
+- "충분히 가까운" 하지만 일관되지 않은 간격
+- 4px에서 12px까지 범위의 border radius 값
+- 타이포그래피 스케일과 맞지 않는 텍스트 크기
+
+이걸 수동으로 리팩토링하는 건 몇 주 작업입니다.
+
+## 디자인 토큰 추가하면 어떻게 되나
+
+Claude Code에게 구조화된 디자인 토큰 접근 권한을 주면 같은 프롬프트가 이렇게 생성됩니다:
+
+```tsx
+<div className="p-6 bg-base rounded-lg shadow-sm border border-default">
+  <h2 className="text-xl font-semibold text-primary mb-4">대시보드</h2>
+  <div className="grid grid-cols-3 gap-4">
+    <div className="p-4 bg-subtle border border-default rounded-md">
+      <p className="text-sm text-secondary">전체 사용자</p>
+      <p className="text-2xl font-semibold text-primary">1,234</p>
+    </div>
+    {/* 더 많은 카드... */}
+  </div>
+</div>
+```
+
+이제 모든 값이 디자인 시스템에서 옵니다:
+- `bg-base`, `bg-subtle` → 시맨틱 배경 색상
+- `text-primary`, `text-secondary` → 텍스트 계층
+- `border-default` → 보더 토큰
+- `p-6`, `p-4`, `gap-4`, `mb-4` → 간격 스케일
+- `rounded-lg`, `rounded-md` → 코너 radius 시스템
+
+브랜드 색상을 업데이트하면 Claude 생성 컴포넌트 전체가 자동으로 업데이트됩니다. 간격을 조정하면 모든 게 비례적으로 유지됩니다. Claude가 작성하는 코드는 기존 컴포넌트와 완벽하게 통합됩니다.
+
+## Claude Code에 FramingUI 토큰 설정하기
+
+### 1단계: 디자인 시스템 문서 생성
+
+Claude Code는 명확하고 구조화된 문서에서 최고의 성능을 냅니다. `.claude/design-system.md` 생성:
+
+```markdown
+# 디자인 시스템 - UI 생성 규칙
+
+UI 컴포넌트 생성 시 항상 우리 시스템의 디자인 토큰을 사용하세요.
+절대 하드코딩된 색상, 간격, 임의의 Tailwind 클래스를 사용하지 마세요.
+
+## 토큰 Import
+
+```tsx
+import { tokens } from '@framingui/tokens'
+// 또는 Tailwind: preset 클래스 직접 사용
+```
+
+## 컬러 토큰
+
+### 배경
+- `bg-base` - 메인 surface (#FFFFFF)
+- `bg-subtle` - 서브틀한 surface (#F9FAFB)
+- `bg-muted` - 뮤트된 surface (#F3F4F6)
+- `bg-emphasis` - 강조된 surface (#F3F4F6)
+
+### 텍스트
+- `text-primary` - 주요 텍스트 (#111827)
+- `text-secondary` - 보조 텍스트 (#6B7280)
+- `text-tertiary` - 3차 텍스트 (#9CA3AF)
+- `text-disabled` - 비활성 텍스트 (#D1D5DB)
+
+### 보더
+- `border-default` - 기본 보더 (#E5E7EB)
+- `border-muted` - 뮤트된 보더 (#F3F4F6)
+- `border-emphasis` - 강조된 보더 (#D1D5DB)
+
+### 브랜드 색상
+- `primary-solid` - 주요 액션 색상
+- `primary-fg` - primary 배경 위 텍스트
+- `error`, `success`, `warning`, `info` - 상태 색상
+
+## 간격 스케일
+
+간격 토큰 사용 (기본 4px):
+- `1` = 4px
+- `2` = 8px
+- `3` = 12px
+- `4` = 16px
+- `5` = 20px
+- `6` = 24px
+- `8` = 32px
+- `10` = 40px
+- `12` = 48px
+- `16` = 64px
+
+## 타이포그래피
+
+- `text-xs` = 12px / 16px line-height
+- `text-sm` = 14px / 20px
+- `text-base` = 16px / 24px
+- `text-lg` = 18px / 28px
+- `text-xl` = 20px / 28px
+- `text-2xl` = 24px / 32px
+- `text-3xl` = 30px / 36px
+
+## Border Radius
+
+- `rounded-sm` = 4px
+- `rounded-md` = 6px
+- `rounded-lg` = 8px
+- `rounded-xl` = 12px
+- `rounded-2xl` = 16px
+- `rounded-full` = 9999px
+
+## 컴포넌트 패턴
+
+### 버튼
+```tsx
+// Primary 버튼
+<button className="bg-primary-solid text-primary-fg px-4 py-2 rounded-md">
+  액션
+</button>
+
+// Secondary 버튼
+<button className="bg-muted text-primary px-4 py-2 rounded-md">
+  취소
+</button>
+```
+
+### 카드
+```tsx
+<div className="bg-base border border-default rounded-lg p-6">
+  {/* content */}
+</div>
+```
+
+### 폼 필드
+```tsx
+<input className="w-full px-3 py-2 bg-base border border-default rounded-md text-primary" />
+```
+
+## 규칙
+
+1. 절대 `bg-blue-500`, `text-gray-700` 등 사용 금지
+2. 항상 시맨틱 토큰 사용: `bg-primary-solid`, `text-secondary`
+3. 간격은 스케일에서 (no `p-5`, `gap-7`)
+4. 각 컴포넌트가 사용하는 토큰 문서화
+5. 불확실하면 생성 전에 질문
+```
+
+### 2단계: Claude Code MCP 설정
+
+Claude Desktop과 MCP를 사용한다면 MCP 서버 설정에 FramingUI 컨텍스트 추가:
+
+```json
+{
+  "mcpServers": {
+    "design-system": {
+      "command": "npx",
+      "args": ["-y", "@framingui/mcp-server"],
+      "env": {
+        "PROJECT_ROOT": "/path/to/your/project",
+        "TOKENS_PATH": "./.claude/design-system.md"
+      }
+    }
+  }
+}
+```
+
+이렇게 하면 모든 세션에서 디자인 토큰이 Claude Code에 자동으로 제공됩니다.
+
+### 3단계: Tailwind Config 초기화
+
+`tailwind.config.js`를 업데이트해서 FramingUI preset 사용:
+
+```javascript
+import { framingUIPreset } from '@framingui/tailwind-preset'
+
+export default {
+  presets: [framingUIPreset],
+  content: [
+    './src/**/*.{js,jsx,ts,tsx}',
+    './app/**/*.{js,jsx,ts,tsx}',
+  ],
+  theme: {
+    extend: {
+      // 커스텀 오버라이드
+    }
+  }
+}
+```
+
+### 4단계: 생성 테스트
+
+Claude Code에게 컴포넌트 구축 요청:
+
+**프롬프트:**
+```
+다음 항목이 있는 사용자 프로필 카드 컴포넌트 만들어줘:
+- 아바타 (원형)
+- 이름과 역할
+- 편집과 메시지 액션 버튼
+- 우리 디자인 토큰 사용
+```
+
+**예상 출력:**
+
+```tsx
+export function UserProfileCard({ 
+  avatar, 
+  name, 
+  role, 
+  onEdit, 
+  onMessage 
+}: UserProfileCardProps) {
+  return (
+    <div className="bg-base border border-default rounded-lg p-6">
+      <div className="flex items-start gap-4 mb-6">
+        <img 
+          src={avatar} 
+          alt={name}
+          className="w-16 h-16 rounded-full object-cover"
+        />
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-primary">{name}</h3>
+          <p className="text-sm text-secondary">{role}</p>
+        </div>
+      </div>
+      
+      <div className="flex gap-3">
+        <button 
+          onClick={onEdit}
+          className="flex-1 bg-primary-solid text-primary-fg px-4 py-2 rounded-md font-medium"
+        >
+          프로필 편집
+        </button>
+        <button 
+          onClick={onMessage}
+          className="flex-1 bg-muted text-primary px-4 py-2 rounded-md font-medium"
+        >
+          메시지
+        </button>
+      </div>
+    </div>
+  )
+}
+```
+
+주목할 점:
+- 모든 색상이 시맨틱 토큰 사용
+- 간격이 스케일 준수 (`gap-4`, `mb-6`, `p-6`)
+- Border radius가 시스템에서 (`rounded-lg`, `rounded-md`, `rounded-full`)
+- 타이포그래피가 정의된 크기 사용 (`text-lg`, `text-sm`)
+- 컴포넌트 구조가 패턴과 일치
+
+## 실전 예시: 기능 구축
+
+전체 기능에서 토큰 기반 생성이 어떻게 작동하는지 봅시다.
+
+**프롬프트:**
+```
+알림 센터 기능 만들어줘:
+- 헤더 아이콘에서 트리거되는 드롭다운
+- 알림 목록 (읽지 않은 항목 강조)
+- 각 알림: 아이콘, 제목, 타임스탬프, 읽음 표시 버튼
+- "모두 보기" 링크가 있는 푸터
+- 디자인 토큰 사용, 스크롤 있는 최대 높이
+```
+
+**Claude Code 생성:**
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+import { Bell, Check, ExternalLink } from 'lucide-react'
+
+interface Notification {
+  id: string
+  title: string
+  timestamp: string
+  isRead: boolean
+  icon: React.ReactNode
+}
+
+export function NotificationCenter({ 
+  notifications 
+}: { 
+  notifications: Notification[] 
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [items, setItems] = useState(notifications)
+  
+  const unreadCount = items.filter(n => !n.isRead).length
+
+  const markAsRead = (id: string) => {
+    setItems(items.map(n => 
+      n.id === id ? { ...n, isRead: true } : n
+    ))
+  }
+
+  return (
+    <div className="relative">
+      {/* 트리거 */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative p-2 rounded-md hover:bg-muted transition-colors"
+      >
+        <Bell className="w-5 h-5 text-secondary" />
+        {unreadCount > 0 && (
+          <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full" />
+        )}
+      </button>
+
+      {/* 드롭다운 */}
+      {isOpen && (
+        <>
+          <div 
+            className="fixed inset-0 z-10" 
+            onClick={() => setIsOpen(false)} 
+          />
+          <div className="absolute right-0 top-12 z-20 w-96 bg-base border border-default rounded-lg shadow-lg">
+            {/* 헤더 */}
+            <div className="px-4 py-3 border-b border-default">
+              <h3 className="text-base font-semibold text-primary">
+                알림
+              </h3>
+              {unreadCount > 0 && (
+                <p className="text-sm text-secondary mt-1">
+                  {unreadCount}개 읽지 않음
+                </p>
+              )}
+            </div>
+
+            {/* 목록 */}
+            <div className="max-h-96 overflow-y-auto">
+              {items.length === 0 ? (
+                <div className="px-4 py-8 text-center text-secondary text-sm">
+                  알림 없음
+                </div>
+              ) : (
+                items.map((notification) => (
+                  <div
+                    key={notification.id}
+                    className={`px-4 py-3 border-b border-default last:border-0 ${
+                      !notification.isRead ? 'bg-subtle' : ''
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-1 text-secondary">
+                        {notification.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-primary font-medium">
+                          {notification.title}
+                        </p>
+                        <p className="text-xs text-tertiary mt-1">
+                          {notification.timestamp}
+                        </p>
+                      </div>
+                      {!notification.isRead && (
+                        <button
+                          onClick={() => markAsRead(notification.id)}
+                          className="p-1 hover:bg-muted rounded"
+                          title="읽음 표시"
+                        >
+                          <Check className="w-4 h-4 text-secondary" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* 푸터 */}
+            <div className="px-4 py-3 border-t border-default">
+              <a
+                href="/notifications"
+                className="flex items-center justify-center gap-2 text-sm text-primary font-medium hover:text-secondary transition-colors"
+              >
+                모두 보기
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+```
+
+**Claude가 잘한 것:**
+- ✅ 모든 색상이 토큰 시스템에서 (`bg-base`, `text-primary`, `border-default`)
+- ✅ 간격 스케일 준수 (`px-4 py-3`, `gap-3`, `mt-1`)
+- ✅ 상태용 시맨틱 색상 (읽지 않음은 `bg-subtle`, 배지는 `bg-error`)
+- ✅ 타이포그래피 크기 (`text-sm`, `text-xs`, `text-base`)
+- ✅ Border radius 일관성 (`rounded-md`, `rounded-lg`, `rounded-full`)
+- ✅ 시스템 토큰 사용하는 호버 상태 (`hover:bg-muted`)
+
+이 컴포넌트는 기존 디자인 시스템과 완벽하게 통합됩니다. 리팩토링 불필요.
+
+## 고급: 다중 파일 기능
+
+더 큰 기능의 경우 Claude Code는 여러 파일에 걸쳐 토큰 일관성을 유지할 수 있습니다.
+
+**프롬프트:**
+```
+다음이 있는 설정 페이지 만들어줘:
+1. 사이드바 네비게이션 (계정, 보안, 알림, 결제)
+2. 각 섹션용 폼이 있는 콘텐츠 영역
+3. 저장/취소 버튼
+4. 모두 디자인 토큰 사용
+```
+
+Claude는 다음을 생성합니다:
+- `SettingsLayout.tsx` - 사이드바 + 콘텐츠 레이아웃
+- `SettingsSidebar.tsx` - 네비게이션 컴포넌트
+- `AccountSettings.tsx` - 계정 폼
+- `SecuritySettings.tsx` - 보안 폼
+- 등등
+
+모든 파일이 같은 토큰 시스템을 사용합니다. 모든 컴포넌트가 일관된 스타일링을 갖습니다. 전체 기능이 디자인된 것처럼 보입니다, 생성된 게 아니라.
+
+## Claude가 배우는 일반적인 패턴
+
+몇 개 컴포넌트를 생성하면 Claude Code는 패턴을 인식합니다:
+
+### 상태 배지
+
+```tsx
+<span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-success/10 text-success">
+  활성
+</span>
+```
+
+### 로딩 상태
+
+```tsx
+{isLoading ? (
+  <div className="flex items-center justify-center p-8">
+    <div className="w-6 h-6 border-2 border-primary-solid border-t-transparent rounded-full animate-spin" />
+  </div>
+) : (
+  content
+)}
+```
+
+### Empty 상태
+
+```tsx
+<div className="text-center py-12">
+  <p className="text-base text-secondary mb-2">항목 없음</p>
+  <p className="text-sm text-tertiary">필터를 조정해보세요</p>
+</div>
+```
+
+## 트러블슈팅
+
+### Claude가 하드코딩된 값 사용
+
+**해결:** 디자인 시스템 문서를 명시적으로 참조:
+```
+@design-system.md 우리 토큰 사용해서 모달 컴포넌트 만들어줘
+```
+
+### 일관되지 않은 간격
+
+**`.claude/design-system.md`에 추가:**
+```markdown
+## 간격 규칙
+
+- 카드: `p-6` (24px 패딩)
+- 폼 필드: `px-3 py-2` (12px/8px)
+- 버튼: `px-4 py-2` (16px/8px)
+- 스택 간격: `space-y-4` 또는 `gap-4` (16px)
+- 섹션 간격: `mb-8` 또는 `mb-12` (32px/48px)
+```
+
+### 잘못된 시맨틱 토큰
+
+**토큰 문서 개선:**
+```markdown
+## 각 토큰 사용 시기
+
+### 배경
+- `bg-base` - 페이지 배경, 카드 배경
+- `bg-subtle` - 호버 상태, 보조 surface
+- `bg-muted` - 비활성 상태, 덜 중요한 영역
+- `bg-emphasis` - 강조된 항목, 선택된 상태
+
+### 텍스트
+- `text-primary` - 헤딩, 중요한 콘텐츠
+- `text-secondary` - 본문, 설명
+- `text-tertiary` - 캡션, 메타데이터
+- `text-disabled` - 비활성 폼 필드, 비활성 항목
+```
+
+## 결과
+
+FramingUI 토큰 + Claude Code:
+
+✅ **디자인 드리프트 제로** - 생성된 모든 컴포넌트가 시스템 사용
+✅ **빠른 반복** - 스타일링 지연 없이 기능 구축
+✅ **팀 확장성** - Claude Code 사용하는 모든 이가 일관된 출력
+✅ **쉬운 테마 적용** - 토큰 업데이트하면 AI 생성 UI 전체 업데이트
+✅ **프로덕션 준비** - 생성된 코드가 즉시 디자인 리뷰 통과
+
+## 다음 단계
+
+1. **컴포넌트 패턴 문서화** - 일반적인 레이아웃을 `.claude/design-system.md`에 추가
+2. **토큰 스니펫 생성** - 자주 쓰는 Claude 프롬프트 재사용 위해 저장
+3. **생성된 코드 감사** - 몇 개 컴포넌트 리뷰, 갭 기반으로 토큰 문서 개선
+4. **팀 교육** - 디자인 시스템 문서 공유로 모두가 일관된 UI 생성
+
+---
+
+**리소스:**
+- [FramingUI 문서](https://framingui.com/docs)
+- [Claude Code 가이드](https://docs.anthropic.com/claude/docs)
+- [디자인 토큰 스펙](https://framingui.com/docs/tokens)

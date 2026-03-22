@@ -1,0 +1,381 @@
+---
+title: "How to Use Design Tokens with Cursor AI"
+description: "Step-by-step guide to integrate FramingUI design tokens with Cursor AI for consistent, production-ready UI code generation."
+date: "2026-03-22"
+author:
+  name: "FramingUI Team"
+tags:
+  - cursor-ai
+  - design-tokens
+  - ai-coding
+  - workflow
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+Cursor AI generates code fast. But without design tokens, that code uses arbitrary colors, spacing, and styles that don't match your design system. The solution isn't to paste your Figma specs into every prompt—it's to give Cursor structured token data it can reference automatically.
+
+This guide shows how to set up FramingUI design tokens with Cursor so every component it generates uses your actual design system values.
+
+## Why Cursor Needs Design Tokens
+
+Cursor's AI models are trained on millions of codebases. When you ask it to "create a button component," it generates what buttons typically look like across those examples. That means:
+
+- **Generic colors:** `#3B82F6` instead of your brand blue
+- **Random spacing:** `padding: 12px 24px` instead of your spacing scale
+- **Arbitrary radius:** `border-radius: 6px` instead of your corner standard
+- **Inconsistent naming:** `primaryButton`, `main-btn`, `ButtonPrimary` across different files
+
+With design tokens in context, Cursor generates components that:
+- Use your exact color palette
+- Follow your spacing system
+- Match your typography scale
+- Reference semantic token names consistently
+
+## Step 1: Install FramingUI Tokens
+
+First, add FramingUI to your project:
+
+```bash
+npm install @framingui/tokens
+# or
+pnpm add @framingui/tokens
+```
+
+For Tailwind projects:
+
+```bash
+npm install @framingui/tailwind-preset
+```
+
+## Step 2: Create a Token Reference File
+
+Create `.cursor/tokens.md` in your project root:
+
+```markdown
+# Design System Tokens
+
+## Colors
+
+Use these semantic color tokens:
+
+- `color.bg.base` - Main background (#FFFFFF)
+- `color.bg.subtle` - Subtle background (#F9FAFB)
+- `color.bg.muted` - Muted background (#F3F4F6)
+- `color.text.primary` - Primary text (#111827)
+- `color.text.secondary` - Secondary text (#6B7280)
+- `color.border.default` - Default borders (#E5E7EB)
+- `color.primary.solid` - Primary action color
+- `color.primary.fg` - Text on primary backgrounds
+
+## Spacing
+
+Use spacing scale (base 4px):
+
+- `spacing.1` = 4px
+- `spacing.2` = 8px
+- `spacing.3` = 12px
+- `spacing.4` = 16px
+- `spacing.5` = 20px
+- `spacing.6` = 24px
+- `spacing.8` = 32px
+- `spacing.10` = 40px
+- `spacing.12` = 48px
+
+## Typography
+
+Font sizes with line-heights:
+
+- `text.xs` - 12px/16px
+- `text.sm` - 14px/20px
+- `text.base` - 16px/24px
+- `text.lg` - 18px/28px
+- `text.xl` - 20px/28px
+- `text.2xl` - 24px/32px
+
+## Border Radius
+
+- `radius.sm` = 4px
+- `radius.md` = 6px
+- `radius.lg` = 8px
+- `radius.xl` = 12px
+- `radius.2xl` = 16px
+- `radius.full` = 9999px
+```
+
+## Step 3: Configure Cursor Rules
+
+Create or update `.cursorrules` in your project root:
+
+```text
+# Design System Rules
+
+## Always Use Design Tokens
+
+When generating UI components:
+1. Import tokens from @framingui/tokens
+2. Use semantic token names, never hardcoded values
+3. Reference .cursor/tokens.md for available tokens
+4. Follow the spacing scale (multiples of 4px)
+
+## Code Style
+
+- Use CSS variables for tokens: var(--color-bg-base)
+- For Tailwind: use preset classes like bg-base, text-primary
+- Component props should accept token names, not raw values
+- Document which tokens are used in component comments
+
+## Examples
+
+Good:
+```tsx
+<button className="bg-primary-solid text-primary-fg px-4 py-2 rounded-md">
+  Click me
+</button>
+```
+
+Bad:
+```tsx
+<button className="bg-blue-600 text-white px-4 py-2 rounded-md">
+  Click me
+</button>
+```
+```
+
+## Step 4: Set Up Your Token Configuration
+
+For CSS-in-JS projects, create `src/tokens.ts`:
+
+```typescript
+import { tokens } from '@framingui/tokens'
+
+export const colors = tokens.color
+export const spacing = tokens.spacing
+export const typography = tokens.typography
+export const radius = tokens.radius
+
+// Export as CSS variables
+export const cssVars = `
+  :root {
+    --color-bg-base: ${colors.bg.base};
+    --color-bg-subtle: ${colors.bg.subtle};
+    --color-text-primary: ${colors.text.primary};
+    --color-primary-solid: ${colors.primary.solid};
+    --spacing-4: ${spacing[4]};
+    /* ... more tokens */
+  }
+`
+```
+
+For Tailwind, update `tailwind.config.js`:
+
+```javascript
+import { framingUIPreset } from '@framingui/tailwind-preset'
+
+export default {
+  presets: [framingUIPreset],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  // Your custom overrides
+}
+```
+
+## Step 5: Test with Cursor
+
+Now try these prompts in Cursor:
+
+**Prompt 1:**
+```
+Create a card component with subtle background, primary text, 
+and proper spacing using our design tokens
+```
+
+Cursor should generate:
+
+```tsx
+export function Card({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="bg-subtle border border-default rounded-lg p-6">
+      <div className="text-primary">{children}</div>
+    </div>
+  )
+}
+```
+
+**Prompt 2:**
+```
+Build a primary button component using our color tokens
+```
+
+Expected output:
+
+```tsx
+export function Button({ children, onClick }: ButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className="bg-primary-solid text-primary-fg px-4 py-2 rounded-md 
+                 hover:opacity-90 transition-opacity"
+    >
+      {children}
+    </button>
+  )
+}
+```
+
+## Step 6: Use Cursor's Token Autocomplete
+
+Once tokens are imported in your files, Cursor's autocomplete will suggest token names:
+
+```tsx
+// Type "color." and Cursor will suggest:
+// color.bg.base
+// color.bg.subtle
+// color.text.primary
+// etc.
+
+const cardStyles = {
+  backgroundColor: tokens.color.bg.subtle,
+  padding: tokens.spacing[4],
+  borderRadius: tokens.radius.lg,
+}
+```
+
+## Advanced: Token Context in Composer
+
+For complex components, include token context in Cursor Composer:
+
+```
+@tokens.md Create a data table with:
+- Subtle background for header
+- Border between rows using border.default
+- Proper spacing (spacing.4 for cells, spacing.2 for compact mode)
+- Hover state using bg.muted
+```
+
+The `@tokens.md` reference tells Composer to load your token documentation before generating.
+
+## Common Patterns
+
+### Dashboard Cards
+
+```tsx
+// Cursor prompt: "Create a stat card with icon, label, and value"
+export function StatCard({ icon, label, value }: StatCardProps) {
+  return (
+    <div className="bg-base border border-default rounded-lg p-6">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="text-secondary">{icon}</div>
+        <span className="text-sm text-secondary">{label}</span>
+      </div>
+      <div className="text-2xl font-semibold text-primary">{value}</div>
+    </div>
+  )
+}
+```
+
+### Form Inputs
+
+```tsx
+// Cursor prompt: "Build a text input with label and error state"
+export function TextField({ label, error, ...props }: TextFieldProps) {
+  return (
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-primary">{label}</label>
+      <input
+        {...props}
+        className={cn(
+          "w-full px-3 py-2 rounded-md border",
+          "bg-base text-primary",
+          "focus:outline-none focus:ring-2 focus:ring-primary-solid",
+          error ? "border-error" : "border-default"
+        )}
+      />
+      {error && <p className="text-sm text-error">{error}</p>}
+    </div>
+  )
+}
+```
+
+### Modal Dialogs
+
+```tsx
+// Cursor prompt: "Create a modal with overlay, close button, header, and actions"
+export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  if (!isOpen) return null
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-base rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+        <h2 className="text-xl font-semibold text-primary mb-4">{title}</h2>
+        <div className="text-secondary mb-6">{children}</div>
+        <div className="flex gap-3 justify-end">
+          <button className="px-4 py-2 rounded-md bg-muted text-primary">
+            Cancel
+          </button>
+          <button className="px-4 py-2 rounded-md bg-primary-solid text-primary-fg">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+```
+
+## Troubleshooting
+
+### Cursor Still Uses Hardcoded Values
+
+**Check:**
+1. Is `.cursorrules` in your project root?
+2. Did you reload Cursor after adding token files?
+3. Try explicitly mentioning tokens in your prompt: "using design tokens from @framingui/tokens"
+
+### Token Names Don't Autocomplete
+
+**Fix:**
+1. Make sure tokens are imported in the active file
+2. Type the full path first: `tokens.color.bg.base`
+3. Cursor learns from usage—use tokens a few times and autocomplete improves
+
+### Generated Code Mixes Token Styles
+
+**Solution:**
+Update `.cursorrules` to be more explicit:
+
+```text
+NEVER use:
+- Hardcoded hex colors (#FFFFFF, #000000, etc.)
+- Arbitrary pixel values (12px, 18px, etc.)
+- Generic Tailwind colors (bg-blue-500, text-gray-600)
+
+ALWAYS use:
+- Token classes (bg-base, text-primary)
+- Spacing scale (p-4, gap-6, space-y-3)
+- Semantic names from our design system
+```
+
+## What You Get
+
+With FramingUI tokens + Cursor:
+
+✅ **No more design drift** - Every generated component uses your system
+✅ **Faster iterations** - Cursor generates production-ready code immediately
+✅ **Consistent naming** - Semantic tokens across all AI-generated files
+✅ **Easy refactoring** - Change tokens once, update everywhere
+✅ **Better prompts** - Focus on features, not visual specs
+
+## Next Steps
+
+- **Expand your token docs**: Add component patterns, layout recipes, animation tokens
+- **Create prompt templates**: Save common Cursor prompts for your frequent component types
+- **Share with team**: Everyone gets consistent AI output when they use the same token setup
+
+---
+
+**More resources:**
+- [FramingUI Documentation](https://framingui.com/docs)
+- [Token Reference](https://framingui.com/docs/tokens)
+- [Cursor AI Best Practices](https://cursor.sh/docs)

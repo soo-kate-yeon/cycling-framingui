@@ -1,0 +1,541 @@
+---
+title: "v0 Design Customization: Beyond Default Themes"
+description: "How to customize v0.dev generated components to match your design system instead of accepting generic shadcn/ui defaults."
+date: "2026-03-22"
+author:
+  name: "FramingUI Team"
+tags:
+  - v0
+  - design-tokens
+  - customization
+  - shadcn-ui
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+v0.dev generates beautiful UI components instantly. The problem? So does everyone else's v0. Without customization, your app looks like every other product using shadcn/ui defaults: zinc gray palette, rounded-md borders, 16px spacing increments.
+
+The components work perfectly. But they're generic. This guide shows how to customize v0 output to use your design system while keeping the speed and convenience of AI generation.
+
+## The v0 Default Problem
+
+Generate a dashboard card in v0:
+
+**Prompt:** "Create a stat card component"
+
+**v0 generates:**
+
+```tsx
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+export function StatCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Total Revenue</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">$45,231.89</div>
+        <p className="text-xs text-muted-foreground">
+          +20.1% from last month
+        </p>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+This uses shadcn/ui's default design tokens:
+- `Card` → zinc border, subtle background
+- `text-muted-foreground` → `hsl(240 3.8% 46.1%)`
+- Spacing → shadcn defaults
+- Typography → default scale
+
+It looks good. But it doesn't look like **your** product.
+
+## Strategy 1: Custom v0 Theme Configuration
+
+v0 respects project-level theme configuration. You can override defaults before generation.
+
+### Step 1: Create Theme File
+
+In your project, create `v0.config.json`:
+
+```json
+{
+  "theme": {
+    "colors": {
+      "background": "#FFFFFF",
+      "foreground": "#111827",
+      "primary": "#7C3AED",
+      "primary-foreground": "#FFFFFF",
+      "secondary": "#F3F4F6",
+      "secondary-foreground": "#111827",
+      "muted": "#F9FAFB",
+      "muted-foreground": "#6B7280",
+      "accent": "#EC4899",
+      "accent-foreground": "#FFFFFF",
+      "border": "#E5E7EB",
+      "input": "#E5E7EB",
+      "ring": "#7C3AED"
+    },
+    "radius": {
+      "sm": "0.25rem",
+      "md": "0.375rem",
+      "lg": "0.5rem",
+      "xl": "0.75rem"
+    },
+    "spacing": {
+      "unit": 4
+    }
+  }
+}
+```
+
+### Step 2: Reference in v0 Prompts
+
+When generating components:
+
+```
+@v0.config.json Create a stat card component using our custom theme
+```
+
+v0 will generate using your specified colors and spacing instead of defaults.
+
+## Strategy 2: Post-Generation Token Replacement
+
+Generate with v0, then replace shadcn tokens with your design system tokens.
+
+### Before (v0 default):
+
+```tsx
+<Card className="border-border bg-card">
+  <CardHeader>
+    <CardTitle className="text-foreground">Total Users</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold text-foreground">1,234</div>
+    <p className="text-xs text-muted-foreground">+12% from last week</p>
+  </CardContent>
+</Card>
+```
+
+### After (FramingUI tokens):
+
+```tsx
+<Card className="border-default bg-base">
+  <CardHeader>
+    <CardTitle className="text-primary">Total Users</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold text-primary">1,234</div>
+    <p className="text-xs text-secondary">+12% from last week</p>
+  </CardContent>
+</Card>
+```
+
+**Replacement map:**
+- `border-border` → `border-default`
+- `bg-card` → `bg-base` or `bg-subtle`
+- `text-foreground` → `text-primary`
+- `text-muted-foreground` → `text-secondary` or `text-tertiary`
+- `bg-muted` → `bg-muted` (same name, different value)
+
+You can automate this with find-and-replace or a codemod script.
+
+## Strategy 3: Custom shadcn Theme
+
+If you're using shadcn/ui (which v0 generates), customize the base theme.
+
+### Update `globals.css`:
+
+```css
+@layer base {
+  :root {
+    /* Replace shadcn defaults with your tokens */
+    --background: 0 0% 100%;           /* #FFFFFF */
+    --foreground: 222 47% 11%;         /* #111827 */
+    --card: 0 0% 98%;                  /* #F9FAFB */
+    --card-foreground: 222 47% 11%;
+    --primary: 262 83% 58%;            /* #7C3AED */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;          /* #F3F4F6 */
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;    /* #6B7280 */
+    --accent: 330 81% 60%;             /* #EC4899 */
+    --accent-foreground: 0 0% 100%;
+    --border: 220 13% 91%;             /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 262 83% 58%;
+    --radius: 0.375rem;                /* 6px */
+  }
+}
+```
+
+Now all v0-generated shadcn components use your colors automatically.
+
+### For FramingUI Integration:
+
+```css
+@layer base {
+  :root {
+    /* Map FramingUI tokens to shadcn variables */
+    --background: var(--color-bg-base);
+    --foreground: var(--color-text-primary);
+    --card: var(--color-bg-subtle);
+    --card-foreground: var(--color-text-primary);
+    --primary: var(--color-primary-solid);
+    --primary-foreground: var(--color-primary-fg);
+    --muted: var(--color-bg-muted);
+    --muted-foreground: var(--color-text-secondary);
+    --border: var(--color-border-default);
+    --radius: var(--radius-md);
+  }
+}
+```
+
+This bridges v0/shadcn and FramingUI tokens.
+
+## Strategy 4: Constrained v0 Prompts
+
+Tell v0 exactly what design constraints to follow.
+
+### Generic Prompt (produces defaults):
+
+```
+Create a dashboard with revenue card, user stats, and activity feed
+```
+
+### Constrained Prompt (produces custom design):
+
+```
+Create a dashboard with revenue card, user stats, and activity feed.
+
+Design constraints:
+- Use semantic tokens: bg-base, bg-subtle, text-primary, text-secondary
+- Border: border-default (1px solid #E5E7EB)
+- Spacing: p-6 for cards, gap-4 for grids
+- Typography: text-3xl for numbers, text-sm for labels
+- Primary color: #7C3AED (purple)
+- Corner radius: rounded-lg (8px) for cards
+- NO gradients, NO shadcn zinc defaults
+
+Component structure:
+- 3-column grid on desktop
+- Each card: white background, subtle border, padding 24px
+- Numbers: large, bold, primary color
+- Labels: small, secondary color
+- Growth indicators: green for positive, red for negative
+```
+
+v0 generates much closer to your design system with this level of specificity.
+
+## Strategy 5: v0 + FramingUI Workflow
+
+Combine v0's speed with FramingUI's token system.
+
+### Step 1: Generate with v0
+
+Use v0 to quickly scaffold the component structure.
+
+**Prompt:** "Create a pricing table with 3 tiers"
+
+v0 generates the layout and logic.
+
+### Step 2: Replace with FramingUI Tokens
+
+Convert shadcn classes to FramingUI semantic tokens:
+
+**v0 output:**
+```tsx
+<div className="grid md:grid-cols-3 gap-8">
+  <div className="border rounded-lg p-6 bg-card">
+    <h3 className="text-xl font-semibold text-foreground">Starter</h3>
+    <p className="text-3xl font-bold text-foreground mt-4">$9<span className="text-sm text-muted-foreground">/mo</span></p>
+    <Button className="mt-6 w-full">Get Started</Button>
+  </div>
+  {/* more tiers */}
+</div>
+```
+
+**After FramingUI:**
+```tsx
+<div className="grid md:grid-cols-3 gap-8">
+  <div className="border border-default rounded-lg p-6 bg-base">
+    <h3 className="text-xl font-semibold text-primary">Starter</h3>
+    <p className="text-3xl font-bold text-primary mt-4">$9<span className="text-sm text-secondary">/mo</span></p>
+    <Button className="mt-6 w-full bg-primary-solid text-primary-fg">Get Started</Button>
+  </div>
+  {/* more tiers */}
+</div>
+```
+
+### Step 3: Refine Logic, Keep Design
+
+v0 handled the responsive grid, pricing logic, and structure. You just swapped in your design tokens. Result: fast generation + on-brand design.
+
+## Common v0 Patterns to Customize
+
+### Dashboard Cards
+
+**v0 default:**
+```tsx
+<Card>
+  <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+    <DollarSign className="h-4 w-4 text-muted-foreground" />
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold">$45,231.89</div>
+    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+  </CardContent>
+</Card>
+```
+
+**Customized:**
+```tsx
+<Card className="border-default bg-base">
+  <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <CardTitle className="text-sm font-medium text-primary">Total Revenue</CardTitle>
+    <DollarSign className="h-4 w-4 text-secondary" />
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold text-primary">$45,231.89</div>
+    <p className="text-xs text-secondary">+20.1% from last month</p>
+  </CardContent>
+</Card>
+```
+
+### Form Fields
+
+**v0 default:**
+```tsx
+<div className="grid gap-2">
+  <Label htmlFor="email">Email</Label>
+  <Input id="email" type="email" placeholder="m@example.com" />
+</div>
+```
+
+**Customized:**
+```tsx
+<div className="grid gap-2">
+  <Label htmlFor="email" className="text-sm font-medium text-primary">Email</Label>
+  <Input 
+    id="email" 
+    type="email" 
+    placeholder="m@example.com"
+    className="border-default bg-base text-primary focus:ring-primary-solid"
+  />
+</div>
+```
+
+### Dialogs/Modals
+
+**v0 default:**
+```tsx
+<Dialog>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Are you sure?</DialogTitle>
+      <DialogDescription>
+        This action cannot be undone.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <Button variant="outline">Cancel</Button>
+      <Button>Confirm</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+**Customized:**
+```tsx
+<Dialog>
+  <DialogContent className="bg-base border-default">
+    <DialogHeader>
+      <DialogTitle className="text-primary">Are you sure?</DialogTitle>
+      <DialogDescription className="text-secondary">
+        This action cannot be undone.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <Button variant="outline" className="border-default text-primary">Cancel</Button>
+      <Button className="bg-primary-solid text-primary-fg">Confirm</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+## Automation: Token Replacement Script
+
+For large v0 codebases, automate token replacement:
+
+```javascript
+// replace-tokens.js
+const fs = require('fs')
+const path = require('path')
+
+const replacements = {
+  'text-foreground': 'text-primary',
+  'text-muted-foreground': 'text-secondary',
+  'bg-card': 'bg-base',
+  'bg-muted': 'bg-subtle',
+  'border-border': 'border-default',
+  'text-card-foreground': 'text-primary',
+}
+
+function replaceTokens(filePath) {
+  let content = fs.readFileSync(filePath, 'utf8')
+  
+  for (const [oldToken, newToken] of Object.entries(replacements)) {
+    const regex = new RegExp(`\\b${oldToken}\\b`, 'g')
+    content = content.replace(regex, newToken)
+  }
+  
+  fs.writeFileSync(filePath, content)
+}
+
+// Usage: node replace-tokens.js ./src/components/**/*.tsx
+```
+
+Run after v0 generation to batch-convert to your tokens.
+
+## v0 Pro Tips for Custom Design
+
+### 1. Be Specific About Colors
+
+Instead of "blue theme":
+```
+Use purple primary (#7C3AED), not blue. 
+All primary actions should use this exact color.
+```
+
+### 2. Reference Existing Examples
+
+```
+Style this similar to Linear's settings page: 
+minimal, lots of whitespace, muted purple accents
+```
+
+### 3. Provide Component Specs
+
+```
+Button specs:
+- Primary: purple background (#7C3AED), white text, 6px radius
+- Secondary: light gray background (#F3F4F6), dark text
+- Padding: 12px horizontal, 8px vertical
+- Font: 14px medium weight
+```
+
+### 4. Iterate on Specific Elements
+
+After first generation:
+```
+Make the card borders lighter (#E5E7EB instead of current)
+Increase spacing between cards to 24px
+Use semibold for card titles instead of bold
+```
+
+### 5. Use v0's Variants
+
+v0 supports component variants. Define them upfront:
+
+```
+Create a Button component with variants:
+- default: purple background, white text
+- secondary: gray background, dark text
+- outline: transparent background, purple border and text
+- ghost: transparent background, purple text, no border
+```
+
+## When v0 Isn't Enough
+
+v0 is great for:
+- ✅ Scaffolding layouts quickly
+- ✅ Generating form logic
+- ✅ Creating responsive grids
+- ✅ Building shadcn-compatible components
+
+But for full design system control:
+- Use FramingUI tokens from the start
+- Generate component structure with v0
+- Apply your design system post-generation
+- Build reusable components that wrap v0 output
+
+## FramingUI + v0 Integration
+
+Install FramingUI alongside shadcn:
+
+```bash
+npm install @framingui/tokens @framingui/tailwind-preset
+npm install shadcn-ui
+```
+
+Update `tailwind.config.js`:
+
+```javascript
+import { framingUIPreset } from '@framingui/tailwind-preset'
+
+export default {
+  presets: [framingUIPreset],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  theme: {
+    extend: {
+      // Your overrides
+    }
+  }
+}
+```
+
+Now you can use FramingUI tokens alongside v0-generated shadcn components:
+
+```tsx
+<Card className="border-default bg-base">
+  <CardContent className="p-6">
+    <h3 className="text-primary text-lg font-semibold">Card Title</h3>
+    <p className="text-secondary text-sm mt-2">Description text</p>
+  </CardContent>
+</Card>
+```
+
+## Results
+
+With customized v0 workflow:
+
+✅ **Speed of AI generation** - v0 scaffolds structure fast
+✅ **Your design system** - Tokens ensure brand consistency
+✅ **shadcn quality** - Accessible, well-built components
+✅ **Easy maintenance** - Update tokens, all components update
+✅ **Team scalability** - Everyone generates consistent UI
+
+## Checklist for v0 Customization
+
+Before accepting v0 output:
+
+- [ ] Replace `text-foreground` with `text-primary`
+- [ ] Replace `text-muted-foreground` with `text-secondary`
+- [ ] Replace `bg-card` with `bg-base` or `bg-subtle`
+- [ ] Replace `border-border` with `border-default`
+- [ ] Check spacing matches your scale (p-6, gap-4, etc.)
+- [ ] Verify colors match your brand palette
+- [ ] Test responsive behavior
+- [ ] Ensure accessibility (v0 handles this well by default)
+
+## Next Steps
+
+1. **Set up theme config** - Create `v0.config.json` with your tokens
+2. **Customize shadcn base** - Update `globals.css` with your colors
+3. **Create prompt templates** - Save constrained prompts for reuse
+4. **Build wrapper components** - Create your own components that use FramingUI tokens
+5. **Automate token replacement** - Use scripts for batch conversion
+
+---
+
+**Resources:**
+- [v0.dev Documentation](https://v0.dev/docs)
+- [FramingUI + shadcn Guide](https://framingui.com/docs/shadcn)
+- [shadcn/ui Theming](https://ui.shadcn.com/docs/theming)
+- [Token Customization](https://framingui.com/docs/customization)

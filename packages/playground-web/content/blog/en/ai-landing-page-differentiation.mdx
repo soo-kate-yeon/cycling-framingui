@@ -1,0 +1,501 @@
+---
+title: "AI-Generated Landing Page That Doesn't Look Generic"
+description: "How to use AI tools to build landing pages that stand out instead of blending in with every other AI-generated site."
+date: "2026-03-22"
+author:
+  name: "FramingUI Team"
+tags:
+  - ai-design
+  - landing-page
+  - design-tokens
+  - differentiation
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+AI can generate a landing page in 30 seconds. The problem? So can everyone else. And they're all starting to look the same: gradient hero sections, three-column feature grids, pricing tables with "Most Popular" badges, testimonial carousels.
+
+The code works. The layout is reasonable. But your landing page looks like 10,000 others built with v0, Vercel AI, or GPT-4. Prospects can't tell you apart.
+
+This isn't AI's fault. It's a constraint problem. Without design boundaries, AI generates the statistical average of what landing pages look like. This guide shows how to constrain AI generation to produce landing pages that are distinctive, on-brand, and not obviously AI-generated.
+
+## The Generic AI Landing Page Problem
+
+Ask v0 or Claude to "build a SaaS landing page" and you get:
+
+```tsx
+<section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+  <div className="max-w-6xl mx-auto px-6 text-center">
+    <h1 className="text-5xl font-bold mb-6">
+      The Future of [Your Industry]
+    </h1>
+    <p className="text-xl mb-8 max-w-2xl mx-auto">
+      Revolutionary platform that transforms how you [do the thing]
+    </p>
+    <button className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold">
+      Start Free Trial
+    </button>
+  </div>
+</section>
+```
+
+Followed by:
+
+- Three feature boxes with icons
+- Social proof logos in grayscale
+- "How it works" with numbered steps
+- Pricing table (free, pro, enterprise)
+- FAQ accordion
+- CTA footer with gradient
+
+This structure isn't wrong. It converts fine. But when your competitors' landing pages have the exact same layout, you're competing on copy alone. And if they're also using AI for copy, you're fully commoditized.
+
+## What Makes a Landing Page Distinctive
+
+Not creative experiments—**constrained consistency**. The best landing pages don't surprise you with novelty. They feel coherent, intentional, and aligned with the brand.
+
+### 1. Visual Identity
+
+Your landing page should reflect your product's personality:
+- **B2B SaaS:** Clean, professional, trust-focused
+- **Dev tools:** Code-forward, technical, no fluff
+- **Creative tools:** Expressive, playful, visual-first
+- **Finance:** Secure, stable, data-driven
+
+AI doesn't know your personality by default. You have to tell it.
+
+### 2. Unique Constraints
+
+Generic landing pages use generic constraints:
+- Colors: "professional blue" → `#3B82F6`
+- Spacing: "enough padding" → arbitrary values
+- Typography: "readable" → 16px body, 36px headings
+
+Distinctive landing pages use brand-specific constraints:
+- Colors: Your exact palette
+- Spacing: Your spacing scale
+- Typography: Your type system
+- Layout: Your grid preferences
+
+### 3. Content Hierarchy
+
+AI tends to treat all content equally. Distinctive pages have clear priority:
+- **Primary CTA:** Obvious, impossible to miss
+- **Value prop:** Clear and front-loaded
+- **Social proof:** Supporting, not competing with CTA
+- **Features:** Scannable, not walls of text
+
+## Strategy 1: Constrain with Design Tokens
+
+Give AI your design system upfront so it generates on-brand from the start.
+
+### Setup: Token-Driven Prompt
+
+Instead of:
+```
+Build a landing page for a project management tool
+```
+
+Use:
+```
+Build a landing page for a project management tool using these constraints:
+
+Colors:
+- Background: bg-base (#FFFFFF)
+- Text: text-primary (#111827), text-secondary (#6B7280)
+- Brand: primary-solid (#7C3AED), primary-fg (#FFFFFF)
+- Accent: accent-solid (#EC4899)
+
+Spacing scale (4px base):
+- Sections: py-16 (64px)
+- Cards: p-6 (24px)
+- Elements: gap-4 (16px)
+
+Typography:
+- Hero: text-5xl (48px)
+- Section headers: text-3xl (30px)
+- Body: text-lg (18px)
+
+Buttons:
+- Primary: bg-primary-solid text-primary-fg px-6 py-3 rounded-md
+- Secondary: bg-muted text-primary px-6 py-3 rounded-md
+
+NO gradients, NO purple-blue defaults, NO arbitrary spacing.
+Use semantic class names (bg-base, text-primary) not Tailwind defaults.
+```
+
+**Result:** AI generates a page that uses your system, not generic Tailwind.
+
+### Example Output
+
+```tsx
+<section className="py-16 bg-base">
+  <div className="max-w-6xl mx-auto px-6">
+    <div className="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h1 className="text-5xl font-bold text-primary mb-4">
+          Project Management Without the Chaos
+        </h1>
+        <p className="text-lg text-secondary mb-6">
+          Keep your team aligned with simple task tracking, 
+          clear priorities, and zero busywork.
+        </p>
+        <div className="flex gap-4">
+          <button className="bg-primary-solid text-primary-fg px-6 py-3 rounded-md font-semibold">
+            Start Free Trial
+          </button>
+          <button className="bg-muted text-primary px-6 py-3 rounded-md font-semibold">
+            Watch Demo
+          </button>
+        </div>
+        <p className="text-sm text-tertiary mt-4">
+          No credit card required • 14-day trial
+        </p>
+      </div>
+      <div className="bg-subtle border border-default rounded-lg p-8">
+        {/* Product screenshot or illustration */}
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+Notice:
+- Uses token-based classes (`bg-base`, `text-primary`)
+- Follows spacing scale (`py-16`, `gap-12`, `mb-4`)
+- Matches typography scale (`text-5xl`, `text-lg`)
+- Primary CTA stands out with brand color
+- No gradient, no generic blue
+
+## Strategy 2: Reference Existing Brands
+
+Tell AI to match a specific design language.
+
+**Prompt:**
+```
+Build a landing page with Linear's visual style:
+- Minimal, lots of whitespace
+- Muted purple accent (#5E6AD2)
+- Clean sans-serif typography
+- Subtle borders, no shadows
+- Product screenshots as primary visual
+- Simple grid layouts, no clutter
+```
+
+Or:
+
+```
+Build a landing page inspired by Stripe:
+- Professional, trust-focused
+- Purple brand color (#635BFF)
+- Clear hierarchy
+- Code snippets as visual elements
+- Inline demos
+- Technical but approachable tone
+```
+
+AI models have strong priors on well-known brands. Referencing them anchors generation toward a specific aesthetic.
+
+**Warning:** Don't copy. Use as a style reference, not a clone target.
+
+## Strategy 3: Anti-Patterns
+
+Tell AI what NOT to do. This eliminates generic defaults.
+
+**Prompt:**
+```
+Build a landing page for a developer tool.
+
+DO NOT use:
+- Gradient backgrounds (especially blue-purple)
+- Stock photos of people in meetings
+- Generic icons (rocket, lightning bolt, chart up)
+- "Revolutionary" or "Transform" language
+- Rounded-full buttons
+- Carousel testimonials
+
+DO use:
+- Code examples as visual elements
+- Terminal/CLI aesthetic where appropriate
+- Monospace font for technical details
+- Actual product screenshots
+- Developer-focused copy (specifics, not hype)
+- Rectangular, minimal button style
+```
+
+This flips AI from "do what's common" to "do what's distinctive for this audience."
+
+## Strategy 4: Component-by-Component with FramingUI
+
+Instead of generating the entire page, build it component-by-component with token constraints.
+
+### Hero Section
+
+**Prompt:**
+```
+@design-tokens.md Build a hero section:
+- Split layout: text left, visual right
+- Large heading (text-5xl), concise subheading (text-lg)
+- Two CTAs: primary (bg-primary-solid), secondary (bg-muted)
+- Trust indicators below CTAs (pricing, trial info)
+- Background: bg-base, no gradients
+```
+
+### Feature Grid
+
+**Prompt:**
+```
+@design-tokens.md Build a feature section:
+- 3-column grid on desktop, stack on mobile
+- Each feature: icon, heading (text-xl), description (text-base)
+- Icons: 24px, text-secondary color
+- Cards: bg-subtle, border-default, rounded-lg, p-6
+- Section header: text-3xl, text-primary, mb-12
+```
+
+### Social Proof
+
+**Prompt:**
+```
+@design-tokens.md Build social proof section:
+- Logo cloud: grayscale, equal sizing
+- Short testimonial quotes: text-base, text-secondary
+- Customer avatars: rounded-full, 48px
+- Layout: centered, max-w-4xl
+- Background: bg-subtle
+```
+
+By generating components separately, you maintain token consistency across all sections. The full page feels cohesive because everything uses the same system.
+
+## Strategy 5: Iterate with Constraints
+
+First generation is rarely perfect. Refine with constraints.
+
+**Initial:**
+```
+Build a landing page hero for an email marketing tool
+```
+
+**AI generates generic gradient hero**
+
+**Refine:**
+```
+Remove the gradient background. Use bg-base.
+Make the CTA button more prominent: larger padding (px-8 py-4), 
+stronger contrast with bg-primary-solid.
+Reduce heading size from text-6xl to text-5xl for better hierarchy.
+Add a trust indicator below the CTA: "Join 10,000+ marketers"
+```
+
+**AI updates with constraints**
+
+Each iteration adds specificity. By round 3-4, the page looks intentional, not generated.
+
+## Real Example: Before/After
+
+### Before (Generic AI Output)
+
+```tsx
+<div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-500">
+  <header className="py-6 px-8">
+    <nav className="flex justify-between items-center max-w-7xl mx-auto">
+      <div className="text-white text-2xl font-bold">BrandName</div>
+      <button className="bg-white text-purple-600 px-6 py-2 rounded-full font-semibold">
+        Get Started
+      </button>
+    </nav>
+  </header>
+  
+  <section className="text-white text-center py-20 px-6">
+    <h1 className="text-6xl font-bold mb-6">
+      Transform Your Business Today
+    </h1>
+    <p className="text-xl mb-8 max-w-2xl mx-auto">
+      Revolutionary platform that helps you achieve more with less effort
+    </p>
+    <button className="bg-white text-purple-600 px-8 py-4 rounded-full text-lg font-semibold shadow-xl">
+      Start Free Trial
+    </button>
+  </section>
+</div>
+```
+
+Problems:
+- Generic gradient (purple-blue-cyan)
+- Buzzword copy ("Transform", "Revolutionary")
+- Rounded-full buttons (very 2023)
+- No specific value proposition
+- Looks like 1000 other AI sites
+
+### After (Token-Constrained)
+
+```tsx
+<div className="min-h-screen bg-base">
+  <header className="border-b border-default py-4 px-6">
+    <nav className="flex justify-between items-center max-w-6xl mx-auto">
+      <div className="text-primary text-xl font-semibold">FramingUI</div>
+      <div className="flex gap-4 items-center">
+        <a href="/docs" className="text-secondary hover:text-primary">Docs</a>
+        <a href="/pricing" className="text-secondary hover:text-primary">Pricing</a>
+        <button className="bg-primary-solid text-primary-fg px-4 py-2 rounded-md font-medium">
+          Get Started
+        </button>
+      </div>
+    </nav>
+  </header>
+  
+  <section className="py-16 px-6">
+    <div className="max-w-5xl mx-auto">
+      <div className="max-w-3xl">
+        <h1 className="text-5xl font-bold text-primary mb-4">
+          Design tokens for developers who ship
+        </h1>
+        <p className="text-lg text-secondary mb-6 max-w-2xl">
+          Stop fighting with arbitrary spacing and colors. 
+          Use a semantic token system that scales from landing page to full product.
+        </p>
+        <div className="flex gap-4 items-center mb-4">
+          <button className="bg-primary-solid text-primary-fg px-6 py-3 rounded-md font-semibold">
+            Install Tokens
+          </button>
+          <button className="bg-muted text-primary px-6 py-3 rounded-md font-semibold">
+            View Docs
+          </button>
+        </div>
+        <p className="text-sm text-tertiary">
+          <code className="bg-subtle px-2 py-1 rounded text-xs">
+            npm install @framingui/tokens
+          </code>
+        </p>
+      </div>
+      
+      {/* Code example or product screenshot */}
+      <div className="mt-12 bg-subtle border border-default rounded-lg p-8">
+        <pre className="text-sm text-secondary">
+          {`import { tokens } from '@framingui/tokens'
+
+const button = {
+  background: tokens.color.primary.solid,
+  color: tokens.color.primary.fg,
+  padding: \`\${tokens.spacing[3]} \${tokens.spacing[4]}\`,
+}`}
+        </pre>
+      </div>
+    </div>
+  </section>
+</div>
+```
+
+Improvements:
+- Token-based color system (bg-base, text-primary)
+- Specific value prop (not "transform your business")
+- Clean, minimal layout (no gradient)
+- Developer-focused (includes code example)
+- Consistent spacing (spacing scale)
+- Rectangular buttons (rounded-md)
+- Looks intentional, not generated
+
+## Tools That Help
+
+### FramingUI + AI
+
+Use FramingUI tokens to constrain AI generation:
+
+1. **Install tokens:**
+   ```bash
+   npm install @framingui/tokens @framingui/tailwind-preset
+   ```
+
+2. **Create `.cursorrules` or `.clauderules`:**
+   ```
+   When generating landing page sections:
+   - Use @framingui/tokens for all colors, spacing, typography
+   - Reference semantic tokens (bg-base, text-primary, primary-solid)
+   - Follow spacing scale (p-6, gap-4, py-16)
+   - NO gradients, NO arbitrary hex codes
+   ```
+
+3. **Generate with context:**
+   ```
+   @design-tokens.md Build a landing page hero section
+   ```
+
+AI now generates token-based code that matches your design system automatically.
+
+### v0 with Token Presets
+
+If using v0.dev:
+
+1. Define your tokens as a v0 project preset
+2. Reference the preset in every generation
+3. v0 maintains consistency across sections
+
+### Figma → Tokens → AI
+
+If you have Figma designs:
+
+1. Export design tokens from Figma (via plugins like Tokens Studio)
+2. Convert to FramingUI-compatible format
+3. Feed tokens to AI for generation
+4. Generated code matches Figma designs
+
+## Common Mistakes
+
+### 1. Trusting First Output
+
+AI's first generation is a starting point, not the final version. Always iterate with constraints.
+
+### 2. No Visual Review
+
+Generated code might be semantically correct but visually off. Always preview and adjust.
+
+### 3. Inconsistent Prompts
+
+If you generate the hero with one prompt style and features with another, sections won't match. Use consistent token references across all prompts.
+
+### 4. Ignoring Responsive Design
+
+AI often generates desktop-first. Explicitly prompt for mobile:
+```
+Make sure this works on mobile: stack columns, reduce text sizes, 
+adjust spacing for small screens
+```
+
+## Results
+
+With token-constrained AI generation:
+
+✅ **Brand consistency** - Every section uses your design system
+✅ **Faster iteration** - Generate + refine instead of build from scratch
+✅ **Unique aesthetic** - Your tokens = your look, not generic defaults
+✅ **Scalable** - Landing page tokens extend to full product
+✅ **Maintainable** - Update tokens, landing page updates automatically
+
+## Checklist for AI-Generated Landing Pages
+
+Before shipping:
+
+- [ ] All colors use semantic tokens (no hardcoded hex)
+- [ ] Spacing follows your scale (no arbitrary values)
+- [ ] Typography uses your type system
+- [ ] Primary CTA is visually dominant
+- [ ] Copy is specific, not buzzwords
+- [ ] Layout doesn't look like v0 defaults
+- [ ] Mobile responsive (tested on real device)
+- [ ] Loads fast (no huge images, minimal JS)
+
+## Next Steps
+
+1. **Define your tokens** - Set up FramingUI or create your own
+2. **Document constraints** - Create a prompt template with your tokens
+3. **Generate iteratively** - Component by component, refine with feedback
+4. **Test differentiation** - Compare to competitors. Does yours stand out?
+5. **Maintain consistency** - Use the same tokens for your full product
+
+---
+
+**Resources:**
+- [FramingUI Quick Start](https://framingui.com/docs/quick-start)
+- [Landing Page Token Examples](https://framingui.com/examples/landing)
+- [AI Coding Guides](https://framingui.com/docs/ai-coding)

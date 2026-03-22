@@ -1,0 +1,399 @@
+---
+title: "Design System for Solo Developers"
+description: "Why solo developers need design systems more than large teams, and how to build one that actually helps you ship faster."
+date: "2026-03-22"
+author:
+  name: "FramingUI Team"
+tags:
+  - design-system
+  - solo-developer
+  - productivity
+  - indie-hacker
+category: "Concept"
+coverImage: ""
+published: true
+---
+
+Most design system content targets teams: Figma handoff workflows, component governance, designer-developer collaboration. If you're building solo, it all sounds irrelevant—more process overhead that slows you down.
+
+But solo developers might need design systems more than teams do. Not for collaboration, for **constraint**. A good design system doesn't slow you down by making decisions harder. It speeds you up by making them unnecessary.
+
+## The Solo Developer's Design Problem
+
+You're building a SaaS product alone. You can code, so you skip design tools and jump straight to implementation. Six months later:
+
+- Every page has slightly different padding
+- You have 8 shades of gray that "looked right at the time"
+- Button sizes are inconsistent
+- Some icons are 20px, others 24px, some 16px
+- Hover states exist on some elements, not others
+- Your mobile spacing doesn't scale proportionally with desktop
+
+Nothing is broken. But nothing looks intentional either. Users can't articulate why, but something feels off. Your product looks "developer-made" in the bad sense—functional but unpolished.
+
+You know you need to fix it. But where do you start? Do you redesign everything? Pick colors first? Standardize spacing? The scope feels overwhelming, so you keep shipping features and hope it'll somehow get better.
+
+It won't.
+
+## What Makes a Design System Solo-Friendly
+
+Most design systems are built for scale: dozens of components, exhaustive documentation, multiple brand variations. Solo developers don't need that. You need:
+
+### 1. Decision Elimination
+
+The system should make UI decisions for you automatically. Not "what color should this be?"—that's too late. The system should know that buttons use `primary-solid`, secondary actions use `muted`, and you never have to think about it.
+
+### 2. Immediate Defaults
+
+When you create a new page, the default state should already look decent. Not perfect, but structurally sound. Proper spacing, readable typography, semantic colors. You refine from 80% instead of building from 0%.
+
+### 3. Constraint Without Friction
+
+The system should make wrong choices annoying to implement. Not by blocking you—you're solo, you can do whatever you want—but by making the right choice the path of least resistance.
+
+### 4. Scalable by Default
+
+Early product decisions should still work at scale. The 8px spacing you choose for your landing page should work just as well for your dashboard with 50 components. You shouldn't need to redesign as you grow.
+
+## The Minimal System: Start With Tokens
+
+You don't need a 50-component library. You need **design tokens**—the atomic values everything else builds on.
+
+### Color Tokens (10 minutes to set up)
+
+Stop picking colors. Define semantic tokens once:
+
+```javascript
+// tokens/colors.js
+export const colors = {
+  bg: {
+    base: '#FFFFFF',      // Main background
+    subtle: '#F9FAFB',    // Cards, sections
+    muted: '#F3F4F6',     // Disabled, less important
+  },
+  text: {
+    primary: '#111827',   // Headings, important text
+    secondary: '#6B7280', // Body text
+    tertiary: '#9CA3AF',  // Captions, metadata
+  },
+  border: {
+    default: '#E5E7EB',
+    muted: '#F3F4F6',
+  },
+  primary: {
+    solid: '#2563EB',     // Primary actions
+    fg: '#FFFFFF',        // Text on primary
+  }
+}
+```
+
+Now you never think "what color?" again. Every UI element maps to a semantic token:
+- Background? `bg.base` or `bg.subtle`
+- Text? `text.primary` or `text.secondary`
+- Button? `primary.solid`
+
+### Spacing Scale (5 minutes)
+
+Use a consistent scale based on 4px increments:
+
+```javascript
+export const spacing = {
+  1: '4px',
+  2: '8px',
+  3: '12px',
+  4: '16px',
+  5: '20px',
+  6: '24px',
+  8: '32px',
+  10: '40px',
+  12: '48px',
+  16: '64px',
+}
+```
+
+Rules:
+- Cards: `p-6` (24px)
+- Buttons: `px-4 py-2` (16px/8px)
+- Form fields: `px-3 py-2` (12px/8px)
+- Section gaps: `gap-4` or `gap-6` (16px/24px)
+
+### Typography (5 minutes)
+
+Define your type scale once:
+
+```javascript
+export const typography = {
+  xs: { fontSize: '12px', lineHeight: '16px' },
+  sm: { fontSize: '14px', lineHeight: '20px' },
+  base: { fontSize: '16px', lineHeight: '24px' },
+  lg: { fontSize: '18px', lineHeight: '28px' },
+  xl: { fontSize: '20px', lineHeight: '28px' },
+  '2xl': { fontSize: '24px', lineHeight: '32px' },
+  '3xl': { fontSize: '30px', lineHeight: '36px' },
+}
+```
+
+Now every text element uses the scale. No more `font-size: 17px` because it "looked better" in that specific context.
+
+### Border Radius (2 minutes)
+
+```javascript
+export const radius = {
+  sm: '4px',
+  md: '6px',
+  lg: '8px',
+  xl: '12px',
+  full: '9999px',
+}
+```
+
+Buttons: `rounded-md`
+Cards: `rounded-lg`
+Avatars: `rounded-full`
+Done.
+
+## Implementation: 20 Minutes from Tokens to System
+
+**Step 1: Install FramingUI (or define tokens yourself)**
+
+```bash
+npm install @framingui/tokens @framingui/tailwind-preset
+```
+
+**Step 2: Configure Tailwind**
+
+```javascript
+// tailwind.config.js
+import { framingUIPreset } from '@framingui/tailwind-preset'
+
+export default {
+  presets: [framingUIPreset],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+}
+```
+
+**Step 3: Use semantic classes**
+
+Before:
+```tsx
+<button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+  Save
+</button>
+```
+
+After:
+```tsx
+<button className="bg-primary-solid text-primary-fg px-4 py-2 rounded-md hover:opacity-90">
+  Save
+</button>
+```
+
+Same amount of typing. Infinite improvement in consistency.
+
+## Real Example: Landing Page Refactor
+
+**Before (ad-hoc styling):**
+
+```tsx
+<section className="py-20 bg-gray-50">
+  <div className="max-w-6xl mx-auto px-6">
+    <h1 className="text-5xl font-bold text-gray-900 mb-6">
+      Ship Faster
+    </h1>
+    <p className="text-xl text-gray-600 mb-8 max-w-2xl">
+      Build products without design bottlenecks
+    </p>
+    <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700">
+      Get Started
+    </button>
+  </div>
+</section>
+```
+
+Problems:
+- `py-20` → arbitrary value
+- `bg-gray-50`, `text-gray-600`, `text-gray-900` → no semantic meaning
+- `bg-blue-600` → hardcoded brand color
+- `text-5xl`, `text-xl` → not from a defined scale
+- `mb-6`, `mb-8` → inconsistent spacing
+
+**After (token-based):**
+
+```tsx
+<section className="py-16 bg-subtle">
+  <div className="max-w-6xl mx-auto px-6">
+    <h1 className="text-4xl font-bold text-primary mb-4">
+      Ship Faster
+    </h1>
+    <p className="text-lg text-secondary mb-6 max-w-2xl">
+      Build products without design bottlenecks
+    </p>
+    <button className="bg-primary-solid text-primary-fg px-6 py-3 rounded-md text-base font-semibold hover:opacity-90">
+      Get Started
+    </button>
+  </div>
+</section>
+```
+
+Changes:
+- `py-16` → from spacing scale
+- `bg-subtle` → semantic background token
+- `text-primary`, `text-secondary` → semantic text hierarchy
+- `bg-primary-solid` → brand color token
+- `text-4xl`, `text-lg`, `text-base` → type scale
+- `mb-4`, `mb-6` → consistent spacing
+
+This section now updates automatically when you:
+- Change brand colors → update `primary.solid` once
+- Adjust spacing → scale applies everywhere
+- Refine typography → one place, all headings update
+
+## Patterns for Common Solo Dev Scenarios
+
+### Dashboard Cards
+
+```tsx
+<div className="bg-base border border-default rounded-lg p-6">
+  <h3 className="text-base font-semibold text-primary mb-2">Revenue</h3>
+  <p className="text-3xl font-bold text-primary">$12,450</p>
+  <p className="text-sm text-secondary mt-2">+12% from last month</p>
+</div>
+```
+
+Copy-paste this structure. Change content. Every card looks consistent.
+
+### Form Fields
+
+```tsx
+<div className="space-y-2">
+  <label className="block text-sm font-medium text-primary">Email</label>
+  <input 
+    type="email"
+    className="w-full px-3 py-2 border border-default rounded-md bg-base text-primary focus:ring-2 focus:ring-primary-solid"
+  />
+</div>
+```
+
+One pattern. Every form field.
+
+### Modals
+
+```tsx
+<div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+  <div className="bg-base rounded-xl shadow-xl max-w-md w-full p-6">
+    <h2 className="text-xl font-semibold text-primary mb-4">Confirm Action</h2>
+    <p className="text-secondary mb-6">Are you sure?</p>
+    <div className="flex gap-3 justify-end">
+      <button className="px-4 py-2 rounded-md bg-muted text-primary">Cancel</button>
+      <button className="px-4 py-2 rounded-md bg-primary-solid text-primary-fg">Confirm</button>
+    </div>
+  </div>
+</div>
+```
+
+Works everywhere. Looks polished. Zero design decisions.
+
+## What You Get
+
+With just tokens, you've eliminated:
+
+✅ **Color decisions** - Semantic tokens handle everything
+✅ **Spacing inconsistency** - Scale enforces proportion
+✅ **Typography drift** - One scale, all text
+✅ **Border radius variance** - Predefined curves
+✅ **Refactoring hell** - Change tokens, update everywhere
+
+And you've gained:
+
+✅ **Speed** - Copy patterns, ship features
+✅ **Consistency** - Every new page looks intentional
+✅ **Flexibility** - Tokens let you rebrand in minutes
+✅ **Professionalism** - UI that looks designed, not developed
+
+## When to Add More
+
+Start with tokens. Add components only when you've used the same pattern 3+ times:
+
+**Token-only (start here):**
+- Colors, spacing, typography, radius
+- Semantic class names
+
+**Add components when:**
+- You've built the same button 5 times → create `<Button>`
+- Every form field has identical validation UI → create `<TextField>`
+- Modals repeat across features → create `<Modal>`
+
+But tokens alone get you 80% of the way. Most solo devs never need more.
+
+## Tools That Help
+
+### FramingUI (shameless plug)
+
+We built FramingUI specifically for this use case:
+- Pre-configured token system
+- Tailwind preset for instant setup
+- Semantic class names out of the box
+- No component library overhead
+
+```bash
+npm install @framingui/tokens @framingui/tailwind-preset
+```
+
+Add the preset, start building. 20 minutes.
+
+### Alternatives
+
+**If you want full control:**
+- Define tokens yourself in `tokens.js`
+- Extend Tailwind config manually
+- 100% yours, slightly more setup
+
+**If you want AI integration:**
+- Add tokens to Cursor/Claude Code context
+- AI generates token-based code automatically
+- See our guides on Cursor AI + tokens
+
+## Common Solo Dev Objections
+
+**"I'm not a designer, I'll mess it up anyway"**
+
+That's exactly why you need tokens. You're not making design decisions—you're following a system. The system does the hard part.
+
+**"This feels like over-engineering for a side project"**
+
+20 minutes of setup saves hours of refactoring. And when your side project gets traction, your UI is already production-ready.
+
+**"I'll just hire a designer later"**
+
+Later, that designer will appreciate that your codebase uses semantic tokens instead of 47 shades of `#4A5568`. Tokens make designer handoff seamless.
+
+**"My product is different, I need custom everything"**
+
+Your product's features are different. Your spacing scale is the same as everyone else's. Use constraints for foundations, customize for features.
+
+## Real Success Pattern
+
+**Week 1:** Install tokens, convert your landing page
+**Week 2:** Build new features with tokens from the start
+**Week 3:** Refactor old pages as you touch them
+**Month 2:** Realize you haven't thought about colors in weeks
+**Month 6:** Rebrand in 30 minutes by changing 5 token values
+
+## The Solo Advantage
+
+Teams need design systems for **coordination**—making sure 12 people build consistently.
+
+Solo developers need design systems for **speed**—shipping features without sweating UI decisions every time.
+
+You don't need Figma. You don't need a component library. You don't need a design team.
+
+You need tokens. And 20 minutes to set them up.
+
+After that, you just build.
+
+---
+
+**Get started:**
+- [FramingUI Quick Start](https://framingui.com/docs/quick-start)
+- [Token Reference](https://framingui.com/docs/tokens)
+- [Tailwind Preset Guide](https://framingui.com/docs/tailwind)

@@ -1,0 +1,564 @@
+---
+title: "Claude Code UI Design: Stop Generic UI with Tokens"
+description: "How to configure Claude Code with design tokens to generate production-ready, brand-consistent components instead of generic UI."
+date: "2026-03-22"
+author:
+  name: "FramingUI Team"
+tags:
+  - claude-code
+  - design-tokens
+  - ai-coding
+  - consistency
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+Claude Code can build entire features autonomously. But without design constraints, it generates functional UI that looks like every other AI-generated interface: reasonable spacing, generic blues, Tailwind defaults. The code works. The design doesn't match your product.
+
+The fix isn't micromanaging every component Claude generates. It's giving it access to your design system upfront so every decision it makes aligns with your visual language.
+
+## The Generic UI Problem
+
+Ask Claude Code to build a dashboard and you'll get something like this:
+
+```tsx
+<div className="p-6 bg-white rounded-lg shadow">
+  <h2 className="text-xl font-bold text-gray-900 mb-4">Dashboard</h2>
+  <div className="grid grid-cols-3 gap-4">
+    <div className="p-4 bg-blue-50 border border-blue-200 rounded">
+      <p className="text-sm text-gray-600">Total Users</p>
+      <p className="text-2xl font-semibold text-gray-900">1,234</p>
+    </div>
+    {/* more cards... */}
+  </div>
+</div>
+```
+
+This code:
+- ✅ Works correctly
+- ✅ Follows common patterns
+- ✅ Uses semantic HTML
+- ❌ Doesn't match your brand colors
+- ❌ Ignores your spacing system
+- ❌ Uses arbitrary Tailwind defaults
+- ❌ Won't survive design review
+
+The problem compounds. Claude generates dozens of components across multiple features. Each one makes independent styling decisions. Six months later, you have:
+- 12 different shades of blue
+- Spacing that's "close enough" but inconsistent
+- Border radius values ranging from 4px to 12px
+- Text sizes that don't match your typography scale
+
+Refactoring this manually is weeks of work.
+
+## What Happens When You Add Design Tokens
+
+Give Claude Code access to structured design tokens and the same prompt produces:
+
+```tsx
+<div className="p-6 bg-base rounded-lg shadow-sm border border-default">
+  <h2 className="text-xl font-semibold text-primary mb-4">Dashboard</h2>
+  <div className="grid grid-cols-3 gap-4">
+    <div className="p-4 bg-subtle border border-default rounded-md">
+      <p className="text-sm text-secondary">Total Users</p>
+      <p className="text-2xl font-semibold text-primary">1,234</p>
+    </div>
+    {/* more cards... */}
+  </div>
+</div>
+```
+
+Now every value comes from your design system:
+- `bg-base`, `bg-subtle` → your semantic background colors
+- `text-primary`, `text-secondary` → your text hierarchy
+- `border-default` → your border token
+- `p-6`, `p-4`, `gap-4`, `mb-4` → your spacing scale
+- `rounded-lg`, `rounded-md` → your corner radius system
+
+When you update your brand colors, all Claude-generated components update automatically. When you adjust spacing, everything stays proportional. The code Claude writes integrates seamlessly with your existing components.
+
+## Setting Up Claude Code with FramingUI Tokens
+
+### Step 1: Create a Design System Document
+
+Claude Code works best with clear, structured documentation. Create `.claude/design-system.md`:
+
+```markdown
+# Design System - UI Generation Rules
+
+When generating any UI component, ALWAYS use design tokens from our system.
+Never use hardcoded colors, spacing, or arbitrary Tailwind classes.
+
+## Token Import
+
+```tsx
+import { tokens } from '@framingui/tokens'
+// or for Tailwind: use preset classes directly
+```
+
+## Color Tokens
+
+### Backgrounds
+- `bg-base` - Main surface (#FFFFFF)
+- `bg-subtle` - Subdued surface (#F9FAFB)
+- `bg-muted` - Muted surface (#F3F4F6)
+- `bg-emphasis` - Emphasized surface (#F3F4F6)
+
+### Text
+- `text-primary` - Primary text (#111827)
+- `text-secondary` - Secondary text (#6B7280)
+- `text-tertiary` - Tertiary text (#9CA3AF)
+- `text-disabled` - Disabled text (#D1D5DB)
+
+### Borders
+- `border-default` - Default border (#E5E7EB)
+- `border-muted` - Muted border (#F3F4F6)
+- `border-emphasis` - Emphasized border (#D1D5DB)
+
+### Brand Colors
+- `primary-solid` - Primary action color
+- `primary-fg` - Text on primary backgrounds
+- `error`, `success`, `warning`, `info` - Status colors
+
+## Spacing Scale
+
+Use spacing tokens (base 4px):
+- `1` = 4px
+- `2` = 8px
+- `3` = 12px
+- `4` = 16px
+- `5` = 20px
+- `6` = 24px
+- `8` = 32px
+- `10` = 40px
+- `12` = 48px
+- `16` = 64px
+
+## Typography
+
+- `text-xs` = 12px / 16px line-height
+- `text-sm` = 14px / 20px
+- `text-base` = 16px / 24px
+- `text-lg` = 18px / 28px
+- `text-xl` = 20px / 28px
+- `text-2xl` = 24px / 32px
+- `text-3xl` = 30px / 36px
+
+## Border Radius
+
+- `rounded-sm` = 4px
+- `rounded-md` = 6px
+- `rounded-lg` = 8px
+- `rounded-xl` = 12px
+- `rounded-2xl` = 16px
+- `rounded-full` = 9999px
+
+## Component Patterns
+
+### Buttons
+```tsx
+// Primary button
+<button className="bg-primary-solid text-primary-fg px-4 py-2 rounded-md">
+  Action
+</button>
+
+// Secondary button
+<button className="bg-muted text-primary px-4 py-2 rounded-md">
+  Cancel
+</button>
+```
+
+### Cards
+```tsx
+<div className="bg-base border border-default rounded-lg p-6">
+  {/* content */}
+</div>
+```
+
+### Form Fields
+```tsx
+<input className="w-full px-3 py-2 bg-base border border-default rounded-md text-primary" />
+```
+
+## Rules
+
+1. NEVER use `bg-blue-500`, `text-gray-700`, etc.
+2. ALWAYS use semantic tokens: `bg-primary-solid`, `text-secondary`
+3. Spacing must be from the scale (no `p-5`, `gap-7`)
+4. Document which tokens each component uses
+5. If unsure, ask before generating
+```
+
+### Step 2: Configure Claude Code MCP
+
+If using Claude Desktop with MCP, add FramingUI context to your MCP server configuration:
+
+```json
+{
+  "mcpServers": {
+    "design-system": {
+      "command": "npx",
+      "args": ["-y", "@framingui/mcp-server"],
+      "env": {
+        "PROJECT_ROOT": "/path/to/your/project",
+        "TOKENS_PATH": "./.claude/design-system.md"
+      }
+    }
+  }
+}
+```
+
+This makes your design tokens available to Claude Code automatically in every session.
+
+### Step 3: Initialize Your Tailwind Config
+
+Update `tailwind.config.js` to use FramingUI preset:
+
+```javascript
+import { framingUIPreset } from '@framingui/tailwind-preset'
+
+export default {
+  presets: [framingUIPreset],
+  content: [
+    './src/**/*.{js,jsx,ts,tsx}',
+    './app/**/*.{js,jsx,ts,tsx}',
+  ],
+  theme: {
+    extend: {
+      // Your custom overrides
+    }
+  }
+}
+```
+
+### Step 4: Test Generation
+
+Ask Claude Code to build a component:
+
+**Prompt:**
+```
+Build a user profile card component with:
+- Avatar (circular)
+- Name and role
+- Edit and message action buttons
+- Use our design tokens
+```
+
+**Expected Output:**
+
+```tsx
+export function UserProfileCard({ 
+  avatar, 
+  name, 
+  role, 
+  onEdit, 
+  onMessage 
+}: UserProfileCardProps) {
+  return (
+    <div className="bg-base border border-default rounded-lg p-6">
+      <div className="flex items-start gap-4 mb-6">
+        <img 
+          src={avatar} 
+          alt={name}
+          className="w-16 h-16 rounded-full object-cover"
+        />
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-primary">{name}</h3>
+          <p className="text-sm text-secondary">{role}</p>
+        </div>
+      </div>
+      
+      <div className="flex gap-3">
+        <button 
+          onClick={onEdit}
+          className="flex-1 bg-primary-solid text-primary-fg px-4 py-2 rounded-md font-medium"
+        >
+          Edit Profile
+        </button>
+        <button 
+          onClick={onMessage}
+          className="flex-1 bg-muted text-primary px-4 py-2 rounded-md font-medium"
+        >
+          Message
+        </button>
+      </div>
+    </div>
+  )
+}
+```
+
+Notice:
+- All colors use semantic tokens
+- Spacing follows the scale (`gap-4`, `mb-6`, `p-6`)
+- Border radius is from the system (`rounded-lg`, `rounded-md`, `rounded-full`)
+- Typography uses defined sizes (`text-lg`, `text-sm`)
+- Component structure matches your patterns
+
+## Real-World Example: Building a Feature
+
+Let's see how token-driven generation works for a complete feature.
+
+**Prompt:**
+```
+Build a notification center feature:
+- Dropdown triggered from header icon
+- List of notifications (unread highlighted)
+- Each notification: icon, title, timestamp, mark as read button
+- Footer with "View All" link
+- Use design tokens, max height with scroll
+```
+
+**Claude Code generates:**
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+import { Bell, Check, ExternalLink } from 'lucide-react'
+
+interface Notification {
+  id: string
+  title: string
+  timestamp: string
+  isRead: boolean
+  icon: React.ReactNode
+}
+
+export function NotificationCenter({ 
+  notifications 
+}: { 
+  notifications: Notification[] 
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [items, setItems] = useState(notifications)
+  
+  const unreadCount = items.filter(n => !n.isRead).length
+
+  const markAsRead = (id: string) => {
+    setItems(items.map(n => 
+      n.id === id ? { ...n, isRead: true } : n
+    ))
+  }
+
+  return (
+    <div className="relative">
+      {/* Trigger */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative p-2 rounded-md hover:bg-muted transition-colors"
+      >
+        <Bell className="w-5 h-5 text-secondary" />
+        {unreadCount > 0 && (
+          <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full" />
+        )}
+      </button>
+
+      {/* Dropdown */}
+      {isOpen && (
+        <>
+          <div 
+            className="fixed inset-0 z-10" 
+            onClick={() => setIsOpen(false)} 
+          />
+          <div className="absolute right-0 top-12 z-20 w-96 bg-base border border-default rounded-lg shadow-lg">
+            {/* Header */}
+            <div className="px-4 py-3 border-b border-default">
+              <h3 className="text-base font-semibold text-primary">
+                Notifications
+              </h3>
+              {unreadCount > 0 && (
+                <p className="text-sm text-secondary mt-1">
+                  {unreadCount} unread
+                </p>
+              )}
+            </div>
+
+            {/* List */}
+            <div className="max-h-96 overflow-y-auto">
+              {items.length === 0 ? (
+                <div className="px-4 py-8 text-center text-secondary text-sm">
+                  No notifications
+                </div>
+              ) : (
+                items.map((notification) => (
+                  <div
+                    key={notification.id}
+                    className={`px-4 py-3 border-b border-default last:border-0 ${
+                      !notification.isRead ? 'bg-subtle' : ''
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-1 text-secondary">
+                        {notification.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-primary font-medium">
+                          {notification.title}
+                        </p>
+                        <p className="text-xs text-tertiary mt-1">
+                          {notification.timestamp}
+                        </p>
+                      </div>
+                      {!notification.isRead && (
+                        <button
+                          onClick={() => markAsRead(notification.id)}
+                          className="p-1 hover:bg-muted rounded"
+                          title="Mark as read"
+                        >
+                          <Check className="w-4 h-4 text-secondary" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="px-4 py-3 border-t border-default">
+              <a
+                href="/notifications"
+                className="flex items-center justify-center gap-2 text-sm text-primary font-medium hover:text-secondary transition-colors"
+              >
+                View All
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+```
+
+**What Claude got right:**
+- ✅ All colors from token system (`bg-base`, `text-primary`, `border-default`)
+- ✅ Spacing scale respected (`px-4 py-3`, `gap-3`, `mt-1`)
+- ✅ Semantic colors for states (`bg-subtle` for unread, `bg-error` for badge)
+- ✅ Typography sizing (`text-sm`, `text-xs`, `text-base`)
+- ✅ Border radius consistency (`rounded-md`, `rounded-lg`, `rounded-full`)
+- ✅ Hover states using system tokens (`hover:bg-muted`)
+
+This component integrates seamlessly with your existing design system. No refactoring needed.
+
+## Advanced: Multi-File Features
+
+For larger features, Claude Code can maintain token consistency across multiple files.
+
+**Prompt:**
+```
+Create a settings page with:
+1. Sidebar navigation (Account, Security, Notifications, Billing)
+2. Content area with forms for each section
+3. Save/Cancel buttons
+4. All using design tokens
+```
+
+Claude will generate:
+- `SettingsLayout.tsx` - Layout with sidebar + content
+- `SettingsSidebar.tsx` - Navigation component
+- `AccountSettings.tsx` - Account form
+- `SecuritySettings.tsx` - Security form
+- etc.
+
+All files use the same token system. All components have consistent styling. The entire feature looks designed, not generated.
+
+## Common Patterns Claude Learns
+
+Once you've generated a few components, Claude Code recognizes your patterns:
+
+### Status Badges
+
+```tsx
+<span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-success/10 text-success">
+  Active
+</span>
+```
+
+### Loading States
+
+```tsx
+{isLoading ? (
+  <div className="flex items-center justify-center p-8">
+    <div className="w-6 h-6 border-2 border-primary-solid border-t-transparent rounded-full animate-spin" />
+  </div>
+) : (
+  content
+)}
+```
+
+### Empty States
+
+```tsx
+<div className="text-center py-12">
+  <p className="text-base text-secondary mb-2">No items found</p>
+  <p className="text-sm text-tertiary">Try adjusting your filters</p>
+</div>
+```
+
+## Troubleshooting
+
+### Claude Uses Hardcoded Values
+
+**Fix:** Reference the design system doc explicitly:
+```
+@design-system.md Build a modal component using our tokens
+```
+
+### Inconsistent Spacing
+
+**Add to `.claude/design-system.md`:**
+```markdown
+## Spacing Rules
+
+- Cards: `p-6` (24px padding)
+- Form fields: `px-3 py-2` (12px/8px)
+- Buttons: `px-4 py-2` (16px/8px)
+- Stack spacing: `space-y-4` or `gap-4` (16px)
+- Section spacing: `mb-8` or `mb-12` (32px/48px)
+```
+
+### Wrong Semantic Tokens
+
+**Improve token documentation:**
+```markdown
+## When to Use Each Token
+
+### Backgrounds
+- `bg-base` - Page background, card backgrounds
+- `bg-subtle` - Hover states, secondary surfaces
+- `bg-muted` - Disabled states, less important areas
+- `bg-emphasis` - Highlighted items, selected states
+
+### Text
+- `text-primary` - Headings, important content
+- `text-secondary` - Body text, descriptions
+- `text-tertiary` - Captions, metadata
+- `text-disabled` - Disabled form fields, inactive items
+```
+
+## Results
+
+With FramingUI tokens + Claude Code:
+
+✅ **Zero design drift** - Every generated component uses your system
+✅ **Faster iteration** - Build features without styling delays
+✅ **Team scalability** - Anyone using Claude Code gets consistent output
+✅ **Easy theming** - Update tokens, all AI-generated UI updates
+✅ **Production ready** - Generated code passes design review immediately
+
+## Next Steps
+
+1. **Document component patterns** - Add your common layouts to `.claude/design-system.md`
+2. **Create token snippets** - Save frequent Claude prompts for reuse
+3. **Audit generated code** - Review a few components, refine token docs based on gaps
+4. **Train your team** - Share the design system doc so everyone generates consistent UI
+
+---
+
+**Resources:**
+- [FramingUI Documentation](https://framingui.com/docs)
+- [Claude Code Guide](https://docs.anthropic.com/claude/docs)
+- [Design Token Spec](https://framingui.com/docs/tokens)

@@ -1,0 +1,399 @@
+---
+title: "1인 개발자를 위한 디자인 시스템"
+description: "1인 개발자가 대규모 팀보다 디자인 시스템이 더 필요한 이유와 실제로 빠르게 배포하는 데 도움이 되는 시스템 구축 방법"
+date: "2026-03-22"
+author:
+  name: "FramingUI Team"
+tags:
+  - design-system
+  - solo-developer
+  - productivity
+  - indie-hacker
+category: "Concept"
+coverImage: ""
+published: true
+---
+
+대부분의 디자인 시스템 콘텐츠는 팀을 대상으로 합니다: Figma 핸드오프 워크플로우, 컴포넌트 거버넌스, 디자이너-개발자 협업. 혼자 개발한다면 전부 무관해 보입니다—속도를 늦추는 프로세스 오버헤드로만 느껴집니다.
+
+하지만 1인 개발자는 팀보다 디자인 시스템이 더 필요할 수 있습니다. 협업이 아니라 **제약**을 위해서. 좋은 디자인 시스템은 결정을 어렵게 만들어서 속도를 늦추지 않습니다. 결정을 불필요하게 만들어서 속도를 높입니다.
+
+## 1인 개발자의 디자인 문제
+
+혼자 SaaS 제품을 만들고 있습니다. 코딩은 할 수 있으니 디자인 툴은 건너뛰고 바로 구현으로 뛰어듭니다. 6개월 후:
+
+- 모든 페이지의 패딩이 약간씩 다름
+- "그때는 괜찮아 보였던" 8가지 회색 음영
+- 일관되지 않은 버튼 크기
+- 어떤 아이콘은 20px, 다른 건 24px, 또 다른 건 16px
+- 일부 요소에만 호버 상태 존재
+- 모바일 간격이 데스크톱과 비례적으로 확장 안 됨
+
+아무것도 망가지지 않았습니다. 하지만 아무것도 의도적으로 보이지 않습니다. 유저는 왜인지 표현 못 하지만 뭔가 이상하다고 느낍니다. 제품이 나쁜 의미로 "개발자가 만든" 느낌—기능적이지만 다듬어지지 않았습니다.
+
+고쳐야 한다는 걸 압니다. 하지만 어디서 시작하나요? 전부 재디자인? 색상 먼저? 간격 표준화? 범위가 압도적으로 느껴져서 계속 기능을 배포하고 저절로 나아지기를 바랍니다.
+
+나아지지 않습니다.
+
+## 1인 친화적인 디자인 시스템이란
+
+대부분의 디자인 시스템은 확장을 위해 구축됩니다: 수십 개의 컴포넌트, 빠짐없는 문서, 여러 브랜드 변형. 1인 개발자는 그럴 필요 없습니다. 필요한 건:
+
+### 1. 결정 제거
+
+시스템이 자동으로 UI 결정을 내려야 합니다. "이게 무슨 색이어야 하지?"가 아니라—그건 너무 늦었습니다. 시스템이 버튼은 `primary-solid`, 보조 액션은 `muted`를 사용한다는 걸 알아야 하고, 당신은 생각할 필요가 없어야 합니다.
+
+### 2. 즉각적인 기본값
+
+새 페이지를 만들 때 기본 상태가 이미 괜찮게 보여야 합니다. 완벽하진 않지만 구조적으로 견고하게. 적절한 간격, 읽을 수 있는 타이포그래피, 시맨틱 색상. 0%에서 만드는 게 아니라 80%에서 다듬는 것입니다.
+
+### 3. 마찰 없는 제약
+
+시스템은 잘못된 선택을 구현하기 귀찮게 만들어야 합니다. 막지는 않고—혼자니까 뭐든 할 수 있습니다—하지만 올바른 선택을 최소 저항 경로로 만들어야 합니다.
+
+### 4. 기본적으로 확장 가능
+
+초기 제품 결정이 규모에서도 작동해야 합니다. 랜딩 페이지에 선택한 8px 간격이 50개 컴포넌트가 있는 대시보드에서도 똑같이 작동해야 합니다. 성장하면서 재디자인할 필요가 없어야 합니다.
+
+## 최소 시스템: 토큰으로 시작
+
+50개 컴포넌트 라이브러리는 필요 없습니다. **디자인 토큰**이 필요합니다—나머지 모든 것이 구축되는 원자 값.
+
+### 컬러 토큰 (설정 10분)
+
+색상 고르기를 멈추세요. 시맨틱 토큰을 한 번 정의하세요:
+
+```javascript
+// tokens/colors.js
+export const colors = {
+  bg: {
+    base: '#FFFFFF',      // 메인 배경
+    subtle: '#F9FAFB',    // 카드, 섹션
+    muted: '#F3F4F6',     // 비활성, 덜 중요
+  },
+  text: {
+    primary: '#111827',   // 헤딩, 중요 텍스트
+    secondary: '#6B7280', // 본문
+    tertiary: '#9CA3AF',  // 캡션, 메타데이터
+  },
+  border: {
+    default: '#E5E7EB',
+    muted: '#F3F4F6',
+  },
+  primary: {
+    solid: '#2563EB',     // 주요 액션
+    fg: '#FFFFFF',        // primary 위 텍스트
+  }
+}
+```
+
+이제 "무슨 색?"을 다시 생각하지 않습니다. 모든 UI 요소가 시맨틱 토큰으로 매핑됩니다:
+- 배경? `bg.base` 또는 `bg.subtle`
+- 텍스트? `text.primary` 또는 `text.secondary`
+- 버튼? `primary.solid`
+
+### 간격 스케일 (5분)
+
+4px 증분 기반 일관된 스케일 사용:
+
+```javascript
+export const spacing = {
+  1: '4px',
+  2: '8px',
+  3: '12px',
+  4: '16px',
+  5: '20px',
+  6: '24px',
+  8: '32px',
+  10: '40px',
+  12: '48px',
+  16: '64px',
+}
+```
+
+규칙:
+- 카드: `p-6` (24px)
+- 버튼: `px-4 py-2` (16px/8px)
+- 폼 필드: `px-3 py-2` (12px/8px)
+- 섹션 갭: `gap-4` 또는 `gap-6` (16px/24px)
+
+### 타이포그래피 (5분)
+
+타입 스케일을 한 번 정의:
+
+```javascript
+export const typography = {
+  xs: { fontSize: '12px', lineHeight: '16px' },
+  sm: { fontSize: '14px', lineHeight: '20px' },
+  base: { fontSize: '16px', lineHeight: '24px' },
+  lg: { fontSize: '18px', lineHeight: '28px' },
+  xl: { fontSize: '20px', lineHeight: '28px' },
+  '2xl': { fontSize: '24px', lineHeight: '32px' },
+  '3xl': { fontSize: '30px', lineHeight: '36px' },
+}
+```
+
+이제 모든 텍스트 요소가 스케일을 사용합니다. 특정 컨텍스트에서 "더 잘 보여서" `font-size: 17px` 같은 건 이제 없습니다.
+
+### Border Radius (2분)
+
+```javascript
+export const radius = {
+  sm: '4px',
+  md: '6px',
+  lg: '8px',
+  xl: '12px',
+  full: '9999px',
+}
+```
+
+버튼: `rounded-md`
+카드: `rounded-lg`
+아바타: `rounded-full`
+끝.
+
+## 구현: 토큰에서 시스템까지 20분
+
+**1단계: FramingUI 설치 (또는 직접 토큰 정의)**
+
+```bash
+npm install @framingui/tokens @framingui/tailwind-preset
+```
+
+**2단계: Tailwind 설정**
+
+```javascript
+// tailwind.config.js
+import { framingUIPreset } from '@framingui/tailwind-preset'
+
+export default {
+  presets: [framingUIPreset],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+}
+```
+
+**3단계: 시맨틱 클래스 사용**
+
+이전:
+```tsx
+<button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+  저장
+</button>
+```
+
+이후:
+```tsx
+<button className="bg-primary-solid text-primary-fg px-4 py-2 rounded-md hover:opacity-90">
+  저장
+</button>
+```
+
+타이핑 양은 같습니다. 일관성은 무한 개선.
+
+## 실제 예시: 랜딩 페이지 리팩토링
+
+**이전 (임시 스타일링):**
+
+```tsx
+<section className="py-20 bg-gray-50">
+  <div className="max-w-6xl mx-auto px-6">
+    <h1 className="text-5xl font-bold text-gray-900 mb-6">
+      더 빠르게 배포
+    </h1>
+    <p className="text-xl text-gray-600 mb-8 max-w-2xl">
+      디자인 병목 없이 제품 구축
+    </p>
+    <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700">
+      시작하기
+    </button>
+  </div>
+</section>
+```
+
+문제:
+- `py-20` → 임의 값
+- `bg-gray-50`, `text-gray-600`, `text-gray-900` → 시맨틱 의미 없음
+- `bg-blue-600` → 하드코딩된 브랜드 색상
+- `text-5xl`, `text-xl` → 정의된 스케일이 아님
+- `mb-6`, `mb-8` → 일관되지 않은 간격
+
+**이후 (토큰 기반):**
+
+```tsx
+<section className="py-16 bg-subtle">
+  <div className="max-w-6xl mx-auto px-6">
+    <h1 className="text-4xl font-bold text-primary mb-4">
+      더 빠르게 배포
+    </h1>
+    <p className="text-lg text-secondary mb-6 max-w-2xl">
+      디자인 병목 없이 제품 구축
+    </p>
+    <button className="bg-primary-solid text-primary-fg px-6 py-3 rounded-md text-base font-semibold hover:opacity-90">
+      시작하기
+    </button>
+  </div>
+</section>
+```
+
+변경 사항:
+- `py-16` → 간격 스케일에서
+- `bg-subtle` → 시맨틱 배경 토큰
+- `text-primary`, `text-secondary` → 시맨틱 텍스트 계층
+- `bg-primary-solid` → 브랜드 색상 토큰
+- `text-4xl`, `text-lg`, `text-base` → 타입 스케일
+- `mb-4`, `mb-6` → 일관된 간격
+
+이 섹션은 이제 이럴 때 자동으로 업데이트됩니다:
+- 브랜드 색상 변경 → `primary.solid` 한 번 업데이트
+- 간격 조정 → 스케일이 모든 곳에 적용
+- 타이포그래피 개선 → 한 곳, 모든 헤딩 업데이트
+
+## 일반적인 1인 개발 시나리오용 패턴
+
+### 대시보드 카드
+
+```tsx
+<div className="bg-base border border-default rounded-lg p-6">
+  <h3 className="text-base font-semibold text-primary mb-2">매출</h3>
+  <p className="text-3xl font-bold text-primary">$12,450</p>
+  <p className="text-sm text-secondary mt-2">지난달 대비 +12%</p>
+</div>
+```
+
+이 구조를 복사-붙여넣기. 콘텐츠 변경. 모든 카드가 일관되게 보입니다.
+
+### 폼 필드
+
+```tsx
+<div className="space-y-2">
+  <label className="block text-sm font-medium text-primary">이메일</label>
+  <input 
+    type="email"
+    className="w-full px-3 py-2 border border-default rounded-md bg-base text-primary focus:ring-2 focus:ring-primary-solid"
+  />
+</div>
+```
+
+하나의 패턴. 모든 폼 필드.
+
+### 모달
+
+```tsx
+<div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+  <div className="bg-base rounded-xl shadow-xl max-w-md w-full p-6">
+    <h2 className="text-xl font-semibold text-primary mb-4">액션 확인</h2>
+    <p className="text-secondary mb-6">확실합니까?</p>
+    <div className="flex gap-3 justify-end">
+      <button className="px-4 py-2 rounded-md bg-muted text-primary">취소</button>
+      <button className="px-4 py-2 rounded-md bg-primary-solid text-primary-fg">확인</button>
+    </div>
+  </div>
+</div>
+```
+
+어디서나 작동. 다듬어져 보임. 디자인 결정 제로.
+
+## 얻을 수 있는 것
+
+토큰만으로 제거한 것:
+
+✅ **색상 결정** - 시맨틱 토큰이 모든 걸 처리
+✅ **간격 불일치** - 스케일이 비율 강제
+✅ **타이포그래피 드리프트** - 하나의 스케일, 모든 텍스트
+✅ **Border radius 분산** - 사전 정의된 곡선
+✅ **리팩토링 지옥** - 토큰 변경, 모든 곳 업데이트
+
+그리고 얻은 것:
+
+✅ **속도** - 패턴 복사, 기능 배포
+✅ **일관성** - 모든 새 페이지가 의도적으로 보임
+✅ **유연성** - 토큰으로 몇 분 만에 리브랜딩
+✅ **전문성** - 개발된 게 아니라 디자인된 것처럼 보이는 UI
+
+## 언제 더 추가하나
+
+토큰으로 시작하세요. 같은 패턴을 3회 이상 사용한 경우에만 컴포넌트 추가:
+
+**토큰만 (여기서 시작):**
+- 색상, 간격, 타이포그래피, radius
+- 시맨틱 클래스 이름
+
+**이럴 때 컴포넌트 추가:**
+- 같은 버튼을 5번 만들었다 → `<Button>` 생성
+- 모든 폼 필드가 동일한 검증 UI를 갖는다 → `<TextField>` 생성
+- 모달이 기능 전체에 반복된다 → `<Modal>` 생성
+
+하지만 토큰만으로 80%는 갑니다. 대부분의 1인 개발자는 더 필요 없습니다.
+
+## 도움이 되는 도구
+
+### FramingUI (노골적인 홍보)
+
+우리는 이 사용 사례를 위해 FramingUI를 만들었습니다:
+- 사전 설정된 토큰 시스템
+- 즉각적인 설정용 Tailwind preset
+- 기본 시맨틱 클래스 이름
+- 컴포넌트 라이브러리 오버헤드 없음
+
+```bash
+npm install @framingui/tokens @framingui/tailwind-preset
+```
+
+preset 추가, 개발 시작. 20분.
+
+### 대안
+
+**완전한 제어를 원한다면:**
+- `tokens.js`에서 직접 토큰 정의
+- Tailwind config 수동 확장
+- 100% 본인 것, 설정 약간 더 필요
+
+**AI 통합을 원한다면:**
+- Cursor/Claude Code 컨텍스트에 토큰 추가
+- AI가 토큰 기반 코드 자동 생성
+- Cursor AI + 토큰 가이드 참조
+
+## 일반적인 1인 개발 반론
+
+**"디자이너가 아니라 어차피 망칠 거야"**
+
+바로 그래서 토큰이 필요합니다. 디자인 결정을 내리는 게 아니라 시스템을 따르는 겁니다. 시스템이 어려운 부분을 합니다.
+
+**"사이드 프로젝트에 과도한 엔지니어링 같아"**
+
+20분 설정이 몇 시간의 리팩토링을 절약합니다. 그리고 사이드 프로젝트가 견인력을 얻을 때 UI는 이미 프로덕션 준비됐습니다.
+
+**"나중에 디자이너를 고용할 거야"**
+
+나중에 그 디자이너는 코드베이스가 47가지 `#4A5568` 음영 대신 시맨틱 토큰을 사용한다는 걸 감사하게 여길 겁니다. 토큰은 디자이너 핸드오프를 매끄럽게 만듭니다.
+
+**"내 제품은 달라, 모든 걸 커스텀해야 해"**
+
+제품의 기능은 다릅니다. 간격 스케일은 다른 모든 이와 같습니다. 기초에 제약을 사용하고, 기능에 커스터마이징하세요.
+
+## 실제 성공 패턴
+
+**1주차:** 토큰 설치, 랜딩 페이지 전환
+**2주차:** 처음부터 토큰으로 새 기능 구축
+**3주차:** 손대는 대로 오래된 페이지 리팩토링
+**2개월차:** 몇 주 동안 색상 생각 안 한 걸 깨달음
+**6개월차:** 5개 토큰 값 변경으로 30분 만에 리브랜딩
+
+## 1인 개발의 장점
+
+팀은 **조율**을 위해 디자인 시스템이 필요합니다—12명이 일관되게 만들도록.
+
+1인 개발자는 **속도**를 위해 디자인 시스템이 필요합니다—매번 UI 결정에 신경 쓰지 않고 기능 배포.
+
+Figma 필요 없습니다. 컴포넌트 라이브러리 필요 없습니다. 디자인 팀 필요 없습니다.
+
+토큰이 필요합니다. 그리고 설정할 20분.
+
+그 다음엔 그냥 개발하면 됩니다.
+
+---
+
+**시작하기:**
+- [FramingUI 빠른 시작](https://framingui.com/docs/quick-start)
+- [토큰 레퍼런스](https://framingui.com/docs/tokens)
+- [Tailwind Preset 가이드](https://framingui.com/docs/tailwind)

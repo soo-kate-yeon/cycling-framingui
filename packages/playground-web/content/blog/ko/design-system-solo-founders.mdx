@@ -1,0 +1,605 @@
+---
+title: "Design System for Solo Founders: Ship Fast Without Looking Amateur"
+description: "Building alone with no designer? Set up a production-ready design system in under 2 hours and maintain consistency as you scale."
+date: "2026-03-23"
+author:
+  name: "FramingUI Team"
+tags:
+  - solo-founders
+  - design-system
+  - indie-hackers
+  - bootstrap
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+You're a solo founder building a product. You can code the backend, set up the infrastructure, handle the business logic. But when it's time to build UI, you hit a wall.
+
+You need it to look professional—investors, early users, and your own standards demand it. But you don't have time to obsess over design. You're shipping features, iterating fast, running experiments.
+
+Generic UI components work, but they make your product look like every other bootstrap startup. Custom design takes days you don't have.
+
+Here's the problem: **you need consistency without a design team.**
+
+This guide shows how to implement a design system that makes your product look professional by default, with minimal setup and zero ongoing design work.
+
+## The Solo Founder's UI Dilemma
+
+When you have a design team, the workflow is:
+
+1. Designer creates mockups
+2. Developer builds to spec
+3. Designer reviews implementation
+4. Iterate until it matches
+
+When you're solo, the workflow is:
+
+1. You build UI "good enough"
+2. You notice it looks inconsistent
+3. You spend 2 hours tweaking colors
+4. You realize you need to ship features, not fiddle with padding
+
+Six months later:
+- Your landing page uses one shade of blue
+- Your dashboard uses another
+- Your settings page has different button styles
+- New features look slightly off
+- You can't remember which spacing values you used where
+
+**You didn't forget to design. You just had more important things to do.**
+
+## Why Generic UI Libraries Don't Solve This
+
+You might think: "I'll just use Tailwind UI / shadcn/ui / Material UI and be done."
+
+Here's what actually happens:
+
+### With Generic Component Libraries
+
+You install shadcn/ui, copy-paste components. They work fine at first.
+
+Then you need to customize:
+- Change the primary color to your brand
+- Adjust spacing to match your vibe
+- Tweak the button styles
+
+You edit components one by one. Some you forget. Six months later:
+
+```tsx
+// Button in landing page (customized)
+<Button className="bg-[#2563eb] px-6 py-3">Get Started</Button>
+
+// Button in dashboard (from shadcn, not customized)
+<Button>Save Changes</Button>
+
+// Button in settings (half-customized)
+<Button className="bg-blue-600">Update</Button>
+```
+
+Three different button styles. All technically working. None consistent.
+
+### The Real Problem
+
+Generic libraries give you components, but not **constraints**. You can customize anything, which means:
+
+- Every feature makes slightly different choices
+- Your product looks "pretty good" but not cohesive
+- Iterating means fixing design inconsistencies along with bugs
+
+You need something between "fully custom" (too slow) and "completely generic" (too bland).
+
+## Design Systems as Default Constraints
+
+Think of a design system like ESLint for design:
+
+**ESLint says:**
+- "Use `const`, not `var`"
+- "Always use semicolons"
+- "Prefer arrow functions"
+
+**Design system says:**
+- "Use `bg-primary`, not `bg-blue-600`"
+- "Use spacing scale `p-4`, not arbitrary `p-[14px]`"
+- "Use `text-heading-lg`, not `text-2xl`"
+
+You don't debate the rules every time. You follow the system and move on.
+
+## Implementation: The 2-Hour Setup
+
+Here's how to go from zero to production-ready design system in under 2 hours.
+
+### Hour 1: Install & Configure (30 minutes)
+
+**Step 1: Install design tokens** (5 minutes)
+
+```bash
+npm install @framingui/tokens @framingui/tailwind-preset
+```
+
+**Step 2: Configure Tailwind** (5 minutes)
+
+```javascript
+// tailwind.config.js
+import { framinguiPreset } from '@framingui/tailwind-preset';
+
+export default {
+  presets: [framinguiPreset],
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        // Optional: Override primary color with your brand
+        primary: {
+          DEFAULT: '#2563eb', // Your brand color
+          foreground: '#ffffff',
+        },
+      },
+    },
+  },
+};
+```
+
+**Step 3: Create base components** (20 minutes)
+
+Create `src/components/ui/button.tsx`:
+
+```tsx
+import { cn } from '@/lib/utils';
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  className,
+  ...props
+}: ButtonProps) {
+  return (
+    <button
+      className={cn(
+        'inline-flex items-center justify-center rounded-base font-medium transition-colors',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'disabled:pointer-events-none disabled:opacity-50',
+        {
+          'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'primary',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
+          'border border-input bg-background hover:bg-accent hover:text-accent-foreground': variant === 'outline',
+          'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
+        },
+        {
+          'h-9 px-3 text-sm': size === 'sm',
+          'h-10 px-4': size === 'md',
+          'h-11 px-6 text-lg': size === 'lg',
+        },
+        className
+      )}
+      {...props}
+    />
+  );
+}
+```
+
+Copy similar patterns for:
+- `input.tsx` (text inputs)
+- `card.tsx` (container component)
+- `badge.tsx` (status indicators)
+
+You now have 4 components covering 80% of UI needs.
+
+### Hour 2: Document & Use (30 minutes)
+
+**Step 4: Create token reference** (10 minutes)
+
+Create `docs/design-system.md`:
+
+```markdown
+# Design System Reference
+
+## Colors
+
+**Brand:**
+- `bg-primary` `text-primary-foreground` — Primary actions
+- `bg-secondary` `text-secondary-foreground` — Secondary actions
+
+**Surfaces:**
+- `bg-background` — Page background
+- `bg-card` — Card backgrounds
+- `bg-accent` — Subtle highlights
+
+**Text:**
+- `text-content` — Body text
+- `text-muted-foreground` — Secondary text
+
+**Status:**
+- `bg-success` — Success states
+- `bg-destructive` — Errors, deletions
+- `bg-warning` — Warnings
+
+## Spacing
+
+Use scale: `p-{2,4,6,8}`, `gap-{2,4,6}`, `space-y-{2,4,6}`
+
+- `2` = 0.5rem (8px)
+- `4` = 1rem (16px)
+- `6` = 1.5rem (24px)
+- `8` = 2rem (32px)
+
+## Typography
+
+- `text-heading-xl` — Page titles
+- `text-heading-lg` — Section headings
+- `text-heading-md` — Card titles
+- `text-body` — Default text
+- `text-caption` — Small text
+
+## Components
+
+Use components from `src/components/ui/`:
+- `<Button variant="primary" size="md">Click me</Button>`
+- `<Card>Content here</Card>`
+- `<Badge variant="success">Active</Badge>`
+```
+
+**Step 5: Apply to one feature** (20 minutes)
+
+Refactor your landing page or main dashboard to use the system:
+
+**Before:**
+
+```tsx
+<div className="bg-white rounded-lg shadow-md p-6">
+  <h2 className="text-2xl font-bold text-gray-900 mb-4">Features</h2>
+  <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    Get Started
+  </button>
+</div>
+```
+
+**After:**
+
+```tsx
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+<Card>
+  <h2 className="text-heading-lg mb-4">Features</h2>
+  <Button variant="primary">Get Started</Button>
+</Card>
+```
+
+You've now:
+- ✅ Installed design tokens
+- ✅ Configured Tailwind with your brand
+- ✅ Created base components
+- ✅ Documented the system
+- ✅ Applied it to one feature
+
+**Total time: ~2 hours.**
+
+## The Solo Founder Workflow: Build Without Thinking
+
+Now that setup is done, here's the daily workflow:
+
+### 1. Build New Features with Tokens
+
+When adding a new feature:
+
+```tsx
+// You used to do this (arbitrary values):
+<div className="bg-white p-6 rounded-lg">
+  <h3 className="text-xl font-semibold mb-3">User Settings</h3>
+  <button className="bg-blue-500 text-white px-4 py-2 rounded">
+    Save
+  </button>
+</div>
+
+// Now you do this (system values):
+import { Card, Button } from '@/components/ui';
+
+<Card>
+  <h3 className="text-heading-md mb-3">User Settings</h3>
+  <Button>Save</Button>
+</Card>
+```
+
+**Time saved:** No thinking about colors, spacing, shadows. Just use the system.
+
+### 2. Use AI with Your Design System
+
+Create `.cursorrules`:
+
+```markdown
+# Design System Rules
+
+When generating UI components:
+
+1. Always use design tokens, never arbitrary values
+2. Use `<Button>`, `<Card>`, `<Badge>` from `@/components/ui`
+3. Use semantic colors: `bg-primary`, `text-content`, `border-border`
+4. Use spacing scale: `p-4`, `gap-6`, `space-y-4`
+5. Use typography tokens: `text-heading-lg`, `text-body`
+
+Example:
+```tsx
+import { Card, Button } from '@/components/ui';
+
+<Card>
+  <h2 className="text-heading-lg mb-4">Title</h2>
+  <p className="text-body text-muted-foreground mb-6">Description</p>
+  <Button variant="primary">Action</Button>
+</Card>
+```
+```
+
+Now when you ask Cursor/Claude to build features:
+
+**You:** "Build a pricing page with 3 tiers"
+
+**AI generates:**
+
+```tsx
+import { Card, Button, Badge } from '@/components/ui';
+
+export function PricingPage() {
+  return (
+    <div className="grid grid-cols-3 gap-6 p-8">
+      <Card>
+        <Badge variant="secondary">Starter</Badge>
+        <h3 className="text-heading-lg mt-4">$9/mo</h3>
+        <p className="text-body text-muted-foreground my-4">
+          Perfect for individuals
+        </p>
+        <Button variant="outline" className="w-full">
+          Get Started
+        </Button>
+      </Card>
+      {/* More tiers... */}
+    </div>
+  );
+}
+```
+
+**Notice:**
+- Uses `<Card>`, `<Button>`, `<Badge>` from your system
+- Uses `text-heading-lg`, `text-body` (tokens)
+- Uses `text-muted-foreground` (semantic color)
+- Spacing with `gap-6`, `p-8`, `my-4` (scale)
+
+**Zero design decisions from you.** AI follows your system.
+
+### 3. Maintain Consistency as You Scale
+
+As you add features, the system enforces consistency:
+
+**Month 1:** Landing page, dashboard → Uses `bg-primary`, `text-heading-lg`
+
+**Month 3:** User settings, billing → Still uses `bg-primary`, `text-heading-lg`
+
+**Month 6:** New analytics dashboard → AI generates with same tokens
+
+Your product looks cohesive without deliberate effort.
+
+## Common Solo Founder Questions
+
+### "What if I want to customize colors later?"
+
+Easy. Change once, apply everywhere:
+
+```javascript
+// tailwind.config.js
+export default {
+  presets: [framinguiPreset],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#8b5cf6', // Changed from blue to purple
+          foreground: '#ffffff',
+        },
+      },
+    },
+  },
+};
+```
+
+Every component using `bg-primary` updates instantly. No hunting down hardcoded values.
+
+### "I need a custom component not in the base set. Now what?"
+
+Build it following the same pattern:
+
+```tsx
+// src/components/ui/stat-card.tsx
+import { Card } from './card';
+
+export function StatCard({ label, value, trend }) {
+  return (
+    <Card>
+      <p className="text-caption text-muted-foreground">{label}</p>
+      <p className="text-heading-xl my-2">{value}</p>
+      <p className="text-body-sm text-success">{trend}</p>
+    </Card>
+  );
+}
+```
+
+Same tokens, same spacing, instant consistency.
+
+### "What if I'm using a different stack (Vue, Svelte, Angular)?"
+
+Design tokens work with any framework. The Tailwind config is universal.
+
+For Vue:
+
+```vue
+<template>
+  <div class="bg-card border border-border rounded-lg p-6">
+    <h2 class="text-heading-lg mb-4">{{ title }}</h2>
+    <button class="bg-primary text-primary-foreground px-4 py-2 rounded-base">
+      {{ label }}
+    </button>
+  </div>
+</template>
+```
+
+Same token names, different syntax.
+
+### "I don't use Tailwind. Can I still use this?"
+
+Yes. Export tokens as CSS variables:
+
+```bash
+npx framingui export --format css --output src/styles/tokens.css
+```
+
+Generates:
+
+```css
+:root {
+  --color-primary: #2563eb;
+  --color-card: #ffffff;
+  --spacing-4: 1rem;
+  --radius-base: 0.375rem;
+  /* ... */
+}
+```
+
+Use in your CSS:
+
+```css
+.button {
+  background: var(--color-primary);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-base);
+}
+```
+
+Or styled-components:
+
+```tsx
+import { tokens } from '@framingui/tokens';
+
+const Button = styled.button`
+  background: ${tokens.color.primary.base};
+  padding: ${tokens.spacing[2]} ${tokens.spacing[4]};
+`;
+```
+
+## Solo Founder Success Metrics
+
+Track your design system ROI:
+
+### Before Design System
+
+- **Time per feature:** 8 hours dev + 3 hours design tweaks = 11 hours
+- **Consistency:** ~60% (components look "close enough")
+- **Design debt:** Growing (each feature adds new arbitrary values)
+
+### After Design System
+
+- **Time per feature:** 8 hours dev + 0 hours design tweaks = 8 hours
+- **Consistency:** 95% (all features use the same tokens)
+- **Design debt:** Eliminated (tokens enforce constraints)
+
+**ROI:** 27% faster feature development + professional-looking product.
+
+## Real Solo Founder Example
+
+**Meet Alex, building a SaaS analytics tool solo.**
+
+### Before Design System (Month 1-3)
+
+- Built landing page with custom colors: `#3b82f6`, `#1e40af`
+- Built dashboard with slightly different blue: `#2563eb`
+- Built settings page, forgot which blue to use, picked `#4f46e5`
+- Spent 4 hours "fixing design inconsistencies" before investor demo
+
+### After Design System (Month 4-6)
+
+- Set up FramingUI tokens (2 hours)
+- Refactored existing pages to use `bg-primary` (3 hours)
+- Built 5 new features, AI used tokens automatically
+- Zero time spent on design consistency
+
+### Results
+
+- **6 months in:** Product looks cohesive across 15 pages
+- **Early users say:** "Looks super polished for a v1"
+- **Alex says:** "I literally don't think about design anymore. It just works."
+
+## The "Zero Design Work" Checklist
+
+Follow this and you'll never manually tweak padding again:
+
+- [ ] Install `@framingui/tokens` and Tailwind preset
+- [ ] Set primary brand color in config (5 minutes)
+- [ ] Create 4-5 base components (`Button`, `Card`, `Input`, `Badge`)
+- [ ] Document token usage in `docs/design-system.md`
+- [ ] Create `.cursorrules` for AI code generation
+- [ ] Refactor one existing feature to use tokens
+- [ ] Use tokens for all new features
+- [ ] Let AI follow the system
+
+Done. Design consistency on autopilot.
+
+## Advanced: Theme Switching for Power Users
+
+Once your system is solid, add dark mode in 10 minutes:
+
+```javascript
+// tailwind.config.js
+export default {
+  presets: [framinguiPreset],
+  darkMode: 'class', // Enable dark mode
+};
+```
+
+Update tokens with dark variants:
+
+```javascript
+// tokens/theme.json
+{
+  "color": {
+    "background": {
+      "light": "#ffffff",
+      "dark": "#0a0a0a"
+    },
+    "content": {
+      "light": "#111827",
+      "dark": "#f9fafb"
+    }
+  }
+}
+```
+
+Toggle in your app:
+
+```tsx
+<html className={theme === 'dark' ? 'dark' : ''}>
+```
+
+All components using `bg-background` and `text-content` adapt automatically.
+
+## Key Takeaways for Solo Founders
+
+1. **2-hour setup, lifetime benefit** — Install tokens, create base components, done
+2. **AI follows your system** — `.cursorrules` makes AI use your tokens automatically
+3. **Consistency without effort** — Tokens enforce constraints, you focus on features
+4. **Change once, apply everywhere** — Update primary color, all components update
+5. **Professional by default** — Your product looks polished without design work
+
+You're building alone. You don't have time for design debt. A design system makes consistency the default, not a chore.
+
+---
+
+**Next steps:**
+- Install [@framingui/tokens](https://www.npmjs.com/package/@framingui/tokens) in your project
+- Set up base components (Button, Card, Input)
+- Refactor one feature to use the system
+- Let AI build the rest with your design system
+
+Questions? Join [FramingUI Discord](https://discord.gg/framingui) — lots of solo founders sharing setups and shortcuts.

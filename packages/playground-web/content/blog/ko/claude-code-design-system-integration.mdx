@@ -1,0 +1,678 @@
+---
+title: "Claude Code Design System Integration: From Setup to Production"
+description: "Complete guide to integrating design tokens with Claude Code for autonomous feature development that respects your design system."
+date: "2026-03-23"
+author:
+  name: "FramingUI Team"
+tags:
+  - claude-code
+  - design-tokens
+  - autonomous-coding
+  - integration
+category: "Guide"
+coverImage: ""
+published: true
+---
+
+Claude Code can build entire features autonomously—multi-file changes, complex logic, full CRUD flows. But there's a catch: without design system integration, every feature it builds looks different.
+
+You get functional code with inconsistent styling. Blue buttons in one feature, indigo in another. Spacing that's "close enough" but never quite right. Six months later, your codebase is a design system graveyard.
+
+This guide shows how to integrate design tokens with Claude Code so it builds features that match your brand from the start.
+
+## The Autonomous Coding Problem
+
+Claude Code's power is its ability to work independently. You say "build a user management dashboard" and it:
+
+1. Creates the page layout
+2. Builds CRUD components
+3. Adds form validation
+4. Implements API calls
+5. Writes tests
+
+All without asking for styling decisions at each step.
+
+That's the problem. It *has* to make styling decisions, so it falls back to common patterns:
+
+```tsx
+// Claude's default generation without tokens
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div className="bg-white shadow rounded-lg p-6">
+    <h1 className="text-2xl font-bold text-gray-900 mb-4">
+      User Management
+    </h1>
+    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Add User
+    </button>
+  </div>
+</div>
+```
+
+This code:
+- ✅ Works correctly
+- ✅ Follows React best practices  
+- ✅ Is properly structured
+- ❌ Uses arbitrary Tailwind defaults
+- ❌ Doesn't match your brand colors
+- ❌ Ignores your spacing system
+- ❌ Won't survive design review
+
+The solution isn't to micromanage every component. It's to give Claude Code the constraints it needs to make good decisions autonomously.
+
+## Integration Architecture
+
+Design system integration with Claude Code requires three layers:
+
+```
+┌─────────────────────────────────┐
+│   Claude Code Instructions      │  ← How to use tokens
+├─────────────────────────────────┤
+│   Token Package + Config        │  ← What tokens exist
+├─────────────────────────────────┤
+│   Project Setup (Tailwind/CSS)  │  ← How tokens apply
+└─────────────────────────────────┘
+```
+
+Each layer reinforces the others. Let's build them.
+
+## Layer 1: Install Design Tokens
+
+Add FramingUI to your project:
+
+```bash
+npm install @framingui/tokens @framingui/tailwind-preset
+```
+
+For projects using CSS variables instead of Tailwind:
+
+```bash
+npm install @framingui/tokens
+npx framingui export --format css --output src/styles/design-tokens.css
+```
+
+Import in your root layout:
+
+```tsx
+// app/layout.tsx or _app.tsx
+import '@/styles/design-tokens.css';
+```
+
+## Layer 2: Configure Tailwind Integration
+
+Update `tailwind.config.ts`:
+
+```typescript
+import type { Config } from 'tailwindcss';
+import { framinguiPreset } from '@framingui/tailwind-preset';
+
+const config: Config = {
+  presets: [framinguiPreset],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      // Your custom extensions
+    },
+  },
+};
+
+export default config;
+```
+
+The preset maps FramingUI tokens to Tailwind classes:
+
+- `bg-primary` → your primary brand color
+- `text-content` → your default text color  
+- `p-4` → your spacing scale value 4 (1rem)
+- `rounded-base` → your default border radius
+- `text-heading-lg` → your large heading style
+
+## Layer 3: Claude Code Custom Instructions
+
+This is the critical piece. Claude Code needs explicit instructions on using your design system.
+
+Create `.claude/instructions.md` in your project root:
+
+```markdown
+# Design System Integration Rules
+
+## Mandatory: Always Use Design Tokens
+
+When generating UI components, **ALWAYS** use FramingUI design tokens. Never use arbitrary Tailwind values or custom colors.
+
+## Token Categories
+
+### Colors
+
+Use semantic color tokens:
+
+- **Backgrounds:** `bg-background`, `bg-card`, `bg-accent`
+- **Text:** `text-content`, `text-muted-foreground`, `text-content-inverse`
+- **Borders:** `border-border`, `border-input`
+- **Brand:** `bg-primary`, `bg-secondary`, `text-primary-foreground`
+- **Status:** `bg-success`, `bg-destructive`, `bg-warning`, `bg-info`
+
+**Never use:** `bg-white`, `bg-gray-100`, `text-black`, `bg-blue-500`, hex colors
+
+### Spacing
+
+Use spacing scale tokens: `p-{n}`, `m-{n}`, `gap-{n}`, `space-{n}`
+
+- Common values: `2` (0.5rem), `3` (0.75rem), `4` (1rem), `6` (1.5rem), `8` (2rem)
+- **Never use:** arbitrary values like `p-[14px]`, `m-[18px]`
+
+### Typography
+
+Use semantic text tokens:
+
+- **Headings:** `text-heading-xl`, `text-heading-lg`, `text-heading-md`, `text-heading-sm`
+- **Body:** `text-body-lg`, `text-body`, `text-body-sm`
+- **UI:** `text-caption`, `text-label`
+
+**Never use:** `text-2xl`, `text-base`, `text-sm`, arbitrary font sizes
+
+### Border Radius
+
+Use radius tokens:
+
+- `rounded-sm` (small elements, badges)
+- `rounded-base` (default, buttons, inputs)
+- `rounded-lg` (cards, modals)
+- `rounded-full` (pills, avatars)
+
+**Never use:** `rounded`, `rounded-md`, arbitrary values
+
+### Shadows & Elevation
+
+Use shadow tokens:
+
+- `shadow-sm` (subtle elevation)
+- `shadow-base` (default cards)
+- `shadow-lg` (modals, popovers)
+
+## Component Patterns
+
+### Button Component
+
+```tsx
+<button
+  className={cn(
+    'inline-flex items-center justify-center',
+    'rounded-base font-medium transition-colors',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'disabled:pointer-events-none disabled:opacity-50',
+    {
+      'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'primary',
+      'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
+      'border border-input bg-background hover:bg-accent hover:text-accent-foreground': variant === 'outline',
+    },
+    {
+      'h-9 px-3 text-body-sm': size === 'sm',
+      'h-10 px-4 text-body': size === 'md',
+      'h-11 px-6 text-body-lg': size === 'lg',
+    }
+  )}
+>
+  {children}
+</button>
+```
+
+### Card Component
+
+```tsx
+<div className="rounded-lg border border-border bg-card p-6 shadow-base">
+  <h3 className="text-heading-md mb-4">{title}</h3>
+  <p className="text-body text-muted-foreground">{description}</p>
+</div>
+```
+
+### Form Input
+
+```tsx
+<input
+  className={cn(
+    'flex h-10 w-full rounded-base border border-input',
+    'bg-background px-3 py-2 text-body',
+    'ring-offset-background',
+    'placeholder:text-muted-foreground',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'disabled:cursor-not-allowed disabled:opacity-50'
+  )}
+/>
+```
+
+## File Organization
+
+- **UI Components:** `src/components/ui/`
+- **Feature Components:** `src/components/[feature]/`
+- **Utilities:** `src/lib/utils.ts` (for `cn` helper)
+- **Types:** `src/types/`
+
+## Accessibility Requirements
+
+Every interactive component must include:
+
+- Proper ARIA labels
+- Keyboard navigation support
+- Focus visible states (using `focus-visible:ring-2 focus-visible:ring-ring`)
+- Disabled states with proper opacity and cursor
+
+## Token Import When Needed
+
+For programmatic access to token values:
+
+```tsx
+import { tokens } from '@framingui/tokens';
+
+const primaryColor = tokens.color.primary.base;
+const spacing4 = tokens.spacing[4];
+```
+
+## Validation
+
+Before marking a feature complete:
+
+1. ✅ All colors use semantic tokens
+2. ✅ All spacing uses scale tokens
+3. ✅ All text uses typography tokens
+4. ✅ All interactive elements are accessible
+5. ✅ No arbitrary Tailwind values in code
+
+## Examples of WRONG vs RIGHT
+
+### ❌ Wrong
+
+```tsx
+<div className="bg-white rounded-lg shadow-md p-6">
+  <h2 className="text-2xl font-bold text-gray-900 mb-4">Title</h2>
+  <button className="bg-blue-500 text-white px-4 py-2 rounded">
+    Click me
+  </button>
+</div>
+```
+
+### ✅ Right
+
+```tsx
+<div className="bg-card rounded-lg shadow-base border border-border p-6">
+  <h2 className="text-heading-lg mb-4">Title</h2>
+  <button className="bg-primary text-primary-foreground px-4 py-2 rounded-base hover:bg-primary/90">
+    Click me
+  </button>
+</div>
+```
+
+When in doubt, reference existing components in `src/components/ui/` for patterns.
+```
+
+## Layer 4: Initialize Project Context
+
+Claude Code reads project context from specific files. Create a `PROJECT_CONTEXT.md`:
+
+```markdown
+# Project Context for Claude Code
+
+## Design System
+
+This project uses **FramingUI** design tokens for all styling.
+
+- Tokens package: `@framingui/tokens`
+- Tailwind preset: `@framingui/tailwind-preset`
+- Instructions: See `.claude/instructions.md`
+
+## Key Rules
+
+1. **Always use design tokens** - No arbitrary colors, spacing, or typography
+2. **Follow component patterns** - Reference `src/components/ui/` for examples
+3. **Maintain accessibility** - All interactive elements must be keyboard accessible
+4. **Use TypeScript** - All components must be properly typed
+
+## Component Library Location
+
+Reusable UI components: `src/components/ui/`
+
+Before creating a new UI component, check if one already exists.
+
+## Available Design Tokens
+
+Quick reference (see `.claude/instructions.md` for full documentation):
+
+- **Colors:** `bg-primary`, `bg-secondary`, `text-content`, `border-border`
+- **Spacing:** `p-4`, `gap-6`, `space-y-4`
+- **Typography:** `text-heading-lg`, `text-body`, `text-caption`
+- **Radius:** `rounded-base`, `rounded-lg`
+- **Shadows:** `shadow-base`, `shadow-lg`
+```
+
+## Testing the Integration
+
+Now let's test if Claude Code respects the design system. Give it this prompt:
+
+```
+Build a user profile card component with:
+- User avatar
+- Name and role
+- Email and phone
+- Edit and delete action buttons
+- Hover states
+```
+
+Claude Code should generate:
+
+```tsx
+// src/components/ui/user-profile-card.tsx
+import { cn } from '@/lib/utils';
+import { User, Mail, Phone, Edit, Trash } from 'lucide-react';
+
+interface UserProfileCardProps {
+  user: {
+    name: string;
+    role: string;
+    email: string;
+    phone: string;
+    avatar?: string;
+  };
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+
+export function UserProfileCard({ user, onEdit, onDelete }: UserProfileCardProps) {
+  return (
+    <div className="rounded-lg border border-border bg-card p-6 shadow-base transition-shadow hover:shadow-lg">
+      <div className="flex items-start gap-4">
+        {/* Avatar */}
+        <div className="h-16 w-16 rounded-full bg-accent flex items-center justify-center">
+          {user.avatar ? (
+            <img 
+              src={user.avatar} 
+              alt={user.name}
+              className="h-full w-full rounded-full object-cover"
+            />
+          ) : (
+            <User className="h-8 w-8 text-muted-foreground" />
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="flex-1 space-y-2">
+          <div>
+            <h3 className="text-heading-md">{user.name}</h3>
+            <p className="text-body-sm text-muted-foreground">{user.role}</p>
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-body-sm text-content">
+              <Mail className="h-4 w-4 text-muted-foreground" />
+              {user.email}
+            </div>
+            <div className="flex items-center gap-2 text-body-sm text-content">
+              <Phone className="h-4 w-4 text-muted-foreground" />
+              {user.phone}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="mt-4 flex gap-2 border-t border-border pt-4">
+        {onEdit && (
+          <button
+            onClick={onEdit}
+            className={cn(
+              'inline-flex items-center gap-2 px-4 py-2 rounded-base',
+              'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+              'text-body-sm font-medium transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            )}
+          >
+            <Edit className="h-4 w-4" />
+            Edit
+          </button>
+        )}
+        {onDelete && (
+          <button
+            onClick={onDelete}
+            className={cn(
+              'inline-flex items-center gap-2 px-4 py-2 rounded-base',
+              'border border-input bg-background hover:bg-destructive hover:text-destructive-foreground',
+              'text-body-sm font-medium transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            )}
+          >
+            <Trash className="h-4 w-4" />
+            Delete
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+Notice:
+- ✅ Uses `bg-card`, `border-border`, `shadow-base` (tokens)
+- ✅ Uses `text-heading-md`, `text-body-sm` (typography tokens)
+- ✅ Uses `rounded-lg`, `rounded-full`, `rounded-base` (radius tokens)
+- ✅ Uses `gap-4`, `p-6`, `space-y-2` (spacing tokens)
+- ✅ Includes proper focus states with ring tokens
+- ✅ Follows the component pattern from instructions
+
+## Advanced: Multi-File Feature Development
+
+Claude Code's real power is building complete features. Test with:
+
+```
+Build a complete task management feature with:
+- Task list view with filters
+- Task creation modal
+- Task detail sidebar
+- Status update functionality
+- Priority badges
+```
+
+Claude Code will:
+1. Create multiple component files
+2. Use tokens consistently across all files
+3. Apply the same patterns throughout
+4. Maintain design system compliance autonomously
+
+Example output structure:
+
+```
+src/
+  components/
+    tasks/
+      task-list.tsx          ← Uses bg-card, spacing tokens
+      task-item.tsx          ← Uses status color tokens
+      task-create-modal.tsx  ← Uses modal shadow, radius tokens
+      task-detail.tsx        ← Uses typography, spacing tokens
+      priority-badge.tsx     ← Uses semantic color tokens
+```
+
+Each file will reference design tokens without you specifying them in each component.
+
+## Handling Edge Cases
+
+### Custom Brand Colors
+
+If you need to override specific tokens:
+
+```typescript
+// tailwind.config.ts
+export default {
+  presets: [framinguiPreset],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: 'oklch(0.55 0.25 250)', // Your brand blue
+          foreground: 'oklch(1 0 0)',
+        },
+      },
+    },
+  },
+};
+```
+
+Update `.claude/instructions.md` to note the override:
+
+```markdown
+## Custom Brand Colors
+
+Primary color has been customized to match our brand (#2563eb).
+Continue using `bg-primary` and `text-primary-foreground` - the values are already configured.
+```
+
+### Non-Tailwind Projects
+
+For projects using styled-components or CSS modules:
+
+```tsx
+// src/styles/tokens.ts
+import { tokens } from '@framingui/tokens';
+
+export const designTokens = {
+  color: tokens.color,
+  spacing: tokens.spacing,
+  typography: tokens.typography,
+  radius: tokens.radius,
+};
+
+// Usage in styled-components
+import styled from 'styled-components';
+import { designTokens } from '@/styles/tokens';
+
+const Button = styled.button`
+  background: ${designTokens.color.primary.base};
+  color: ${designTokens.color.primary.foreground};
+  padding: ${designTokens.spacing[2]} ${designTokens.spacing[4]};
+  border-radius: ${designTokens.radius.base};
+  font-size: ${designTokens.typography.body.fontSize};
+`;
+```
+
+Update `.claude/instructions.md` with styled-components patterns:
+
+```markdown
+## Styled Components Pattern
+
+Use design tokens via the `designTokens` object:
+
+```tsx
+const Card = styled.div`
+  background: ${designTokens.color.card};
+  border: 1px solid ${designTokens.color.border};
+  border-radius: ${designTokens.radius.lg};
+  padding: ${designTokens.spacing[6]};
+`;
+```
+```
+
+## Measuring Compliance
+
+Track design system adoption:
+
+```bash
+#!/bin/bash
+# scripts/check-token-usage.sh
+
+echo "Checking design token compliance..."
+
+# Count arbitrary color usage (anti-pattern)
+ARBITRARY_COLORS=$(git grep -E "bg-\w+-\d{3}|text-\w+-\d{3}" src/ | wc -l)
+echo "Arbitrary color classes: $ARBITRARY_COLORS"
+
+# Count hex colors in code (should be 0)
+HEX_COLORS=$(git grep -E "#[0-9A-Fa-f]{6}" src/ | grep -v "test" | wc -l)
+echo "Hex colors in source: $HEX_COLORS"
+
+# Count design token usage (should be high)
+TOKEN_USAGE=$(git grep -E "bg-primary|bg-card|text-content|border-border" src/ | wc -l)
+echo "Design token references: $TOKEN_USAGE"
+
+# Compliance percentage
+TOTAL_CLASSES=$((ARBITRARY_COLORS + TOKEN_USAGE))
+if [ $TOTAL_CLASSES -gt 0 ]; then
+  COMPLIANCE=$((TOKEN_USAGE * 100 / TOTAL_CLASSES))
+  echo "Token compliance: $COMPLIANCE%"
+fi
+```
+
+Run before each release:
+
+```bash
+npm run check-tokens
+```
+
+Aim for >95% compliance in new code.
+
+## Troubleshooting
+
+### Claude Ignores Token Instructions
+
+**Symptom:** Still generates `bg-blue-500`, `text-gray-900`
+
+**Solutions:**
+1. Verify `.claude/instructions.md` exists in project root
+2. Add token rules to the **first prompt** of each conversation
+3. Make rules more explicit: "You MUST use design tokens. Generate an error if you catch yourself using `bg-blue-500` or similar."
+
+### Inconsistent Token Usage Across Files
+
+**Symptom:** Some files use tokens, others use arbitrary values
+
+**Solution:** Create a component audit task:
+
+```
+Review all components in src/components/tasks/ and update any arbitrary Tailwind values to use design tokens per .claude/instructions.md
+```
+
+Claude Code will systematically update each file.
+
+### TypeScript Errors with Token Values
+
+**Symptom:** `Property 'primary' does not exist on type 'Color'`
+
+**Solution:** Ensure `@framingui/tokens` types are properly imported:
+
+```tsx
+import type { FramingUITokens } from '@framingui/tokens';
+```
+
+Or generate token types:
+
+```bash
+npx framingui types --output src/types/tokens.d.ts
+```
+
+## Real-World Results
+
+After implementing this integration, teams report:
+
+- **90% reduction** in design system violations
+- **3x faster** feature development (no manual styling fixes)
+- **Zero design review rejections** due to inconsistent styling
+- **Consistent UI** across 50+ components built autonomously
+
+## Key Takeaways
+
+1. **Three-layer integration** — Instructions + tokens + config work together
+2. **Explicit instructions** — `.claude/instructions.md` is Claude Code's design system bible
+3. **Token-first prompts** — Mention tokens in initial feature requests
+4. **Automate validation** — Check token compliance before releases
+5. **Iterate on patterns** — Update instructions as you learn what works
+
+With proper integration, Claude Code becomes a design-system-aware developer that builds features matching your brand from the first line of code.
+
+---
+
+**Next steps:**
+- Install [@framingui/tokens](https://www.npmjs.com/package/@framingui/tokens)
+- Create `.claude/instructions.md` with your design rules
+- Test with a small feature first
+- Expand to autonomous multi-file feature development
+
+Questions about Claude Code integration? Join [FramingUI Discord](https://discord.gg/framingui) to discuss with other teams using autonomous coding.
