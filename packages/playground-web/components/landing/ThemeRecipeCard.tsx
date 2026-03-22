@@ -61,14 +61,38 @@ function buildThemeStyle(vars: ThumbnailVars): React.CSSProperties {
 // Row 1: Color Palette & Typography
 // ============================================================================
 
+/**
+ * Estimate perceived lightness from an oklch/hex/rgb color string.
+ * Returns 0-1 range. Used to pick contrasting text color.
+ */
+function isLightColor(color: string | undefined): boolean {
+  if (!color) {
+    return true;
+  }
+  // oklch(L C H) — L is 0-1 lightness
+  const oklch = color.match(/oklch\(([\d.]+)/);
+  if (oklch) {
+    return parseFloat(oklch[1]!) > 0.65;
+  }
+  // hex
+  const hex = color.match(/^#([0-9a-f]{6})/i);
+  if (hex) {
+    const r = parseInt(hex[1]!.slice(0, 2), 16);
+    const g = parseInt(hex[1]!.slice(2, 4), 16);
+    const b = parseInt(hex[1]!.slice(4, 6), 16);
+    return (r * 299 + g * 587 + b * 114) / 1000 > 160;
+  }
+  return true;
+}
+
 function ColorPaletteCell({ vars }: { vars: ThumbnailVars }) {
   const swatches = [
+    { label: 'Primary', color: vars['--bg-primary'] },
     { label: 'Background', color: vars['--bg-background'] },
     { label: 'Card', color: vars['--bg-card'] },
-    { label: 'Primary', color: vars['--bg-primary'] },
-    { label: 'Secondary', color: vars['--bg-secondary'] },
     { label: 'Foreground', color: vars['--bg-foreground'] },
-    { label: 'Border', color: vars['--border-default'] },
+    { label: 'Secondary', color: vars['--bg-secondary'] },
+    { label: 'Muted', color: vars['--bg-muted'] },
   ];
 
   return (
@@ -79,29 +103,37 @@ function ColorPaletteCell({ vars }: { vars: ThumbnailVars }) {
       >
         Color Palette
       </span>
-      <div className="grid grid-cols-3 grid-rows-2 gap-1.5">
-        {swatches.map((s) => (
-          <div
-            key={s.label}
-            className="relative h-14 rounded-md border overflow-hidden"
-            style={{
-              background: s.color,
-              borderColor: vars['--border-default'] ?? vars['--border-input'],
-            }}
-          >
-            <span
-              className="absolute bottom-1 left-1.5 text-[9px] font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]"
-              style={{
-                color:
-                  vars['--bg-background'] === s.color
-                    ? (vars['--bg-muted-foreground'] ?? vars['--text-secondary'])
-                    : '#fff',
-              }}
+      <div className="grid grid-cols-3 grid-rows-2 gap-[2px] rounded-lg overflow-hidden">
+        {swatches.map((s, i) => {
+          const light = isLightColor(s.color);
+          const fg = light ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.85)';
+          const fgSub = light ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.5)';
+          return (
+            <div
+              key={s.label}
+              className="flex flex-col justify-between p-2.5 h-[72px]"
+              style={{ background: s.color }}
             >
-              {s.label}
-            </span>
-          </div>
-        ))}
+              <span className="text-[10px] font-medium leading-tight" style={{ color: fg }}>
+                {s.label}
+              </span>
+              <div className="flex items-center gap-1.5">
+                <span
+                  className="w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold shrink-0"
+                  style={{
+                    background: fg,
+                    color: s.color,
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <span className="text-[9px] font-mono truncate" style={{ color: fgSub }}>
+                  {s.color?.substring(0, 20)}
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

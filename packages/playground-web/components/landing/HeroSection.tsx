@@ -24,8 +24,71 @@ export function HeroSection({ content }: HeroSectionProps) {
   }, [hero.initPrompt]);
 
   return (
-    <section className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-20 pb-6 sm:pt-24 md:pt-28 md:pb-8">
+    <section className="relative max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-20 pb-6 sm:pt-24 md:pt-28 md:pb-8">
+      {/* Expanding grid micro-animation — extends past hero into use-cases */}
+      <div
+        className="absolute -inset-x-20 -top-20 pointer-events-none"
+        style={{ height: '150%' }}
+        aria-hidden="true"
+      >
+        <svg
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full"
+          viewBox="0 0 1200 900"
+          preserveAspectRatio="xMidYMid slice"
+          fill="none"
+        >
+          {/* Horizontal lines */}
+          {Array.from({ length: 19 }, (_, i) => {
+            const y = i * 50;
+            const delay = Math.abs(i - 6) * 0.07;
+            return (
+              <motion.line
+                key={`h-${i}`}
+                x1="0"
+                y1={y}
+                x2="1200"
+                y2={y}
+                stroke="currentColor"
+                className="text-neutral-900/[0.06]"
+                strokeWidth="1"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.4, delay: 0.3 + delay, ease: [0.16, 1, 0.3, 1] }}
+              />
+            );
+          })}
+          {/* Vertical lines */}
+          {Array.from({ length: 25 }, (_, i) => {
+            const x = i * 50;
+            const delay = Math.abs(i - 12) * 0.05;
+            return (
+              <motion.line
+                key={`v-${i}`}
+                x1={x}
+                y1="0"
+                x2={x}
+                y2="900"
+                stroke="currentColor"
+                className="text-neutral-900/[0.06]"
+                strokeWidth="1"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.4, delay: 0.2 + delay, ease: [0.16, 1, 0.3, 1] }}
+              />
+            );
+          })}
+        </svg>
+        {/* Radial fade mask — visible near center-top, fades at edges */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse 80% 60% at 50% 30%, transparent 40%, white 75%)',
+          }}
+        />
+      </div>
+
       <motion.div
+        className="relative z-10"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
