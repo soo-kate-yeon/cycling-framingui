@@ -96,13 +96,53 @@ function ensureSemanticPaths(themeJson: any): any {
 }
 
 /**
+ * For themes where brand.default is a bright accent color (not meant as
+ * primary button bg), fix --bg-primary to use the action/foreground color
+ * so @framingui/ui components render correctly.
+ *
+ * Detection: if --bg-primary has high lightness (>0.8) AND high chroma (>0.1),
+ * it's a bright accent — override to --bg-foreground (the text/action color).
+ */
+function fixAccentBrandTheme(vars: ThumbnailVars): ThumbnailVars {
+  const primary = vars['--bg-primary'];
+  if (!primary) {
+    return vars;
+  }
+
+  const match = primary.match(/oklch\(([\d.]+)\s+([\d.]+)/);
+  if (!match) {
+    return vars;
+  }
+
+  const l = parseFloat(match[1]!);
+  const c = parseFloat(match[2]!);
+
+  // Bright accent (e.g. bold-line green: l=0.94, c=0.22)
+  if (l > 0.8 && c > 0.1) {
+    const fg = vars['--bg-foreground'];
+    if (fg) {
+      return {
+        ...vars,
+        '--bg-primary': fg,
+        '--bg-primary-foreground': vars['--bg-background'] ?? 'oklch(1 0 0)',
+        // Also fix border-input to match the theme's strong border style
+        '--border-input': vars['--border-default'] ?? fg,
+      };
+    }
+  }
+
+  return vars;
+}
+
+/**
  * Generate the full CSS variable map for a theme JSON using the
  * authoritative themeToCSS() from @framingui/ui.
  */
 function resolveTheme(themeJson: unknown): ThumbnailVars {
   const normalized = ensureSemanticPaths(themeJson);
   const css = themeToCSS(normalized as ThemeDefinition);
-  return parseCSSVars(css);
+  const vars = parseCSSVars(css);
+  return fixAccentBrandTheme(vars);
 }
 
 // ============================================================================
